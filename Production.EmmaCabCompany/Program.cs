@@ -11,7 +11,7 @@ public class Program
         ];
 
         var cabCompanyPrinter = new CabCompanyPrinter();
-        cabCompanyPrinter.WriteLine("This emma's cab company will pickup and deliver a customer.");
+        cabCompanyPrinter.WriteLine("Emma's cab company will pickup and deliver a customer.");
         EmmaCabCompany.CallCab(
             cabs, 
             new Customer("Darrell", "1 Fulton Drive", "1 University Avenue"),
@@ -20,7 +20,7 @@ public class Program
             
         cabCompanyPrinter.WriteLine("");
             
-        cabCompanyPrinter.WriteLine("This emma's cab company will pickup and deliver a customer.");
+        cabCompanyPrinter.WriteLine("Emma's cab company will pickup and deliver a customer.");
         EmmaCabCompany.CallCab(
             cabs, 
             new Customer("Diane", "1 Fulton Drive", "1 University Avenue"),
