@@ -15,8 +15,7 @@ public class Program
         EmmaCabCompany.CallCab(
             cabs, 
             new Customer("Darrell", "1 Fulton Drive", "1 University Avenue"),
-            cabCompanyPrinter
-            );
+            cabCompanyPrinter);
             
         cabCompanyPrinter.WriteLine("");
             
