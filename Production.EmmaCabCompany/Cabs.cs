@@ -21,9 +21,7 @@ public class Cabs : ICabs
         {
             return;
         }
-        customer.IsInCab = true;
-        customer.CabName = _cabName;
-        customer.RideHistory.NameOfCabsTaken.Add(_cabName);
+        customer.TakeCab(_cabName);
         _currentCustomer = customer;
         _cabCompanyPrinter.WriteLine(
             _cabName + $" picked up {customer.CustomerName} at {customer.StartLocation}");
@@ -34,9 +32,8 @@ public class Cabs : ICabs
         if (customer.IsInCab == true && _cabName == customer.CabName)
         {
             const int cabFare = 5;
-            customer.Wallet -= cabFare;
+            customer.PayCabbie(cabFare);
             Wallet += cabFare;
-            customer.IsInCab = false;
             _currentCustomer = null;
             _cabCompanyPrinter.WriteLine(
                 _cabName + $" dropped off {customer.CustomerName} at {customer.EndLocation}");
