@@ -4,25 +4,28 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        var cabCompanyPrinter = new CabCompanyPrinter();
         List<ICabs> cabs =
         [
-            new Cabs("Evan's Cab"),
-            new Cabs("Dan's Cab")
+            new Cabs("Evan's Cab", cabCompanyPrinter, 20),
+            new Cabs("Dan's Cab", cabCompanyPrinter, 20)
         ];
 
-        var cabCompanyPrinter = new CabCompanyPrinter();
         cabCompanyPrinter.WriteLine("Emma's cab company will pickup and deliver a customer.");
-        EmmaCabCompany.CallCab(
-            cabs, 
-            new Customer("Darrell", "1 Fulton Drive", "1 University Avenue"),
-            cabCompanyPrinter);
+        var customers = new List<Customer>()
+        {
+            new Customer("Darrell", "1 Fulton Drive", "1 University Avenue", 20)
+        };
+        EmmaCabCompany.CallCab(cabs, customers);
             
         cabCompanyPrinter.WriteLine("");
             
         cabCompanyPrinter.WriteLine("Emma's cab company will pickup and deliver a customer.");
-        EmmaCabCompany.CallCab(
-            cabs, 
-            new Customer("Diane", "1 Fulton Drive", "1 University Avenue"),
-            cabCompanyPrinter);
+        var customersTwo = new List<Customer>()
+        {
+            new Customer("Darrell", "1 Fulton Drive", "1 University Avenue", 20),
+            new Customer("Diane", "2 Fulton Drive", "2 University Avenue", 20),
+        };
+        EmmaCabCompany.CallCab(cabs, customersTwo);
     }
 }
