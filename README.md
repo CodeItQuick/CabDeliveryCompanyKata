@@ -6,16 +6,17 @@ can be extended with new features in the future. The development team will use T
 The code is structured overall using the Visitor Design Pattern.
 
 ### Scenarios
-### 1. Fare Calculation
+
+### 1. Driver Assignment
+
+As a dispatcher, I want to assign an available driver to a customer, so that the customer gets picked up.
+Given a list of available drivers, assign the driver closest to the customer’s location.
+
+### 2. Fare Calculation
 
 As a customer, I want to know the fare for my ride based on a flat rate, so I can pay the correct amount.
 
-### 2. Driver Assignment
-
-As a dispatcher, I want to assign an available driver to a customer, so that the customer gets picked up as quickly as possible.
-Given a list of available drivers with their locations, assign the driver closest to the customer’s location.
-
-### 3. Ride History
+### 3. Customer Ride History
 
 As a customer, I want to view my ride history, so I can track my expenses and review past trips.
 Provide a detailed ride history, including dates, times, and fares for each trip.
