@@ -6,8 +6,7 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=FE9C99A7_002D4B0E_002D4946_002D9C08_002D8F97DAA97897_002Ff_003ACabs_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=FE9C99A7_002D4B0E_002D4946_002D9C08_002D8F97DAA97897_002Ff_003AICabCompanyPrinter_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=FE9C99A7_002D4B0E_002D4946_002D9C08_002D8F97DAA97897_002Ff_003ACabCompanyPrinter_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=655acab8_002Dbb69_002D425b_002Dabb3_002D50fc4f04afa8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TheCabCompanyCanPickupACustomerAtAnAddress" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::E2206694-7662-41A1-B69D-93A3925E9B00::net8.0::Tests.CabDeliveryCompanyKata.AcceptanceTests&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e7a6e4b2_002D7466_002D437b_002D89fc_002Dee4be3c2f269/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Solution /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	</wpf:ResourceDictionary>

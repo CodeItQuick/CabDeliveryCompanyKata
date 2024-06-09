@@ -14,7 +14,7 @@ public class Program
         cabCompanyPrinter.WriteLine("Emma's cab company will pickup and deliver a customer.");
         var customers = new List<Customer>()
         {
-            new Customer("Darrell", "1 Fulton Drive", "1 University Avenue", 20)
+            new("Darrell", "1 Fulton Drive", "1 University Avenue", 20)
         };
         EmmaCabCompany.CallCab(cabs, customers);
             
@@ -23,8 +23,8 @@ public class Program
         cabCompanyPrinter.WriteLine("Emma's cab company will pickup and deliver a customer.");
         var customersTwo = new List<Customer>()
         {
-            new Customer("Darrell", "1 Fulton Drive", "1 University Avenue", 20),
-            new Customer("Diane", "2 Fulton Drive", "2 University Avenue", 20),
+            new("Darrell", "1 Fulton Drive", "1 University Avenue", 20),
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 20),
         };
         EmmaCabCompany.CallCab(cabs, customersTwo);
     }
