@@ -7,6 +7,15 @@ The code is structured overall using the Visitor Design Pattern.
 
 ### Scenarios
 
+### 0. Implement a REPL with the following options
+
+```shell
+1. Add cabbie to fleet
+2. Remove cabbie from fleet
+2. Add customer to call list
+3. Deploy cabbie fleet
+```
+
 ### 1. Driver Assignment
 
 As a dispatcher, I want to assign an available driver to a customer, so that the customer gets picked up.
