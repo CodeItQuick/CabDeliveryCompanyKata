@@ -5,11 +5,11 @@ public class Customer
     public string CustomerName { get; }
     public string StartLocation { get; }
     public string EndLocation { get; }
-    public RideHistory RideHistory { get; } = new();
-    public bool IsInCab { get; private set; }
+    public bool IsInCab { get; private set; } = false;
     public string CabName { get; private set; } = "";
 
     public int Wallet { get; set; }
+    public RideHistory RideHistory { get; set; } = new RideHistory();
 
     public Customer(string customerName, string startLocation, string endLocation, int wallet)
     {
@@ -24,6 +24,7 @@ public class Customer
         IsInCab = true;
         CabName = cabName;
         RideHistory.NameOfCabsTaken.Add(cabName);
+        
     }
 
     public void PayCabbie(int fare)
