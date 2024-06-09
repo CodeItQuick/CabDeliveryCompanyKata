@@ -6,32 +6,30 @@ public class AcceptanceTests
     [Fact]
     public void TheCabCompanyCanPickupACustomerAtAnAddress()
     {
+        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
         List<ICabs> cabs =
         [
-            new Cabs("Evan's Cab"),
+            new Cabs("Evan's Cab", cabCompanyPrinter, 20),
         ];
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
 
         EmmaCabCompany.CallCab(
             cabs, 
-            new Customer("Darrell", "1 Fulton Drive", "1 University Avenue"),
-            cabCompanyPrinter);
+            new Customer("Darrell", "1 Fulton Drive", "1 University Avenue"));
         
         Assert.Equal("Evan's Cab picked up Darrell at 1 Fulton Drive", cabCompanyPrinter.Retrieve(0));
     }
     [Fact]
     public void TheCabCompanyCanDropOffACustomerAtAnAddress()
     {
+        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
         List<ICabs> cabs =
         [
-            new Cabs("Evan's Cab"),
+            new Cabs("Evan's Cab", cabCompanyPrinter, 20),
         ];
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
 
         EmmaCabCompany.CallCab(
             cabs, 
-            new Customer("Diane", "2 Fulton Drive", "2 University Avenue"),
-            cabCompanyPrinter);
+            new Customer("Diane", "2 Fulton Drive", "2 University Avenue"));
         
         Assert.Equal("Evan's Cab dropped off Diane at 2 University Avenue", cabCompanyPrinter.Retrieve(1));
     }
