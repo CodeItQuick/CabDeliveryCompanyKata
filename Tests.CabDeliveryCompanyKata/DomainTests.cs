@@ -1,7 +1,8 @@
 using Production.EmmaCabCompany;
+
 namespace Tests.CabDeliveryCompanyKata;
 
-public class AcceptanceTests
+public class DomainTests
 {
     [Fact]
     public void TheCabCompanyCanPickupACustomerAtAnAddress()
@@ -13,8 +14,8 @@ public class AcceptanceTests
         ];
 
         EmmaCabCompany.CallCab(
-            cabs, 
-            new Customer("Darrell", "1 Fulton Drive", "1 University Avenue"));
+            cabs,
+            [new Customer("Darrell", "1 Fulton Drive", "1 University Avenue")]);
         
         Assert.Equal("Evan's Cab picked up Darrell at 1 Fulton Drive", cabCompanyPrinter.Retrieve(0));
     }
@@ -28,8 +29,8 @@ public class AcceptanceTests
         ];
 
         EmmaCabCompany.CallCab(
-            cabs, 
-            new Customer("Diane", "2 Fulton Drive", "2 University Avenue"));
+            cabs,
+            [new Customer("Diane", "2 Fulton Drive", "2 University Avenue")]);
         
         Assert.Equal("Evan's Cab dropped off Diane at 2 University Avenue", cabCompanyPrinter.Retrieve(1));
     }

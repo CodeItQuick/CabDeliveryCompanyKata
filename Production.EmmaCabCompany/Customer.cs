@@ -2,8 +2,14 @@ namespace Production.EmmaCabCompany;
 
 public class Customer
 {
-    public Customer(string customer, string startLocation, string endLocation)
+    public string name;
+    public string startLocation;
+    public string endLocation;
+
+    public Customer(string customerName, string startLocation, string endLocation)
     {
-        throw new NotImplementedException();
+        name = customerName;
+        this.startLocation = startLocation;
+        this.endLocation = endLocation;
     }
 }
