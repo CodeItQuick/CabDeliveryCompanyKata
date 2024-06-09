@@ -2,8 +2,9 @@ namespace Production.EmmaCabCompany;
 
 public class EmmaCabCompany 
 {
-    public static void CallCab(List<ICabs> cabs, Customer customers)
+    public static void CallCab(List<ICabs> cabs, List<Customer> customers)
     {
-        throw new NotImplementedException();
+        cabs.First().PickupCustomer(customers.First());
+        cabs.First().DropOffCustomer(customers.First());
     }
 }

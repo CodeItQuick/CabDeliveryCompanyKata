@@ -10,7 +10,7 @@ public class FakeCabCompanyPrinter : ICabCompanyPrinter
 
     public void WriteLine(string printStatement)
     {
-        throw new NotImplementedException();
+        Messages.Add(printStatement);
     }
 
     public string Retrieve(int messageNumber)
