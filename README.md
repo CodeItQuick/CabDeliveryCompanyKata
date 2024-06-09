@@ -45,8 +45,3 @@ As a cabbie, I want to be able to offer multiple stops on my rides.
 ### Tribal Knowledge
 
 1. The poorest cabbie should pickup the fare.
-
-### Observations
-
-1. Latent Bug: I forgot to have the customer IsInCab flag to be set to false when being dropped off
-2. Customer should have more behaviour than it does (there's feature envy here)
