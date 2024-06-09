@@ -12,8 +12,8 @@ The code is structured overall using the Visitor Design Pattern.
 ```shell
 1. Add cabbie to fleet
 2. Remove cabbie from fleet
-2. Add customer to call list
-3. Deploy cabbie fleet
+3. Add customer to call list
+4. Deploy cabbie fleet
 ```
 
 ### 1. Driver Assignment
