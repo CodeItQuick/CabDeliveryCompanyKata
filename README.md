@@ -21,6 +21,27 @@ As a customer, I want to know the fare for my ride based on a flat rate, so I ca
 As a customer, I want to view my ride history, so I can track my expenses and review past trips.
 Provide a ride history of which cab's you've previously taken.
 
+### 4. Cabbie Ride History
+
+As a cabbie, I want to view my fare history, so I can track my revenue and review past trips.
+
+### 5. Driver/Customer Ratings and Feedback
+
+As a driver I want to be able to provide ratings and feedback for cabbies.
+
+### 6. Individual Driver Pricing and Cabbie Discount codes
+
+As a driver I want to set my own price for my fares.
+As a cab company, I want to offer discounts to some of my patrons in the form of coupon codes.
+
+### 7. Multi-Person Rides
+
+As a cabbie, I can only seat up to 4 people in my cab.
+
+### 8. Multi-Stop Rides
+
+As a cabbie, I want to be able to offer multiple stops on my rides.
+
 ### Tribal Knowledge
 1. The poorest cabbie should pickup the fare.
 
