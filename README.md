@@ -27,7 +27,7 @@ As a customer, I want to know the fare for my ride based on a starting rate of $
 ### 3. Customer Ride History
 
 As a customer, I want to view my ride history, so I can track my expenses and review past trips.
-Provide a detailed ride history, that includes the name of the cab driver, and how expensive the far was.
+Provide a detailed ride history, that includes the name of the cab driver, and how expensive the fare was (should be $5/ride).
 
 ### 4. Cabbie Ride History
 
