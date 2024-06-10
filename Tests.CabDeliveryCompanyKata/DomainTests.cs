@@ -15,7 +15,7 @@ public class DomainTests
 
         EmmaCabCompany.CallCab(
             cabs,
-            [new Customer("Darrell", "1 Fulton Drive", "1 University Avenue", 20)]);
+            [new Customer("Darrell", "1 Fulton Drive", "1 University Avenue", 20, new MockFileWriter(), new FileReader())]);
         
         Assert.Equal("Evan's Cab picked up Darrell at 1 Fulton Drive", cabCompanyPrinter.Retrieve(0));
     }
@@ -30,7 +30,7 @@ public class DomainTests
 
         EmmaCabCompany.CallCab(
             cabs,
-            [new Customer("Diane", "2 Fulton Drive", "2 University Avenue", 20)]);
+            [new Customer("Diane", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader())]);
         
         Assert.Equal("Evan's Cab dropped off Diane at 2 University Avenue", cabCompanyPrinter.Retrieve(1));
     }

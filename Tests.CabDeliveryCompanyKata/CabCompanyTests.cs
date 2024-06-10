@@ -12,7 +12,7 @@ public class CabCompanyTests
         [
             new Cabs("Evan's Cab", cabCompanyPrinter, 20),
         ];
-        List<Customer> customers = [new Customer("Darrell", "1 Fulton Drive", "1 University Avenue", 20)];
+        List<Customer> customers = [new Customer("Darrell", "1 Fulton Drive", "1 University Avenue", 20, new FileWriter(), new FileReader())];
 
         EmmaCabCompany.CallCab(cabs, customers);
         
@@ -26,7 +26,7 @@ public class CabCompanyTests
         [
             new Cabs("Evan's Cab", cabCompanyPrinter, 20),
         ];
-        List<Customer> customers = [new Customer("Diane", "2 Fulton Drive", "2 University Avenue", 20)];
+        List<Customer> customers = [new Customer("Diane", "2 Fulton Drive", "2 University Avenue", 20, new MockFileWriter(), new FileReader())];
 
         EmmaCabCompany.CallCab(cabs, customers);
         
@@ -42,7 +42,7 @@ public class CabCompanyTests
             new Cabs("Dan's Cab", cabCompanyPrinter, 20),
         ];
 
-        List<Customer> customers = [new Customer("Diane", "2 Fulton Drive", "2 University Avenue", 20)];
+        List<Customer> customers = [new Customer("Diane", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader())];
 
         EmmaCabCompany.CallCab(cabs, customers);
         
@@ -59,8 +59,8 @@ public class CabCompanyTests
         ];
         List<Customer> customers =
         [
-            new Customer("Diane", "1 Fulton Drive", "1 University Avenue", 20),
-            new Customer("Darrell", "2 Fulton Drive", "2 University Avenue", 20)
+            new Customer("Diane", "1 Fulton Drive", "1 University Avenue", 20, new FileWriter(), new FileReader()),
+            new Customer("Darrell", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader())
         ];
 
         EmmaCabCompany.CallCab(
@@ -80,19 +80,15 @@ public class CabCompanyTests
         ];
         List<Customer> customers =
         [
-            new("Diane", "1 Fulton Drive", "1 University Avenue", 20)
+            new("Diane", "1 Fulton Drive", "1 University Avenue", 20, new FileWriter(), new FileReader())
         ];
         List<Customer> customersSecondCall =
         [
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 20)
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader())
         ];
 
-        EmmaCabCompany.CallCab(
-            cabs, customers 
-            );
-        EmmaCabCompany.CallCab(
-            cabs, customersSecondCall
-        );
+        EmmaCabCompany.CallCab(cabs, customers);
+        EmmaCabCompany.CallCab(cabs, customersSecondCall);
         
         Assert.Equal(4, cabCompanyPrinter.CountMessages());
     }
@@ -105,7 +101,7 @@ public class CabCompanyTests
             new Cabs("Evan's Cab", cabCompanyPrinter, 20),
         ];
         List<Customer> customers = [
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 20)
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader())
         ];
 
         EmmaCabCompany.CallCab(cabs, customers);
@@ -123,8 +119,8 @@ public class CabCompanyTests
         ];
         List<Customer> customers =
         [
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 20),
-            new("Darrell", "1 Fulton Drive", "1 University Avenue", 20)
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader()),
+            new("Darrell", "1 Fulton Drive", "1 University Avenue", 20, new FileWriter(), new FileReader())
         ];
 
         EmmaCabCompany.CallCab(cabs, customers);
@@ -144,8 +140,8 @@ public class CabCompanyTests
         ];
         List<Customer> customers =
         [
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 20),
-            new("Darrell", "1 Fulton Drive", "1 University Avenue", 20)
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader()),
+            new("Darrell", "1 Fulton Drive", "1 University Avenue", 20, new FileWriter(), new FileReader())
         ];
 
         EmmaCabCompany.CallCab(cabs, customers);
@@ -165,7 +161,7 @@ public class CabCompanyTests
         ];
         List<Customer> customers =
         [
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 20)
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader())
         ];
 
         EmmaCabCompany.CallCab(cabs, customers);
@@ -183,7 +179,7 @@ public class CabCompanyTests
         ];
         List<Customer> customers =
         [
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 20)
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader())
         ];
 
         EmmaCabCompany.CallCab(cabs, customers);
@@ -202,8 +198,8 @@ public class CabCompanyTests
         ];
         List<Customer> customers =
         [
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 15),
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 30),
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 15, new FileWriter(), new FileReader()),
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 30, new FileWriter(), new FileReader()),
         ];
 
         EmmaCabCompany.CallCab(cabs, customers);

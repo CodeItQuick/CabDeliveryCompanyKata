@@ -9,6 +9,6 @@ public class Program
         var cabsList = new List<ICabs>();
         var customers = new List<Customer>();
         
-        REPL.Run(cabCompanyPrinter, cabCompanyWriter, cabsList, customers);
+        REPL.Run(cabCompanyPrinter, cabCompanyWriter, cabsList, customers, new FileWriter(), new FileReader());
     }
 }

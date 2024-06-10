@@ -20,9 +20,9 @@ public class AcceptanceTests
         };
         var customers = new List<Customer>();
         var cabsList = new List<ICabs>();
-        REPL.Run(cabCompanyPrinter, cabCompanyReader, cabsList, customers);
+        REPL.Run(cabCompanyPrinter, cabCompanyReader, cabsList, customers, new MockFileWriter(), new FileReader());
         
-        Assert.Single(customers);
+        Assert.Empty(customers);
         Assert.Single(cabsList);
         Assert.Equal("default 1 picked up default 1 at 1 Default Start Drive", cabCompanyPrinter.Retrieve(26));
         Assert.Equal("default 1 dropped off default 1 at 1 Default Final Drive", cabCompanyPrinter.Retrieve(27));

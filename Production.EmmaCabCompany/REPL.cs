@@ -2,7 +2,8 @@ namespace Production.EmmaCabCompany;
 
 public class REPL
 {
-    public static void Run(ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader, List<ICabs> cabsList, List<Customer> customers)
+    public static void Run(ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader, 
+        List<ICabs> cabsList, List<Customer> customers, IFileWriter fileWriter, IFileReader fileReader)
     {
         const int randomStartNumber = 10;
         int selection = randomStartNumber;
@@ -36,7 +37,9 @@ public class REPL
                 if (selection == 3)
                 {
                     customers.Add(
-                        new Customer($"default {customers.Count + 1}", $"{customers.Count + 1} Default Start Drive", $"{customers.Count + 1} Default Final Drive", 20));
+                        new Customer(
+                            $"default {customers.Count + 1}", $"{customers.Count + 1} Default Start Drive", 
+                            $"{customers.Count + 1} Default Final Drive", 20, fileWriter, fileReader));
                     cabCompanyPrinter.WriteLine("Customer List:");
                     foreach (var customer in customers)
                     {
@@ -58,6 +61,8 @@ public class REPL
                 if (selection == 5)
                 {
                     EmmaCabCompany.CallCab(cabsList, customers);
+                    // Remove Customer from call list
+                    customers.RemoveAll(x => true);
                 }
             }
             
