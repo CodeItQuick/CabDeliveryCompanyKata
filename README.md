@@ -13,22 +13,21 @@ The code is structured overall using the Visitor Design Pattern.
 2. Remove cabbie from fleet
 3. Add customer to call list
 4. Remove customer from call list 
-5. Deploy cabbie fleet
+5. Deploy cabbie fleet to pickup and drop off customers
 ```
 
 ### 1. Driver Assignment
 
 As a dispatcher, I want to assign an available driver to a customer, so that the customer gets picked up.
-Given a list of available drivers, assign the driver closest to the customer’s location.
 
 ### 2. Fare Calculation
 
-As a customer, I want to know the fare for my ride based on a flat rate, so I can pay the correct amount.
+As a customer, I want to know the fare for my ride based on a starting rate of $5/cab ride, so I can pay the correct amount.
 
 ### 3. Customer Ride History
 
 As a customer, I want to view my ride history, so I can track my expenses and review past trips.
-Provide a detailed ride history, including dates, times, and fares for each trip.
+Provide a detailed ride history, that includes the name of the cab driver, and how expensive the far was.
 
 ### 4. Cabbie Ride History
 
