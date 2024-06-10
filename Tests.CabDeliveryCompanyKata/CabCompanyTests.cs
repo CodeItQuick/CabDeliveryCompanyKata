@@ -12,7 +12,9 @@ public class CabCompanyTests
         [
             new Cabs("Evan's Cab", cabCompanyPrinter, 20),
         ];
-        List<Customer> customers = [new Customer("Darrell", "1 Fulton Drive", "1 University Avenue", 20, new FileWriter(), new FileReader())];
+        var mockFileReadWriter = new MockFileReadWriter();
+        List<Customer> customers = [new Customer("Darrell", "1 Fulton Drive", "1 University Avenue", 
+            20, mockFileReadWriter, mockFileReadWriter)];
 
         EmmaCabCompany.CallCab(cabs, customers);
         
@@ -26,7 +28,9 @@ public class CabCompanyTests
         [
             new Cabs("Evan's Cab", cabCompanyPrinter, 20),
         ];
-        List<Customer> customers = [new Customer("Diane", "2 Fulton Drive", "2 University Avenue", 20, new MockFileWriter(), new FileReader())];
+        var mockFileReadWriter = new MockFileReadWriter();
+        List<Customer> customers = [new Customer("Diane", "2 Fulton Drive", "2 University Avenue", 
+            20, mockFileReadWriter, mockFileReadWriter)];
 
         EmmaCabCompany.CallCab(cabs, customers);
         
@@ -42,7 +46,9 @@ public class CabCompanyTests
             new Cabs("Dan's Cab", cabCompanyPrinter, 20),
         ];
 
-        List<Customer> customers = [new Customer("Diane", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader())];
+        var mockFileReadWriter = new MockFileReadWriter();
+        List<Customer> customers = [new Customer("Diane", "2 Fulton Drive", "2 University Avenue", 
+            20, mockFileReadWriter, mockFileReadWriter)];
 
         EmmaCabCompany.CallCab(cabs, customers);
         
@@ -57,10 +63,13 @@ public class CabCompanyTests
             new Cabs("Evan's Cab", cabCompanyPrinter, 20),
             new Cabs("Dan's Cab", cabCompanyPrinter, 20),
         ];
+        var mockFileReadWriter = new MockFileReadWriter();
         List<Customer> customers =
         [
-            new Customer("Diane", "1 Fulton Drive", "1 University Avenue", 20, new FileWriter(), new FileReader()),
-            new Customer("Darrell", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader())
+            new Customer("Diane", "1 Fulton Drive", "1 University Avenue", 20, 
+                mockFileReadWriter, mockFileReadWriter),
+            new Customer("Darrell", "2 Fulton Drive", "2 University Avenue", 20, 
+                mockFileReadWriter, mockFileReadWriter)
         ];
 
         EmmaCabCompany.CallCab(
@@ -78,13 +87,16 @@ public class CabCompanyTests
             new Cabs("Evan's Cab", cabCompanyPrinter, 20),
             new Cabs("Dan's Cab", cabCompanyPrinter, 20),
         ];
+        var mockFileReadWriter = new MockFileReadWriter();
         List<Customer> customers =
         [
-            new("Diane", "1 Fulton Drive", "1 University Avenue", 20, new FileWriter(), new FileReader())
+            new("Diane", "1 Fulton Drive", "1 University Avenue", 20, 
+                mockFileReadWriter, mockFileReadWriter)
         ];
         List<Customer> customersSecondCall =
         [
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader())
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, 
+                mockFileReadWriter, mockFileReadWriter)
         ];
 
         EmmaCabCompany.CallCab(cabs, customers);
@@ -100,8 +112,10 @@ public class CabCompanyTests
         [
             new Cabs("Evan's Cab", cabCompanyPrinter, 20),
         ];
+        var mockFileReadWriter = new MockFileReadWriter();
         List<Customer> customers = [
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader())
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, 
+                mockFileReadWriter, mockFileReadWriter)
         ];
 
         EmmaCabCompany.CallCab(cabs, customers);
@@ -117,10 +131,13 @@ public class CabCompanyTests
         [
             new Cabs("Evan's Cab", cabCompanyPrinter, 40),
         ];
+        var mockFileReadWriter = new MockFileReadWriter();
         List<Customer> customers =
         [
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader()),
-            new("Darrell", "1 Fulton Drive", "1 University Avenue", 20, new FileWriter(), new FileReader())
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, 
+                mockFileReadWriter, mockFileReadWriter),
+            new("Darrell", "1 Fulton Drive", "1 University Avenue", 20, 
+                mockFileReadWriter, mockFileReadWriter)
         ];
 
         EmmaCabCompany.CallCab(cabs, customers);
@@ -138,10 +155,13 @@ public class CabCompanyTests
             new Cabs("Evan's Cab", cabCompanyPrinter, 20),
             new Cabs("Dan's Cab", cabCompanyPrinter, 20),
         ];
+        var mockFileReadWriter = new MockFileReadWriter();
         List<Customer> customers =
         [
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader()),
-            new("Darrell", "1 Fulton Drive", "1 University Avenue", 20, new FileWriter(), new FileReader())
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, 
+                mockFileReadWriter, mockFileReadWriter),
+            new("Darrell", "1 Fulton Drive", "1 University Avenue", 20, 
+                mockFileReadWriter, mockFileReadWriter)
         ];
 
         EmmaCabCompany.CallCab(cabs, customers);
@@ -159,14 +179,15 @@ public class CabCompanyTests
         [
             new Cabs("Evan's Cab", cabCompanyPrinter, 20),
         ];
+        var mockFileReadWriter = new MockFileReadWriter();
         List<Customer> customers =
         [
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader())
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, mockFileReadWriter, mockFileReadWriter)
         ];
 
         EmmaCabCompany.CallCab(cabs, customers);
         
-        Assert.Equal("Evan's Cab", customers.First().RideHistory.NameOfCabsTaken.First());
+        Assert.Equal("Evan's Cab", customers.First().RetrieveRideHistory().First());
     }
     [Fact]
     public void TheCustomerHasRideHistoryAvailableForMultipleCalls()
@@ -177,16 +198,17 @@ public class CabCompanyTests
             new Cabs("Evan's Cab", cabCompanyPrinter, 20),
             new Cabs("Dan's Cab", cabCompanyPrinter, 20),
         ];
+        var mockFileReadWriter = new MockFileReadWriter();
         List<Customer> customers =
         [
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, new FileWriter(), new FileReader())
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 20, mockFileReadWriter, mockFileReadWriter)
         ];
 
         EmmaCabCompany.CallCab(cabs, customers);
         EmmaCabCompany.CallCab(cabs, customers);
         
-        Assert.Equal("Evan's Cab", customers.First().RideHistory.NameOfCabsTaken.First());
-        Assert.Equal("Dan's Cab", customers.First().RideHistory.NameOfCabsTaken.Skip(1).First());
+        Assert.Equal("Evan's Cab", customers.First().RetrieveRideHistory().First());
+        Assert.Equal("Dan's Cab", customers.First().RetrieveRideHistory().Skip(1).First());
     }
     [Fact]
     public void TheCabCompanyCanHandleMakingChange()
@@ -196,10 +218,11 @@ public class CabCompanyTests
         [
             new Cabs("Evan's Cab", cabCompanyPrinter, 30),
         ];
+        var mockFileReadWriter = new MockFileReadWriter();
         List<Customer> customers =
         [
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 15, new FileWriter(), new FileReader()),
-            new("Diane", "2 Fulton Drive", "2 University Avenue", 30, new FileWriter(), new FileReader()),
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 15, mockFileReadWriter, mockFileReadWriter),
+            new("Diane", "2 Fulton Drive", "2 University Avenue", 30, mockFileReadWriter, mockFileReadWriter),
         ];
 
         EmmaCabCompany.CallCab(cabs, customers);

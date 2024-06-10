@@ -20,7 +20,7 @@ public class AcceptanceTests
         };
         var customers = new List<Customer>();
         var cabsList = new List<ICabs>();
-        REPL.Run(cabCompanyPrinter, cabCompanyReader, cabsList, customers, new MockFileWriter(), new FileReader());
+        REPL.Run(cabCompanyPrinter, cabCompanyReader, cabsList, customers, new MockFileReadWriter(), new FileReader());
         
         Assert.Empty(customers);
         Assert.Single(cabsList);

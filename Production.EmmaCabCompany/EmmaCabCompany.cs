@@ -5,7 +5,7 @@ public class EmmaCabCompany
     public static void CallCab(List<ICabs> cabs, List<Customer> customers)
     {
         customers.Sort(
-            (x, y) => y.RideHistory.NameOfCabsTaken.Count() - x.RideHistory.NameOfCabsTaken.Count());
+            (x, y) => y.RetrieveRideHistory().Count() - x.RetrieveRideHistory().Count());
         var numberFaresTaken = customers.FirstOrDefault()?.RideHistory.NameOfCabsTaken.Count ?? 0;
         while (customers.Any(x => x.RideHistory.NameOfCabsTaken.Count == numberFaresTaken))
         {
