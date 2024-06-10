@@ -4,22 +4,39 @@ public class Cabs : ICabs
 {
     private readonly string _cabName;
     private readonly ICabCompanyPrinter _cabCompanyPrinter;
-    private readonly int _wallet;
+    private Customer? _currentCustomer = null;
+    public int Wallet { get; set; }
+
 
     public Cabs(string cabName, ICabCompanyPrinter cabCompanyPrinter, int wallet)
     {
         _cabName = cabName;
         _cabCompanyPrinter = cabCompanyPrinter;
-        _wallet = wallet;
+        Wallet = wallet;
     }
 
     public void PickupCustomer(Customer customer)
     {
-        _cabCompanyPrinter.WriteLine($"Evan's Cab picked up {customer.name} at {customer.startLocation}.");
+        if (customer.IsInCab || _currentCustomer != null)
+        {
+            return;
+        }
+        customer.TakeCab(_cabName);
+        _currentCustomer = customer;
+        _cabCompanyPrinter.WriteLine(
+            _cabName + $" picked up {customer.CustomerName} at {customer.StartLocation}");
     }
 
     public void DropOffCustomer(Customer customer)
     {
-        _cabCompanyPrinter.WriteLine($"Evan's Cab dropped off {customer.name} at {customer.endLocation}.");
+        if (customer.IsInCab == true && _cabName == customer.CabName)
+        {
+            const int cabFare = 5;
+            customer.PayCabbie(cabFare);
+            Wallet += cabFare;
+            _currentCustomer = null;
+            _cabCompanyPrinter.WriteLine(
+                _cabName + $" dropped off {customer.CustomerName} at {customer.EndLocation}");
+        }
     }
 }

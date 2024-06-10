@@ -1,6 +1,6 @@
 namespace Production.EmmaCabCompany;
 
-public interface ICabCompanyWriter
+public interface ICabCompanyReader
 {
     public string? ReadLine();
 }

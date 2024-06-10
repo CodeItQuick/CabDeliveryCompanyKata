@@ -5,7 +5,7 @@ public class Program
     public static void Main(string[] args)
     {
         var cabCompanyPrinter = new CabCompanyPrinter();
-        var cabCompanyWriter = new CabCompanyWriter();
+        var cabCompanyWriter = new CabCompanyReader();
         var cabsList = new List<ICabs>();
         var customers = new List<Customer>();
         

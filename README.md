@@ -7,12 +7,13 @@ The code is structured overall using the Visitor Design Pattern.
 
 ### Scenarios
 
-### 0. Implement a REPL with the following options:
+### 0. Implement a REPL with the following options
+
 ```shell
 1. Add cabbie to fleet
 2. Remove cabbie from fleet
-2. Add customer to call list
-3. Deploy cabbie fleet
+3. Add customer to call list
+4. Deploy cabbie fleet
 ```
 
 ### 1. Driver Assignment
@@ -27,7 +28,7 @@ As a customer, I want to know the fare for my ride based on a flat rate, so I ca
 ### 3. Customer Ride History
 
 As a customer, I want to view my ride history, so I can track my expenses and review past trips.
-Provide a detailed ride history, including dates, times, and fares for each trip.
+Provide a ride history of which cab's you've previously taken.
 
 ### 4. Cabbie Ride History
 
@@ -51,5 +52,4 @@ As a cabbie, I can only seat up to 4 people in my cab.
 As a cabbie, I want to be able to offer multiple stops on my rides.
 
 ### Tribal Knowledge
-
 1. The poorest cabbie should pickup the fare.

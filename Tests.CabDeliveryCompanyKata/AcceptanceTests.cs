@@ -8,7 +8,7 @@ public class AcceptanceTests
     public void TheCabCompanyCanPickupACustomerAtAnAddress()
     {
         FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
-        FakeCabCompanyWriter cabCompanyWriter = new FakeCabCompanyWriter()
+        FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
             CommandList = new List<string>()
             {
@@ -20,12 +20,12 @@ public class AcceptanceTests
         };
         var customers = new List<Customer>();
         var cabsList = new List<ICabs>();
-        REPL.Run(cabCompanyPrinter, cabCompanyWriter, cabsList, customers);
+        REPL.Run(cabCompanyPrinter, cabCompanyReader, cabsList, customers);
         
         Assert.Single(customers);
         Assert.Single(cabsList);
-        Assert.Equal("Evan's Cab picked up default customer 1 at start location 1.", cabCompanyPrinter.Retrieve(24));
-        Assert.Equal("Evan's Cab dropped off default customer 1 at end location 1.", cabCompanyPrinter.Retrieve(25));
+        Assert.Equal("default 1 picked up default 1 at 1 Default Start Drive", cabCompanyPrinter.Retrieve(26));
+        Assert.Equal("default 1 dropped off default 1 at 1 Default Final Drive", cabCompanyPrinter.Retrieve(27));
     }
     
 }

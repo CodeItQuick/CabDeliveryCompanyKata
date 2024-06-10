@@ -17,4 +17,9 @@ public class FakeCabCompanyPrinter : ICabCompanyPrinter
     {
         return Messages[messageNumber];
     }
+
+    public int CountMessages()
+    {
+        return Messages.Count;
+    }
 }
