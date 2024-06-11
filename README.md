@@ -15,7 +15,8 @@ Main Navigation Menu:
 1. Passenger Menu
 2. Dispatcher Menu
 3. Cab Driver Menu
-4. HR Menu 
+4. HR Menu
+0. Exit 
 ```
 
 Passenger Menu:
