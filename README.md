@@ -20,7 +20,7 @@ Main Navigation Menu:
 0. Exit 
 ```
 
-Passenger Menu:
+Passenger Menus:
 ```shell
 1. Choose Passenger From List
 2. Add New Passenger
@@ -53,7 +53,7 @@ Current Driver Request Confirmations: 2
 4. Back to Main Navigation Menu
 ```
 
-Cab Driver Menu:
+Cab Driver Menus:
 ```shell
 1. Choose Cab Driver From List
 2. Add New Cab Driver
