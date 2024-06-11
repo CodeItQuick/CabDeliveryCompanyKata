@@ -7,13 +7,16 @@ The code is structured overall using the Visitor Design Pattern.
 
 ### Scenarios
 
-### 0. Implement a REPL with the following options
+// Also add constraints on size of problem (Eg: 12 cabs? )
+Event Storming/Event Modelling/Event Sourcing
 
+### 0. Implement a REPL with the following options
+(These are the events)
 ```shell
 1. Add cabbie to fleet
 2. Remove cabbie from fleet
-3. Add customer to call list
-4. Deploy cabbie fleet
+3. Customer Requested Pickup
+4. Dispatch Cab
 ```
 
 ### 1. Driver Assignment
@@ -23,11 +26,11 @@ Given a list of available drivers, assign the driver closest to the customer’s
 
 ### 2. Fare Calculation
 
-As a customer, I want to know the fare for my ride based on a flat rate, so I can pay the correct amount.
+As a party, I want to know the fare for my ride based on a flat rate, so I can pay the correct amount.
 
 ### 3. Customer Ride History
 
-As a customer, I want to view my ride history, so I can track my expenses and review past trips.
+As a party, I want to view my ride history, so I can track my expenses and review past trips.
 Provide a ride history of which cab's you've previously taken.
 
 ### 4. Cabbie Ride History

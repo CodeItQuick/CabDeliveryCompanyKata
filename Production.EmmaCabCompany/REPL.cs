@@ -11,6 +11,8 @@ public class REPL
         while (selection != 0 && isChosen)
         {
             cabCompanyPrinter.WriteLine("Please choose a selection from the list: ");
+            // also in the command pattern
+            // command -> menu option string, -> execute with parameters
             cabCompanyPrinter.WriteLine("0. Exit");
             cabCompanyPrinter.WriteLine("1. Add cabbie to fleet");
             cabCompanyPrinter.WriteLine("2. Remove cabbie from fleet");
@@ -23,6 +25,7 @@ public class REPL
             isChosen = Int32.TryParse(lineEntered, out selection);
             if (isChosen)
             {
+                // command pattern
                 if (selection == 1)
                 {
                     cabsList.Add(new Cabs($"default {cabsList.Count + 1}", cabCompanyPrinter, 20));
