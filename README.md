@@ -7,7 +7,8 @@ The code is structured overall using the Visitor Design Pattern.
 
 ### Scenarios
 
-Note: Only one passenger calls at a time, otherwise the line is busy
+Note: Only one passenger calls at a time, otherwise the line is busy. 
+Passenger must call in to get the cab, no other methods available for MVP (see event-storming/passenger-events.md for exhaustive list)
 
 ### Implement a UX with the following screens:
 Main Navigation Menu:
