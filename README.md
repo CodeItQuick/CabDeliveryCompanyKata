@@ -7,51 +7,70 @@ The code is structured overall using the Visitor Design Pattern.
 
 ### Scenarios
 
-### 0. Implement a REPL with the following options:
+Note: Only one passenger calls at a time, otherwise the line is busy
+
+### Implement a UX with the following screens:
+Main Navigation Menu:
 ```shell
-1. Add cabbie to fleet
-2. Remove cabbie from fleet
-3. Add customer to call list
-4. Remove customer from call list 
-5. Deploy cabbie fleet to pickup and drop off customers
+1. Passenger Menu
+2. Dispatcher Menu
+3. Cab Driver Menu
+4. HR Menu 
 ```
 
-### 1. Driver Assignment
+Passenger Menu:
+```shell
+1. Choose Passenger From List
+2. Add New Passenger
+3. Cancel Passenger Fare
+4. Back to Main Navigation Menu
+```
 
-As a dispatcher, I want to assign an available driver to a customer, so that the customer gets picked up.
+```shell
+1. Call Cab Company
+2. Pay Cabbie
+3. Back to Passenger Menu
+```
+Call Cab Company Information:
+```
+Enter starting location: <input>
+Enter destination: <input>
+```
 
-### 2. Fare Calculation
+Dispatcher Menu:
+```
+Current Passenger Requests: 1
+Current Passenger Request Confirmations: 2
+Current Driver Requests: 0
+Current Driver Request Confirmations: 2
+```
+```shell
+1. Check Cabs Available
+2. List Cabs Drivers, Locations, Availability
+3. Assign Cab Driver to Ride Request
+4. Back to Main Navigation Menu
+```
 
-As a customer, I want to know the fare for my ride based on a starting rate of $5/cab ride, so I can pay the correct amount.
+Cab Driver Menu:
+```shell
+1. Choose Cab Driver From List
+2. Add New Cab Driver
+3. Cancel Cab Driver Fare
+4. Back to Main Navigation Menu
+```
 
-### 3. Customer Ride History
+```
+Current Status: (Request Outstanding, Request Accepted, Fare Started, Fare Ended, Free)
+```
+```shell
+1. Accept/Reject Cab Fare
+2. Pickup Passenger
+3. Drop Off Passenger
+4. Back to Main Navigation Menu
+```
 
-As a customer, I want to view my ride history, so I can track my expenses and review past trips.
-Provide a detailed ride history, that includes the name of the cab driver, and how expensive the fare was (should be $5/ride).
-It's a requirement that the customers persists this information.
-
-### 4. Cabbie Ride History
-
-As a cabbie, I want to view my fare history, so I can track my revenue and review past trips.
-It's a requirement that the cabbie persists this information.
-
-### 5. Driver/Customer Ratings and Feedback
-
-As a driver I want to be able to provide ratings and feedback for cabbies.
-
-### 6. Individual Driver Pricing and Cabbie Discount codes
-
-As a driver I want to set my own price for my fares.
-As a cab company, I want to offer discounts to some of my patrons in the form of coupon codes.
-
-### 7. Multi-Person Rides
-
-As a cabbie, I can only seat up to 4 people in my cab.
-
-### 8. Multi-Stop Rides
-
-As a cabbie, I want to be able to offer multiple stops on my rides.
-
-### Tribal Knowledge
-
-1. The poorest cabbie should pickup the fare.
+HR Menu:
+```shell
+1. List Cab Drivers, Fares Received
+2. Back to Main Navigation Menu 
+```
