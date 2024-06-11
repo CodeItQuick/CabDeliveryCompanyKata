@@ -1,4 +1,4 @@
-# Cab Company TDD Kata
+# Cab Company TDD MVP
 ## Story
 A cab company wants to implement a new system to handle fare calculations, driver assignments, and ride tracking to 
 improve efficiency and customer satisfaction. The goal is to ensure that the system is reliable, easy to maintain, and 
