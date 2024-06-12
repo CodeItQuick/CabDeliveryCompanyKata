@@ -6,8 +6,9 @@ You, the developer, are tasked with building the ride dispatch system that allow
 outgoing driver assignments.
 
 You have been given a sample UX designed menu screen for the dispatch. Previously the team got together and did event storming
-on this problem, and this is provided in the "event-storming" folder. Design the following UI, and any forgotten requirements,
-for the system.
+on this problem, and this is provided in the "event-storming" folder. The output of the big picture event storming is given 
+in the folder structure. Some big-picture UX design screens are given as well. Design the following UI, and any 
+forgotten requirements, for the system.
 
 Dispatcher Menu:
 ```
