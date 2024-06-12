@@ -57,8 +57,9 @@ Cab Driver Menus:
 ```shell
 1. Choose Cab Driver From List
 2. Add New Cab Driver
-3. Cancel Cab Driver Fare
-4. Back to Main Navigation Menu
+3. Remove Cab Driver
+4. Cancel Cab Driver Fare
+5. Back to Main Navigation Menu
 ```
 
 ```
