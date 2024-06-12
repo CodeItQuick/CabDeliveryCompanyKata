@@ -5,8 +5,8 @@ to include a software solution that helps them pickup customers from one locatio
 You, the developer, are tasked with building the ride dispatch system that allows for incoming customer requests and 
 outgoing driver assignments.
 
-You have been given a sample UX designed menu screen for the dispatch. There has been some background event-storming work
-done for you, and this is provided in the "event-storming" folder. Design the following UI, and any forgotten requirements,
+You have been given a sample UX designed menu screen for the dispatch. Previously the team got together and did event storming
+on this problem, and this is provided in the "event-storming" folder. Design the following UI, and any forgotten requirements,
 for the system.
 
 Dispatcher Menu:
