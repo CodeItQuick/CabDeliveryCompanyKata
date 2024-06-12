@@ -3,7 +3,7 @@
 1. **Driver Management**: Add New Cab Driver
 2. **Customer Interaction**: Customer Requests Ride
 3. **Ride Dispatch**: Ride Request Received
-4. **Ride Dispatch**: Driver Request Sent
+4. **Ride Dispatch**: Driver Request Sent (**How is this sent? to the whole fleet? to a section of the fleet? etc.**)
 5. **Driver Management**: Accept Cab Fare
 6. **Ride Dispatch**: Driver Request Confirmed
 7. **Ride Dispatch**: Ride Assigned to Driver
