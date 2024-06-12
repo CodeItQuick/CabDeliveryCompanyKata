@@ -18,3 +18,7 @@
 16. **Payment Processing**: Receipt Issued
 17. **Driver Management**: Status: Ready for pickup
 18. **Optionally: Human Resources**: List Cab Drivers, Fares Received
+
+Question:
+* How does the dispatch system know that the fare was completed, or if it was cancelled, etc?
+* There must be some interaction between the cabbie and the dispatch that is missing here
