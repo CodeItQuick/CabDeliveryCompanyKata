@@ -1,170 +1,87 @@
-Sure! Here’s a sample system design event storming for a cab company, focusing on the technical aspects and the flow of data through the system. This will involve identifying key systems, events, and interactions between them.
+System design event storming is an extension of the event storming methodology focused on understanding and designing the architecture and interactions of a system. It involves a detailed exploration of the system's components, their interactions, and the events that flow through the system. Here's an overview of what system design event storming typically looks like:
 
-### Step 1: Identify Key Systems
+### Key Components
 
-1. **Customer App** (Mobile/Web)
-2. **Driver App** (Mobile)
-3. **Dispatch System**
-4. **GPS Navigation System**
-5. **Payment Gateway**
-6. **Fleet Management System**
-7. **HR System**
-8. **Accounting System**
-9. **Notification System**
-10. **Database** (Centralized Data Storage)
+1. **Domain Events**: Significant occurrences within the system, typically expressed in past tense (e.g., "User Registered," "Order Shipped").
 
-### Step 2: Brainstorm Key Events and Data Flow
+2. **Commands**: Actions or instructions that trigger domain events (e.g., "Register User," "Ship Order").
 
-**Customer App**:
-- Customer Requests Ride
-- Customer Cancels Ride
-- Customer Makes Payment
-- Customer Provides Feedback
+3. **Actors**: Entities (people, systems, or external services) that perform actions or trigger events (e.g., User, Payment Gateway).
 
-**Driver App**:
-- Driver Logs In
-- Driver Receives Ride Assignment
-- Driver Acknowledges Assignment
-- Driver Starts Ride
-- Driver Completes Ride
-- Driver Logs Out
+4. **Aggregates**: Clusters of related domain objects that ensure consistency and encapsulate business rules (e.g., Order, Customer).
 
-**Dispatch System**:
-- Receive Ride Request
-- Assign Ride to Driver
-- Track Driver Location
-- Update Customer on ETA
+5. **Policies (or Sagas)**: Long-running processes or business rules that react to events and may trigger further commands (e.g., "Send Welcome Email").
 
-**GPS Navigation System**:
-- Provide Navigation to Pickup
-- Provide Navigation to Destination
+6. **Read Models/Queries**: Data views or projections that represent information needed by users or other systems (e.g., "Order Status," "User Profile").
 
-**Payment Gateway**:
-- Calculate Fare
-- Process Payment
-- Issue Receipt
+7. **Bounded Contexts**: Logical boundaries within the system that encapsulate related models and services, often aligned with subdomains.
 
-**Fleet Management System**:
-- Schedule Vehicle Maintenance
-- Track Vehicle Status
-- Assign Vehicle to Driver
+### Steps in System Design Event Storming
 
-**HR System**:
-- Manage Driver Profiles
-- Schedule Driver Training
-- Record Performance Reviews
+1. **Preparation**:
+    - Gather a diverse group of stakeholders, including domain experts, architects, developers, and other relevant participants.
+    - Provide materials like sticky notes, markers, and large surfaces (e.g., whiteboards or large sheets of paper).
 
-**Accounting System**:
-- Reconcile Daily Fares
-- Process Driver Payments
-- Record Expenses
-- Generate Financial Reports
+2. **Identify Domain Events**:
+    - Start by brainstorming and writing down domain events that occur within the system, one per sticky note.
+    - Place these events on the timeline in the order they occur.
 
-**Notification System**:
-- Send Ride Confirmation to Customer
-- Send Arrival Notification to Customer
-- Send Payment Receipt to Customer
-- Send Updates to Driver
+3. **Identify Commands**:
+    - Identify the commands that trigger each event and place them before the corresponding event.
 
-**Database**:
-- Store Customer Data
-- Store Driver Data
-- Store Ride Data
-- Store Payment Data
-- Store Vehicle Data
+4. **Identify Actors**:
+    - Determine the actors who perform the commands and place them above the commands.
 
-### Step 3: Arrange Events in Sequence and Identify Interactions
+5. **Define Aggregates**:
+    - Group related events and commands to identify aggregates and place them around the related events.
 
-1. **Customer Requests Ride** (Customer App)
-    - Data sent to **Dispatch System**
+6. **Add Policies**:
+    - Identify business rules or policies that influence the process and add these policies around the relevant events and commands.
 
-2. **Receive Ride Request** (Dispatch System)
-    - Validate request and store in **Database**
-    - Notify available drivers via **Driver App**
+7. **Define Read Models/Queries**:
+    - Determine the data views or projections needed by users and place these read models around the events that generate the data.
 
-3. **Assign Ride to Driver** (Dispatch System)
-    - Update driver status in **Database**
-    - Notify driver via **Driver App**
+8. **Identify Bounded Contexts**:
+    - Group related aggregates, commands, events, and policies into bounded contexts to define logical boundaries within the system.
 
-4. **Driver Receives Ride Assignment** (Driver App)
-    - Acknowledge assignment, send confirmation to **Dispatch System**
+9. **Explore Interactions**:
+    - Map out interactions between different bounded contexts, identifying integration points, message flows, and dependencies.
 
-5. **Driver En Route to Pickup** (Driver App & GPS Navigation System)
-    - Navigation data from **GPS Navigation System**
-    - Update location in **Database**
+10. **Refine and Document**:
+    - Discuss and refine the model, ensuring all key interactions and components are captured.
+    - Document the final system design using diagrams, photos, or formal documentation tools.
 
-6. **Send Ride Confirmation to Customer** (Notification System)
-    - Update customer with driver details and ETA
+### Example Flow
 
-7. **Driver Arrives at Pickup** (Driver App)
-    - Notify **Dispatch System**, update status in **Database**
-    - Send arrival notification via **Notification System**
+1. **User Registration**:
+    - **Command**: "Register User"
+    - **Event**: "User Registered"
+    - **Actor**: User
+    - **Aggregate**: User
 
-8. **Customer Picked Up** (Driver App)
-    - Start ride, update status in **Database**
-    - Begin navigation to destination using **GPS Navigation System**
+2. **Order Placement**:
+    - **Command**: "Place Order"
+    - **Event**: "Order Placed"
+    - **Actor**: User
+    - **Aggregate**: Order
 
-9. **Ride in Progress** (Driver App & GPS Navigation System)
-    - Track location, update in **Database**
+3. **Payment Processing**:
+    - **Command**: "Process Payment"
+    - **Event**: "Payment Processed"
+    - **Actor**: Payment Gateway
+    - **Aggregate**: Payment
 
-10. **Driver Arrives at Destination** (Driver App)
-    - Notify **Dispatch System**, update status in **Database**
+4. **Shipping**:
+    - **Policy**: "Initiate Shipping"
+    - **Event**: "Order Shipped"
+    - **Actor**: Shipping Service
+    - **Aggregate**: Order
 
-11. **Fare Calculated** (Payment Gateway)
-    - Data from **Database** (distance, time, rate)
-    - Process payment via **Customer App**
+### Benefits
 
-12. **Payment Processed** (Payment Gateway)
-    - Update payment status in **Database**
-    - Issue receipt via **Notification System**
+- **Holistic Understanding**: Provides a comprehensive view of the system's architecture, highlighting key components and their interactions.
+- **Collaboration**: Fosters collaboration among stakeholders to build a shared understanding of the system.
+- **Problem Identification**: Helps identify potential issues, integration points, and areas for improvement within the system.
+- **Visual Representation**: Facilitates visual thinking, making it easier to understand complex interactions and dependencies.
 
-13. **Ride Completed** (Driver App)
-    - Update ride status in **Database**
-
-14. **Customer Provides Feedback** (Customer App)
-    - Store feedback in **Database**
-
-15. **Daily Reconciliation** (Accounting System)
-    - Reconcile fares from **Database**
-    - Process driver payments, record expenses
-
-16. **Driver Logs Out** (Driver App)
-    - Update status in **Database**
-
-17. **Fleet Maintenance Scheduled** (Fleet Management System)
-    - Track vehicle usage, schedule maintenance
-    - Update vehicle status in **Database**
-
-18. **Driver Training Scheduled** (HR System)
-    - Manage driver profiles, schedule training
-    - Record performance reviews in **Database**
-
-### Step 4: Visualize the System Design
-
-**Customer App** ⟷ **Dispatch System** ⟷ **Driver App** ⟷ **GPS Navigation System**
-**Customer App** ⟷ **Payment Gateway** ⟷ **Accounting System**
-**Driver App** ⟷ **Fleet Management System** ⟷ **HR System**
-**Notification System** ⟷ **Customer App** / **Driver App**
-**Database** (Central repository for all systems)
-
-### Step 5: Create Event Flow Diagram
-
-1. **Customer Requests Ride** ➝
-2. **Dispatch System Receives Request** ➝
-3. **Ride Assigned to Driver** ➝
-4. **Driver Acknowledges Assignment** ➝
-5. **Driver En Route to Pickup** ➝
-6. **Customer Notified of Arrival** ➝
-7. **Customer Picked Up** ➝
-8. **Ride in Progress** ➝
-9. **Driver Arrives at Destination** ➝
-10. **Fare Calculated** ➝
-11. **Payment Processed** ➝
-12. **Ride Completed** ➝
-13. **Customer Feedback Provided** ➝
-14. **Daily Reconciliation** ➝
-15. **Driver Logs Out** ➝
-16. **Fleet Maintenance Scheduled** ➝
-17. **Driver Training Scheduled**
-
-This event storming exercise helps to clarify the interactions between different systems and actors, ensuring that all components of the cab company’s operations are seamlessly integrated and effectively managed.
+System design event storming is a powerful technique for capturing the intricacies of system architecture and interactions, leading to better design decisions and more effective system implementation.
