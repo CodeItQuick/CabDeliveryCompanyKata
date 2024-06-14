@@ -8,18 +8,17 @@
 6. **Driver Management**: Accept Cab Fare
 7. **Ride Dispatch**: Driver Request Confirmed
 8. **Ride Dispatch**: Ride Assigned to Driver
-9. **Ride Dispatch**: Ride Request Confirmed
-10. **Customer Interaction**: Ride Confirmed to Customer
-11. **Ride Execution**: Customer Picked Up
-12. **Ride Execution**: Ride in Progress
-13. **Ride Execution**: Customer Dropped Off
-14. **Ride Execution**: Ride Completed
-15. **Payment Processing**: Fare Calculated
-16. **Payment Processing**: Payment Processed
-17. **Payment Processing**: Receipt Issued
-18. **Driver Management**: Status: Send ready for pickup status
-19. **Ride Dispatch**: Driver Ready For Pickup Status Received
-20. **Optionally: Human Resources**: List Cab Drivers, Fares Received
+9. **Customer Interaction**: Ride Confirmed to Customer
+10. **Ride Execution**: Customer Picked Up
+11. **Ride Execution**: Ride in Progress
+12. **Ride Execution**: Customer Dropped Off
+13. **Ride Execution**: Ride Completed
+14. **Payment Processing**: Fare Calculated
+15. **Payment Processing**: Payment Processed
+16. **Payment Processing**: Receipt Issued
+17. **Driver Management**: Status: Send ready for pickup status
+18. **Ride Dispatch**: Driver Ready For Pickup Status Received
+19. **Optionally: Human Resources**: List Cab Drivers, Fares Received
 
 Question:
 * How does the dispatch system know that the fare was completed, or if it was cancelled, etc?
