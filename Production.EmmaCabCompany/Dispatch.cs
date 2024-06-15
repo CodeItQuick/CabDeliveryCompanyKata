@@ -58,4 +58,9 @@ public class Dispatch
     {
         return !_fleet.Any();
     }
+
+    public void RemoveCab()
+    {
+        _fleet.RemoveAt(_fleet.Count - 1);
+    }
 }

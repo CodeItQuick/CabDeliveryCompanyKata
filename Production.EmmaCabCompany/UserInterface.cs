@@ -64,6 +64,10 @@ public class UserInterface
                 }
                 if (selection == 2)
                 {
+                    if (!dispatch.NoCabsInFleet())
+                    {
+                        dispatch.RemoveCab();
+                    }
                 }
                 if (selection == 3)
                 {
@@ -102,6 +106,14 @@ public class UserInterface
                 }
                 if (selection == 5)
                 {
+                    if (customersServed.Any())
+                    {
+                        customersServed.RemoveAt(customersServed.Count - 1);
+                    }
+                    if (customersCalls.Any())
+                    {
+                        customersCalls.RemoveAt(customersCalls.Count - 1);
+                    }
                 }
                 if (selection == 6)
                 {
