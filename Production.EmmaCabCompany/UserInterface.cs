@@ -106,13 +106,15 @@ public class UserInterface
                 }
                 if (selection == 5)
                 {
-                    if (customersServed.Any())
-                    {
-                        customersServed.RemoveAt(customersServed.Count - 1);
-                    }
                     if (customersCalls.Any())
                     {
                         customersCalls.RemoveAt(customersCalls.Count - 1);
+                        _cabCompanyPrinter.WriteLine("Customer cancelled request before cab assigned.");
+                    }
+                    if (customersServed.Any())
+                    {
+                        customersServed.RemoveAt(customersServed.Count - 1);
+                        _cabCompanyPrinter.WriteLine("Customer cancelled request before cab got there.");
                     }
                 }
                 if (selection == 6)
