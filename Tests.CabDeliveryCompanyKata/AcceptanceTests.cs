@@ -46,6 +46,24 @@ public class AcceptanceTests
         Assert.Contains("There are currently no customer's waiting for cabs.", cabCompanyPrinter.List());
     }
     [Fact]
+    public void TheCabCompanyReportsFailureIfCannotDropoffCustomerDueToNoCustomerRequests()
+    {
+        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
+        {
+            CommandList = new List<string>()
+            {
+                "4",
+                "0"
+            }
+        };
+        var mockFileReadWriter = new MockFileReadWriter();
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        userInterface.Run();
+        
+        Assert.Contains("There are currently no customer's assigned to cabs.", cabCompanyPrinter.List());
+    }
+    [Fact]
     public void TheCabCompanyReportsFailureIfCannotDropoffCustomerDueToNoRequestedCabs()
     {
         FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();

@@ -80,6 +80,10 @@ public class UserInterface
                 }
                 if (selection == 4)
                 {
+                    if (customersCalls.Count == 0 && customersServed.Count == 0)
+                    {
+                        _cabCompanyPrinter.WriteLine("There are currently no customer calls in for cabs.");
+                    }
                     if (customersCalls.Count == customersServed.Count)
                     {
                         _cabCompanyPrinter.WriteLine("There are currently no customer's assigned to cabs.");
