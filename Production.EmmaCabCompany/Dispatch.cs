@@ -18,15 +18,30 @@ public class Dispatch
 
     public void CallCab(Customer customer)
     {
-        var success = _fleet.FirstOrDefault()?.PickupCustomer(customer);
-        if (success == true)
+        for (int i = 0; i < _fleet.Count; i++)
         {
-            _fleet.FirstOrDefault()?.DropOffCustomer();
+            var success = _fleet[i].PickupCustomer(customer);
+            if (success == true)
+            {
+                _fleet[i].DropOffCustomer();
+            }
+            
         }
     }
 
     public void RideRequest(Customer customer)
     {
-        _fleet.FirstOrDefault()?.RideRequest(customer);
+        var rideRequested = false;
+        for (int i = 0; i < _fleet.Count; i++)
+        {
+            if (rideRequested == false)
+            {
+                var rideRequest = _fleet[i].RideRequest(customer);
+                if (rideRequest == true)
+                {
+                    rideRequested = true;
+                }
+            }
+        }
     }
 }

@@ -22,4 +22,9 @@ public class FakeCabCompanyPrinter : ICabCompanyPrinter
     {
         return Messages.Count;
     }
+
+    public IEnumerable<string> List()
+    {
+        return Messages;
+    }
 }

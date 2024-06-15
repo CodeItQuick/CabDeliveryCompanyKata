@@ -19,11 +19,26 @@ public class UserInterface
 
     public void Run()
     {
+        int numCustomersServed = 0;
+        List<string> customerNames = new List<string>()
+        {
+            "Emma",
+            "Lisa",
+            "Dan",
+            "Evan",
+            "Darrell",
+            "Diane",
+            "Bob",
+            "Arlo"
+        };
         const int randomStartNumber = 10;
         int selection = randomStartNumber;
         bool isChosen = true;
-        var customers = new List<Customer>();
+        var customersServed = new List<Customer>();
+        List<Customer> customersCalls = new List<Customer>();
         var dispatch = new Dispatch(_cabCompanyPrinter);
+        int currentRideRequestServing = 0;
+        int currentAssignedCabServing = 0;
         while (selection != 0 && isChosen)
         {
             _cabCompanyPrinter.WriteLine("Please choose a selection from the list: ");
@@ -52,19 +67,26 @@ public class UserInterface
                 }
                 if (selection == 3)
                 {
-                    dispatch.RideRequest(customers.First());
+                    var customer = customersCalls.Skip(0).First();
+                    dispatch.RideRequest(customer);
+                    customersCalls.RemoveAt(0);
                 }
                 if (selection == 4)
                 {
-                    dispatch.CallCab(customers.First());
-                    customers.RemoveAt(0);
+                    var customer = customersServed.Skip(0).First();
+                    dispatch.CallCab(customer);
+                    customersServed.RemoveAt(0);
                 }
                 if (selection == 5)
                 {
                 }
                 if (selection == 6)
                 {
-                    customers.Add(new Customer("Emma", "1 Fulton Drive", "1 Destination Lane"));
+                    var customerName = customerNames[numCustomersServed];
+                    numCustomersServed++;
+                    var customer = new Customer(customerName, "1 Fulton Drive", "1 Destination Lane");
+                    customersServed.Add(customer);
+                    customersCalls.Add(customer);
                 }
             }
         }

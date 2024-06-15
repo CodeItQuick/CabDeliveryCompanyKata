@@ -17,7 +17,7 @@ public class Cabs : ICabs
 
     public bool PickupCustomer(Customer customer)
     {
-        if (_status != CabStatus.Available || customer.name != _passenger?.name)
+        if (_status != CabStatus.CustomerRideRequested || customer.name != _passenger?.name)
         {
             return false;
         }
@@ -34,21 +34,26 @@ public class Cabs : ICabs
         }
         _cabCompanyPrinter.WriteLine($"Evan's Cab dropped off {_passenger.name} at {_passenger.endLocation}.");
         _status = CabStatus.Available;
-        return true;
+        _passenger = null;
+        return _status != CabStatus.Available;
     }
 
     public bool RideRequest(Customer customer)
     {
-        if (_status == CabStatus.Available)
+        if (_status == CabStatus.Available && _passenger == null)
         {
             _passenger = customer;
+            _status = CabStatus.CustomerRideRequested;
+            return true;
         }
-        return _status == CabStatus.Available;
+
+        return false;
     }
 }
 
 internal enum CabStatus
 {
     Available,
-    TransportingCustomer
+    TransportingCustomer,
+    CustomerRideRequested
 }
