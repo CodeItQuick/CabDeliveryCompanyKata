@@ -42,11 +42,11 @@ public class UserInterface
             // also in the command pattern
             // command -> menu option string, -> execute with parameters
             _cabCompanyPrinter.WriteLine("0. Exit");
-            _cabCompanyPrinter.WriteLine("1. (Incoming Call) Add New Cab Driver");
-            _cabCompanyPrinter.WriteLine("2. (Incoming Call) Remove Cab Driver"); // TODO: weird tricks here could cause bugs
-            _cabCompanyPrinter.WriteLine("3. (Outgoing Call) Send Cab Driver Ride Request");
-            _cabCompanyPrinter.WriteLine("4. (Incoming Call) Cab Notifies Passenger Picked Up");
-            _cabCompanyPrinter.WriteLine("5. (Incoming Call) All Cab Notifies Passenger Dropped Off");
+            _cabCompanyPrinter.WriteLine("1. (Incoming Radio) Add New Cab Driver");
+            _cabCompanyPrinter.WriteLine("2. (Incoming Radio) Remove Cab Driver"); // TODO: weird tricks here could cause bugs
+            _cabCompanyPrinter.WriteLine("3. (Outgoing Radio) Send Cab Driver Ride Request");
+            _cabCompanyPrinter.WriteLine("4. (Incoming Radio) Cab Notifies Passenger Picked Up");
+            _cabCompanyPrinter.WriteLine("5. (Incoming Radio) All Cab Notifies Passenger Dropped Off");
             _cabCompanyPrinter.WriteLine("6. (Incoming Call) Cancel Cab Driver Fare");
             _cabCompanyPrinter.WriteLine("7. (Incoming Call) Customer Request Ride");
             var lineEntered = _cabCompanyReader.ReadLine();
