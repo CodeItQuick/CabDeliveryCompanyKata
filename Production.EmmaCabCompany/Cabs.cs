@@ -40,14 +40,14 @@ public class Cabs : ICabs
 
     public bool RideRequest(Customer? customer)
     {
-        if (_status == CabStatus.Available && _passenger == null)
+        if (_status != CabStatus.Available || _passenger != null)
         {
-            _passenger = customer;
-            _status = CabStatus.CustomerRideRequested;
-            return true;
+            return false;
         }
+        _passenger = customer;
+        _status = CabStatus.CustomerRideRequested;
+        return true;
 
-        return false;
     }
 }
 

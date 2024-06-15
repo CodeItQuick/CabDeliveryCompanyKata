@@ -13,9 +13,10 @@ public class AcceptanceTests
             CommandList = new List<string>()
             {
                 "1",
-                "6",
+                "7",
                 "3",
                 "4",
+                "5",
                 "0"
             }
         };
@@ -108,7 +109,7 @@ public class AcceptanceTests
         {
             CommandList = new List<string>()
             {
-                "6",
+                "7",
                 "3",
                 "0"
             }
@@ -128,12 +129,14 @@ public class AcceptanceTests
             CommandList = new List<string>()
             {
                 "1",
-                "6",
-                "6",
+                "7",
+                "7",
                 "3",
                 "4",
+                "5",
                 "3",
                 "4",
+                "5",
                 "0"
             }
         };
@@ -156,8 +159,8 @@ public class AcceptanceTests
             CommandList = new List<string>()
             {
                 "1",
-                "6",
-                "6",
+                "7",
+                "7",
                 "3",
                 "3",
                 "0"
@@ -181,12 +184,13 @@ public class AcceptanceTests
             {
                 "1",
                 "1",
-                "6",
-                "6",
+                "7",
+                "7",
                 "3",
                 "3",
                 "4",
                 "4",
+                "5",
                 "0"
             }
         };

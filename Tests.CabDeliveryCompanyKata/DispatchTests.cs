@@ -16,8 +16,9 @@ public class DispatchTests
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
         dispatch.RideRequest(customer);
+        dispatch.PickupCustomer(customer);
 
-        dispatch.CallCab(customer);
+        dispatch.DropOffCustomers();
         
         Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", 
             cabCompanyPrinter.Retrieve(0));
@@ -41,7 +42,7 @@ public class DispatchTests
         dispatch.AddCab(cabs);
         cabs.RideRequest(customerTwo);
 
-        dispatch.CallCab(customer);
+        dispatch.PickupCustomer(customer);
         
         Assert.Equal(0, cabCompanyPrinter.CountMessages());
     }

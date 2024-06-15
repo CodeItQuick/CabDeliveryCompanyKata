@@ -16,16 +16,18 @@ public class Dispatch
         _fleet.Add(cab);
     }
 
-    public void CallCab(Customer customer)
+    public void PickupCustomer(Customer customer)
     {
         for (int i = 0; i < _fleet.Count; i++)
         {
-            var success = _fleet[i].PickupCustomer(customer);
-            if (success == true)
-            {
-                _fleet[i].DropOffCustomer();
-            }
-            
+            _fleet[i].PickupCustomer(customer);
+        }
+    }
+    public void DropOffCustomers()
+    {
+        for (int i = 0; i < _fleet.Count; i++)
+        {
+            _fleet[i].DropOffCustomer();
         }
     }
 
