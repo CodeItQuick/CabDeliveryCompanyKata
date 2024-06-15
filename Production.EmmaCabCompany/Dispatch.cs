@@ -63,6 +63,13 @@ public class Dispatch
 
     public void RemoveCab()
     {
-        _fleet.RemoveAt(_fleet.Count - 1);
+        if (_fleet[^1].RideInProgress())
+        {
+            _fleet.RemoveAt(_fleet.Count - 1);
+        }
+        else
+        {
+            _cabCompanyPrinter.WriteLine("Cab cannot be removed until passenger dropped off.");
+        }
     }
 }

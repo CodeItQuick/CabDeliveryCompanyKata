@@ -49,6 +49,11 @@ public class Cabs : ICabs
         return true;
 
     }
+
+    public bool RideInProgress()
+    {
+        return _status == CabStatus.Available;
+    }
 }
 
 internal enum CabStatus
