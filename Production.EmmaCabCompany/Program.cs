@@ -8,7 +8,7 @@ public class Program
         var cabCompanyReader = new CabCompanyReader();
         var cabsList = new List<ICabs>();
 
-        var dispatch = new Dispatch(cabCompanyPrinter, cabCompanyReader, new FileWriter(), new FileReader());
+        var dispatch = new UserInterface(cabCompanyPrinter, cabCompanyReader, new FileWriter(), new FileReader());
         dispatch.Run(cabsList);
     }
 }

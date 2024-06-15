@@ -22,7 +22,7 @@ public class AcceptanceTests
         };
         var cabsList = new List<ICabs>();
         var mockFileReadWriter = new MockFileReadWriter();
-        var dispatch = new Dispatch(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        var dispatch = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
         dispatch.Run(cabsList);
         
         Assert.Single(cabsList);
