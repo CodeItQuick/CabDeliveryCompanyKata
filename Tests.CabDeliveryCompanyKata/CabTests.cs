@@ -26,4 +26,16 @@ public class CabTests
 
         Assert.False(acceptedRide);
     }
+    [Fact]
+    public void CabAcceptRideRequestWhenAvailableAfterPickingUpFare()
+    {
+        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        var cab = new Cabs("Evan's Cab", cabCompanyPrinter, 20);
+        cab.PickupCustomer(new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue"));
+        cab.DropOffCustomer();
+        
+        var acceptedRide = cab.RideRequest();
+
+        Assert.True(acceptedRide);
+    }
 }
