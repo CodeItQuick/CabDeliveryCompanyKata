@@ -57,6 +57,7 @@ public class UserInterface
                 if (selection == 4)
                 {
                     dispatch.CallCab(customers.First());
+                    customers.RemoveAt(0);
                 }
                 if (selection == 5)
                 {
