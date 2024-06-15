@@ -76,6 +76,7 @@ public class UserInterface
                         var customer = customersCalls.Skip(0).FirstOrDefault();
                         dispatch.RideRequest(customer);
                         customersCalls.RemoveAt(0);
+                        _cabCompanyPrinter.WriteLine("Cab assigned to customer.");
                     }
                     else
                     {
@@ -109,6 +110,7 @@ public class UserInterface
                     var customer = new Customer(customerName, "1 Fulton Drive", "1 Destination Lane");
                     customersServed.Add(customer);
                     customersCalls.Add(customer);
+                    _cabCompanyPrinter.WriteLine($"Received customer ride request from {customerName}");
                 }
             }
         }
