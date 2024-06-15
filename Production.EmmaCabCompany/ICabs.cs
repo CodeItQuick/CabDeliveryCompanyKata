@@ -2,6 +2,6 @@ namespace Production.EmmaCabCompany;
 
 public interface ICabs
 {
-    public void PickupCustomer(Customer customer);
-    public void DropOffCustomer();
+    public bool PickupCustomer(Customer customer);
+    public bool DropOffCustomer();
 }

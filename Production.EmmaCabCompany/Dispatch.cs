@@ -18,7 +18,10 @@ public class Dispatch
 
     public void CallCab(Customer customer)
     {
-        _fleet.FirstOrDefault()?.PickupCustomer(customer);
-        _fleet.FirstOrDefault()?.DropOffCustomer();
+        var success = _fleet.FirstOrDefault()?.PickupCustomer(customer);
+        if (success == true)
+        {
+            _fleet.FirstOrDefault()?.DropOffCustomer();
+        }
     }
 }

@@ -15,17 +15,27 @@ public class Cabs : ICabs
         _wallet = wallet;
     }
 
-    public void PickupCustomer(Customer customer)
+    public bool PickupCustomer(Customer customer)
     {
+        if (_status != CabStatus.Available)
+        {
+            return false;
+        }
         _status = CabStatus.TransportingCustomer;
         _customer = customer;
         _cabCompanyPrinter.WriteLine($"Evan's Cab picked up {customer.name} at {customer.startLocation}.");
+        return true;
     }
 
-    public void DropOffCustomer()
+    public bool DropOffCustomer()
     {
+        if (_status != CabStatus.TransportingCustomer)
+        {
+            return false;
+        }
         _cabCompanyPrinter.WriteLine($"Evan's Cab dropped off {_customer.name} at {_customer.endLocation}.");
         _status = CabStatus.Available;
+        return true;
     }
 
     public bool RideRequest()

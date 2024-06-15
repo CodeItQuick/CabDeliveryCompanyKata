@@ -23,4 +23,25 @@ public class DispatchTests
         Assert.Contains("Evan's Cab dropped off Emma at 1 Final Destination Lane.", 
             cabCompanyPrinter.Retrieve(1));
     }
+    [Fact]
+    public void CannotPickupCustomerIfNotAvailable()
+    {
+        var cabCompanyPrinter = new FakeCabCompanyPrinter();
+        var cabs = new Cabs("Dan's Cab", cabCompanyPrinter, 20);
+        var dispatch = new Dispatch(cabCompanyPrinter);
+        var customer = new Customer(
+            "Emma", 
+            "1 Fulton Drive", 
+            "1 Final Destination Lane");
+        var customerTwo = new Customer(
+            "Lisa", 
+            "1 Fulton Drive", 
+            "1 Final Destination Lane");
+        dispatch.AddCab(cabs);
+        cabs.PickupCustomer(customerTwo);
+
+        dispatch.CallCab(customer);
+        
+        Assert.Equal(1, cabCompanyPrinter.CountMessages());
+    }
 }
