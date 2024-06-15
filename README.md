@@ -18,15 +18,10 @@ Current Driver Requests: 0
 Current Driver Request Confirmations: 2
 ```
 ```shell
-1. List Cabs Drivers, Locations, Availability
-2. Assign Cab Driver to Ride Request
-3. Back to Main Navigation Menu
-```
-List Cab Drivers, Locations, Availability Menu:
-```shell
-1. Choose Cab Driver, Locations, Availability From List
-2. Add New Cab Driver
-3. Remove Cab Driver
-4. Cancel Cab Driver Fare
-5. Back to Main Navigation Menu
+1. Add New Cab Driver
+2. Remove Cab Driver
+3. Send Cab Driver Ride Request
+4. Assign Cab Driver to Ride
+5. Cancel Cab Driver Fare
+6. Back to Main Navigation Menu
 ```

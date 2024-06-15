@@ -8,24 +8,26 @@ public class AcceptanceTests
     public void TheCabCompanyCanPickupACustomerAtAnAddress()
     {
         FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
-        FakeCabCompanyWriter cabCompanyWriter = new FakeCabCompanyWriter()
+        FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
             CommandList = new List<string>()
             {
                 "1",
+                "6",
                 "3",
+                "4",
                 "5",
                 "0"
             }
         };
-        var customers = new List<Customer>();
         var cabsList = new List<ICabs>();
-        REPL.Run(cabCompanyPrinter, cabCompanyWriter, cabsList, customers);
+        var mockFileReadWriter = new MockFileReadWriter();
+        var dispatch = new Dispatch(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        dispatch.Run(cabsList);
         
-        Assert.Single(customers);
         Assert.Single(cabsList);
-        Assert.Equal("Evan's Cab picked up default customer 1 at start location 1.", cabCompanyPrinter.Retrieve(24));
-        Assert.Equal("Evan's Cab dropped off default customer 1 at end location 1.", cabCompanyPrinter.Retrieve(25));
+        Assert.Equal("Evan's Cab picked up default customer 1 at start location 1.", cabCompanyPrinter.Retrieve(45));
+        Assert.Equal("Evan's Cab dropped off default customer 1 at end location 1.", cabCompanyPrinter.Retrieve(46));
     }
     
 }
