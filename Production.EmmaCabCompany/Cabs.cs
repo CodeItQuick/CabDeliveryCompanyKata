@@ -6,7 +6,7 @@ public class Cabs : ICabs
     private readonly ICabCompanyPrinter _cabCompanyPrinter;
     private readonly int _wallet;
     private CabStatus _status = CabStatus.Available;
-    private Customer _customer;
+    private Customer? _passenger;
 
     public Cabs(string cabName, ICabCompanyPrinter cabCompanyPrinter, int wallet)
     {
@@ -17,12 +17,11 @@ public class Cabs : ICabs
 
     public bool PickupCustomer(Customer customer)
     {
-        if (_status != CabStatus.Available)
+        if (_status != CabStatus.Available || customer.name != _passenger?.name)
         {
             return false;
         }
         _status = CabStatus.TransportingCustomer;
-        _customer = customer;
         _cabCompanyPrinter.WriteLine($"Evan's Cab picked up {customer.name} at {customer.startLocation}.");
         return true;
     }
@@ -33,13 +32,17 @@ public class Cabs : ICabs
         {
             return false;
         }
-        _cabCompanyPrinter.WriteLine($"Evan's Cab dropped off {_customer.name} at {_customer.endLocation}.");
+        _cabCompanyPrinter.WriteLine($"Evan's Cab dropped off {_passenger.name} at {_passenger.endLocation}.");
         _status = CabStatus.Available;
         return true;
     }
 
-    public bool RideRequest()
+    public bool RideRequest(Customer customer)
     {
+        if (_status == CabStatus.Available)
+        {
+            _passenger = customer;
+        }
         return _status == CabStatus.Available;
     }
 }

@@ -15,6 +15,7 @@ public class DispatchTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
+        dispatch.RideRequest(customer);
 
         dispatch.CallCab(customer);
         
@@ -38,10 +39,10 @@ public class DispatchTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
-        cabs.PickupCustomer(customerTwo);
+        cabs.RideRequest(customerTwo);
 
         dispatch.CallCab(customer);
         
-        Assert.Equal(1, cabCompanyPrinter.CountMessages());
+        Assert.Equal(0, cabCompanyPrinter.CountMessages());
     }
 }

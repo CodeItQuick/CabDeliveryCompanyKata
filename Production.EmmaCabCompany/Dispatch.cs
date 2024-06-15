@@ -24,4 +24,9 @@ public class Dispatch
             _fleet.FirstOrDefault()?.DropOffCustomer();
         }
     }
+
+    public void RideRequest(Customer customer)
+    {
+        _fleet.FirstOrDefault()?.RideRequest(customer);
+    }
 }

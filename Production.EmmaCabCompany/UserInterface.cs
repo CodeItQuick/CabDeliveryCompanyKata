@@ -52,6 +52,7 @@ public class UserInterface
                 }
                 if (selection == 3)
                 {
+                    dispatch.RideRequest(customers.First());
                 }
                 if (selection == 4)
                 {

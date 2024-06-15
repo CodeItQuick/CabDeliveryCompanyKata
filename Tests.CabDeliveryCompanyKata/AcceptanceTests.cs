@@ -21,8 +21,8 @@ public class AcceptanceTests
             }
         };
         var mockFileReadWriter = new MockFileReadWriter();
-        var dispatch = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
-        dispatch.Run();
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        userInterface.Run();
         
         Assert.Equal("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.Retrieve(36));
         Assert.Equal("Evan's Cab dropped off Emma at 1 Destination Lane.", cabCompanyPrinter.Retrieve(37));
