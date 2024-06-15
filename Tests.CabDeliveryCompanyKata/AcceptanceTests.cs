@@ -27,6 +27,25 @@ public class AcceptanceTests
         Assert.Contains("Evan's Cab dropped off Emma at 1 Destination Lane.", cabCompanyPrinter.List());
     }
     [Fact]
+    public void TheCabCompanyReportsFailureIfCannotPickupCustomerDueToNoCalls()
+    {
+        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
+        {
+            CommandList = new List<string>()
+            {
+                "1",
+                "3",
+                "0"
+            }
+        };
+        var mockFileReadWriter = new MockFileReadWriter();
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        userInterface.Run();
+        
+        Assert.Contains("There are currently no customer's waiting for cabs.", cabCompanyPrinter.List());
+    }
+    [Fact]
     public void TheCabCompanyCanPickupTwoCustomerAtAnAddress()
     {
         FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
@@ -51,6 +70,31 @@ public class AcceptanceTests
         Assert.Equal("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.Retrieve(45));
         Assert.Equal("Evan's Cab dropped off Emma at 1 Destination Lane.", cabCompanyPrinter.Retrieve(46));
     }
+
+    [Fact]
+    public void TheCabCompanyReportsFailureWhenItCannotMakeAPickupDueToNoAvailableCabs()
+    {
+        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
+        {
+            CommandList = new List<string>()
+            {
+                "1",
+                "6",
+                "6",
+                "3",
+                "3",
+                "0"
+            }
+        };
+        var mockFileReadWriter = new MockFileReadWriter();
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        userInterface.Run();
+        
+        Assert.Contains("Dispatch failed to pickup Lisa as there are no available cabs.", 
+            cabCompanyPrinter.List());
+    }
+
     [Fact]
     public void TheCabCompanyCanPickupTwoCustomerInAMessyOrderingAtAnAddress()
     {
@@ -83,5 +127,4 @@ public class AcceptanceTests
         Assert.Contains("Evan's Cab dropped off Lisa at 1 Destination Lane.", 
             cabCompanyPrinter.List());
     }
-    
 }
