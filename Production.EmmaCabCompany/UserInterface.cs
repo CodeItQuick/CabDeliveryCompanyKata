@@ -47,9 +47,8 @@ public class UserInterface
             _cabCompanyPrinter.WriteLine("3. Send Cab Driver Ride Request");
             _cabCompanyPrinter.WriteLine("4. (External) Cab Notifies Passenger Picked Up");
             _cabCompanyPrinter.WriteLine("5. (External) All Cab Notifies Passenger Dropped Off");
-            _cabCompanyPrinter.WriteLine("6. Assign Cab Driver to Ride");
-            _cabCompanyPrinter.WriteLine("7. Cancel Cab Driver Fare");
-            _cabCompanyPrinter.WriteLine("8. (External) Customer Request Ride");
+            _cabCompanyPrinter.WriteLine("6. Cancel Cab Driver Fare");
+            _cabCompanyPrinter.WriteLine("7. (External) Customer Request Ride");
             var lineEntered = _cabCompanyReader.ReadLine();
 
             _cabCompanyPrinter.WriteLine($"You selected: {lineEntered}");
