@@ -6,7 +6,6 @@ public class Program
     {
         var cabCompanyPrinter = new CabCompanyPrinter();
         var cabCompanyReader = new CabCompanyReader();
-        var cabsList = new List<ICabs>();
 
         var dispatch = new UserInterface(cabCompanyPrinter, cabCompanyReader, new FileWriter(), new FileReader());
         dispatch.Run();

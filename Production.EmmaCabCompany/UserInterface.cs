@@ -31,15 +31,11 @@ public class UserInterface
             "Bob",
             "Arlo"
         };
-        const int randomStartNumber = 10;
-        int selection = randomStartNumber;
-        bool isChosen = true;
-        var customersPickedUp = new List<Customer>();
-        List<Customer> customerCallInProgress = new List<Customer>();
+        int selection;
+        List<Customer> customersCallInProgress = new List<Customer>();
         List<Customer> customersAwaitingPickup = new List<Customer>();
-        List<Customer> customersInCab = new List<Customer>();
+        List<Customer> customersPickedUp = new List<Customer>();
         var dispatch = new Dispatch(_cabCompanyPrinter);
-        int customersDelivered = 0;
         do
         {
             _cabCompanyPrinter.WriteLine("Please choose a selection from the list: ");
@@ -57,7 +53,7 @@ public class UserInterface
             var lineEntered = _cabCompanyReader.ReadLine();
 
             _cabCompanyPrinter.WriteLine($"You selected: {lineEntered}");
-            isChosen = Int32.TryParse(lineEntered, out selection);
+            var isChosen = Int32.TryParse(lineEntered, out selection);
             if (!isChosen)
             {
                 selection = 10;
@@ -83,12 +79,12 @@ public class UserInterface
                 {
                     _cabCompanyPrinter.WriteLine("There are currently no cabs in the fleet.");
                 }
-                else if (customerCallInProgress.Any())
+                else if (customersCallInProgress.Any())
                 {
-                    var customer = customerCallInProgress.Skip(0).First();
+                    var customer = customersCallInProgress.Skip(0).First();
                     dispatch.RideRequest(customer);
                     customersAwaitingPickup.Add(customer);
-                    customerCallInProgress.RemoveAt(0);
+                    customersCallInProgress.RemoveAt(0);
                     _cabCompanyPrinter.WriteLine("Cab assigned to customer.");
                 }
                 else
@@ -144,7 +140,7 @@ public class UserInterface
                 var customerName = customerNames[numCustomersServed];
                 numCustomersServed++;
                 var customer = new Customer(customerName, "1 Fulton Drive", "1 Destination Lane");
-                customerCallInProgress.Add(customer);
+                customersCallInProgress.Add(customer);
                 _cabCompanyPrinter.WriteLine($"Received customer ride request from {customerName}");
             }
         } while (selection != 0);
