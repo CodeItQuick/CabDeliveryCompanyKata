@@ -39,7 +39,7 @@ public class UserInterface
         var dispatch = new Dispatch(_cabCompanyPrinter);
         int currentRideRequestServing = 0;
         int currentAssignedCabServing = 0;
-        while (selection != 0 && isChosen)
+        do
         {
             _cabCompanyPrinter.WriteLine("Please choose a selection from the list: ");
             // also in the command pattern
@@ -52,81 +52,90 @@ public class UserInterface
             _cabCompanyPrinter.WriteLine("5. Cancel Cab Driver Fare");
             _cabCompanyPrinter.WriteLine("6. (External) Customer Request Ride");
             var lineEntered = _cabCompanyReader.ReadLine();
-        
+
             _cabCompanyPrinter.WriteLine($"You selected: {lineEntered}");
             isChosen = Int32.TryParse(lineEntered, out selection);
-            if (isChosen)
+            if (!isChosen)
             {
-                // command pattern
-                if (selection == 1)
+                selection = 10;
+                continue;
+            }
+            // command pattern
+            if (selection == 1)
+            {
+                dispatch.AddCab(new Cabs("Evan's Cab", _cabCompanyPrinter, 20));
+            }
+
+            if (selection == 2)
+            {
+                if (!dispatch.NoCabsInFleet())
                 {
-                    dispatch.AddCab(new Cabs("Evan's Cab", _cabCompanyPrinter, 20));
-                }
-                if (selection == 2)
-                {
-                    if (!dispatch.NoCabsInFleet())
-                    {
-                        dispatch.RemoveCab();
-                    }
-                }
-                if (selection == 3)
-                {
-                    if (dispatch.NoCabsInFleet())
-                    {
-                        _cabCompanyPrinter.WriteLine("There are currently no cabs in the fleet.");
-                    }
-                    else if (customersCalls.Any())
-                    {
-                        var customer = customersCalls.Skip(0).FirstOrDefault();
-                        dispatch.RideRequest(customer);
-                        customersCalls.RemoveAt(0);
-                        _cabCompanyPrinter.WriteLine("Cab assigned to customer.");
-                    }
-                    else
-                    {
-                        _cabCompanyPrinter.WriteLine("There are currently no customer's waiting for cabs.");
-                    }
-                }
-                if (selection == 4)
-                {
-                    if (customersCalls.Count == 0 && customersServed.Count == 0)
-                    {
-                        _cabCompanyPrinter.WriteLine("There are currently no customer calls in for cabs.");
-                    }
-                    if (customersCalls.Count == customersServed.Count)
-                    {
-                        _cabCompanyPrinter.WriteLine("There are currently no customer's assigned to cabs.");
-                    }
-                    else
-                    {
-                        var customer = customersServed.Skip(0).First();
-                        dispatch.CallCab(customer);
-                        customersServed.RemoveAt(0);
-                    }
-                }
-                if (selection == 5)
-                {
-                    if (customersCalls.Any())
-                    {
-                        customersCalls.RemoveAt(customersCalls.Count - 1);
-                        _cabCompanyPrinter.WriteLine("Customer cancelled request before cab assigned.");
-                    }
-                    if (customersServed.Any())
-                    {
-                        customersServed.RemoveAt(customersServed.Count - 1);
-                        _cabCompanyPrinter.WriteLine("Customer cancelled request before cab got there.");
-                    }
-                }
-                if (selection == 6)
-                {
-                    var customerName = customerNames[numCustomersServed];
-                    numCustomersServed++;
-                    var customer = new Customer(customerName, "1 Fulton Drive", "1 Destination Lane");
-                    customersServed.Add(customer);
-                    customersCalls.Add(customer);
-                    _cabCompanyPrinter.WriteLine($"Received customer ride request from {customerName}");
+                    dispatch.RemoveCab();
                 }
             }
-        }
+
+            if (selection == 3)
+            {
+                if (dispatch.NoCabsInFleet())
+                {
+                    _cabCompanyPrinter.WriteLine("There are currently no cabs in the fleet.");
+                }
+                else if (customersCalls.Any())
+                {
+                    var customer = customersCalls.Skip(0).FirstOrDefault();
+                    dispatch.RideRequest(customer);
+                    customersCalls.RemoveAt(0);
+                    _cabCompanyPrinter.WriteLine("Cab assigned to customer.");
+                }
+                else
+                {
+                    _cabCompanyPrinter.WriteLine("There are currently no customer's waiting for cabs.");
+                }
+            }
+
+            if (selection == 4)
+            {
+                if (customersCalls.Count == 0 && customersServed.Count == 0)
+                {
+                    _cabCompanyPrinter.WriteLine("There are currently no customer calls in for cabs.");
+                }
+
+                if (customersCalls.Count == customersServed.Count)
+                {
+                    _cabCompanyPrinter.WriteLine("There are currently no customer's assigned to cabs.");
+                }
+                else
+                {
+                    var customer = customersServed.Skip(0).First();
+                    dispatch.CallCab(customer);
+                    customersServed.RemoveAt(0);
+                }
+            }
+
+            if (selection == 5)
+            {
+                if (customersCalls.Any())
+                {
+                    customersCalls.RemoveAt(customersCalls.Count - 1);
+                    _cabCompanyPrinter.WriteLine("Customer cancelled request before cab assigned.");
+                }
+
+                if (customersServed.Any())
+                {
+                    customersServed.RemoveAt(customersServed.Count - 1);
+                    _cabCompanyPrinter.WriteLine("Customer cancelled request before cab got there.");
+                }
+            }
+
+            if (selection == 6)
+            {
+                var customerName = customerNames[numCustomersServed];
+                numCustomersServed++;
+                var customer = new Customer(customerName, "1 Fulton Drive", "1 Destination Lane");
+                customersServed.Add(customer);
+                customersCalls.Add(customer);
+                _cabCompanyPrinter.WriteLine($"Received customer ride request from {customerName}");
+            }
+        } while (selection != 0);
     }
 }
