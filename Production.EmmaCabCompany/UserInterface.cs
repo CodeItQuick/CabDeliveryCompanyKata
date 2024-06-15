@@ -80,9 +80,16 @@ public class UserInterface
                 }
                 if (selection == 4)
                 {
-                    var customer = customersServed.Skip(0).First();
-                    dispatch.CallCab(customer);
-                    customersServed.RemoveAt(0);
+                    if (customersCalls.Count == customersServed.Count)
+                    {
+                        _cabCompanyPrinter.WriteLine("There are currently no customer's assigned to cabs.");
+                    }
+                    else
+                    {
+                        var customer = customersServed.Skip(0).First();
+                        dispatch.CallCab(customer);
+                        customersServed.RemoveAt(0);
+                    }
                 }
                 if (selection == 5)
                 {
