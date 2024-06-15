@@ -43,9 +43,9 @@ public class UserInterface
             // command -> menu option string, -> execute with parameters
             _cabCompanyPrinter.WriteLine("0. Exit");
             _cabCompanyPrinter.WriteLine("1. Add New Cab Driver");
-            _cabCompanyPrinter.WriteLine("2. Remove Cab Driver");
+            _cabCompanyPrinter.WriteLine("2. Remove Cab Driver"); // TODO: weird tricks here could cause bugs
             _cabCompanyPrinter.WriteLine("3. Send Cab Driver Ride Request");
-            _cabCompanyPrinter.WriteLine("4. (External) All Cab Notifies Passenger Picked Up");
+            _cabCompanyPrinter.WriteLine("4. (External) Cab Notifies Passenger Picked Up");
             _cabCompanyPrinter.WriteLine("5. (External) All Cab Notifies Passenger Dropped Off");
             _cabCompanyPrinter.WriteLine("6. Assign Cab Driver to Ride");
             _cabCompanyPrinter.WriteLine("7. Cancel Cab Driver Fare");
