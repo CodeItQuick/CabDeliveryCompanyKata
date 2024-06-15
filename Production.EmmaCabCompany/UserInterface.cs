@@ -95,7 +95,11 @@ public class UserInterface
 
             if (selection == 4)
             {
-                if (customersAwaitingPickup.Count == 0)
+                if (dispatch.NoCabsInFleet())
+                {
+                    _cabCompanyPrinter.WriteLine("There are currently no cabs in the fleet.");
+                }
+                else if (customersAwaitingPickup.Count == 0)
                 {
                     _cabCompanyPrinter.WriteLine("There are currently no customer's assigned to cabs.");
                 }

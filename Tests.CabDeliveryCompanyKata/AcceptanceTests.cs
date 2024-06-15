@@ -54,6 +54,7 @@ public class AcceptanceTests
         {
             CommandList = new List<string>()
             {
+                "1",
                 "4",
                 "0"
             }
