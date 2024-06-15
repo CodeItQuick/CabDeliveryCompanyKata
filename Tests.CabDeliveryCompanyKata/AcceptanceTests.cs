@@ -86,8 +86,10 @@ public class AcceptanceTests
         var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
         userInterface.Run();
         
-        Assert.Equal("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.Retrieve(45));
-        Assert.Equal("Evan's Cab dropped off Emma at 1 Destination Lane.", cabCompanyPrinter.Retrieve(46));
+        Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.List());
+        Assert.Contains("Evan's Cab dropped off Emma at 1 Destination Lane.", cabCompanyPrinter.List());
+        Assert.Contains("Evan's Cab picked up Lisa at 1 Fulton Drive.", cabCompanyPrinter.List());
+        Assert.Contains("Evan's Cab dropped off Lisa at 1 Destination Lane.", cabCompanyPrinter.List());
     }
 
     [Fact]
