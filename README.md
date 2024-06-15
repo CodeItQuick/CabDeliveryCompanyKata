@@ -22,7 +22,7 @@ Current Driver Request Confirmations: 2
 2. Assign Cab Driver to Ride Request
 3. Back to Main Navigation Menu
 ```
-List Cab Drivers Menu:
+List Cab Drivers, Locations, Availability Menu:
 ```shell
 1. Choose Cab Driver, Locations, Availability From List
 2. Add New Cab Driver
