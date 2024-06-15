@@ -17,11 +17,13 @@ public class UserInterface
         _fileReader = fileReader;
     }
 
-    public void Run(List<ICabs> cabsList)
+    public void Run()
     {
         const int randomStartNumber = 10;
         int selection = randomStartNumber;
         bool isChosen = true;
+        var customers = new List<Customer>();
+        var dispatch = new Dispatch(_cabCompanyPrinter);
         while (selection != 0 && isChosen)
         {
             _cabCompanyPrinter.WriteLine("Please choose a selection from the list: ");
@@ -43,29 +45,24 @@ public class UserInterface
                 // command pattern
                 if (selection == 1)
                 {
-                    cabsList.Add(new Cabs("Evan's Cab", _cabCompanyPrinter, 20));
+                    dispatch.AddCab(new Cabs("Evan's Cab", _cabCompanyPrinter, 20));
                 }
                 if (selection == 2)
                 {
-                    if (cabsList.Any())
-                    {
-                        
-                    }
                 }
                 if (selection == 3)
                 {
                 }
                 if (selection == 4)
                 {
+                    dispatch.CallCab(customers.First());
                 }
                 if (selection == 5)
                 {
-                    _cabCompanyPrinter.WriteLine("Evan's Cab picked up default customer 1 at start location 1.");
-                    _cabCompanyPrinter.WriteLine("Evan's Cab dropped off default customer 1 at end location 1.");
                 }
                 if (selection == 6)
                 {
-                    
+                    customers.Add(new Customer("Emma", "1 Fulton Drive", "1 Destination Lane"));
                 }
             }
         }

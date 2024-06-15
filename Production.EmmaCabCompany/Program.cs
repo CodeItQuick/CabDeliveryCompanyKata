@@ -9,6 +9,6 @@ public class Program
         var cabsList = new List<ICabs>();
 
         var dispatch = new UserInterface(cabCompanyPrinter, cabCompanyReader, new FileWriter(), new FileReader());
-        dispatch.Run(cabsList);
+        dispatch.Run();
     }
 }

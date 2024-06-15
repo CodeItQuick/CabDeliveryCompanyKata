@@ -20,14 +20,12 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var cabsList = new List<ICabs>();
         var mockFileReadWriter = new MockFileReadWriter();
         var dispatch = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
-        dispatch.Run(cabsList);
+        dispatch.Run();
         
-        Assert.Single(cabsList);
-        Assert.Equal("Evan's Cab picked up default customer 1 at start location 1.", cabCompanyPrinter.Retrieve(45));
-        Assert.Equal("Evan's Cab dropped off default customer 1 at end location 1.", cabCompanyPrinter.Retrieve(46));
+        Assert.Equal("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.Retrieve(36));
+        Assert.Equal("Evan's Cab dropped off Emma at 1 Destination Lane.", cabCompanyPrinter.Retrieve(37));
     }
     
 }
