@@ -29,7 +29,7 @@ public class Dispatch
         }
     }
 
-    public void RideRequest(Customer customer)
+    public void RideRequest(Customer? customer)
     {
         if (!_fleet.Any())
         {
@@ -48,7 +48,7 @@ public class Dispatch
             }
         }
 
-        if (rideRequested == false)
+        if (rideRequested == false && customer != null)
         {
             _cabCompanyPrinter.WriteLine($"Dispatch failed to pickup {customer.name} as there are no available cabs.");
         }

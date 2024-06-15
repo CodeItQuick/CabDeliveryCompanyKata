@@ -38,7 +38,7 @@ public class Cabs : ICabs
         return _status != CabStatus.Available;
     }
 
-    public bool RideRequest(Customer customer)
+    public bool RideRequest(Customer? customer)
     {
         if (_status == CabStatus.Available && _passenger == null)
         {
