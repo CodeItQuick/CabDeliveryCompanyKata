@@ -67,10 +67,14 @@ public class UserInterface
                 }
                 if (selection == 3)
                 {
-                    var customer = customersCalls.Skip(0).FirstOrDefault();
-                    dispatch.RideRequest(customer);
-                    if (customersCalls.Any())
+                    if (dispatch.NoCabsInFleet())
                     {
+                        _cabCompanyPrinter.WriteLine("There are currently no cabs in the fleet.");
+                    }
+                    else if (customersCalls.Any())
+                    {
+                        var customer = customersCalls.Skip(0).FirstOrDefault();
+                        dispatch.RideRequest(customer);
                         customersCalls.RemoveAt(0);
                     }
                     else

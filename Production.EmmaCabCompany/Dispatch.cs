@@ -53,4 +53,9 @@ public class Dispatch
             _cabCompanyPrinter.WriteLine($"Dispatch failed to pickup {customer.name} as there are no available cabs.");
         }
     }
+
+    public bool NoCabsInFleet()
+    {
+        return !_fleet.Any();
+    }
 }
