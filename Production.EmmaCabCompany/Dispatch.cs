@@ -31,6 +31,10 @@ public class Dispatch
 
     public void RideRequest(Customer customer)
     {
+        if (!_fleet.Any())
+        {
+            _cabCompanyPrinter.WriteLine("There are currently no cabs in the fleet.");
+        }
         var rideRequested = false;
         for (int i = 0; i < _fleet.Count; i++)
         {
