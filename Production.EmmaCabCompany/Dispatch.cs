@@ -3,7 +3,7 @@ namespace Production.EmmaCabCompany;
 public class Dispatch 
 {
     private readonly ICabCompanyPrinter _cabCompanyPrinter;
-    private List<ICabs> _fleet = new();
+    private readonly List<ICabs> _fleet = new();
 
     public Dispatch(ICabCompanyPrinter cabCompanyPrinter)
     {
@@ -16,22 +16,7 @@ public class Dispatch
         _fleet.Add(cab);
     }
 
-    public void PickupCustomer(Customer customer)
-    {
-        for (int i = 0; i < _fleet.Count; i++)
-        {
-            _fleet[i].PickupCustomer(customer);
-        }
-    }
-    public void DropOffCustomers()
-    {
-        for (int i = 0; i < _fleet.Count; i++)
-        {
-            _fleet[i].DropOffCustomer();
-        }
-    }
-
-    public void RideRequest(Customer? customer)
+    public bool RideRequest(Customer? customer)
     {
         if (!_fleet.Any())
         {
@@ -54,6 +39,33 @@ public class Dispatch
         {
             _cabCompanyPrinter.WriteLine($"Dispatch failed to pickup {customer.name} as there are no available cabs.");
         }
+
+        return rideRequested;
+    }
+
+    public bool PickupCustomer(Customer customer)
+    {
+        for (int i = 0; i < _fleet.Count; i++)
+        {
+            _fleet[i].PickupCustomer(customer);
+        }
+
+        return customer.IsPickedUp();
+    }
+
+    public bool DropOffCustomers()
+    {
+        if (_fleet.Count == 0)
+        {
+            return false;
+        }
+        var allPickedUp = true;
+        for (int i = 0; i < _fleet.Count; i++)
+        {
+            allPickedUp = allPickedUp && _fleet[i].DropOffCustomer();
+        }
+
+        return allPickedUp;
     }
 
     public bool NoCabsInFleet()

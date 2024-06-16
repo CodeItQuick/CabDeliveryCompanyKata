@@ -22,6 +22,7 @@ public class Cabs : ICabs
             return false;
         }
         _status = CabStatus.TransportingCustomer;
+        customer.IsInCab(this);
         _cabCompanyPrinter.WriteLine($"{_cabName} picked up {customer.name} at {customer.startLocation}.");
         return true;
     }
