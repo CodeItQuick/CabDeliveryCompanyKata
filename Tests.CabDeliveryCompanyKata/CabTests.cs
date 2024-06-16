@@ -41,7 +41,6 @@ public class CabTests
         cab.PickupCustomer(passengerTwo);
         var dropOffCustomerTwo = cab.DropOffCustomer();
 
-
         Assert.True(dropOffCustomer);
         Assert.True(dropOffCustomerTwo);
     }
@@ -61,11 +60,30 @@ public class CabTests
     {
         FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
         var cab = new Cabs("Evan's Cab", cabCompanyPrinter, 20);
-        var acceptedRide = cab.RideRequest(new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue"));
-        
-        cab.PickupCustomer(new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue"));
-        cab.DropOffCustomer();
+        var passenger = new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue");
+        var acceptedRide = cab.RideRequest(passenger);
+        var pickupCustomer = cab.PickupCustomer(passenger);
+
+        var dropOffCustomer = cab.DropOffCustomer();
 
         Assert.True(acceptedRide);
+        Assert.True(pickupCustomer);
+        Assert.True(dropOffCustomer);
+    }
+    [Fact]
+    public void CabDenyRideRequestWhenNotAvailableAfterPickingUpAnotherFare()
+    {
+        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        var cab = new Cabs("Evan's Cab", cabCompanyPrinter, 20);
+        var passenger = new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue");
+        var passengerDenied = new Customer("Emma", "2 Fulton Drive", "2 Destination Avenue");
+        var acceptedRide = cab.RideRequest(passenger);
+        var pickupCustomer = cab.PickupCustomer(passengerDenied);
+
+        var dropOffCustomer = cab.DropOffCustomer();
+
+        Assert.True(acceptedRide);
+        Assert.False(pickupCustomer);
+        Assert.False(dropOffCustomer);
     }
 }
