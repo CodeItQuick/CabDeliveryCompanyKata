@@ -1,3 +1,5 @@
+using Production.EmmaCabCompany.Commands;
+
 namespace Production.EmmaCabCompany;
 
 public class UserInterface
@@ -60,114 +62,32 @@ public class UserInterface
             // command pattern
             if (selection == 1)
             {
-                var cabName = "Evan's Cab";
-                var addCab = dispatch.AddCab(new Cab(cabName, 20));
-                if (addCab)
-                {
-                    _cabCompanyPrinter.WriteLine("Added Evan's Cab to fleet");
-                }
+                AddCabCommand.Select(dispatch, _cabCompanyPrinter);
             }
 
             if (selection == 2)
             {
-                if (!dispatch.NoCabsInFleet())
-                {
-                    var success = dispatch.RemoveCab();
-                    if (success)
-                    {
-                        _cabCompanyPrinter.WriteLine("Last cab removed from cab fleet.");
-                    }
-                    else
-                    {
-                        _cabCompanyPrinter.WriteLine("Cab cannot be removed until passenger dropped off.");
-                    }
-                }
+                RemoveCabCommand.Select(dispatch, _cabCompanyPrinter);
             }
             if (selection == 3)
             {
-                if (dispatch.NoCabsInFleet())
-                {
-                    _cabCompanyPrinter.WriteLine("There are currently no cabs in the fleet.");
-                }
-                else if (customersCallInProgress.Any())
-                {
-                    try
-                    {
-                        var customer = customersCallInProgress.Skip(0).First();
-                        var cabInfo = dispatch.RideRequest(customer);
-                        if (cabInfo != null)
-                        {
-                            _cabCompanyPrinter.WriteLine($"{cabInfo.CabName} picked up {cabInfo.PassengerName} at {cabInfo.StartLocation}.");
-                        }
-                        customersAwaitingPickup.Add(customer);
-                        customersCallInProgress.RemoveAt(0);
-                        _cabCompanyPrinter.WriteLine("Cab assigned to customer.");
-                    }
-                    catch (SystemException ex)
-                    {
-                        _cabCompanyPrinter.WriteLine(ex.Message);
-                    }
-                }
-                else
-                {
-                    _cabCompanyPrinter.WriteLine("There are currently no customer's waiting for cabs.");
-                }
+                SendCabRequestCommand.Select(dispatch, customersCallInProgress, customersAwaitingPickup, _cabCompanyPrinter);
             }
             if (selection == 4)
             {
-                if (dispatch.NoCabsInFleet())
-                {
-                    _cabCompanyPrinter.WriteLine("There are currently no cabs in the fleet.");
-                }
-                else if (customersAwaitingPickup.Count == 0)
-                {
-                    _cabCompanyPrinter.WriteLine("There are currently no customer's assigned to cabs.");
-                }
-                else
-                {
-                    var customer = customersAwaitingPickup.FirstOrDefault();
-                    dispatch.PickupCustomer(customer);
-                    customersPickedUp.Add(customer);
-                    customersAwaitingPickup.RemoveAt(0);
-                }
+                CabNotifiesPickedUpCommand.Select(dispatch, customersAwaitingPickup, customersPickedUp, _cabCompanyPrinter);
             }
             if (selection == 5)
             {
-                if (customersPickedUp.Count == 0)
-                {
-                    _cabCompanyPrinter.WriteLine("There are currently no customer's assigned to cabs.");
-                }
-                else
-                {
-                    var droppedOffCustomers = dispatch.DropOffCustomers();
-                    foreach (var cabInfo in droppedOffCustomers)
-                    {
-                        _cabCompanyPrinter.WriteLine($"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}.");
-                    }
-                    customersPickedUp = new List<Customer>();
-                }
+                customersPickedUp = CabNotifiesDroppedOffCommand.Select(customersPickedUp, dispatch, _cabCompanyPrinter);
             }
             if (selection == 6)
             {
-                if (customersAwaitingPickup.Any())
-                {
-                    customersAwaitingPickup.RemoveAt(customersAwaitingPickup.Count - 1);
-                    _cabCompanyPrinter.WriteLine("Customer cancelled request before cab assigned.");
-                }
-
-                if (customersPickedUp.Any())
-                {
-                    customersPickedUp.RemoveAt(customersPickedUp.Count - 1);
-                    _cabCompanyPrinter.WriteLine("Customer cancelled request before cab got there.");
-                }
+                CustomerCancelledCabRideCommand.Select(customersAwaitingPickup, customersPickedUp, _cabCompanyPrinter);
             }
             if (selection == 7)
             {
-                var customerName = customerNames[numCustomersServed];
-                numCustomersServed++;
-                var customer = new Customer(customerName, "1 Fulton Drive", "1 Destination Lane");
-                customersCallInProgress.Add(customer);
-                _cabCompanyPrinter.WriteLine($"Received customer ride request from {customerName}");
+                numCustomersServed = CustomerCabCallCommand.Select(customerNames, numCustomersServed, customersCallInProgress, _cabCompanyPrinter);
             }
         } while (selection != 0);
     }
