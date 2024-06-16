@@ -2,7 +2,7 @@ namespace Production.EmmaCabCompany.Commands;
 
 public static class SendCabRequestCommand
 {
-    public static void Select(
+    public static List<string> Select(
         Dispatch dispatch, 
         List<Customer> customersCallInProgress,
         List<Customer> customersAwaitingPickup, 
@@ -10,9 +10,9 @@ public static class SendCabRequestCommand
     {
         if (dispatch.NoCabsInFleet())
         {
-            cabCompanyPrinter.WriteLine("There are currently no cabs in the fleet.");
+            return ["There are currently no cabs in the fleet."];
         }
-        else if (customersCallInProgress.Any())
+        if (customersCallInProgress.Any())
         {
             try
             {
@@ -20,11 +20,17 @@ public static class SendCabRequestCommand
                 var cabInfo = dispatch.RideRequest(customer);
                 if (cabInfo != null)
                 {
-                    cabCompanyPrinter.WriteLine($"{cabInfo.CabName} picked up {cabInfo.PassengerName} at {cabInfo.StartLocation}.");
+                    customersAwaitingPickup.Add(customer);
+                    customersCallInProgress.RemoveAt(0);
+                    return
+                    [
+                        $"{cabInfo.CabName} picked up {cabInfo.PassengerName} at {cabInfo.StartLocation}.",
+                        "Cab assigned to customer."
+                    ];
                 }
                 customersAwaitingPickup.Add(customer);
                 customersCallInProgress.RemoveAt(0);
-                cabCompanyPrinter.WriteLine("Cab assigned to customer.");
+                return ["Cab assigned to customer."];
             }
             catch (SystemException ex)
             {
@@ -33,7 +39,9 @@ public static class SendCabRequestCommand
         }
         else
         {
-            cabCompanyPrinter.WriteLine("There are currently no customer's waiting for cabs.");
+            return ["There are currently no customer's waiting for cabs."];
         }
+
+        return ["There are no customer calls in progress"];
     }
 }

@@ -2,19 +2,19 @@ namespace Production.EmmaCabCompany.Commands;
 
 public class RemoveCabCommand
 {
-    public static void Select(Dispatch dispatch, ICabCompanyPrinter cabCompanyPrinter)
+    public static string Select(Dispatch dispatch, ICabCompanyPrinter cabCompanyPrinter)
     {
         if (!dispatch.NoCabsInFleet())
         {
             var success = dispatch.RemoveCab();
             if (success)
             {
-                cabCompanyPrinter.WriteLine("Last cab removed from cab fleet.");
+                return "Last cab removed from cab fleet.";
             }
-            else
-            {
-                cabCompanyPrinter.WriteLine("Cab cannot be removed until passenger dropped off.");
-            }
+
+            return "Cab cannot be removed until passenger dropped off.";
         }
+
+        return "No cabs in fleet currently";
     }
 }

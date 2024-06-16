@@ -64,14 +64,17 @@ public class UserInterface
             {
                 // command pattern
                 case 1:
-                    var result = AddCabCommand.Select(dispatch);
-                    _cabCompanyPrinter.WriteLine(result);
+                    var addCabCommand = AddCabCommand.Select(dispatch);
+                    _cabCompanyPrinter.WriteLine(addCabCommand);
                     break;
                 case 2:
-                    RemoveCabCommand.Select(dispatch, _cabCompanyPrinter);
+                    var removeCabCommand = RemoveCabCommand.Select(dispatch, _cabCompanyPrinter);
+                    _cabCompanyPrinter.WriteLine(removeCabCommand);
                     break;
                 case 3:
-                    SendCabRequestCommand.Select(dispatch, customersCallInProgress, customersAwaitingPickup, _cabCompanyPrinter);
+                    var sendCabRequestCommand = SendCabRequestCommand
+                        .Select(dispatch, customersCallInProgress, customersAwaitingPickup, _cabCompanyPrinter);
+                    sendCabRequestCommand.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 4:
                     CabNotifiesPickedUpCommand.Select(dispatch, customersAwaitingPickup, customersPickedUp, _cabCompanyPrinter);
