@@ -55,7 +55,6 @@ public class UserInterface
             var isChosen = Int32.TryParse(lineEntered, out selection);
             if (!isChosen)
             {
-                selection = 10;
                 continue;
             }
             // command pattern
