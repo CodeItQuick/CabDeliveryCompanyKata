@@ -1,4 +1,4 @@
-### An Example Overall Big-Picture Event Storm (Dispatcher Customer Journey)
+### Dispatcher Customer Journey (From Event Storming)
 
 1. **Driver Management**: Add New Cab Driver
 2. **Customer Interaction**: Customer Requests Ride
