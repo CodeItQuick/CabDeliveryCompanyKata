@@ -1,4 +1,10 @@
 # Cab Company Dispatch Screen
+
+## TODO
+1. Add More Tests
+2. Fix Architecture
+3. Add More Features
+
 ## Story
 A cab company currently operates with "old school" technology. The cab company wants to upgrade their technology offering
 to include a software solution that helps them pickup customers from one location and drop them off at another location.
@@ -17,7 +23,7 @@ Current Passenger Request Confirmations: 2
 Current Driver Requests: 0
 Current Driver Request Confirmations: 2
 ```
-```shell
+```
 0. Exit
 1. (Incoming Radio) Add New Cab Driver
 2. (Incoming Radio) Remove Cab Driver
