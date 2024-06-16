@@ -18,10 +18,15 @@ Current Driver Requests: 0
 Current Driver Request Confirmations: 2
 ```
 ```shell
-1. Add New Cab Driver
-2. Remove Cab Driver
-3. Send Cab Driver Ride Request
-4. Assign Cab Driver to Ride
-5. Cancel Cab Driver Fare
-6. Back to Main Navigation Menu
+1. (Incoming Radio) Add New Cab Driver
+2. (Incoming Radio) Remove Cab Driver
+3. (Outgoing Radio) Send Cab Driver Ride Request
+4. (Incoming Radio) Cab Notifies Passenger Picked Up
+4. (Incoming Radio) All Cab Notifies Passenger Dropped Off
+5. (Incoming Call) Cancel Cab Driver Fare
+6. (Incoming Call) Back to Main Navigation Menu
 ```
+
+Write the following acceptance tests:
+TheCabCompanyCanPickupACustomerAtAnAddress
+TheCabCompanyCanPickupTwoCustomerAtTwoAddresses

@@ -106,7 +106,7 @@ public class AcceptanceTests
         Assert.Contains("There are currently no cabs in the fleet.", cabCompanyPrinter.List());
     }
     [Fact]
-    public void TheCabCompanyReportsFailureIfCannotDropoffCustomerDueToNoRequestedCabs()
+    public void TheCabCompanyReportsFailureIfCannotDropOffCustomerDueToNoRequestedCabs()
     {
         FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()

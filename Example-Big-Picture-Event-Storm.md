@@ -20,7 +20,3 @@
 18. **Driver Management**: Status: Send ready for pickup status
 19. **Ride Dispatch**: Driver Ready For Pickup Status Received
 20. **Optionally: Human Resources**: List Cab Drivers, Fares Received
-
-Question:
-* How does the dispatch system know that the fare was completed, or if it was cancelled, etc?
-* There must be some interaction between the cabbie and the dispatch that is missing here
