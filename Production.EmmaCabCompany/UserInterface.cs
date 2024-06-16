@@ -61,7 +61,7 @@ public class UserInterface
             // command pattern
             if (selection == 1)
             {
-                dispatch.AddCab(new Cabs("Evan's Cab", _cabCompanyPrinter, 20));
+                dispatch.AddCab(new Cab("Evan's Cab", _cabCompanyPrinter, 20));
             }
 
             if (selection == 2)

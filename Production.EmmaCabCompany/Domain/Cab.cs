@@ -1,6 +1,6 @@
 namespace Production.EmmaCabCompany;
 
-public class Cabs : ICabs
+public class Cab : ICabs
 {
     private readonly string _cabName;
     private readonly ICabCompanyPrinter _cabCompanyPrinter;
@@ -8,7 +8,7 @@ public class Cabs : ICabs
     private CabStatus _status = CabStatus.Available;
     private Customer? _passenger;
 
-    public Cabs(string cabName, ICabCompanyPrinter cabCompanyPrinter, int wallet)
+    public Cab(string cabName, ICabCompanyPrinter cabCompanyPrinter, int wallet)
     {
         _cabName = cabName;
         _cabCompanyPrinter = cabCompanyPrinter;
@@ -38,14 +38,18 @@ public class Cabs : ICabs
         return true;
     }
 
+    public bool ReachedDestination()
+    {
+        return _status == CabStatus.TransportingCustomer;
+    }
     public bool DropOffCustomer()
     {
         if (_status != CabStatus.TransportingCustomer)
         {
             return false;
         }
-        _cabCompanyPrinter.WriteLine($"{_cabName} dropped off {_passenger.name} at {_passenger.endLocation}.");
         _status = CabStatus.Available;
+        _passenger?.ExitCab();
         _passenger = null;
         return _status == CabStatus.Available;
     }

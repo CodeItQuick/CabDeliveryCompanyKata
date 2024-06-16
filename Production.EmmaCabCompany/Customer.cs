@@ -5,7 +5,7 @@ public class Customer
     public string name;
     public string startLocation;
     public string endLocation;
-    private Cabs? currentCab;
+    private Cab? currentCab;
 
     public Customer(string customerName, string startLocation, string endLocation)
     {
@@ -19,8 +19,14 @@ public class Customer
         return currentCab != null;
     }
 
-    public void IsInCab(Cabs cabs)
+    public void IsInCab(Cab cab)
     {
-        currentCab = cabs;
+        currentCab = cab;
+    }
+
+    // TODO: Not tested directly yet
+    public void ExitCab()
+    {
+        currentCab = null;
     }
 }

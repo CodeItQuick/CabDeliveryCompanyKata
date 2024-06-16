@@ -64,7 +64,14 @@ public class Dispatch
         var allPickedUp = true;
         for (int i = 0; i < _fleet.Count; i++)
         {
-            allPickedUp = allPickedUp && _fleet[i].DropOffCustomer();
+            var droppedOffCustomerSuccess = _fleet[i].ReachedDestination();
+            if (droppedOffCustomerSuccess)
+            {
+                var cabInfo = _fleet[i].CabInfo();
+                _cabCompanyPrinter.WriteLine($"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}.");
+                _fleet[i].DropOffCustomer();
+            }
+            allPickedUp = allPickedUp && droppedOffCustomerSuccess;
         }
 
         return allPickedUp;

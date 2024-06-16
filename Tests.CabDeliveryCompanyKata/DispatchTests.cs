@@ -8,7 +8,7 @@ public class DispatchTests
     public void CanPickupCustomer()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cabs("Diane's Cab", cabCompanyPrinter, 20);
+        var cabs = new Cab("Diane's Cab", cabCompanyPrinter, 20);
         var dispatch = new Dispatch(cabCompanyPrinter);
         var customer = new Customer(
             "Emma", 
@@ -29,8 +29,8 @@ public class DispatchTests
     public void CanPickupTwoCustomersWithTwoCabs()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cabs("Dan's Cab", cabCompanyPrinter, 20);
-        var cabTwo = new Cabs("Evan's Cab", cabCompanyPrinter, 20);
+        var cabs = new Cab("Dan's Cab", cabCompanyPrinter, 20);
+        var cabTwo = new Cab("Evan's Cab", cabCompanyPrinter, 20);
         var dispatch = new Dispatch(cabCompanyPrinter);
         var customer = new Customer(
             "Emma", 
@@ -63,8 +63,8 @@ public class DispatchTests
     public void CanPickupTwoCustomersWithTwoCabsSecondOrdering()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cabs("Dan's Cab", cabCompanyPrinter, 20);
-        var cabTwo = new Cabs("Evan's Cab", cabCompanyPrinter, 20);
+        var cabs = new Cab("Dan's Cab", cabCompanyPrinter, 20);
+        var cabTwo = new Cab("Evan's Cab", cabCompanyPrinter, 20);
         var dispatch = new Dispatch(cabCompanyPrinter);
         var customer = new Customer(
             "Emma", 
@@ -98,7 +98,7 @@ public class DispatchTests
     public void CannotPickupCustomerIfNotAvailable()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cabs("Dan's Cab", cabCompanyPrinter, 20);
+        var cabs = new Cab("Dan's Cab", cabCompanyPrinter, 20);
         var dispatch = new Dispatch(cabCompanyPrinter);
         var customer = new Customer(
             "Emma", 
@@ -119,7 +119,7 @@ public class DispatchTests
     public void CannotPickupCustomerIfNoCabs()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cabs("Diane's Cab", cabCompanyPrinter, 20);
+        var cabs = new Cab("Diane's Cab", cabCompanyPrinter, 20);
         var dispatch = new Dispatch(cabCompanyPrinter);
         var customer = new Customer(
             "Emma", 
@@ -138,7 +138,7 @@ public class DispatchTests
     public void CabNotRequestedByDispatcherAllCallsFail()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cabs("Diane's Cab", cabCompanyPrinter, 20);
+        var cabs = new Cab("Diane's Cab", cabCompanyPrinter, 20);
         var dispatch = new Dispatch(cabCompanyPrinter);
         var customer = new Customer(
             "Emma", 
@@ -155,7 +155,7 @@ public class DispatchTests
     public void CustomerNotPickedUpCannotDropOff()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cabs("Diane's Cab", cabCompanyPrinter, 20);
+        var cabs = new Cab("Diane's Cab", cabCompanyPrinter, 20);
         var dispatch = new Dispatch(cabCompanyPrinter);
         var customer = new Customer(
             "Emma", 
@@ -172,7 +172,7 @@ public class DispatchTests
     public void CannotPickupTwoCustomerFares()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cabs("Diane's Cab", cabCompanyPrinter, 20);
+        var cabs = new Cab("Diane's Cab", cabCompanyPrinter, 20);
         var dispatch = new Dispatch(cabCompanyPrinter);
         var customer = new Customer(
             "Emma", 
