@@ -59,35 +59,32 @@ public class UserInterface
             {
                 continue;
             }
-            // command pattern
-            if (selection == 1)
-            {
-                AddCabCommand.Select(dispatch, _cabCompanyPrinter);
-            }
 
-            if (selection == 2)
+            switch (selection)
             {
-                RemoveCabCommand.Select(dispatch, _cabCompanyPrinter);
-            }
-            if (selection == 3)
-            {
-                SendCabRequestCommand.Select(dispatch, customersCallInProgress, customersAwaitingPickup, _cabCompanyPrinter);
-            }
-            if (selection == 4)
-            {
-                CabNotifiesPickedUpCommand.Select(dispatch, customersAwaitingPickup, customersPickedUp, _cabCompanyPrinter);
-            }
-            if (selection == 5)
-            {
-                customersPickedUp = CabNotifiesDroppedOffCommand.Select(customersPickedUp, dispatch, _cabCompanyPrinter);
-            }
-            if (selection == 6)
-            {
-                CustomerCancelledCabRideCommand.Select(customersAwaitingPickup, customersPickedUp, _cabCompanyPrinter);
-            }
-            if (selection == 7)
-            {
-                numCustomersServed = CustomerCabCallCommand.Select(customerNames, numCustomersServed, customersCallInProgress, _cabCompanyPrinter);
+                // command pattern
+                case 1:
+                    var result = AddCabCommand.Select(dispatch);
+                    _cabCompanyPrinter.WriteLine(result);
+                    break;
+                case 2:
+                    RemoveCabCommand.Select(dispatch, _cabCompanyPrinter);
+                    break;
+                case 3:
+                    SendCabRequestCommand.Select(dispatch, customersCallInProgress, customersAwaitingPickup, _cabCompanyPrinter);
+                    break;
+                case 4:
+                    CabNotifiesPickedUpCommand.Select(dispatch, customersAwaitingPickup, customersPickedUp, _cabCompanyPrinter);
+                    break;
+                case 5:
+                    customersPickedUp = CabNotifiesDroppedOffCommand.Select(customersPickedUp, dispatch, _cabCompanyPrinter);
+                    break;
+                case 6:
+                    CustomerCancelledCabRideCommand.Select(customersAwaitingPickup, customersPickedUp, _cabCompanyPrinter);
+                    break;
+                case 7:
+                    numCustomersServed = CustomerCabCallCommand.Select(customerNames, numCustomersServed, customersCallInProgress, _cabCompanyPrinter);
+                    break;
             }
         } while (selection != 0);
     }
