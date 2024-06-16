@@ -27,3 +27,7 @@ Current Driver Request Confirmations: 2
 6. (Incoming Call) Cancel Cab Driver Fare
 7. (Incoming Call) Customer Request Ride
 ```
+# Acceptance Tests
+
+The Cab Company Can Pickup A Customer At An Address
+The Cab Company Can Pickup Multiple Customer's At Different Addresses
