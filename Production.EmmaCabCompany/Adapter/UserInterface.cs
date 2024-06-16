@@ -77,16 +77,20 @@ public class UserInterface
                     sendCabRequestCommand.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 4:
-                    CabNotifiesPickedUpCommand.Select(dispatch, customersAwaitingPickup, customersPickedUp, _cabCompanyPrinter);
+                    var cabNotifiesOfPickup = CabNotifiesPickedUpCommand.Select(dispatch, customersAwaitingPickup, customersPickedUp);
+                    _cabCompanyPrinter.WriteLine(cabNotifiesOfPickup);
                     break;
                 case 5:
-                    customersPickedUp = CabNotifiesDroppedOffCommand.Select(customersPickedUp, dispatch, _cabCompanyPrinter);
+                    var customersPickedUpOutput = CabNotifiesDroppedOffCommand.Select(customersPickedUp, dispatch);
+                    customersPickedUpOutput.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 6:
-                    CustomerCancelledCabRideCommand.Select(customersAwaitingPickup, customersPickedUp, _cabCompanyPrinter);
+                    var customerCancelledOutput = CustomerCancelledCabRideCommand.Select(customersAwaitingPickup, customersPickedUp, _cabCompanyPrinter);
+                    customerCancelledOutput.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 7:
-                    numCustomersServed = CustomerCabCallCommand.Select(customerNames, numCustomersServed, customersCallInProgress, _cabCompanyPrinter);
+                    var cabCalledOutput = CustomerCabCallCommand.Select(customerNames, ref numCustomersServed, customersCallInProgress, _cabCompanyPrinter);
+                    _cabCompanyPrinter.WriteLine(cabCalledOutput);
                     break;
             }
         } while (selection != 0);

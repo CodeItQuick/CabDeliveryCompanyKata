@@ -2,22 +2,23 @@ namespace Production.EmmaCabCompany.Commands;
 
 public static class CabNotifiesDroppedOffCommand
 {
-    public static List<Customer> Select(List<Customer> customersPickedUp, Dispatch dispatch, ICabCompanyPrinter cabCompanyPrinter)
+    public static List<string> Select(List<Customer> customersPickedUp, Dispatch dispatch)
     {
+        var list = new List<string>();
         if (customersPickedUp.Count == 0)
         {
-            cabCompanyPrinter.WriteLine("There are currently no customer's assigned to cabs.");
+            return new List<string> { "There are currently no customer's assigned to cabs." };
         }
         else
         {
             var droppedOffCustomers = dispatch.DropOffCustomers();
             foreach (var cabInfo in droppedOffCustomers)
             {
-                cabCompanyPrinter.WriteLine($"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}.");
+                list.Add($"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}.");
             }
             customersPickedUp = new List<Customer>();
         }
 
-        return customersPickedUp;
+        return list;
     }
 }
