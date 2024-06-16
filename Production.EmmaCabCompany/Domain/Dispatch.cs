@@ -11,9 +11,22 @@ public class Dispatch
     }
 
     // Dispatcher?
-    public void AddCab(ICabs cab)
+
+    public bool AddCab(ICabs cab)
     {
         _fleet.Add(cab);
+        return true;
+    }
+
+    public bool RemoveCab()
+    {
+        if (_fleet[^1].RideInProgress())
+        {
+            _fleet.RemoveAt(_fleet.Count - 1);
+            return true;
+        }
+
+        return false;
     }
 
     public bool RideRequest(Customer? customer)
@@ -80,17 +93,5 @@ public class Dispatch
     public bool NoCabsInFleet()
     {
         return !_fleet.Any();
-    }
-
-    public void RemoveCab()
-    {
-        if (_fleet[^1].RideInProgress())
-        {
-            _fleet.RemoveAt(_fleet.Count - 1);
-        }
-        else
-        {
-            _cabCompanyPrinter.WriteLine("Cab cannot be removed until passenger dropped off.");
-        }
     }
 }

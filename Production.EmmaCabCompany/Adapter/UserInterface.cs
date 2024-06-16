@@ -61,14 +61,27 @@ public class UserInterface
             // command pattern
             if (selection == 1)
             {
-                dispatch.AddCab(new Cab("Evan's Cab", _cabCompanyPrinter, 20));
+                var cabName = "Evan's Cab";
+                var addCab = dispatch.AddCab(new Cab(cabName, _cabCompanyPrinter, 20));
+                if (addCab)
+                {
+                    _cabCompanyPrinter.WriteLine("Added Evan's Cab to fleet");
+                }
             }
 
             if (selection == 2)
             {
                 if (!dispatch.NoCabsInFleet())
                 {
-                    dispatch.RemoveCab();
+                    var success = dispatch.RemoveCab();
+                    if (success)
+                    {
+                        _cabCompanyPrinter.WriteLine("Last cab removed from cab fleet.");
+                    }
+                    else
+                    {
+                        _cabCompanyPrinter.WriteLine("Cab cannot be removed until passenger dropped off.");
+                    }
                 }
             }
             if (selection == 3)
