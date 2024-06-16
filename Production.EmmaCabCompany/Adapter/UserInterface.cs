@@ -71,7 +71,6 @@ public class UserInterface
                     dispatch.RemoveCab();
                 }
             }
-
             if (selection == 3)
             {
                 if (dispatch.NoCabsInFleet())
@@ -91,7 +90,6 @@ public class UserInterface
                     _cabCompanyPrinter.WriteLine("There are currently no customer's waiting for cabs.");
                 }
             }
-
             if (selection == 4)
             {
                 if (dispatch.NoCabsInFleet())
@@ -122,7 +120,6 @@ public class UserInterface
                     customersPickedUp = new List<Customer>();
                 }
             }
-
             if (selection == 6)
             {
                 if (customersAwaitingPickup.Any())
@@ -137,7 +134,6 @@ public class UserInterface
                     _cabCompanyPrinter.WriteLine("Customer cancelled request before cab got there.");
                 }
             }
-
             if (selection == 7)
             {
                 var customerName = customerNames[numCustomersServed];
