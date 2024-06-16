@@ -2,7 +2,7 @@ namespace Production.EmmaCabCompany.Commands;
 
 public class RemoveCabCommand
 {
-    public static string Select(Dispatch dispatch, ICabCompanyPrinter cabCompanyPrinter)
+    public static string Select(Dispatch dispatch)
     {
         if (!dispatch.NoCabsInFleet())
         {

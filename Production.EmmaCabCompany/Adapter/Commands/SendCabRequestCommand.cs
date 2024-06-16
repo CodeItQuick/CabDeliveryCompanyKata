@@ -5,8 +5,7 @@ public static class SendCabRequestCommand
     public static List<string> Select(
         Dispatch dispatch, 
         List<Customer> customersCallInProgress,
-        List<Customer> customersAwaitingPickup, 
-        ICabCompanyPrinter cabCompanyPrinter)
+        List<Customer> customersAwaitingPickup)
     {
         if (dispatch.NoCabsInFleet())
         {
@@ -34,7 +33,7 @@ public static class SendCabRequestCommand
             }
             catch (SystemException ex)
             {
-                cabCompanyPrinter.WriteLine(ex.Message);
+                return [ex.Message];
             }
         }
         else

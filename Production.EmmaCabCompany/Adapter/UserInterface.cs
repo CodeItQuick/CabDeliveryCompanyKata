@@ -68,12 +68,12 @@ public class UserInterface
                     _cabCompanyPrinter.WriteLine(addCabCommand);
                     break;
                 case 2:
-                    var removeCabCommand = RemoveCabCommand.Select(dispatch, _cabCompanyPrinter);
+                    var removeCabCommand = RemoveCabCommand.Select(dispatch);
                     _cabCompanyPrinter.WriteLine(removeCabCommand);
                     break;
                 case 3:
                     var sendCabRequestCommand = SendCabRequestCommand
-                        .Select(dispatch, customersCallInProgress, customersAwaitingPickup, _cabCompanyPrinter);
+                        .Select(dispatch, customersCallInProgress, customersAwaitingPickup);
                     sendCabRequestCommand.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 4:
