@@ -1,4 +1,5 @@
-A cab driver can acquire passengers through various methods, each depending on the operational setup of the cab service and the driver's approach. Here are all the typical ways a cab driver can get a passenger:
+A cab driver can acquire passengers through various methods, each depending on the operational setup of the cab service 
+and the driver's approach. Here are all the typical ways a cab driver can get a passenger:
 
 1. **Street Hailing**:
    - Passengers flag down a cab from the street by raising their hand or making eye contact with the driver.
