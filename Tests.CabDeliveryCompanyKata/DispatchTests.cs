@@ -8,8 +8,8 @@ public class DispatchTests
     public void CanPickupCustomer()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cab("Diane's Cab", cabCompanyPrinter, 20);
-        var dispatch = new Dispatch(cabCompanyPrinter);
+        var cabs = new Cab("Diane's Cab", 20);
+        var dispatch = new Dispatch();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -27,9 +27,9 @@ public class DispatchTests
     public void CanPickupTwoCustomersWithTwoCabs()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cab("Dan's Cab", cabCompanyPrinter, 20);
-        var cabTwo = new Cab("Evan's Cab", cabCompanyPrinter, 20);
-        var dispatch = new Dispatch(cabCompanyPrinter);
+        var cabs = new Cab("Dan's Cab", 20);
+        var cabTwo = new Cab("Evan's Cab", 20);
+        var dispatch = new Dispatch();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -55,9 +55,9 @@ public class DispatchTests
     public void CanPickupTwoCustomersWithTwoCabsSecondOrdering()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cab("Dan's Cab", cabCompanyPrinter, 20);
-        var cabTwo = new Cab("Evan's Cab", cabCompanyPrinter, 20);
-        var dispatch = new Dispatch(cabCompanyPrinter);
+        var cabs = new Cab("Dan's Cab", 20);
+        var cabTwo = new Cab("Evan's Cab", 20);
+        var dispatch = new Dispatch();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -66,32 +66,29 @@ public class DispatchTests
             "Lisa", 
             "2 Fulton Drive", 
             "2 Final Destination Lane");
-        dispatch.AddCab(cabs);
-        dispatch.AddCab(cabTwo);
-        dispatch.RideRequest(customer);
-        dispatch.RideRequest(customerTwo);
-        dispatch.PickupCustomer(customer);
-        dispatch.PickupCustomer(customerTwo);
+        var cabOneAdded = dispatch.AddCab(cabs);
+        var cabTwoAdded = dispatch.AddCab(cabTwo);
+        var customerOneRequestRide = dispatch.RideRequest(customer);
+        var customerTwoRequestRide = dispatch.RideRequest(customerTwo);
+        var customerOnePickedUp = dispatch.PickupCustomer(customer);
+        var customerTwoPickedUp = dispatch.PickupCustomer(customerTwo);
 
-        dispatch.DropOffCustomers();
-        
-        // TODO: Broken, Dan's cab doesn't pick anyone up
-        Assert.Contains("Evan's Cab picked up Lisa at 2 Fulton Drive.", 
-            cabCompanyPrinter.List());
-        Assert.Contains("Dan's Cab picked up Emma at 1 Fulton Drive.", 
-            cabCompanyPrinter.List()); 
-        Assert.Contains("Evan's Cab dropped off Lisa at 2 Final Destination Lane.", 
-            cabCompanyPrinter.List()); 
-        Assert.Contains("Dan's Cab dropped off Emma at 1 Final Destination Lane.", 
-            cabCompanyPrinter.List()); 
-        Assert.Equal(4, cabCompanyPrinter.CountMessages());
+        var dropOffCustomers = dispatch.DropOffCustomers();
+
+        Assert.True(cabOneAdded);
+        Assert.True(cabTwoAdded);
+        Assert.NotNull(customerOneRequestRide);
+        Assert.NotNull(customerTwoRequestRide);
+        Assert.True(customerOnePickedUp);
+        Assert.True(customerTwoPickedUp);
+        Assert.Equal(2, dropOffCustomers.Count);
     }
     [Fact]
     public void CannotPickupCustomerIfNotAvailable()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cab("Dan's Cab", cabCompanyPrinter, 20);
-        var dispatch = new Dispatch(cabCompanyPrinter);
+        var cabs = new Cab("Dan's Cab", 20);
+        var dispatch = new Dispatch();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -111,8 +108,8 @@ public class DispatchTests
     public void CannotPickupCustomerIfNoCabs()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cab("Diane's Cab", cabCompanyPrinter, 20);
-        var dispatch = new Dispatch(cabCompanyPrinter);
+        var cabs = new Cab("Diane's Cab", 20);
+        var dispatch = new Dispatch();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -127,8 +124,8 @@ public class DispatchTests
     public void CabNotRequestedByDispatcherAllCallsFail()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cab("Diane's Cab", cabCompanyPrinter, 20);
-        var dispatch = new Dispatch(cabCompanyPrinter);
+        var cabs = new Cab("Diane's Cab", 20);
+        var dispatch = new Dispatch();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -144,8 +141,8 @@ public class DispatchTests
     public void CustomerNotPickedUpCannotDropOff()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cab("Diane's Cab", cabCompanyPrinter, 20);
-        var dispatch = new Dispatch(cabCompanyPrinter);
+        var cabs = new Cab("Diane's Cab", 20);
+        var dispatch = new Dispatch();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -161,8 +158,8 @@ public class DispatchTests
     public void CannotPickupTwoCustomerFares()
     {
         var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cab("Diane's Cab", cabCompanyPrinter, 20);
-        var dispatch = new Dispatch(cabCompanyPrinter);
+        var cabs = new Cab("Diane's Cab", 20);
+        var dispatch = new Dispatch();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 

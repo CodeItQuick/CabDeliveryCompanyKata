@@ -7,8 +7,7 @@ public class CabTests
     [Fact]
     public void CabCanAcceptRideRequest()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cab = new Cab("Evan's Cab", cabCompanyPrinter, 20);
+        var cab = new Cab("Evan's Cab", 20);
         
         var acceptedRide = cab.RideRequest(new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue"));
 
@@ -17,8 +16,7 @@ public class CabTests
     [Fact]
     public void CabCanAcceptARide()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cab = new Cab("Evan's Cab", cabCompanyPrinter, 20);
+        var cab = new Cab("Evan's Cab", 20);
         var passenger = new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue");
         cab.RideRequest(passenger);
         cab.PickupCustomer(passenger);
@@ -30,8 +28,7 @@ public class CabTests
     [Fact]
     public void CabCanAcceptMultipleRides()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cab = new Cab("Evan's Cab", cabCompanyPrinter, 20);
+        var cab = new Cab("Evan's Cab", 20);
         var passenger = new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue");
         cab.RideRequest(passenger);
         cab.PickupCustomer(passenger);
@@ -47,8 +44,7 @@ public class CabTests
     [Fact]
     public void CabDenyRideRequestWhenNotAvailable()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cab = new Cab("Evan's Cab", cabCompanyPrinter, 20);
+        var cab = new Cab("Evan's Cab", 20);
         cab.RideRequest(new Customer("Emma", "1 Fulton Drive", "1 Destination Avenue"));
 
         var pickupSuccess = cab.PickupCustomer(new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue"));
@@ -58,8 +54,7 @@ public class CabTests
     [Fact]
     public void CabAcceptRideRequestWhenAvailableAfterPickingUpFare()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cab = new Cab("Evan's Cab", cabCompanyPrinter, 20);
+        var cab = new Cab("Evan's Cab", 20);
         var passenger = new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue");
         var acceptedRide = cab.RideRequest(passenger);
         var pickupCustomer = cab.PickupCustomer(passenger);
@@ -73,8 +68,7 @@ public class CabTests
     [Fact]
     public void CabDenyRideRequestWhenNotAvailableAfterPickingUpAnotherFare()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cab = new Cab("Evan's Cab", cabCompanyPrinter, 20);
+        var cab = new Cab("Evan's Cab", 20);
         var passenger = new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue");
         var passengerDenied = new Customer("Emma", "2 Fulton Drive", "2 Destination Avenue");
         var acceptedRide = cab.RideRequest(passenger);

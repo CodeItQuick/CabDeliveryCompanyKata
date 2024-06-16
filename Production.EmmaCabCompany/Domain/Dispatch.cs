@@ -2,15 +2,7 @@ namespace Production.EmmaCabCompany;
 
 public class Dispatch 
 {
-    private readonly ICabCompanyPrinter _cabCompanyPrinter;
     private readonly List<ICabs> _fleet = new();
-
-    public Dispatch(ICabCompanyPrinter cabCompanyPrinter)
-    {
-        _cabCompanyPrinter = cabCompanyPrinter;
-    }
-
-    // Dispatcher?
 
     public bool AddCab(ICabs cab)
     {

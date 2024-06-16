@@ -35,7 +35,7 @@ public class UserInterface
         List<Customer> customersCallInProgress = new List<Customer>();
         List<Customer> customersAwaitingPickup = new List<Customer>();
         List<Customer> customersPickedUp = new List<Customer>();
-        var dispatch = new Dispatch(_cabCompanyPrinter);
+        var dispatch = new Dispatch();
         do
         {
             _cabCompanyPrinter.WriteLine("Please choose a selection from the list: ");
@@ -62,7 +62,7 @@ public class UserInterface
             if (selection == 1)
             {
                 var cabName = "Evan's Cab";
-                var addCab = dispatch.AddCab(new Cab(cabName, _cabCompanyPrinter, 20));
+                var addCab = dispatch.AddCab(new Cab(cabName, 20));
                 if (addCab)
                 {
                     _cabCompanyPrinter.WriteLine("Added Evan's Cab to fleet");

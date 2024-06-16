@@ -3,15 +3,13 @@ namespace Production.EmmaCabCompany;
 public class Cab : ICabs
 {
     private readonly string _cabName;
-    private readonly ICabCompanyPrinter _cabCompanyPrinter;
     private readonly int _wallet;
     private CabStatus _status = CabStatus.Available;
     private Customer? _passenger;
 
-    public Cab(string cabName, ICabCompanyPrinter cabCompanyPrinter, int wallet)
+    public Cab(string cabName, int wallet)
     {
         _cabName = cabName;
-        _cabCompanyPrinter = cabCompanyPrinter;
         _wallet = wallet;
     }
 
