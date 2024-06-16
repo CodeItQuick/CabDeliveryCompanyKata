@@ -8,4 +8,9 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Adapter\" />
+      <Folder Include="Service\" />
+    </ItemGroup>
+
 </Project>

@@ -15,6 +15,18 @@ public class Cabs : ICabs
         _wallet = wallet;
     }
 
+    public bool RideRequest(Customer? customer)
+    {
+        if (_status != CabStatus.Available || _passenger != null)
+        {
+            return false;
+        }
+        _passenger = customer;
+        _status = CabStatus.CustomerRideRequested;
+        return true;
+
+    }
+
     public bool PickupCustomer(Customer customer)
     {
         if (_status != CabStatus.CustomerRideRequested || customer.name != _passenger?.name)
@@ -23,7 +35,6 @@ public class Cabs : ICabs
         }
         _status = CabStatus.TransportingCustomer;
         customer.IsInCab(this);
-        _cabCompanyPrinter.WriteLine($"{_cabName} picked up {customer.name} at {customer.startLocation}.");
         return true;
     }
 
@@ -39,21 +50,20 @@ public class Cabs : ICabs
         return _status == CabStatus.Available;
     }
 
-    public bool RideRequest(Customer? customer)
-    {
-        if (_status != CabStatus.Available || _passenger != null)
-        {
-            return false;
-        }
-        _passenger = customer;
-        _status = CabStatus.CustomerRideRequested;
-        return true;
-
-    }
-
     public bool RideInProgress()
     {
         return _status == CabStatus.Available;
+    }
+
+    public CabInfo CabInfo()
+    {
+        return new CabInfo()
+        {
+            PassengerName = _passenger?.name,
+            CabName = _cabName,
+            StartLocation = _passenger?.startLocation,
+            Destination = _passenger?.endLocation,
+        };
     }
 }
 

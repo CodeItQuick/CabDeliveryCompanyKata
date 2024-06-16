@@ -31,6 +31,8 @@ public class Dispatch
                 if (rideRequest == true)
                 {
                     rideRequested = true;
+                    var cabInfo = _fleet[i].CabInfo();
+                    _cabCompanyPrinter.WriteLine($"{cabInfo.CabName} picked up {cabInfo.PassengerName} at {cabInfo.StartLocation}.");
                 }
             }
         }
