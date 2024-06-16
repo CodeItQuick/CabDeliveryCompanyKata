@@ -35,7 +35,7 @@ public class Cabs : ICabs
         _cabCompanyPrinter.WriteLine($"Evan's Cab dropped off {_passenger.name} at {_passenger.endLocation}.");
         _status = CabStatus.Available;
         _passenger = null;
-        return _status != CabStatus.Available;
+        return _status == CabStatus.Available;
     }
 
     public bool RideRequest(Customer? customer)

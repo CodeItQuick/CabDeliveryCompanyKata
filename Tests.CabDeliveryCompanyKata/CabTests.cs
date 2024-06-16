@@ -15,6 +15,37 @@ public class CabTests
         Assert.True(acceptedRide);
     }
     [Fact]
+    public void CabCanAcceptARide()
+    {
+        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        var cab = new Cabs("Evan's Cab", cabCompanyPrinter, 20);
+        var passenger = new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue");
+        cab.RideRequest(passenger);
+        cab.PickupCustomer(passenger);
+
+        var dropOffCustomer = cab.DropOffCustomer();
+
+        Assert.True(dropOffCustomer);
+    }
+    [Fact]
+    public void CabCanAcceptMultipleRides()
+    {
+        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        var cab = new Cabs("Evan's Cab", cabCompanyPrinter, 20);
+        var passenger = new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue");
+        cab.RideRequest(passenger);
+        cab.PickupCustomer(passenger);
+        var dropOffCustomer = cab.DropOffCustomer();
+        var passengerTwo = new Customer("Emma", "1 Fulton Drive", "1 Destination Avenue");
+        cab.RideRequest(passengerTwo);
+        cab.PickupCustomer(passengerTwo);
+        var dropOffCustomerTwo = cab.DropOffCustomer();
+
+
+        Assert.True(dropOffCustomer);
+        Assert.True(dropOffCustomerTwo);
+    }
+    [Fact]
     public void CabDenyRideRequestWhenNotAvailable()
     {
         FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
