@@ -1,10 +1,8 @@
 ﻿namespace Production.EmmaCabCompany
 {
-    public class Customer
+    public class Dispatcher
     {
-        private bool HasRequestedRide => false;
-
-        public bool CurrentStatus()
+        public bool RequestRide(Customer customer)
         {
             throw new NotImplementedException();
         }
