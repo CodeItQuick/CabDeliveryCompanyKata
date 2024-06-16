@@ -22,7 +22,7 @@ public class Cabs : ICabs
             return false;
         }
         _status = CabStatus.TransportingCustomer;
-        _cabCompanyPrinter.WriteLine($"Evan's Cab picked up {customer.name} at {customer.startLocation}.");
+        _cabCompanyPrinter.WriteLine($"{_cabName} picked up {customer.name} at {customer.startLocation}.");
         return true;
     }
 
@@ -32,7 +32,7 @@ public class Cabs : ICabs
         {
             return false;
         }
-        _cabCompanyPrinter.WriteLine($"Evan's Cab dropped off {_passenger.name} at {_passenger.endLocation}.");
+        _cabCompanyPrinter.WriteLine($"{_cabName} dropped off {_passenger.name} at {_passenger.endLocation}.");
         _status = CabStatus.Available;
         _passenger = null;
         return _status == CabStatus.Available;
