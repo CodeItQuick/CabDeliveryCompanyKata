@@ -5,10 +5,9 @@ public class Program
     public static void Main(string[] args)
     {
         var cabCompanyPrinter = new CabCompanyPrinter();
-        var cabCompanyWriter = new CabCompanyWriter();
-        var cabsList = new List<ICabs>();
-        var customers = new List<Customer>();
-        
-        REPL.Run(cabCompanyPrinter, cabCompanyWriter, cabsList, customers);
+        var cabCompanyReader = new CabCompanyReader();
+
+        var dispatch = new Dispatcher();
+        dispatch.RequestRide(new Customer());
     }
 }

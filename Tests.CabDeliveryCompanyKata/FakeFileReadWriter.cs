@@ -2,7 +2,7 @@ using Production.EmmaCabCompany;
 
 namespace Tests.CabDeliveryCompanyKata;
 
-public class MockFileReadWriter : IFileWriter, IFileReader
+public class FakeFileReadWriter : IFileWriter, IFileReader
 {
     private string[] fileContents = Array.Empty<string>();
 
@@ -25,5 +25,4 @@ public class MockFileReadWriter : IFileWriter, IFileReader
     {
         return fileContents;
     }
-    
 }

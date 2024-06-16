@@ -4,7 +4,7 @@ using Production.EmmaCabCompany;
 
 namespace Tests.CabDeliveryCompanyKata;
 
-public class FakeCabCompanyPrinter : ICabCompanyPrinter
+public class SpyCabCompanyPrinter : ICabCompanyPrinter
 {
     private List<string> Messages { get; set; } = new List<string>();
 
@@ -16,5 +16,15 @@ public class FakeCabCompanyPrinter : ICabCompanyPrinter
     public string Retrieve(int messageNumber)
     {
         return Messages[messageNumber];
+    }
+
+    public int CountMessages()
+    {
+        return Messages.Count;
+    }
+
+    public IEnumerable<string> List()
+    {
+        return Messages;
     }
 }

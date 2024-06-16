@@ -1,6 +1,6 @@
 namespace Production.EmmaCabCompany;
 
-public class CabCompanyWriter : ICabCompanyWriter
+public class CabCompanyReader : ICabCompanyWriter
 {
     public string? ReadLine()
     {

@@ -2,10 +2,16 @@ using Production.EmmaCabCompany;
 
 namespace Tests.CabDeliveryCompanyKata;
 
-public class FakeCabCompanyWriter : ICabCompanyWriter
+public class ReplayCabCompanyReader : ICabCompanyWriter
 {
     private int currentCommand = 0;
-    public List<string> CommandList { get; set; } = new List<string>();
+    private List<string> CommandList { get; set; }
+
+    public ReplayCabCompanyReader(List<string> commandList)
+    {
+        CommandList = commandList;
+    }
+
     public string? ReadLine()
     {
         var current = CommandList[currentCommand];
