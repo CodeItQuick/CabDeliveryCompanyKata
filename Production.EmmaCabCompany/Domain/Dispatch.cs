@@ -29,13 +29,14 @@ public class Dispatch
         return false;
     }
 
-    public bool RideRequest(Customer? customer)
+    public CabInfo? RideRequest(Customer? customer)
     {
         if (!_fleet.Any())
         {
-            _cabCompanyPrinter.WriteLine("There are currently no cabs in the fleet.");
+            throw new SystemException("There are currently no cabs in the fleet");
         }
         var rideRequested = false;
+        CabInfo? cabInfo = null;
         for (int i = 0; i < _fleet.Count; i++)
         {
             if (rideRequested == false)
@@ -44,18 +45,17 @@ public class Dispatch
                 if (rideRequest == true)
                 {
                     rideRequested = true;
-                    var cabInfo = _fleet[i].CabInfo();
-                    _cabCompanyPrinter.WriteLine($"{cabInfo.CabName} picked up {cabInfo.PassengerName} at {cabInfo.StartLocation}.");
+                    cabInfo = _fleet[i].CabInfo();
                 }
             }
         }
 
         if (rideRequested == false && customer != null)
         {
-            _cabCompanyPrinter.WriteLine($"Dispatch failed to pickup {customer.name} as there are no available cabs.");
+            throw new SystemException($"Dispatch failed to pickup {customer.name} as there are no available cabs.");
         }
 
-        return rideRequested;
+        return cabInfo;
     }
 
     public bool PickupCustomer(Customer customer)
@@ -68,23 +68,22 @@ public class Dispatch
         return customer.IsPickedUp();
     }
 
-    public bool DropOffCustomers()
+    public List<CabInfo> DropOffCustomers()
     {
         if (_fleet.Count == 0)
         {
-            return false;
+            throw new SystemException("Cannot drop off customers as there are no cabs in the fleet");
         }
-        var allPickedUp = true;
+        List<CabInfo> allPickedUp = new List<CabInfo>();
         for (int i = 0; i < _fleet.Count; i++)
         {
             var droppedOffCustomerSuccess = _fleet[i].ReachedDestination();
             if (droppedOffCustomerSuccess)
             {
                 var cabInfo = _fleet[i].CabInfo();
-                _cabCompanyPrinter.WriteLine($"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}.");
                 _fleet[i].DropOffCustomer();
+                allPickedUp.Add(cabInfo);
             }
-            allPickedUp = allPickedUp && droppedOffCustomerSuccess;
         }
 
         return allPickedUp;

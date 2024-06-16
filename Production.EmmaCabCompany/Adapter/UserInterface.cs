@@ -92,11 +92,22 @@ public class UserInterface
                 }
                 else if (customersCallInProgress.Any())
                 {
-                    var customer = customersCallInProgress.Skip(0).First();
-                    dispatch.RideRequest(customer);
-                    customersAwaitingPickup.Add(customer);
-                    customersCallInProgress.RemoveAt(0);
-                    _cabCompanyPrinter.WriteLine("Cab assigned to customer.");
+                    try
+                    {
+                        var customer = customersCallInProgress.Skip(0).First();
+                        var cabInfo = dispatch.RideRequest(customer);
+                        if (cabInfo != null)
+                        {
+                            _cabCompanyPrinter.WriteLine($"{cabInfo.CabName} picked up {cabInfo.PassengerName} at {cabInfo.StartLocation}.");
+                        }
+                        customersAwaitingPickup.Add(customer);
+                        customersCallInProgress.RemoveAt(0);
+                        _cabCompanyPrinter.WriteLine("Cab assigned to customer.");
+                    }
+                    catch (SystemException ex)
+                    {
+                        _cabCompanyPrinter.WriteLine(ex.Message);
+                    }
                 }
                 else
                 {
@@ -129,7 +140,11 @@ public class UserInterface
                 }
                 else
                 {
-                    dispatch.DropOffCustomers();
+                    var droppedOffCustomers = dispatch.DropOffCustomers();
+                    foreach (var cabInfo in droppedOffCustomers)
+                    {
+                        _cabCompanyPrinter.WriteLine($"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}.");
+                    }
                     customersPickedUp = new List<Customer>();
                 }
             }

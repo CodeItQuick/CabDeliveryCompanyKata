@@ -16,14 +16,12 @@ public class DispatchTests
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
         dispatch.RideRequest(customer);
-        dispatch.PickupCustomer(customer);
 
-        dispatch.DropOffCustomers();
-        
-        Assert.Contains("Diane's Cab picked up Emma at 1 Fulton Drive.", 
-            cabCompanyPrinter.Retrieve(0));
-        Assert.Contains("Diane's Cab dropped off Emma at 1 Final Destination Lane.", 
-            cabCompanyPrinter.Retrieve(1));
+        var pickupCustomer = dispatch.PickupCustomer(customer);
+        var dropOffCustomers = dispatch.DropOffCustomers();
+
+        Assert.True(pickupCustomer);
+        Assert.Single(dropOffCustomers);
     }
     [Fact]
     public void CanPickupTwoCustomersWithTwoCabs()
@@ -42,22 +40,16 @@ public class DispatchTests
             "2 Final Destination Lane");
         dispatch.AddCab(cabs);
         dispatch.RideRequest(customer);
-        dispatch.PickupCustomer(customer);
+        var pickupCustomer = dispatch.PickupCustomer(customer);
         dispatch.AddCab(cabTwo);
         dispatch.RideRequest(customerTwo);
-        dispatch.PickupCustomer(customerTwo);
+        var pickupCustomerTwo = dispatch.PickupCustomer(customerTwo);
 
-        dispatch.DropOffCustomers();
-        
-        Assert.Contains("Evan's Cab picked up Lisa at 2 Fulton Drive.", 
-            cabCompanyPrinter.List());
-        Assert.Contains("Dan's Cab picked up Emma at 1 Fulton Drive.", 
-            cabCompanyPrinter.List()); 
-        Assert.Contains("Evan's Cab dropped off Lisa at 2 Final Destination Lane.", 
-            cabCompanyPrinter.List()); 
-        Assert.Contains("Dan's Cab dropped off Emma at 1 Final Destination Lane.", 
-            cabCompanyPrinter.List()); 
-        Assert.Equal(4, cabCompanyPrinter.CountMessages());
+        var dropOffCustomers = dispatch.DropOffCustomers();
+
+        Assert.True(pickupCustomer);
+        Assert.True(pickupCustomerTwo);
+        Assert.Equal(2, dropOffCustomers.Count);
     }
     [Fact]
     public void CanPickupTwoCustomersWithTwoCabsSecondOrdering()
@@ -125,14 +117,11 @@ public class DispatchTests
             "Emma", 
             "1 Fulton Drive", 
             "1 Final Destination Lane");
-        var rideRequested = dispatch.RideRequest(customer);
+        
+        Assert.Throws<SystemException>(() =>  dispatch.RideRequest(customer));
         var pickupCustomer = dispatch.PickupCustomer(customer);
-
-        var allDroppedOff = dispatch.DropOffCustomers();
-
-        Assert.False(rideRequested);
         Assert.False(pickupCustomer);
-        Assert.False(allDroppedOff);
+        Assert.Throws<SystemException>(() => dispatch.DropOffCustomers());
     }
     [Fact]
     public void CabNotRequestedByDispatcherAllCallsFail()
@@ -149,7 +138,7 @@ public class DispatchTests
         var allDroppedOff = dispatch.DropOffCustomers();
 
         Assert.False(pickupCustomer);
-        Assert.False(allDroppedOff);
+        Assert.Empty(allDroppedOff);
     }
     [Fact]
     public void CustomerNotPickedUpCannotDropOff()
@@ -165,8 +154,8 @@ public class DispatchTests
         var rideRequested = dispatch.RideRequest(customer);
         var allDroppedOff = dispatch.DropOffCustomers();
 
-        Assert.True(rideRequested);
-        Assert.False(allDroppedOff);
+        Assert.NotNull(rideRequested);
+        Assert.Empty(allDroppedOff);
     }
     [Fact]
     public void CannotPickupTwoCustomerFares()
@@ -187,8 +176,8 @@ public class DispatchTests
         var customerPickedUp = dispatch.PickupCustomer(customerTwo);
         var allDroppedOff = dispatch.DropOffCustomers();
 
-        Assert.True(rideRequested);
+        Assert.NotNull(rideRequested);
         Assert.False(customerPickedUp);
-        Assert.False(allDroppedOff);
+        Assert.Empty(allDroppedOff);
     }
 }
