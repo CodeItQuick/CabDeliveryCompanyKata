@@ -97,18 +97,18 @@ public class DispatchTests
             "Lisa", 
             "1 Fulton Drive", 
             "1 Final Destination Lane");
-        dispatch.AddCab(cabs);
-        cabs.RideRequest(customerTwo);
+        var addCab = dispatch.AddCab(cabs);
+        var rideRequest = cabs.RideRequest(customerTwo);
 
-        dispatch.PickupCustomer(customer);
-        
-        Assert.Equal(0, cabCompanyPrinter.CountMessages());
+        var pickupCustomer = dispatch.PickupCustomer(customer);
+
+        Assert.True(addCab);
+        Assert.True(rideRequest); // TODO: this should be false, there is no customer call
+        Assert.False(pickupCustomer);
     }
     [Fact]
     public void CannotPickupCustomerIfNoCabs()
     {
-        var cabCompanyPrinter = new FakeCabCompanyPrinter();
-        var cabs = new Cab("Diane's Cab", 20);
         var dispatch = new Dispatch();
         var customer = new Customer(
             "Emma", 
@@ -123,7 +123,6 @@ public class DispatchTests
     [Fact]
     public void CabNotRequestedByDispatcherAllCallsFail()
     {
-        var cabCompanyPrinter = new FakeCabCompanyPrinter();
         var cabs = new Cab("Diane's Cab", 20);
         var dispatch = new Dispatch();
         var customer = new Customer(

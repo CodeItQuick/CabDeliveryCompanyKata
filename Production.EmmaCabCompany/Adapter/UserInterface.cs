@@ -1,4 +1,4 @@
-using Production.EmmaCabCompany.Commands;
+using Production.EmmaCabCompany.Service;
 
 namespace Production.EmmaCabCompany;
 
@@ -38,6 +38,7 @@ public class UserInterface
         List<Customer> customersAwaitingPickup = new List<Customer>();
         List<Customer> customersPickedUp = new List<Customer>();
         var dispatch = new Dispatch();
+        var dispatchService = new DispatchService(dispatch);
         do
         {
             _cabCompanyPrinter.WriteLine("Please choose a selection from the list: ");
@@ -64,32 +65,32 @@ public class UserInterface
             {
                 // command pattern
                 case 1:
-                    var addCabCommand = AddCabCommand.Select(dispatch);
+                    var addCabCommand = dispatchService.AddCab();
                     _cabCompanyPrinter.WriteLine(addCabCommand);
                     break;
                 case 2:
-                    var removeCabCommand = RemoveCabCommand.Select(dispatch);
+                    var removeCabCommand = dispatchService.RemoveCab();
                     _cabCompanyPrinter.WriteLine(removeCabCommand);
                     break;
                 case 3:
-                    var sendCabRequestCommand = SendCabRequestCommand
-                        .Select(dispatch, customersCallInProgress, customersAwaitingPickup);
+                    var sendCabRequestCommand = dispatchService
+                        .SendCabRequest(customersCallInProgress, customersAwaitingPickup);
                     sendCabRequestCommand.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 4:
-                    var cabNotifiesOfPickup = CabNotifiesPickedUpCommand.Select(dispatch, customersAwaitingPickup, customersPickedUp);
+                    var cabNotifiesOfPickup = dispatchService.CabNotifiesPickedUp(customersAwaitingPickup, customersPickedUp);
                     _cabCompanyPrinter.WriteLine(cabNotifiesOfPickup);
                     break;
                 case 5:
-                    var customersPickedUpOutput = CabNotifiesDroppedOffCommand.Select(customersPickedUp, dispatch);
+                    var customersPickedUpOutput = dispatchService.CabNotifiesDroppedOff(customersPickedUp);
                     customersPickedUpOutput.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 6:
-                    var customerCancelledOutput = CustomerCancelledCabRideCommand.Select(customersAwaitingPickup, customersPickedUp, _cabCompanyPrinter);
+                    var customerCancelledOutput = dispatchService.CustomerCancelledCabRide(customersAwaitingPickup, customersPickedUp);
                     customerCancelledOutput.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 7:
-                    var cabCalledOutput = CustomerCabCallCommand.Select(customerNames, ref numCustomersServed, customersCallInProgress, _cabCompanyPrinter);
+                    var cabCalledOutput = dispatchService.CustomerCabCall(customerNames, ref numCustomersServed, customersCallInProgress);
                     _cabCompanyPrinter.WriteLine(cabCalledOutput);
                     break;
             }
