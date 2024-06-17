@@ -1,9 +1,8 @@
 # Cab Company Dispatch Screen
 
 ## TODO
-1. Add More Tests
-2. Fix Architecture
-3. Add More Features
+1. Figure out Customer Aggregate
+2. Add More Features
 
 ## Story
 A cab company currently operates with "old school" technology. The cab company wants to upgrade their technology offering
