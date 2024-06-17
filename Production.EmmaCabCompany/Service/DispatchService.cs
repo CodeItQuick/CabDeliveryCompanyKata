@@ -81,7 +81,6 @@ public class DispatchService
         {
             _customersAwaitingPickup.RemoveAt(_customersAwaitingPickup.Count - 1);
             list.Add("Customer cancelled request before cab assigned.");
-            
         }
 
         if (!_customersPickedUp.Any())
