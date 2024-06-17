@@ -34,5 +34,9 @@ Current Driver Request Confirmations: 2
 ```
 # Acceptance Tests
 
-The Cab Company Can Pickup A Customer At An Address
-The Cab Company Can Pickup Multiple Customer's At Different Addresses
+1. The Cab Company Can Pickup A Customer At An Address  
+2. The Cab Company Can Pickup Multiple Customer's At Different Addresses  
+
+Noteable Constraints: 
+No location data for cabs or customers  
+Fare amount not recorded yet  
