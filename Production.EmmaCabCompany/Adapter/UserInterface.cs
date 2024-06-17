@@ -6,17 +6,11 @@ public class UserInterface
 {
     private readonly ICabCompanyPrinter _cabCompanyPrinter;
     private readonly ICabCompanyReader _cabCompanyReader;
-    private readonly IFileWriter _fileWriter;
-    private readonly IFileReader _fileReader;
 
-    public UserInterface(
-        ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader,
-        IFileWriter fileWriter, IFileReader fileReader)
+    public UserInterface(ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader)
     {
         _cabCompanyPrinter = cabCompanyPrinter;
         _cabCompanyReader = cabCompanyReader;
-        _fileWriter = fileWriter;
-        _fileReader = fileReader;
     }
 
     public void Run()
@@ -34,9 +28,6 @@ public class UserInterface
             "Arlo"
         };
         int selection;
-        List<Customer> customersCallInProgress = new List<Customer>();
-        List<Customer> customersAwaitingPickup = new List<Customer>();
-        List<Customer> customersPickedUp = new List<Customer>();
         var dispatch = new Dispatch();
         var dispatchService = new DispatchService(dispatch);
         do
@@ -74,23 +65,23 @@ public class UserInterface
                     break;
                 case 3:
                     var sendCabRequestCommand = dispatchService
-                        .SendCabRequest(customersCallInProgress, customersAwaitingPickup);
+                        .SendCabRequest();
                     sendCabRequestCommand.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 4:
-                    var cabNotifiesOfPickup = dispatchService.CabNotifiesPickedUp(customersAwaitingPickup, customersPickedUp);
+                    var cabNotifiesOfPickup = dispatchService.CabNotifiesPickedUp();
                     _cabCompanyPrinter.WriteLine(cabNotifiesOfPickup);
                     break;
                 case 5:
-                    var customersPickedUpOutput = dispatchService.CabNotifiesDroppedOff(customersPickedUp);
+                    var customersPickedUpOutput = dispatchService.CabNotifiesDroppedOff();
                     customersPickedUpOutput.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 6:
-                    var customerCancelledOutput = dispatchService.CustomerCancelledCabRide(customersAwaitingPickup, customersPickedUp);
+                    var customerCancelledOutput = dispatchService.CustomerCancelledCabRide();
                     customerCancelledOutput.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 7:
-                    var cabCalledOutput = dispatchService.CustomerCabCall(customerNames, ref numCustomersServed, customersCallInProgress);
+                    var cabCalledOutput = dispatchService.CustomerCabCall(customerNames, ref numCustomersServed);
                     _cabCompanyPrinter.WriteLine(cabCalledOutput);
                     break;
             }

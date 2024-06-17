@@ -3,10 +3,16 @@ namespace Production.EmmaCabCompany.Service;
 public class DispatchService
 {
     private readonly Dispatch _dispatch;
+    private readonly List<Customer> _customersAwaitingPickup;
+    private List<Customer> _customersPickedUp;
+    private readonly List<Customer> _customersCallInProgress;
 
     public DispatchService(Dispatch dispatch)
     {
         _dispatch = dispatch;
+        _customersAwaitingPickup = new List<Customer>();
+        _customersPickedUp = new List<Customer>();
+        _customersCallInProgress = new List<Customer>();
     }
 
     public string AddCab()
@@ -21,10 +27,10 @@ public class DispatchService
         return "Failed to add Evan's Cab to fleet.";
     }
 
-    public List<string> CabNotifiesDroppedOff(List<Customer> customersPickedUp)
+    public List<string> CabNotifiesDroppedOff()
     {
         var list = new List<string>();
-        if (customersPickedUp.Count == 0)
+        if (_customersPickedUp.Count == 0)
         {
             return ["There are currently no customer's assigned to cabs."];
         }
@@ -34,60 +40,55 @@ public class DispatchService
         {
             list.Add($"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}.");
         }
-        customersPickedUp = new List<Customer>();
+        _customersPickedUp = new List<Customer>();
 
         return list;
     }
 
-    public string CabNotifiesPickedUp(
-        List<Customer> customersAwaitingPickup, 
-        List<Customer> customersPickedUp)
+    public string CabNotifiesPickedUp()
     {
         if (_dispatch.NoCabsInFleet())
         {
             return "There are currently no cabs in the fleet.";
         }
 
-        if (customersAwaitingPickup.Count == 0)
+        if (_customersAwaitingPickup.Count == 0)
         {
             return "There are currently no customer's assigned to cabs.";
         }
-        var customer = customersAwaitingPickup.FirstOrDefault();
+        var customer = _customersAwaitingPickup.FirstOrDefault();
         _dispatch.PickupCustomer(customer);
-        customersPickedUp.Add(customer);
-        customersAwaitingPickup.RemoveAt(0);
+        _customersPickedUp.Add(customer);
+        _customersAwaitingPickup.RemoveAt(0);
         return "Notified dispatcher of pickup";
     }
 
     public string CustomerCabCall(
         List<string> customerNames, 
-        ref int numCustomersServed, 
-        List<Customer> customersCallInProgress)
+        ref int numCustomersServed)
     {
         var customerName = customerNames[numCustomersServed];
         numCustomersServed++;
         var customer = new Customer(customerName, "1 Fulton Drive", "1 Destination Lane");
-        customersCallInProgress.Add(customer);
+        _customersCallInProgress.Add(customer);
         return $"Received customer ride request from {customerName}";
     }
 
-    public List<string> CustomerCancelledCabRide(
-        List<Customer> customersAwaitingPickup, 
-        List<Customer> customersPickedUp)
+    public List<string> CustomerCancelledCabRide()
     {
         var list = new List<string>();
-        if (customersAwaitingPickup.Any())
+        if (_customersAwaitingPickup.Any())
         {
-            customersAwaitingPickup.RemoveAt(customersAwaitingPickup.Count - 1);
+            _customersAwaitingPickup.RemoveAt(_customersAwaitingPickup.Count - 1);
             list.Add("Customer cancelled request before cab assigned.");
             
         }
 
-        if (!customersPickedUp.Any())
+        if (!_customersPickedUp.Any())
         {
             return list;
         }
-        customersPickedUp.RemoveAt(customersPickedUp.Count - 1);
+        _customersPickedUp.RemoveAt(_customersPickedUp.Count - 1);
         list.Add("Customer cancelled request before cab got there.");
 
         return list;
@@ -109,32 +110,30 @@ public class DispatchService
         return "No cabs in fleet currently";
     }
 
-    public List<string> SendCabRequest(
-        List<Customer> customersCallInProgress,
-        List<Customer> customersAwaitingPickup)
+    public List<string> SendCabRequest()
     {
         if (_dispatch.NoCabsInFleet())
         {
             return ["There are currently no cabs in the fleet."];
         }
-        if (customersCallInProgress.Any())
+        if (_customersCallInProgress.Any())
         {
             try
             {
-                var customer = customersCallInProgress.Skip(0).First();
+                var customer = _customersCallInProgress.Skip(0).First();
                 var cabInfo = _dispatch.RideRequest(customer);
                 if (cabInfo != null)
                 {
-                    customersAwaitingPickup.Add(customer);
-                    customersCallInProgress.RemoveAt(0);
+                    _customersAwaitingPickup.Add(customer);
+                    _customersCallInProgress.RemoveAt(0);
                     return
                     [
                         $"{cabInfo.CabName} picked up {cabInfo.PassengerName} at {cabInfo.StartLocation}.",
                         "Cab assigned to customer."
                     ];
                 }
-                customersAwaitingPickup.Add(customer);
-                customersCallInProgress.RemoveAt(0);
+                _customersAwaitingPickup.Add(customer);
+                _customersCallInProgress.RemoveAt(0);
                 return ["Cab assigned to customer."];
             }
             catch (SystemException ex)

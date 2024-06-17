@@ -7,7 +7,7 @@ public class Program
         var cabCompanyPrinter = new CabCompanyPrinter();
         var cabCompanyReader = new CabCompanyReader();
 
-        var dispatch = new UserInterface(cabCompanyPrinter, cabCompanyReader, new FileWriter(), new FileReader());
+        var dispatch = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         dispatch.Run();
     }
 }

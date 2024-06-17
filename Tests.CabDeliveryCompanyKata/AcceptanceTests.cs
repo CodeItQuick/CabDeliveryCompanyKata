@@ -21,7 +21,7 @@ public class AcceptanceTests
             }
         };
         var mockFileReadWriter = new MockFileReadWriter();
-        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.List());
@@ -41,7 +41,7 @@ public class AcceptanceTests
             }
         };
         var mockFileReadWriter = new MockFileReadWriter();
-        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("There are currently no customer's waiting for cabs.", cabCompanyPrinter.List());
@@ -60,7 +60,7 @@ public class AcceptanceTests
             }
         };
         var mockFileReadWriter = new MockFileReadWriter();
-        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("There are currently no customer's assigned to cabs.", cabCompanyPrinter.List());
@@ -82,7 +82,7 @@ public class AcceptanceTests
             }
         };
         var mockFileReadWriter = new MockFileReadWriter();
-        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("Cab cannot be removed until passenger dropped off.", cabCompanyPrinter.List());
@@ -100,7 +100,7 @@ public class AcceptanceTests
             }
         };
         var mockFileReadWriter = new MockFileReadWriter();
-        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("There are currently no cabs in the fleet.", cabCompanyPrinter.List());
@@ -119,7 +119,7 @@ public class AcceptanceTests
             }
         };
         var mockFileReadWriter = new MockFileReadWriter();
-        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("There are currently no customer's assigned to cabs.", cabCompanyPrinter.List());
@@ -138,7 +138,7 @@ public class AcceptanceTests
             }
         };
         var mockFileReadWriter = new MockFileReadWriter();
-        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("There are currently no cabs in the fleet.", cabCompanyPrinter.List());
@@ -164,7 +164,7 @@ public class AcceptanceTests
             }
         };
         var mockFileReadWriter = new MockFileReadWriter();
-        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.List());
@@ -190,7 +190,7 @@ public class AcceptanceTests
             }
         };
         var mockFileReadWriter = new MockFileReadWriter();
-        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("Dispatch failed to pickup Lisa as there are no available cabs.", 
@@ -218,7 +218,7 @@ public class AcceptanceTests
             }
         };
         var mockFileReadWriter = new MockFileReadWriter();
-        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader, mockFileReadWriter, mockFileReadWriter);
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", 
