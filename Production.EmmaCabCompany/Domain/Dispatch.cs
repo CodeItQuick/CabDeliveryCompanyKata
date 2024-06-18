@@ -60,7 +60,7 @@ public class Dispatch
         return customer.IsPickedUp();
     }
 
-    public List<CabInfo> DropOffCustomers()
+    public List<CabInfo> DropOffCustomer()
     {
         if (_fleet.Count == 0)
         {
@@ -75,6 +75,7 @@ public class Dispatch
                 var cabInfo = _fleet[i].CabInfo();
                 _fleet[i].DropOffCustomer();
                 allPickedUp.Add(cabInfo);
+                break;
             }
         }
 
@@ -84,5 +85,9 @@ public class Dispatch
     public bool NoCabsInFleet()
     {
         return !_fleet.Any();
+    }
+    public bool CustomersStillInTransport()
+    {
+        return _fleet.Any(x => x.ContainsPassenger());
     }
 }

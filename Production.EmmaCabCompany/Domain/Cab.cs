@@ -67,6 +67,11 @@ public class Cab : ICabs
             Destination = _passenger?.endLocation,
         };
     }
+
+    public bool ContainsPassenger()
+    {
+        return _passenger != null;
+    }
 }
 
 internal enum CabStatus

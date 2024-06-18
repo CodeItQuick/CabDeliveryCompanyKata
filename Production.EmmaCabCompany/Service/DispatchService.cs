@@ -27,40 +27,20 @@ public class DispatchService
         return "Failed to add Evan's Cab to fleet.";
     }
 
-    public List<string> CabNotifiesDroppedOff()
+    public string RemoveCab()
     {
-        var list = new List<string>();
-        if (_customersPickedUp.Count == 0)
+        if (!_dispatch.NoCabsInFleet())
         {
-            return ["There are currently no customer's assigned to cabs."];
+            var success = _dispatch.RemoveCab();
+            if (success)
+            {
+                return "Last cab removed from cab fleet.";
+            }
+
+            return "Cab cannot be removed until passenger dropped off.";
         }
 
-        var droppedOffCustomers = _dispatch.DropOffCustomers();
-        foreach (var cabInfo in droppedOffCustomers)
-        {
-            list.Add($"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}.");
-        }
-        _customersPickedUp = new List<Customer>();
-
-        return list;
-    }
-
-    public string CabNotifiesPickedUp()
-    {
-        if (_dispatch.NoCabsInFleet())
-        {
-            return "There are currently no cabs in the fleet.";
-        }
-
-        if (_customersAwaitingPickup.Count == 0)
-        {
-            return "There are currently no customer's assigned to cabs.";
-        }
-        var customer = _customersAwaitingPickup.FirstOrDefault();
-        _dispatch.PickupCustomer(customer);
-        _customersPickedUp.Add(customer);
-        _customersAwaitingPickup.RemoveAt(0);
-        return "Notified dispatcher of pickup";
+        return "No cabs in fleet currently";
     }
 
     public string CustomerCabCall(
@@ -91,22 +71,6 @@ public class DispatchService
         list.Add("Customer cancelled request before cab got there.");
 
         return list;
-    }
-
-    public string RemoveCab()
-    {
-        if (!_dispatch.NoCabsInFleet())
-        {
-            var success = _dispatch.RemoveCab();
-            if (success)
-            {
-                return "Last cab removed from cab fleet.";
-            }
-
-            return "Cab cannot be removed until passenger dropped off.";
-        }
-
-        return "No cabs in fleet currently";
     }
 
     public List<string> SendCabRequest()
@@ -142,5 +106,41 @@ public class DispatchService
         }
 
         return ["There are currently no customer's waiting for cabs."];
+    }
+
+    public string CabNotifiesPickedUp()
+    {
+        if (_dispatch.NoCabsInFleet())
+        {
+            return "There are currently no cabs in the fleet.";
+        }
+
+        if (_customersAwaitingPickup.Count == 0)
+        {
+            return "There are currently no customer's assigned to cabs.";
+        }
+        var customer = _customersAwaitingPickup.FirstOrDefault();
+        _dispatch.PickupCustomer(customer);
+        _customersPickedUp.Add(customer);
+        _customersAwaitingPickup.RemoveAt(0);
+        return "Notified dispatcher of pickup";
+    }
+
+    public List<string> CabNotifiesDroppedOff()
+    {
+        var list = new List<string>();
+        if (!_dispatch.CustomersStillInTransport())
+        {
+            return ["There are currently no customer's assigned to cabs."];
+        }
+
+        var droppedOffCustomers = _dispatch.DropOffCustomer();
+        foreach (var cabInfo in droppedOffCustomers)
+        {
+            list.Add($"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}.");
+        }
+        _customersPickedUp = new List<Customer>();
+
+        return list;
     }
 }

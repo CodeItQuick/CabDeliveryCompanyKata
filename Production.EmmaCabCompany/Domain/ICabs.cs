@@ -8,4 +8,5 @@ public interface ICabs
     public bool RideRequest(Customer? customer);
     public bool RideInProgress();
     public CabInfo CabInfo();
+    public bool ContainsPassenger();
 }

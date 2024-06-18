@@ -18,7 +18,7 @@ public class DispatchTests
         dispatch.RideRequest(customer);
 
         var pickupCustomer = dispatch.PickupCustomer(customer);
-        var dropOffCustomers = dispatch.DropOffCustomers();
+        var dropOffCustomers = dispatch.DropOffCustomer();
 
         Assert.True(pickupCustomer);
         Assert.Single(dropOffCustomers);
@@ -45,16 +45,17 @@ public class DispatchTests
         dispatch.RideRequest(customerTwo);
         var pickupCustomerTwo = dispatch.PickupCustomer(customerTwo);
 
-        var dropOffCustomers = dispatch.DropOffCustomers();
+        var dropOffCustomers = dispatch.DropOffCustomer();
+        var dropOffCustomersTwo = dispatch.DropOffCustomer();
 
         Assert.True(pickupCustomer);
         Assert.True(pickupCustomerTwo);
-        Assert.Equal(2, dropOffCustomers.Count);
+        Assert.Equal(1, dropOffCustomers.Count);
+        Assert.Equal(1, dropOffCustomersTwo.Count);
     }
     [Fact]
     public void CanPickupTwoCustomersWithTwoCabsSecondOrdering()
     {
-        var cabCompanyPrinter = new FakeCabCompanyPrinter();
         var cabs = new Cab("Dan's Cab", 20);
         var cabTwo = new Cab("Evan's Cab", 20);
         var dispatch = new Dispatch();
@@ -73,7 +74,8 @@ public class DispatchTests
         var customerOnePickedUp = dispatch.PickupCustomer(customer);
         var customerTwoPickedUp = dispatch.PickupCustomer(customerTwo);
 
-        var dropOffCustomers = dispatch.DropOffCustomers();
+        var dropOffCustomers = dispatch.DropOffCustomer();
+        var dropOffCustomersTwo = dispatch.DropOffCustomer();
 
         Assert.True(cabOneAdded);
         Assert.True(cabTwoAdded);
@@ -81,7 +83,8 @@ public class DispatchTests
         Assert.NotNull(customerTwoRequestRide);
         Assert.True(customerOnePickedUp);
         Assert.True(customerTwoPickedUp);
-        Assert.Equal(2, dropOffCustomers.Count);
+        Assert.Equal(1, dropOffCustomers.Count);
+        Assert.Equal(1, dropOffCustomersTwo.Count);
     }
     [Fact]
     public void CannotPickupCustomerIfNotAvailable()
@@ -118,7 +121,7 @@ public class DispatchTests
         Assert.Throws<SystemException>(() =>  dispatch.RideRequest(customer));
         var pickupCustomer = dispatch.PickupCustomer(customer);
         Assert.False(pickupCustomer);
-        Assert.Throws<SystemException>(() => dispatch.DropOffCustomers());
+        Assert.Throws<SystemException>(() => dispatch.DropOffCustomer());
     }
     [Fact]
     public void CabNotRequestedByDispatcherAllCallsFail()
@@ -131,7 +134,7 @@ public class DispatchTests
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
         var pickupCustomer = dispatch.PickupCustomer(customer);
-        var allDroppedOff = dispatch.DropOffCustomers();
+        var allDroppedOff = dispatch.DropOffCustomer();
 
         Assert.False(pickupCustomer);
         Assert.Empty(allDroppedOff);
@@ -148,7 +151,7 @@ public class DispatchTests
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
         var rideRequested = dispatch.RideRequest(customer);
-        var allDroppedOff = dispatch.DropOffCustomers();
+        var allDroppedOff = dispatch.DropOffCustomer();
 
         Assert.NotNull(rideRequested);
         Assert.Empty(allDroppedOff);
@@ -170,7 +173,7 @@ public class DispatchTests
         dispatch.AddCab(cabs);
         var rideRequested = dispatch.RideRequest(customer);
         var customerPickedUp = dispatch.PickupCustomer(customerTwo);
-        var allDroppedOff = dispatch.DropOffCustomers();
+        var allDroppedOff = dispatch.DropOffCustomer();
 
         Assert.NotNull(rideRequested);
         Assert.False(customerPickedUp);

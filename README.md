@@ -28,7 +28,7 @@ Current Driver Request Confirmations: 2
 2. (Incoming Radio) Remove Cab Driver
 3. (Outgoing Radio) Send Cab Driver Ride Request
 4. (Incoming Radio) Cab Notifies Passenger Picked Up
-5. (Incoming Radio) All Cab Notifies Passenger Dropped Off
+5. (Incoming Radio) Cab Notifies Passenger Dropped Off
 6. (Incoming Call) Cancel Cab Driver Fare
 7. (Incoming Call) Customer Request Ride
 ```

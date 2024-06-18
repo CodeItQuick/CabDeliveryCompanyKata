@@ -110,7 +110,7 @@ Event storming is a technique used in process modeling to identify and visualize
 1. **Driver Management**: Add New Cab Driver
 2. **Customer Interaction**: Customer Requests Ride
 3. **Ride Dispatch**: Ride Request Received
-4. **10. Ride Dispatch**: Find Available Driver from Driver List
+4. **Ride Dispatch**: Find Available Driver from Driver List
 5. **Ride Dispatch**: Driver Request Sent
 6. **Driver Management**: Accept Cab Fare
 7. **Ride Dispatch**: Driver Request Confirmed
