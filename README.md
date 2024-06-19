@@ -32,10 +32,15 @@ Current Driver Request Confirmations: 2
 6. (Incoming Call) Cancel Cab Driver Fare
 7. (Incoming Call) Customer Request Ride
 ```
-# Acceptance Tests
+# Acceptance Tests/Possible Features
 
 1. The Cab Company Can Pickup A Customer At An Address  
 2. The Cab Company Can Pickup Multiple Customer's At Different Addresses  
+3. The Cab Company understands districts and prioritizes cabs that are in the correct district already
+4. The Cab Company keeps track of transaction fees
+5. The Cab Company keeps track of driver and customer names
+6. The Cab Company has historical ride information for each cab driver
+
 
 Noteable Constraints: 
 No location data for cabs or customers  
