@@ -29,7 +29,7 @@ public class UserInterface
         };
         int selection;
         var dispatch = new Dispatch();
-        var dispatchService = new DispatchService(dispatch);
+        var dispatchService = new DispatchController(dispatch);
         do
         {
             _cabCompanyPrinter.WriteLine("Please choose a selection from the list: ");

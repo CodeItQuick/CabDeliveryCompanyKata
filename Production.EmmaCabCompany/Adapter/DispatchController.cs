@@ -1,13 +1,13 @@
 namespace Production.EmmaCabCompany.Service;
 
-public class DispatchService
+public class DispatchController
 {
     private readonly Dispatch _dispatch;
     private readonly List<Customer> _customersAwaitingPickup;
     private List<Customer> _customersPickedUp;
     private readonly List<Customer> _customersCallInProgress;
 
-    public DispatchService(Dispatch dispatch)
+    public DispatchController(Dispatch dispatch)
     {
         _dispatch = dispatch;
         _customersAwaitingPickup = new List<Customer>();
