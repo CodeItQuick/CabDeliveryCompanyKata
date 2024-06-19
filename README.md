@@ -40,7 +40,7 @@ Current Driver Request Confirmations: 2
 4. The Cab Company keeps track of transaction fees
 5. The Cab Company keeps track of driver and customer names
 6. The Cab Company has historical ride information for each cab driver
-
+7. The Cab Company's dispatcher system persists the data, so it can recover if the system crashes
 
 Noteable Constraints: 
 No location data for cabs or customers  
