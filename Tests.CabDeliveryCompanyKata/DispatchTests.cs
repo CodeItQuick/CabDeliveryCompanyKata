@@ -17,7 +17,7 @@ public class DispatchTests
         dispatch.AddCab(cabs);
         dispatch.RideRequest(customer);
 
-        dispatch.PickupCustomer(customer);
+        dispatch.PickupCustomer();
         Assert.Equal(customer.name, dispatch.FindEnroutePassenger(customer)?.PassengerName);
         dispatch.DropOffCustomer();
 
@@ -39,10 +39,10 @@ public class DispatchTests
             "2 Final Destination Lane");
         dispatch.AddCab(cabs);
         dispatch.RideRequest(customer);
-        dispatch.PickupCustomer(customer);
+        dispatch.PickupCustomer();
         dispatch.AddCab(cabTwo);
         dispatch.RideRequest(customerTwo);
-        dispatch.PickupCustomer(customerTwo);
+        dispatch.PickupCustomer();
 
         dispatch.DropOffCustomer();
         dispatch.DropOffCustomer();
@@ -70,8 +70,8 @@ public class DispatchTests
         var customerOneRequestRide = dispatch.FindEnroutePassenger(customer);
         dispatch.RideRequest(customerTwo);
         var customerTwoRequestRide = dispatch.FindEnroutePassenger(customer);
-        dispatch.PickupCustomer(customer);
-        dispatch.PickupCustomer(customerTwo);
+        dispatch.PickupCustomer();
+        dispatch.PickupCustomer();
         Assert.NotNull(dispatch.FindEnroutePassenger(customer));
         Assert.NotNull(dispatch.FindEnroutePassenger(customer));
 
@@ -99,7 +99,7 @@ public class DispatchTests
         dispatch.AddCab(cabs);
         var rideRequest = cabs.RequestRideFor(customerTwo);
 
-        dispatch.PickupCustomer(customer);
+        Assert.Throws<SystemException>(() => dispatch.PickupCustomer());
 
         Assert.True(rideRequest); // TODO: this should be false, there is no customer call
     }
@@ -113,7 +113,7 @@ public class DispatchTests
             "1 Final Destination Lane");
         
         Assert.Throws<SystemException>(() => dispatch.RideRequest(customer));
-        Assert.Throws<SystemException>(() => dispatch.PickupCustomer(customer));
+        Assert.Throws<SystemException>(() => dispatch.PickupCustomer());
         Assert.Throws<SystemException>(() => dispatch.DropOffCustomer());
     }
     [Fact]
@@ -126,7 +126,7 @@ public class DispatchTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
-        dispatch.PickupCustomer(customer);
+        Assert.Throws<SystemException>(() => dispatch.PickupCustomer());
         Assert.Null(dispatch.FindEnroutePassenger(customer));
         dispatch.DropOffCustomer();
 
@@ -164,7 +164,7 @@ public class DispatchTests
         dispatch.AddCab(cabs);
         dispatch.RideRequest(customer);
         var rideRequested = dispatch.FindEnroutePassenger(customer);
-        dispatch.PickupCustomer(customerTwo);
+        dispatch.PickupCustomer();
         dispatch.DropOffCustomer();
         var rideRequestedTwo = dispatch.FindEnroutePassenger(customerTwo);
         

@@ -5,14 +5,12 @@ namespace Production.EmmaCabCompany.Service;
 public class DispatchController
 {
     private readonly Dispatch _dispatch;
-    private readonly List<Customer> _customersAwaitingPickup;
     private List<Customer> _customersPickedUp;
     private readonly List<Customer> _customersCallInProgress;
 
     public DispatchController(Dispatch dispatch)
     {
         _dispatch = dispatch;
-        _customersAwaitingPickup = new List<Customer>();
         _customersPickedUp = new List<Customer>();
         _customersCallInProgress = new List<Customer>();
     }
@@ -58,9 +56,9 @@ public class DispatchController
     public List<string> CustomerCancelledCabRide()
     {
         var list = new List<string>();
-        if (_customersAwaitingPickup.Any())
+        if (_dispatch.CustomerAwaitingPickup())
         {
-            _customersAwaitingPickup.RemoveAt(_customersAwaitingPickup.Count - 1);
+            _dispatch.CancelPickup();
             list.Add("Customer cancelled request before cab assigned.");
         }
 
@@ -89,7 +87,6 @@ public class DispatchController
                 var cabInfo = _dispatch.FindEnroutePassenger(customer);
                 if (cabInfo != null)
                 {
-                    _customersAwaitingPickup.Add(customer);
                     _customersCallInProgress.RemoveAt(0);
                     return
                     [
@@ -97,7 +94,6 @@ public class DispatchController
                         "Cab assigned to customer."
                     ];
                 }
-                _customersAwaitingPickup.Add(customer);
                 _customersCallInProgress.RemoveAt(0);
                 return ["Cab assigned to customer."];
             }
@@ -117,14 +113,11 @@ public class DispatchController
             return "There are currently no cabs in the fleet.";
         }
 
-        if (_customersAwaitingPickup.Count == 0)
+        if (!_dispatch.CustomerAwaitingPickup())
         {
             return "There are currently no customer's assigned to cabs.";
         }
-        var customer = _customersAwaitingPickup.FirstOrDefault();
-        _dispatch.PickupCustomer(customer);
-        _customersPickedUp.Add(customer);
-        _customersAwaitingPickup.RemoveAt(0);
+        _dispatch.PickupCustomer();
         return "Notified dispatcher of pickup";
     }
 
