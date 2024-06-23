@@ -4,7 +4,8 @@ public class Fleet
 {
     private readonly List<Cab> _fleet = new();
     private bool _rideRequested;
-    private CabInfo? _lastAssignedCab;
+    private List<CabInfo?> _lastAssignedCab = new();
+    private List<CabInfo?> _lastRideAssigned = new();
 
     public void AddCab(Cab cab)
     {
@@ -19,7 +20,7 @@ public class Fleet
     }
     public bool IsEnroute(Customer customer)
     {
-        return _fleet.Any(x => x.CabInfo().PassengerName == customer.name);
+        return _fleet.Any(x => x.CabInfo()?.PassengerName == customer.name);
     }
     public void RideRequested(Customer? customer)
     {
@@ -29,7 +30,6 @@ public class Fleet
             throw new SystemException("There are currently no cabs in the fleet");
         }
         _rideRequested = false;
-        _lastAssignedCab = null;
         foreach (var cab in _fleet)
         {
             if (_rideRequested) continue;
@@ -38,7 +38,7 @@ public class Fleet
             
             _rideRequested = true;
             cab.RequestRideFor(customer);
-            _lastAssignedCab = cab.CabInfo();
+            _lastRideAssigned.Add(cab.CabInfo());
         }
         // dispatcher
         if (_rideRequested == false && customer != null)
@@ -47,7 +47,7 @@ public class Fleet
         }
     }
     
-    public bool PickupCustomer(Customer customer)
+    public void PickupCustomer(Customer customer)
     {
         if (_fleet.Count == 0)
         {
@@ -55,29 +55,28 @@ public class Fleet
         }
         foreach (var cab in _fleet)
         {
+            if (!cab.IsEnrouteFor(customer))
+            {
+                continue;
+            }
             cab.PickupAssignedCustomer(customer);
-        }
-
-        return customer.IsPickedUp();
-    }
-    
-    public List<CabInfo> DropOffCustomer()
-    {
-        if (_fleet.Count == 0)
-        {
-            throw new SystemException("Cannot drop off customers as there are no cabs in the fleet");
-        }
-        List<CabInfo> allPickedUp = new List<CabInfo>();
-        foreach (var cab in _fleet)
-        {
-            if (!cab.IsEnroute()) continue;
-            var cabInfo = cab.CabInfo();
-            cab.DropOffCustomer();
-            allPickedUp.Add(cabInfo);
             break;
         }
-
-        return allPickedUp;
+    }
+    
+    public void DropOffCustomer()
+    {
+        if (_fleet.Count == 0)
+        {
+            throw new SystemException("Cannot drop off customers as there are no cabs in the fleet");
+        }
+        foreach (var cab in _fleet)
+        {
+            if (!cab.IsStatus(CabStatus.TransportingCustomer)) continue;
+            _lastAssignedCab.Add(cab.CabInfo());
+            cab.DropOffCustomer();
+            break;
+        }
     }
 
     public bool NoCabsInFleet()
@@ -90,12 +89,16 @@ public class Fleet
     }
     public CabInfo? LastAssigned()
     {
-        return _lastAssignedCab;
+        return _lastAssignedCab.LastOrDefault();
+    }
+    public CabInfo? LastRideAssigned()
+    {
+        return _lastRideAssigned.LastOrDefault();
     }
 
     public string? FindCab(Customer customer)
     {
-        return _fleet.First(x => x.CabInfo().PassengerName == customer.name).CabInfo().CabName;
+        return _fleet.First(x => x.CabInfo()?.PassengerName == customer.name).CabInfo()?.CabName;
     }
 
     public bool AllCabsOccupied()

@@ -4,8 +4,6 @@ public class Dispatch
 {
     
     private readonly Fleet _fleet = new();
-    private bool _rideRequested;
-    private CabInfo? _lastAssignedCab;
 
     public void AddCab(Cab cab)
     {
@@ -43,19 +41,16 @@ public class Dispatch
         return null;
     }
 
-    public bool PickupCustomer(Customer customer)
+    public void PickupCustomer(Customer customer)
     {
         _fleet.PickupCustomer(customer);
-
-        return customer.IsPickedUp();
     }
 
-    public List<CabInfo> DropOffCustomer()
+    public void DropOffCustomer()
     {
-        var dropOffCustomer = _fleet.DropOffCustomer();
-
-        return dropOffCustomer;
+        _fleet.DropOffCustomer();
     }
+    
 
     public bool NoCabsInFleet()
     {
@@ -64,5 +59,11 @@ public class Dispatch
     public bool CustomersStillInTransport()
     {
         return _fleet.CustomersStillInTransport();
+    }
+
+    public List<CabInfo> DroppedOffCustomers()
+    {
+        var droppedOff = _fleet.LastAssigned();
+        return new List<CabInfo>() { droppedOff };
     }
 }

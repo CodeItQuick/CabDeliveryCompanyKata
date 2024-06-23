@@ -31,13 +31,15 @@ public class Cab : ICabs
 
     public bool PickupAssignedCustomer(Customer customer)
     {
-        if (_status != CabStatus.CustomerRideRequested || customer.name != _assignedPassenger?.name)
-        {
-            return false;
-        }
+        if (!IsEnrouteFor(customer)) return false;
         _status = CabStatus.TransportingCustomer;
         customer.IsInCab(this);
         return true;
+    }
+
+    public bool IsEnrouteFor(Customer customer)
+    {
+        return _status == CabStatus.CustomerRideRequested && customer.name == _assignedPassenger?.name;
     }
 
     public bool IsStatus(CabStatus requestedStatus)
@@ -66,8 +68,13 @@ public class Cab : ICabs
         return _status == CabStatus.Available;
     }
 
-    public CabInfo CabInfo()
+    public CabInfo? CabInfo()
     {
+        if (_assignedPassenger == null)
+        {
+            return null;
+        }
+        
         return new CabInfo()
         {
             PassengerName = _assignedPassenger?.name,

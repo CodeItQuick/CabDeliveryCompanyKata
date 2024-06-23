@@ -136,11 +136,15 @@ public class DispatchController
             return ["There are currently no customer's assigned to cabs."];
         }
 
-        var droppedOffCustomers = _dispatch.DropOffCustomer();
-        foreach (var cabInfo in droppedOffCustomers)
+        _dispatch.DropOffCustomer();
+        // foreach (var cabInfo in droppedOffCustomers)
+        // {
+        var droppedOff = _dispatch.DroppedOffCustomers();
+        foreach (var cabInfo in droppedOff)
         {
             list.Add($"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}.");
         }
+        // }
         _customersPickedUp = new List<Customer>();
 
         return list;

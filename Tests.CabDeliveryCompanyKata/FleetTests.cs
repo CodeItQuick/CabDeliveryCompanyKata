@@ -29,7 +29,7 @@ public class FleetTests
             CabName = "Dan's Cab",
             Destination = "2 Destination Lane",
             StartLocation = "1 Fulton Drive"
-        }, fleet.LastAssigned());
+        }, fleet.LastRideAssigned());
     }
     [Fact]
     public void DispatchCanAssignPassengerToTwoPassengerFleet()
@@ -47,7 +47,7 @@ public class FleetTests
             CabName = "Dan's Cab",
             Destination = "2 Destination Lane",
             StartLocation = "1 Fulton Drive"
-        }, fleet.LastAssigned());
+        }, fleet.LastRideAssigned());
     }
     [Fact]
     public void DispatchCanAssignTwoPassengerToTwoPassengerFleet()
@@ -67,6 +67,6 @@ public class FleetTests
             CabName = "Lisa's Cab",
             Destination = "3 Destination Lane",
             StartLocation = "2 Fulton Drive"
-        }, fleet.LastAssigned());
+        }, fleet.LastRideAssigned());
     }
 }

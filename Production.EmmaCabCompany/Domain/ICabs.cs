@@ -9,6 +9,6 @@ public interface ICabs
     public bool DropOffCustomer();
     public bool RequestRideFor(Customer? customer);
     public bool RideInProgress();
-    public CabInfo CabInfo();
+    public CabInfo? CabInfo();
     public bool ContainsPassenger();
 }

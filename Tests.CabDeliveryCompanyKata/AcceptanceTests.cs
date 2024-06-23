@@ -217,17 +217,16 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var mockFileReadWriter = new MockFileReadWriter();
         var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
-        Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", 
-            cabCompanyPrinter.List());
-        Assert.Contains("Evan's Cab dropped off Emma at 1 Destination Lane.", 
-            cabCompanyPrinter.List());
         Assert.Contains("Evan's Cab picked up Lisa at 1 Fulton Drive.", 
             cabCompanyPrinter.List());
         Assert.Contains("Evan's Cab dropped off Lisa at 1 Destination Lane.", 
+            cabCompanyPrinter.List());
+        Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", 
+            cabCompanyPrinter.List());
+        Assert.Contains("Evan's Cab dropped off Emma at 1 Destination Lane.", 
             cabCompanyPrinter.List());
     }
 }
