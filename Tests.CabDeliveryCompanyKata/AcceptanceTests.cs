@@ -81,7 +81,6 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var mockFileReadWriter = new MockFileReadWriter();
         var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         

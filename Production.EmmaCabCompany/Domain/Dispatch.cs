@@ -7,17 +7,18 @@ public class Dispatch
     private bool _rideRequested;
     private CabInfo? _lastAssignedCab;
 
-    public bool AddCab(Cab cab)
+    public void AddCab(Cab cab)
     {
         _fleet.AddCab(cab);
-        return true;
     }
 
-    public bool RemoveCab()
+    public void RemoveCab()
     {
+        if (_fleet.AllCabsOccupied())
+        {
+            throw new SystemException("Cab cannot be removed until passenger dropped off.");
+        }
         _fleet.RemoveCab();
-
-        return false;
     }
 
     public void RideRequest(Customer? customer)

@@ -97,4 +97,9 @@ public class Fleet
     {
         return _fleet.First(x => x.CabInfo().PassengerName == customer.name).CabInfo().CabName;
     }
+
+    public bool AllCabsOccupied()
+    {
+        return _fleet.All(x => x.ContainsPassenger());
+    }
 }

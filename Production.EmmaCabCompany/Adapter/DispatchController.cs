@@ -20,26 +20,25 @@ public class DispatchController
     public string AddCab()
     {
         var cabName = "Evan's Cab";
-        var addCab = _dispatch.AddCab(new Cab(cabName, 20));
-        if (addCab)
-        {
-            return "Added Evan's Cab to fleet";
-        }
-
-        return "Failed to add Evan's Cab to fleet.";
+        _dispatch.AddCab(new Cab(cabName, 20));
+        
+        return "Added Evan's Cab to fleet";
     }
 
     public string RemoveCab()
     {
         if (!_dispatch.NoCabsInFleet())
         {
-            var success = _dispatch.RemoveCab();
-            if (success)
+            try
             {
-                return "Last cab removed from cab fleet.";
+                _dispatch.RemoveCab();
             }
-
-            return "Cab cannot be removed until passenger dropped off.";
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            
+            return "Last cab removed from cab fleet.";
         }
 
         return "No cabs in fleet currently";
