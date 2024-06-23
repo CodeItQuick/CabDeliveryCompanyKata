@@ -10,14 +10,16 @@ public class Fleet
     {
         _fleet.Add(cab);
     }
-
     public void RemoveCab()
     {
         if (_fleet[^1].RideInProgress())
         {
             _fleet.RemoveAt(_fleet.Count - 1);
         }
-
+    }
+    public bool IsEnroute(Customer customer)
+    {
+        return _fleet.Any(x => x.CabInfo().PassengerName == customer.name);
     }
     public void RideRequested(Customer? customer)
     {
@@ -89,5 +91,10 @@ public class Fleet
     public CabInfo? LastAssigned()
     {
         return _lastAssignedCab;
+    }
+
+    public string? FindCab(Customer customer)
+    {
+        return _fleet.First(x => x.CabInfo().PassengerName == customer.name).CabInfo().CabName;
     }
 }

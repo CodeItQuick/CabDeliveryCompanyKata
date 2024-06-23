@@ -4,6 +4,8 @@ public class Dispatch
 {
     
     private readonly Fleet _fleet = new();
+    private bool _rideRequested;
+    private CabInfo? _lastAssignedCab;
 
     public bool AddCab(Cab cab)
     {
@@ -18,20 +20,31 @@ public class Dispatch
         return false;
     }
 
-    public CabInfo? RideRequest(Customer? customer)
+    public void RideRequest(Customer? customer)
     {
         _fleet.RideRequested(customer);
+    }
 
-        return _fleet.LastAssigned();
+    public CabInfo? FindEnroutePassenger(Customer customer)
+    {
+        
+        if (_fleet.IsEnroute(customer))
+        {
+            return new CabInfo()
+            {
+                PassengerName = customer.name,
+                CabName = _fleet.FindCab(customer),
+                StartLocation = customer.startLocation,
+                Destination = customer.endLocation
+            };
+        }
+
+        return null;
     }
 
     public bool PickupCustomer(Customer customer)
     {
         _fleet.PickupCustomer(customer);
-        // for (int i = 0; i < _fleet.Count; i++)
-        // {
-        //     _fleet[i].PickupAssignedCustomer(customer);
-        // }
 
         return customer.IsPickedUp();
     }

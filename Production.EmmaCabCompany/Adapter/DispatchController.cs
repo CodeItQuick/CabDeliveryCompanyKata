@@ -4,14 +4,14 @@ namespace Production.EmmaCabCompany.Service;
 
 public class DispatchController
 {
-    private readonly Dispatch _fleet;
+    private readonly Dispatch _dispatch;
     private readonly List<Customer> _customersAwaitingPickup;
     private List<Customer> _customersPickedUp;
     private readonly List<Customer> _customersCallInProgress;
 
-    public DispatchController(Dispatch fleet)
+    public DispatchController(Dispatch dispatch)
     {
-        _fleet = fleet;
+        _dispatch = dispatch;
         _customersAwaitingPickup = new List<Customer>();
         _customersPickedUp = new List<Customer>();
         _customersCallInProgress = new List<Customer>();
@@ -20,7 +20,7 @@ public class DispatchController
     public string AddCab()
     {
         var cabName = "Evan's Cab";
-        var addCab = _fleet.AddCab(new Cab(cabName, 20));
+        var addCab = _dispatch.AddCab(new Cab(cabName, 20));
         if (addCab)
         {
             return "Added Evan's Cab to fleet";
@@ -31,9 +31,9 @@ public class DispatchController
 
     public string RemoveCab()
     {
-        if (!_fleet.NoCabsInFleet())
+        if (!_dispatch.NoCabsInFleet())
         {
-            var success = _fleet.RemoveCab();
+            var success = _dispatch.RemoveCab();
             if (success)
             {
                 return "Last cab removed from cab fleet.";
@@ -77,7 +77,7 @@ public class DispatchController
 
     public List<string> SendCabRequest()
     {
-        if (_fleet.NoCabsInFleet())
+        if (_dispatch.NoCabsInFleet())
         {
             return ["There are currently no cabs in the fleet."];
         }
@@ -86,7 +86,8 @@ public class DispatchController
             try
             {
                 var customer = _customersCallInProgress.Skip(0).First();
-                var cabInfo = _fleet.RideRequest(customer);
+                _dispatch.RideRequest(customer);
+                var cabInfo = _dispatch.FindEnroutePassenger(customer);
                 if (cabInfo != null)
                 {
                     _customersAwaitingPickup.Add(customer);
@@ -112,7 +113,7 @@ public class DispatchController
 
     public string CabNotifiesPickedUp()
     {
-        if (_fleet.NoCabsInFleet())
+        if (_dispatch.NoCabsInFleet())
         {
             return "There are currently no cabs in the fleet.";
         }
@@ -122,7 +123,7 @@ public class DispatchController
             return "There are currently no customer's assigned to cabs.";
         }
         var customer = _customersAwaitingPickup.FirstOrDefault();
-        _fleet.PickupCustomer(customer);
+        _dispatch.PickupCustomer(customer);
         _customersPickedUp.Add(customer);
         _customersAwaitingPickup.RemoveAt(0);
         return "Notified dispatcher of pickup";
@@ -131,12 +132,12 @@ public class DispatchController
     public List<string> CabNotifiesDroppedOff()
     {
         var list = new List<string>();
-        if (!_fleet.CustomersStillInTransport())
+        if (!_dispatch.CustomersStillInTransport())
         {
             return ["There are currently no customer's assigned to cabs."];
         }
 
-        var droppedOffCustomers = _fleet.DropOffCustomer();
+        var droppedOffCustomers = _dispatch.DropOffCustomer();
         foreach (var cabInfo in droppedOffCustomers)
         {
             list.Add($"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}.");

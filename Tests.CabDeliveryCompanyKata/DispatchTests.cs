@@ -70,8 +70,10 @@ public class DispatchTests
             "2 Final Destination Lane");
         var cabOneAdded = dispatch.AddCab(cabs);
         var cabTwoAdded = dispatch.AddCab(cabTwo);
-        var customerOneRequestRide = dispatch.RideRequest(customer);
-        var customerTwoRequestRide = dispatch.RideRequest(customerTwo);
+        dispatch.RideRequest(customer);
+        var customerOneRequestRide = dispatch.FindEnroutePassenger(customer);
+        dispatch.RideRequest(customerTwo);
+        var customerTwoRequestRide = dispatch.FindEnroutePassenger(customer);
         var customerOnePickedUp = dispatch.PickupCustomer(customer);
         var customerTwoPickedUp = dispatch.PickupCustomer(customerTwo);
 
@@ -119,7 +121,7 @@ public class DispatchTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         
-        Assert.Throws<SystemException>(() =>  dispatch.RideRequest(customer));
+        Assert.Throws<SystemException>(() => dispatch.RideRequest(customer));
         Assert.Throws<SystemException>(() => dispatch.PickupCustomer(customer));
         Assert.Throws<SystemException>(() => dispatch.DropOffCustomer());
     }
@@ -150,7 +152,8 @@ public class DispatchTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
-        var rideRequested = dispatch.RideRequest(customer);
+        dispatch.RideRequest(customer);
+        var rideRequested = dispatch.FindEnroutePassenger(customer); 
         var allDroppedOff = dispatch.DropOffCustomer();
 
         Assert.NotNull(rideRequested);
@@ -171,7 +174,8 @@ public class DispatchTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
-        var rideRequested = dispatch.RideRequest(customer);
+        dispatch.RideRequest(customer);
+        var rideRequested = dispatch.FindEnroutePassenger(customer);
         var customerPickedUp = dispatch.PickupCustomer(customerTwo);
         var allDroppedOff = dispatch.DropOffCustomer();
 
