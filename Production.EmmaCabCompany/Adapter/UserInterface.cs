@@ -29,7 +29,7 @@ public class UserInterface
         };
         int selection;
         var dispatch = new Dispatch();
-        var dispatchService = new DispatchController(dispatch);
+        var dispatchController = new DispatchController(dispatch);
         do
         {
             _cabCompanyPrinter.WriteLine("Please choose a selection from the list: ");
@@ -56,32 +56,32 @@ public class UserInterface
             {
                 // command pattern
                 case 1:
-                    var addCabCommand = dispatchService.AddCab();
+                    var addCabCommand = dispatchController.AddCab();
                     _cabCompanyPrinter.WriteLine(addCabCommand);
                     break;
                 case 2:
-                    var removeCabCommand = dispatchService.RemoveCab();
+                    var removeCabCommand = dispatchController.RemoveCab();
                     _cabCompanyPrinter.WriteLine(removeCabCommand);
                     break;
                 case 3:
-                    var sendCabRequestCommand = dispatchService
+                    var sendCabRequestCommand = dispatchController
                         .SendCabRequest();
                     sendCabRequestCommand.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 4:
-                    var cabNotifiesOfPickup = dispatchService.CabNotifiesPickedUp();
+                    var cabNotifiesOfPickup = dispatchController.CabNotifiesPickedUp();
                     _cabCompanyPrinter.WriteLine(cabNotifiesOfPickup);
                     break;
                 case 5:
-                    var customersPickedUpOutput = dispatchService.CabNotifiesDroppedOff();
+                    var customersPickedUpOutput = dispatchController.CabNotifiesDroppedOff();
                     customersPickedUpOutput.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 6:
-                    var customerCancelledOutput = dispatchService.CustomerCancelledCabRide();
+                    var customerCancelledOutput = dispatchController.CustomerCancelledCabRide();
                     customerCancelledOutput.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 7:
-                    var cabCalledOutput = dispatchService.CustomerCabCall(customerNames, ref numCustomersServed);
+                    var cabCalledOutput = dispatchController.CustomerCabCall(customerNames, ref numCustomersServed);
                     _cabCompanyPrinter.WriteLine(cabCalledOutput);
                     break;
             }

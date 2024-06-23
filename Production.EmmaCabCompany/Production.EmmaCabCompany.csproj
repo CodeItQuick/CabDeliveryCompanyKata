@@ -8,8 +8,4 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Folder Include="Adapter\Commands\" />
-    </ItemGroup>
-
 </Project>

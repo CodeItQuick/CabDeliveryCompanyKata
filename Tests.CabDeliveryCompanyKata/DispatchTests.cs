@@ -101,7 +101,7 @@ public class DispatchTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         var addCab = dispatch.AddCab(cabs);
-        var rideRequest = cabs.RideRequest(customerTwo);
+        var rideRequest = cabs.RequestRideFor(customerTwo);
 
         var pickupCustomer = dispatch.PickupCustomer(customer);
 

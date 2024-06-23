@@ -9,7 +9,7 @@ public class CabTests
     {
         var cab = new Cab("Evan's Cab", 20);
         
-        var acceptedRide = cab.RideRequest(new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue"));
+        var acceptedRide = cab.RequestRideFor(new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue"));
 
         Assert.True(acceptedRide);
     }
@@ -18,7 +18,7 @@ public class CabTests
     {
         var cab = new Cab("Evan's Cab", 20);
         var passenger = new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue");
-        cab.RideRequest(passenger);
+        cab.RequestRideFor(passenger);
         cab.PickupCustomer(passenger);
 
         var dropOffCustomer = cab.DropOffCustomer();
@@ -30,11 +30,11 @@ public class CabTests
     {
         var cab = new Cab("Evan's Cab", 20);
         var passenger = new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue");
-        cab.RideRequest(passenger);
+        cab.RequestRideFor(passenger);
         cab.PickupCustomer(passenger);
         var dropOffCustomer = cab.DropOffCustomer();
         var passengerTwo = new Customer("Emma", "1 Fulton Drive", "1 Destination Avenue");
-        cab.RideRequest(passengerTwo);
+        cab.RequestRideFor(passengerTwo);
         cab.PickupCustomer(passengerTwo);
         var dropOffCustomerTwo = cab.DropOffCustomer();
 
@@ -45,7 +45,7 @@ public class CabTests
     public void CabDenyRideRequestWhenNotAvailable()
     {
         var cab = new Cab("Evan's Cab", 20);
-        cab.RideRequest(new Customer("Emma", "1 Fulton Drive", "1 Destination Avenue"));
+        cab.RequestRideFor(new Customer("Emma", "1 Fulton Drive", "1 Destination Avenue"));
 
         var pickupSuccess = cab.PickupCustomer(new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue"));
 
@@ -56,7 +56,7 @@ public class CabTests
     {
         var cab = new Cab("Evan's Cab", 20);
         var passenger = new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue");
-        var acceptedRide = cab.RideRequest(passenger);
+        var acceptedRide = cab.RequestRideFor(passenger);
         var pickupCustomer = cab.PickupCustomer(passenger);
 
         var dropOffCustomer = cab.DropOffCustomer();
@@ -71,7 +71,7 @@ public class CabTests
         var cab = new Cab("Evan's Cab", 20);
         var passenger = new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue");
         var passengerDenied = new Customer("Emma", "2 Fulton Drive", "2 Destination Avenue");
-        var acceptedRide = cab.RideRequest(passenger);
+        var acceptedRide = cab.RequestRideFor(passenger);
         var pickupCustomer = cab.PickupCustomer(passengerDenied);
 
         var dropOffCustomer = cab.DropOffCustomer();

@@ -5,7 +5,7 @@ public class Cab : ICabs
     private readonly string _cabName;
     private readonly int _wallet;
     private CabStatus _status = CabStatus.Available;
-    private Customer? _passenger;
+    private Customer? _assignedPassenger;
 
     public Cab(string cabName, int wallet)
     {
@@ -13,21 +13,25 @@ public class Cab : ICabs
         _wallet = wallet;
     }
 
-    public bool RideRequest(Customer? customer)
+    public bool RequestRideFor(Customer? customer)
     {
-        if (_status != CabStatus.Available || _passenger != null)
+        if (_status != CabStatus.Available || _assignedPassenger != null)
         {
             return false;
         }
-        _passenger = customer;
+        _assignedPassenger = customer; // we're picking up this customer
         _status = CabStatus.CustomerRideRequested;
         return true;
+    }
 
+    public bool IsAvailable()
+    {
+        return _status != CabStatus.Available || _assignedPassenger != null;
     }
 
     public bool PickupCustomer(Customer customer)
     {
-        if (_status != CabStatus.CustomerRideRequested || customer.name != _passenger?.name)
+        if (_status != CabStatus.CustomerRideRequested || customer.name != _assignedPassenger?.name)
         {
             return false;
         }
@@ -36,7 +40,12 @@ public class Cab : ICabs
         return true;
     }
 
-    public bool ReachedDestination()
+    public bool IsStatus(CabStatus requestedStatus)
+    {
+        return _status == requestedStatus;
+    }
+    
+    public bool IsEnroute()
     {
         return _status == CabStatus.TransportingCustomer;
     }
@@ -47,8 +56,8 @@ public class Cab : ICabs
             return false;
         }
         _status = CabStatus.Available;
-        _passenger?.ExitCab();
-        _passenger = null;
+        _assignedPassenger?.ExitCab();
+        _assignedPassenger = null;
         return _status == CabStatus.Available;
     }
 
@@ -61,20 +70,20 @@ public class Cab : ICabs
     {
         return new CabInfo()
         {
-            PassengerName = _passenger?.name,
+            PassengerName = _assignedPassenger?.name,
             CabName = _cabName,
-            StartLocation = _passenger?.startLocation,
-            Destination = _passenger?.endLocation,
+            StartLocation = _assignedPassenger?.startLocation,
+            Destination = _assignedPassenger?.endLocation,
         };
     }
 
     public bool ContainsPassenger()
     {
-        return _passenger != null;
+        return _assignedPassenger != null;
     }
 }
 
-internal enum CabStatus
+public enum CabStatus
 {
     Available,
     TransportingCustomer,

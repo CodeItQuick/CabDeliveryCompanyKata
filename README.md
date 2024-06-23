@@ -1,8 +1,12 @@
 # Cab Company Dispatch Screen
 
 ## TODO
-1. Figure out Customer Aggregate
-2. Add More Features
+1. Add the Event Storming into Miro
+2. Fix Command/Query Separation
+3. Get the Aggregates Out
+4. Limit Menu
+5. Figure out Customer Aggregate
+6. Add More Features
 
 ## Story
 A cab company currently operates with "old school" technology. The cab company wants to upgrade their technology offering
@@ -26,7 +30,7 @@ Current Driver Request Confirmations: 2
 0. Exit
 1. (Incoming Radio) Add New Cab Driver
 2. (Incoming Radio) Remove Cab Driver
-3. (Outgoing Radio) Send Cab Driver Ride Request
+3. (Outgoing Radio) Send Cab Driver Ride Requested
 4. (Incoming Radio) Cab Notifies Passenger Picked Up
 5. (Incoming Radio) Cab Notifies Passenger Dropped Off
 6. (Incoming Call) Cancel Cab Driver Fare

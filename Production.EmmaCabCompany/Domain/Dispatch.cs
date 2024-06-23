@@ -3,6 +3,8 @@ namespace Production.EmmaCabCompany;
 public class Dispatch 
 {
     private readonly List<ICabs> _fleet = new();
+    private bool _rideRequested;
+    private CabInfo? _passenger;
 
     public bool AddCab(ICabs cab)
     {
@@ -23,31 +25,42 @@ public class Dispatch
 
     public CabInfo? RideRequest(Customer? customer)
     {
+        // query to fleet from dispatcher
         if (!_fleet.Any())
         {
             throw new SystemException("There are currently no cabs in the fleet");
         }
-        var rideRequested = false;
-        CabInfo? cabInfo = null;
-        for (int i = 0; i < _fleet.Count; i++)
-        {
-            if (rideRequested == false)
-            {
-                var rideRequest = _fleet[i].RideRequest(customer);
-                if (rideRequest == true)
-                {
-                    rideRequested = true;
-                    cabInfo = _fleet[i].CabInfo();
-                }
-            }
-        }
+        // fleet and dispatch
+        // fleet.AssignAvailableCab();
+        AssignAvailableCab(customer);
 
-        if (rideRequested == false && customer != null)
+        // dispatcher
+        if (_rideRequested == false && customer != null)
         {
             throw new SystemException($"Dispatch failed to pickup {customer.name} as there are no available cabs.");
         }
 
-        return cabInfo;
+        return _passenger;
+    }
+
+    public void AssignAvailableCab(Customer? customer)
+    {
+        _rideRequested = false;
+        _passenger = null;
+        for (int i = 0; i < _fleet.Count; i++)
+        {
+            if (_rideRequested)
+            {
+                continue;
+            }
+            
+            if (_fleet[i].IsStatus(CabStatus.Available))
+            {
+                _rideRequested = true;
+                _fleet[i].RequestRideFor(customer);
+                _passenger = _fleet[i].CabInfo();
+            }
+        }
     }
 
     public bool PickupCustomer(Customer customer)
@@ -69,7 +82,7 @@ public class Dispatch
         List<CabInfo> allPickedUp = new List<CabInfo>();
         for (int i = 0; i < _fleet.Count; i++)
         {
-            var droppedOffCustomerSuccess = _fleet[i].ReachedDestination();
+            var droppedOffCustomerSuccess = _fleet[i].IsEnroute();
             if (droppedOffCustomerSuccess)
             {
                 var cabInfo = _fleet[i].CabInfo();

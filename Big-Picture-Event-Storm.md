@@ -1,11 +1,11 @@
 ### An Example Overall Big-Picture Event Storm (Dispatcher Customer Journey)
 
-1. **Driver Management**: Add New Cab Driver
-2. **Customer Interaction**: Customer Requests Ride
+1. **Driver Management**: New Cab Driver Added <-- past tense
+2. **Customer Interaction**: Ride Requested
 3. **Ride Dispatch**: Ride Request Received
-4. **Ride Dispatch**: Find Available Driver
-5. **Ride Dispatch**: Driver Request Sent
-6. **Driver Management**: Accept Cab Fare
+4. **Ride Dispatch**: Driver Assigned to Request
+5. **Ride Dispatch**: Driver Dispatched
+6. **Driver Management**: Assignment Accepted
 7. **Ride Dispatch**: Driver Request Confirmed
 8. **Ride Dispatch**: Ride Assigned to Driver
 9. **Customer Interaction**: Ride Confirmed to Customer
