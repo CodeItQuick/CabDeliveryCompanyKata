@@ -97,8 +97,7 @@ public class Dispatch
 
     public void CancelPickup()
     {
-        if (_customerStatusMap
-            .Any(x => x.Value == CustomerStatus.WaitingPickup))
+        if (CustomerAwaitingPickup())
         {
             var customer = _customerStatusMap.FirstOrDefault().Key;
             _customerStatusMap.Remove(customer);

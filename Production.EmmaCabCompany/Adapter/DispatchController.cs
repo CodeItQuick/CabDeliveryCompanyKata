@@ -56,18 +56,12 @@ public class DispatchController
     public List<string> CustomerCancelledCabRide()
     {
         var list = new List<string>();
-        if (_dispatch.CustomerAwaitingPickup())
-        {
-            _dispatch.CancelPickup();
-            list.Add("Customer cancelled request before cab assigned.");
-        }
-
-        if (!_customersPickedUp.Any())
+        if (!_dispatch.CustomerAwaitingPickup())
         {
             return list;
         }
-        _customersPickedUp.RemoveAt(_customersPickedUp.Count - 1);
-        list.Add("Customer cancelled request before cab got there.");
+        _dispatch.CancelPickup();
+        list.Add("Customer cancelled request before cab assigned.");
 
         return list;
     }
