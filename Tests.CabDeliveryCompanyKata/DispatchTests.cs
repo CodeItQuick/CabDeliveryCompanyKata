@@ -1,4 +1,5 @@
 using Production.EmmaCabCompany;
+using Production.EmmaCabCompany.Domain;
 
 namespace Tests.CabDeliveryCompanyKata;
 
@@ -119,8 +120,7 @@ public class DispatchTests
             "1 Final Destination Lane");
         
         Assert.Throws<SystemException>(() =>  dispatch.RideRequest(customer));
-        var pickupCustomer = dispatch.PickupCustomer(customer);
-        Assert.False(pickupCustomer);
+        Assert.Throws<SystemException>(() => dispatch.PickupCustomer(customer));
         Assert.Throws<SystemException>(() => dispatch.DropOffCustomer());
     }
     [Fact]

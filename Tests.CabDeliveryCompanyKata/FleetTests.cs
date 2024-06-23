@@ -11,8 +11,7 @@ public class FleetTests
         var fleet = new Fleet();
         var customer = new Customer("Evan", "1 Fulton Drive", "2 Destination Lane");
 
-        fleet.RideRequested(customer);
-        
+        Assert.Throws<SystemException>(() => fleet.RideRequested(customer));
         Assert.Null(fleet.LastAssigned());
     }
     [Fact]

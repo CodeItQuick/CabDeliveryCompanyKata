@@ -2,7 +2,7 @@ namespace Production.EmmaCabCompany;
 
 public interface ICabs
 {
-    public bool PickupCustomer(Customer customer);
+    public bool PickupAssignedCustomer(Customer customer);
     public bool IsEnroute();
     public bool IsAvailable();
     public bool IsStatus(CabStatus requestedStatus);

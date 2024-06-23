@@ -1,3 +1,4 @@
+using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Service;
 
 namespace Production.EmmaCabCompany;

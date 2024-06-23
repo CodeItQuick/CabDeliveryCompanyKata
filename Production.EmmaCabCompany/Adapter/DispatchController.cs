@@ -1,3 +1,5 @@
+using Production.EmmaCabCompany.Domain;
+
 namespace Production.EmmaCabCompany.Service;
 
 public class DispatchController

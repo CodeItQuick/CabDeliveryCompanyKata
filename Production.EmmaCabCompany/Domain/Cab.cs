@@ -29,7 +29,7 @@ public class Cab : ICabs
         return _status != CabStatus.Available || _assignedPassenger != null;
     }
 
-    public bool PickupCustomer(Customer customer)
+    public bool PickupAssignedCustomer(Customer customer)
     {
         if (_status != CabStatus.CustomerRideRequested || customer.name != _assignedPassenger?.name)
         {
