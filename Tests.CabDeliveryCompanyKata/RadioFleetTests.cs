@@ -3,32 +3,33 @@ using Production.EmmaCabCompany.Domain;
 
 namespace Tests.CabDeliveryCompanyKata;
 
-public class DispatchTests
+public class RadioFleetTests
 {
     [Fact]
     public void CanPickupCustomer()
     {
         var cabs = new Cab("Diane's Cab", 20);
-        var dispatch = new Dispatch();
+        var dispatch = new RadioFleet();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
-        dispatch.RideRequest(customer);
+        dispatch.CustomerCabCall(customer);
+        dispatch.RideRequest();
 
         dispatch.PickupCustomer();
-        Assert.Equal(customer.name, dispatch.FindEnroutePassenger(customer)?.PassengerName);
+        Assert.Equal(customer.name, dispatch.FindEnroutePassenger(CustomerStatus.Enroute)?.PassengerName);
         dispatch.DropOffCustomer();
 
-        Assert.Null(dispatch.FindEnroutePassenger(customer)?.PassengerName);
+        Assert.Null(dispatch.FindEnroutePassenger(CustomerStatus.Enroute)?.PassengerName);
     }
     [Fact]
     public void CanPickupTwoCustomersWithTwoCabs()
     {
         var cabs = new Cab("Dan's Cab", 20);
         var cabTwo = new Cab("Evan's Cab", 20);
-        var dispatch = new Dispatch();
+        var dispatch = new RadioFleet();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -38,24 +39,26 @@ public class DispatchTests
             "2 Fulton Drive", 
             "2 Final Destination Lane");
         dispatch.AddCab(cabs);
-        dispatch.RideRequest(customer);
+        dispatch.CustomerCabCall(customer);
+        dispatch.RideRequest();
         dispatch.PickupCustomer();
         dispatch.AddCab(cabTwo);
-        dispatch.RideRequest(customerTwo);
+        dispatch.CustomerCabCall(customerTwo);
+        dispatch.RideRequest();
         dispatch.PickupCustomer();
 
         dispatch.DropOffCustomer();
         dispatch.DropOffCustomer();
 
-        Assert.Null(dispatch.FindEnroutePassenger(customer));
-        Assert.Null(dispatch.FindEnroutePassenger(customerTwo));
+        Assert.Null(dispatch.FindEnroutePassenger(CustomerStatus.Enroute));
+        Assert.Null(dispatch.FindEnroutePassenger(CustomerStatus.Enroute));
     }
     [Fact]
     public void CanPickupTwoCustomersWithTwoCabsSecondOrdering()
     {
         var cabs = new Cab("Dan's Cab", 20);
         var cabTwo = new Cab("Evan's Cab", 20);
-        var dispatch = new Dispatch();
+        var dispatch = new RadioFleet();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -66,28 +69,26 @@ public class DispatchTests
             "2 Final Destination Lane");
         dispatch.AddCab(cabs);
         dispatch.AddCab(cabTwo);
-        dispatch.RideRequest(customer);
-        var customerOneRequestRide = dispatch.FindEnroutePassenger(customer);
-        dispatch.RideRequest(customerTwo);
-        var customerTwoRequestRide = dispatch.FindEnroutePassenger(customer);
+        dispatch.CustomerCabCall(customer);
+        dispatch.RideRequest();
+        dispatch.CustomerCabCall(customerTwo);
+        dispatch.RideRequest();
         dispatch.PickupCustomer();
         dispatch.PickupCustomer();
-        Assert.NotNull(dispatch.FindEnroutePassenger(customer));
-        Assert.NotNull(dispatch.FindEnroutePassenger(customer));
+        Assert.NotNull(dispatch.FindEnroutePassenger(CustomerStatus.Enroute));
+        Assert.NotNull(dispatch.FindEnroutePassenger(CustomerStatus.Enroute));
 
         dispatch.DropOffCustomer();
+        Assert.Equal("Emma", dispatch.DroppedOffCustomers().Single().PassengerName);
         dispatch.DropOffCustomer();
 
-        Assert.NotNull(customerOneRequestRide);
-        Assert.NotNull(customerTwoRequestRide);
-        Assert.Null(dispatch.FindEnroutePassenger(customer));
-        Assert.Null(dispatch.FindEnroutePassenger(customer));
+        Assert.Equal("Lisa", dispatch.DroppedOffCustomers().Single().PassengerName);
     }
     [Fact]
     public void CannotPickupCustomerIfNotAvailable()
     {
         var cabs = new Cab("Dan's Cab", 20);
-        var dispatch = new Dispatch();
+        var dispatch = new RadioFleet();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -97,6 +98,7 @@ public class DispatchTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
+        dispatch.CustomerCabCall(customer);
         var rideRequest = cabs.RequestRideFor(customerTwo);
 
         Assert.Throws<SystemException>(() => dispatch.PickupCustomer());
@@ -106,13 +108,13 @@ public class DispatchTests
     [Fact]
     public void CannotPickupCustomerIfNoCabs()
     {
-        var dispatch = new Dispatch();
+        var dispatch = new RadioFleet();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         
-        Assert.Throws<SystemException>(() => dispatch.RideRequest(customer));
+        Assert.Throws<SystemException>(() => dispatch.RideRequest());
         Assert.Throws<SystemException>(() => dispatch.PickupCustomer());
         Assert.Throws<SystemException>(() => dispatch.DropOffCustomer());
     }
@@ -120,39 +122,41 @@ public class DispatchTests
     public void CabNotRequestedByDispatcherAllCallsFail()
     {
         var cabs = new Cab("Diane's Cab", 20);
-        var dispatch = new Dispatch();
+        var dispatch = new RadioFleet();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
+        dispatch.CustomerCabCall(customer);
         Assert.Throws<SystemException>(() => dispatch.PickupCustomer());
-        Assert.Null(dispatch.FindEnroutePassenger(customer));
-        dispatch.DropOffCustomer();
+        Assert.Null(dispatch.FindEnroutePassenger(CustomerStatus.Enroute));
+        Assert.Throws<SystemException>(() => dispatch.DropOffCustomer());
 
-        Assert.Null(dispatch.FindEnroutePassenger(customer));
+        Assert.Null(dispatch.FindEnroutePassenger(CustomerStatus.Enroute));
     }
     [Fact]
     public void CustomerNotPickedUpCannotDropOff()
     {
         var cabs = new Cab("Diane's Cab", 20);
-        var dispatch = new Dispatch();
+        var dispatch = new RadioFleet();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
-        dispatch.RideRequest(customer);
-        Assert.NotNull(dispatch.FindEnroutePassenger(customer));
-        dispatch.DropOffCustomer();
+        dispatch.CustomerCabCall(customer);
+        dispatch.RideRequest();
+        Assert.NotNull(dispatch.FindEnroutePassenger(CustomerStatus.WaitingPickup));
+        Assert.Throws<SystemException>(() => dispatch.DropOffCustomer());
 
-        Assert.NotNull(dispatch.FindEnroutePassenger(customer));
+        Assert.NotNull(dispatch.FindEnroutePassenger(CustomerStatus.WaitingPickup));
     }
     [Fact]
     public void CannotPickupTwoCustomerFares()
     {
         var cabs = new Cab("Diane's Cab", 20);
-        var dispatch = new Dispatch();
+        var dispatch = new RadioFleet();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -162,13 +166,11 @@ public class DispatchTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
-        dispatch.RideRequest(customer);
-        var rideRequested = dispatch.FindEnroutePassenger(customer);
-        dispatch.PickupCustomer();
-        dispatch.DropOffCustomer();
-        var rideRequestedTwo = dispatch.FindEnroutePassenger(customerTwo);
+        dispatch.CustomerCabCall(customer);
+        dispatch.CustomerCabCall(customerTwo);
+        dispatch.RideRequest();
+        Assert.Throws<SystemException>(() => dispatch.RideRequest());
         
-        Assert.NotNull(rideRequested);
-        Assert.Null(rideRequestedTwo);
+        Assert.True(dispatch.CustomerInState(CustomerStatus.CustomerCallInProgress));
     }
 }

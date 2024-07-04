@@ -1,6 +1,6 @@
 namespace Production.EmmaCabCompany.Domain;
 
-public class Dispatch 
+public class RadioFleet 
 {
     
     private readonly Fleet _fleet = new();
@@ -20,30 +20,44 @@ public class Dispatch
         _fleet.RemoveCab();
     }
 
-    public void RideRequest(Customer? customer)
+    public void CustomerCabCall(Customer customer)
     {
+        _customerStatusMap.Add(customer, CustomerStatus.CustomerCallInProgress);
+    }
+
+    public void RideRequest()
+    {
+        if (!CustomerInState(CustomerStatus.CustomerCallInProgress))
+        {
+            throw new SystemException("No customer waiting for a ride");
+        }
+        var customer = _customerStatusMap
+            .FirstOrDefault(x => x.Value == CustomerStatus.CustomerCallInProgress)
+            .Key;
         _fleet.RideRequested(customer);
         if (customer != null && _fleet.LastRideAssigned()?.PassengerName == customer.name)
         {
-            _customerStatusMap.Add(customer, CustomerStatus.WaitingPickup);
+            _customerStatusMap[customer] = CustomerStatus.WaitingPickup;
         }
     }
 
-    public CabInfo? FindEnroutePassenger(Customer customer)
+    public CabInfo? FindEnroutePassenger(CustomerStatus customerStatus)
     {
-        
-        if (_fleet.IsEnroute(customer))
+        var customer = _customerStatusMap
+            .LastOrDefault(x => x.Value == customerStatus)
+            .Key;
+        if (customer == null)
         {
-            return new CabInfo()
+            return null;
+        }
+        var findCab = _fleet.FindCab(customer);
+        return new CabInfo()
             {
                 PassengerName = customer.name,
-                CabName = _fleet.FindCab(customer),
+                CabName = findCab,
                 StartLocation = customer.startLocation,
                 Destination = customer.endLocation
             };
-        }
-
-        return null;
     }
 
     public void PickupCustomer()
@@ -67,24 +81,22 @@ public class Dispatch
 
     public void DropOffCustomer()
     {
+        var lastCustomer = _customerStatusMap
+            .FirstOrDefault(x => x.Value == CustomerStatus.Enroute)
+            .Key;
+        if (lastCustomer == null)
+        {
+            throw new SystemException("No customer to drop off.");
+        }
         _fleet.DropOffCustomer();
-        var lastDroppedOff = _fleet.LastAssigned();
-        Customer? lastCustomer = null; 
-        if (lastDroppedOff != null)
-        {
-            lastCustomer = new Customer(lastDroppedOff.PassengerName, lastDroppedOff.StartLocation, lastDroppedOff.Destination);
-        }
-        if (lastCustomer != null && _fleet.IsEnroute(lastCustomer))
-        {
-            _customerStatusMap[lastCustomer] = CustomerStatus.Delivered;
-        }
+        _customerStatusMap[lastCustomer] = CustomerStatus.Delivered;
     }
-    
 
     public bool NoCabsInFleet()
     {
         return _fleet.NoCabsInFleet();
     }
+
     public bool CustomersStillInTransport()
     {
         return _fleet.CustomersStillInTransport();
@@ -92,28 +104,30 @@ public class Dispatch
 
     public List<CabInfo?> DroppedOffCustomers()
     {
-        return new List<CabInfo?>() { _fleet.LastAssigned() };
+        return [_fleet.LastAssigned()];
     }
 
     public void CancelPickup()
     {
-        if (CustomerAwaitingPickup())
+        if (CustomerInState(CustomerStatus.WaitingPickup))
         {
             var customer = _customerStatusMap.FirstOrDefault().Key;
             _customerStatusMap.Remove(customer);
         }
     }
-    public bool CustomerAwaitingPickup()
+
+    public bool CustomerInState(CustomerStatus customerStatus)
     {
         return _customerStatusMap
-            .Any(x => x.Value == CustomerStatus.WaitingPickup);
+            .Any(x => x.Value == customerStatus);
     }
-    
+
 }
 
-internal enum CustomerStatus
+public enum CustomerStatus
 {
     WaitingPickup,
     Enroute,
-    Delivered
+    Delivered,
+    CustomerCallInProgress
 }

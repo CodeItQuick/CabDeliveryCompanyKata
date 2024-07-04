@@ -29,7 +29,7 @@ public class UserInterface
             "Arlo"
         };
         int selection;
-        var dispatch = new Dispatch();
+        var dispatch = new RadioFleet();
         var dispatchController = new DispatchController(dispatch);
         do
         {
