@@ -10,8 +10,9 @@
 7. Add More Features - Cab company records customer name on call-in
 8. Add More Features - State persists through file saving/loading (in-progress)
    ~~8a. Create DispatcherCoordinator Concept~~
-   8b. Create Service Layer
-   8c. Persist state to file system
+    8b. Create tests around DispatcherCoordinator and move the tests around/refactor as some are in the wrong spot
+    8c. Create Service Layer
+    8d. Persist state to file system
 8. Add More Features - Cab's have some concept of general location
 
 ## Story
