@@ -94,17 +94,10 @@ public class DispatchController(RadioFleet radioFleet)
     {
         try
         {
-            if (!radioFleet.CustomersStillInTransport())
-            {
-                return ["There are currently no customer's assigned to cabs."];
-            }
-
             radioFleet.DropOffCustomer();
             var droppedOff = radioFleet.DroppedOffCustomer();
 
-            var cabInfo = droppedOff[0];
-            
-            return [$"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}."];
+            return [$"{droppedOff[0]?.CabName} dropped off {droppedOff[0]?.PassengerName} at {droppedOff[0]?.Destination}."];
         }
         catch (Exception ex)
         {

@@ -102,6 +102,11 @@ public class RadioFleet
 
     public void DropOffCustomer()
     {
+        if (!CustomersStillInTransport())
+        {
+            throw new SystemException("There are currently no customer's assigned to cabs.");
+        }
+        
         var lastCustomer = _customerStatusMap
             .FirstOrDefault(x => x.Value == CustomerStatus.Enroute)
             .Key;
