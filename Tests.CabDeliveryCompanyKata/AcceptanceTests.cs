@@ -195,7 +195,6 @@ public class AcceptanceTests
         Assert.Contains("Dispatch failed to pickup Lisa as there are no available cabs.", 
             cabCompanyPrinter.List());
     }
-
     [Fact]
     public void TheCabCompanyCanPickupTwoCustomerInAMessyOrderingAtAnAddress()
     {
@@ -227,6 +226,24 @@ public class AcceptanceTests
         Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", 
             cabCompanyPrinter.List());
         Assert.Contains("Evan's Cab dropped off Emma at 1 Destination Lane.", 
+            cabCompanyPrinter.List());
+    }
+    [Fact]
+    public void CancellingCabWithoutWaitingPickupDisplaysError()
+    {
+        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
+        {
+            CommandList = new List<string>()
+            {
+                "6",
+                "0"
+            }
+        };
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
+        userInterface.Run();
+        
+        Assert.Contains("No customers are waiting for pickup. Cannot cancel cab.", 
             cabCompanyPrinter.List());
     }
 }

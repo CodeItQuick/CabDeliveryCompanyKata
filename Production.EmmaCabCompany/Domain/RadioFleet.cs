@@ -114,11 +114,12 @@ public class RadioFleet
 
     public void CancelPickup()
     {
-        if (CustomerInState(CustomerStatus.WaitingPickup))
+        if (!CustomerInState(CustomerStatus.WaitingPickup))
         {
-            var customer = _customerStatusMap.FirstOrDefault().Key;
-            _customerStatusMap.Remove(customer);
+            throw new SystemException("No customers are waiting for pickup. Cannot cancel cab.");
         }
+        var customer = _customerStatusMap.FirstOrDefault().Key;
+        _customerStatusMap.Remove(customer);
     }
 
     public bool CustomerInState(CustomerStatus customerStatus)

@@ -45,15 +45,15 @@ public class DispatchController
 
     public List<string> CustomerCancelledCabRide()
     {
-        var list = new List<string>();
-        if (!_radioFleet.CustomerInState(CustomerStatus.WaitingPickup))
+        try
         {
-            return list;
+            _radioFleet.CancelPickup();
+            return [];
         }
-        _radioFleet.CancelPickup();
-        list.Add("Customer cancelled request before cab assigned.");
-
-        return list;
+        catch (Exception ex)
+        {
+            return [ex.Message];
+        }
     }
 
     public List<string> SendCabRequest()
