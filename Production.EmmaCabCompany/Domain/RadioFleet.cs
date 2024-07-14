@@ -121,7 +121,7 @@ public class RadioFleet
 
     public void CancelPickup()
     {
-        if (!CustomerInState(CustomerStatus.WaitingPickup))
+        if (!CustomerInState(CustomerStatus.WaitingPickup) && !CustomerInState(CustomerStatus.CustomerCallInProgress))
         {
             throw new SystemException("No customers are waiting for pickup. Cannot cancel cab.");
         }

@@ -48,7 +48,7 @@ public class DispatchController(RadioFleet radioFleet)
         try
         {
             radioFleet.CancelPickup();
-            return [];
+            return ["Customer cancelled cab ride successfully."];
         }
         catch (Exception ex)
         {

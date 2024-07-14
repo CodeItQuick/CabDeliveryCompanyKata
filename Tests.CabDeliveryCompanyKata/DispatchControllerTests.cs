@@ -105,4 +105,39 @@ public class DispatchControllerTests
         
         Assert.Equal("Received customer ride request from Lisa", customerCabCall);
     }
+    [Fact]
+    public void CannotPickupUnlessCustomersWaiting()
+    {
+        var radioFleet = new RadioFleet();
+        var dispatchController = new DispatchController(radioFleet);
+        
+        var customerCabCall = dispatchController.CustomerCancelledCabRide();
+        
+        Assert.Equal("No customers are waiting for pickup. Cannot cancel cab.", customerCabCall.First());
+    }
+    [Fact]
+    public void CanCancelPickup()
+    {
+        var radioFleet = new RadioFleet();
+        var dispatchController = new DispatchController(radioFleet);
+        dispatchController.AddCab();
+        dispatchController.CustomerCabCall();
+        
+        var customerCabCall = dispatchController.CustomerCancelledCabRide();
+        
+        Assert.Equal("Customer cancelled cab ride successfully.", customerCabCall.First());
+    }
+    [Fact]
+    public void CanCancelPickupAtAnyTime()
+    {
+        var radioFleet = new RadioFleet();
+        var dispatchController = new DispatchController(radioFleet);
+        dispatchController.AddCab();
+        dispatchController.CustomerCabCall();
+        dispatchController.SendCabRequest();
+        
+        var customerCabCall = dispatchController.CustomerCancelledCabRide();
+        
+        Assert.Equal("Customer cancelled cab ride successfully.", customerCabCall.First());
+    }
 }
