@@ -52,7 +52,7 @@ public class RadioFleet
             _customerStatusMap[customer] = CustomerStatus.WaitingPickup;
         }
     }
-
+    
     public CabInfo? FindEnroutePassenger(CustomerStatus customerStatus)
     {
         var customer = _customerStatusMap

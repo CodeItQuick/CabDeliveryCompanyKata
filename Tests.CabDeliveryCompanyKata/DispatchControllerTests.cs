@@ -140,4 +140,73 @@ public class DispatchControllerTests
         
         Assert.Equal("Customer cancelled cab ride successfully.", customerCabCall.First());
     }
+    [Fact]
+    public void CabCanDriveToCustomerAfterCabRequest()
+    {
+        var radioFleet = new RadioFleet();
+        var dispatchController = new DispatchController(radioFleet);
+        dispatchController.AddCab();
+        dispatchController.CustomerCabCall();
+
+        var sendCabRequest = dispatchController.SendCabRequest();
+
+        Assert.Equal("Evan's Cab picked up Emma at 1 Fulton Drive.", sendCabRequest.First());
+        Assert.Equal("Cab assigned to customer.", sendCabRequest.Skip(1).First());
+    }
+    [Fact]
+    public void CannotSendCabRequestUntilCustomerCallsIn()
+    {
+        var radioFleet = new RadioFleet();
+        var dispatchController = new DispatchController(radioFleet);
+        dispatchController.AddCab();
+
+        var sendCabRequest = dispatchController.SendCabRequest();
+
+        Assert.Equal("There are currently no customer's waiting for cabs.", sendCabRequest.First());
+    }
+    [Fact]
+    public void CannotSendCabRequestUntilCabsAreInFleet()
+    {
+        var radioFleet = new RadioFleet();
+        var dispatchController = new DispatchController(radioFleet);
+
+        var sendCabRequest = dispatchController.SendCabRequest();
+
+        Assert.Equal("There are currently no cabs in the fleet.", sendCabRequest.First());
+    }
+    [Fact]
+    public void CabCanPickupCustomer()
+    {
+        var radioFleet = new RadioFleet();
+        var dispatchController = new DispatchController(radioFleet);
+        dispatchController.AddCab();
+        dispatchController.CustomerCabCall();
+        dispatchController.SendCabRequest();
+
+        var sendCabRequest = dispatchController.CabNotifiesPickedUp();
+
+        Assert.Equal("Notified dispatcher of pickup", sendCabRequest);
+    }
+    [Fact]
+    public void CabCannotPickupCustomerIfNoCabsInFleet()
+    {
+        var radioFleet = new RadioFleet();
+        var dispatchController = new DispatchController(radioFleet);
+
+        var sendCabRequest = dispatchController.CabNotifiesPickedUp();
+
+        Assert.Equal("There are currently no cabs in the fleet.", sendCabRequest);
+    }
+    [Fact]
+    public void CabCannotPickupCustomerIfCustomerNotWaitingPickup()
+    {
+        var radioFleet = new RadioFleet();
+        var dispatchController = new DispatchController(radioFleet);
+        dispatchController.AddCab();
+        dispatchController.CustomerCabCall();
+
+        var sendCabRequest = dispatchController.CabNotifiesPickedUp();
+
+        Assert.Equal("There are currently no customer's assigned to cabs.", sendCabRequest);
+    }
 }

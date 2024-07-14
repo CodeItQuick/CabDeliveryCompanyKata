@@ -16,17 +16,6 @@ public class UserInterface
 
     public void Run()
     {
-        List<string> customerNames = new List<string>()
-        {
-            "Emma",
-            "Lisa",
-            "Dan",
-            "Evan",
-            "Darrell",
-            "Diane",
-            "Bob",
-            "Arlo"
-        };
         int selection;
         var dispatch = new RadioFleet();
         var dispatchController = new DispatchController(dispatch);

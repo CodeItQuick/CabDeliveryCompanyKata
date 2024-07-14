@@ -2,11 +2,12 @@
 
 ## TODO
 1. Add the Event Storming into Miro
-2. Fix Command/Query Separation
-3. Get the Aggregates Out
-4. Limit Menu
-5. Figure out Customer Aggregate
-6. Add More Features
+2. ~~Fix Command/Query Separation~~
+3. Add More testing around the DispatchController
+4. Get the Aggregates Out (fix the object oriented code to figure out the aggregates)
+5. Limit Menu
+6. Figure out Customer Aggregate
+7. Add More Features
 
 ## Story
 A cab company currently operates with "old school" technology. The cab company wants to upgrade their technology offering
