@@ -16,7 +16,6 @@ public class UserInterface
 
     public void Run()
     {
-        int numCustomersServed = 0;
         List<string> customerNames = new List<string>()
         {
             "Emma",
@@ -82,7 +81,7 @@ public class UserInterface
                     customerCancelledOutput.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 7:
-                    var cabCalledOutput = dispatchController.CustomerCabCall(customerNames, ref numCustomersServed);
+                    var cabCalledOutput = dispatchController.CustomerCabCall(customerNames);
                     _cabCompanyPrinter.WriteLine(cabCalledOutput);
                     break;
             }

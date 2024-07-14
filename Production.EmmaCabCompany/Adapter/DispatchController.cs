@@ -4,6 +4,7 @@ namespace Production.EmmaCabCompany.Service;
 
 public class DispatchController(RadioFleet radioFleet)
 {
+    private int _currentNameIdx = 0;
     public string AddCab()
     {
         var cabName = "Evan's Cab";
@@ -26,11 +27,10 @@ public class DispatchController(RadioFleet radioFleet)
     }
 
     public string CustomerCabCall(
-        List<string> customerNames, 
-        ref int numCustomersServed)
+        List<string> customerNames)
     {
-        var customerName = customerNames[numCustomersServed];
-        numCustomersServed++;
+        var customerName = customerNames[_currentNameIdx];
+        _currentNameIdx++;
         var customer = new Customer(customerName, "1 Fulton Drive", "1 Destination Lane");
         radioFleet.CustomerCabCall(customer);
         return $"Received customer ride request from {customerName}";
