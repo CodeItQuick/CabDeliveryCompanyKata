@@ -1,6 +1,6 @@
 namespace Production.EmmaCabCompany;
 
-public class Cab : ICabs
+public class Cab
 {
     private readonly string _cabName;
     private readonly int _wallet;

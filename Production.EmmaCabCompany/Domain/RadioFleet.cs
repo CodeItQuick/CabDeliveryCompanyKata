@@ -17,6 +17,11 @@ public class RadioFleet
         {
             throw new SystemException("Cab cannot be removed until passenger dropped off.");
         }
+        if (_fleet.NoCabsInFleet())
+        {
+            throw new SystemException("Last cab removed from fleet.");
+        }
+        
         _fleet.RemoveCab();
     }
 

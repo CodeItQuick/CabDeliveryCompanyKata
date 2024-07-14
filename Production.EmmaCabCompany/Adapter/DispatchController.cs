@@ -21,21 +21,15 @@ public class DispatchController
 
     public string RemoveCab()
     {
-        if (!_radioFleet.NoCabsInFleet())
+        try
         {
-            try
-            {
-                _radioFleet.RemoveCab();
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-            
-            return "Last cab removed from cab fleet.";
+            _radioFleet.RemoveCab();
+            return "Cab removed from fleet";
         }
-
-        return "No cabs in fleet currently";
+        catch (Exception ex)
+        {
+            return ex.Message;
+        }
     }
 
     public string CustomerCabCall(
