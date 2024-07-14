@@ -3,7 +3,7 @@ namespace Production.EmmaCabCompany.Domain;
 public class DispatcherCoordinator
 {
     private readonly Fleet _fleet = new();
-    private Dictionary<Customer, CustomerStatus> _customerStatusMap = new(); // TODO: move this into its own class?
+    private readonly CustomerList _customerList = new();
 
     public void AddCab(Cab cab)
     {
@@ -24,11 +24,9 @@ public class DispatcherCoordinator
         _fleet.RemoveCab();
     }
 
-    // TODO: get rid of customerNames as this is not the correct behaviour
     public void CustomerCabCall(string customerCallInName)
     {
-        var customer = new Customer(customerCallInName, "1 Fulton Drive", "1 Destination Lane");
-        _customerStatusMap.Add(customer, CustomerStatus.CustomerCallInProgress);
+        _customerList.CustomerCabCall(customerCallInName);
     }
 
     public void RideRequest()
@@ -37,25 +35,17 @@ public class DispatcherCoordinator
         {
             throw new SystemException("There are currently no cabs in the fleet.");
         }
-        if (_customerStatusMap.All(x => x.Value != CustomerStatus.CustomerCallInProgress))
-        {
-            throw new SystemException("There are currently no customer's waiting for cabs.");
-        }
-        var customer = _customerStatusMap
-            .FirstOrDefault(x => x.Value == CustomerStatus.CustomerCallInProgress)
-            .Key;
+        var customer = _customerList.RideRequestedCustomer();
         _fleet.RideRequested(customer);
         if (customer != null && _fleet.LastRideAssigned()?.PassengerName == customer.name)
         {
-            _customerStatusMap[customer] = CustomerStatus.WaitingPickup;
+            _customerList.RideRequest();
         }
     }
     
     public CabInfo? FindEnroutePassenger(CustomerStatus customerStatus)
     {
-        var customer = _customerStatusMap
-            .LastOrDefault(x => x.Value == customerStatus)
-            .Key;
+        var customer = _customerList.FindEnroutePassenger(customerStatus);
         if (customer == null)
         {
             return null;
@@ -76,24 +66,12 @@ public class DispatcherCoordinator
         {
             throw new SystemException("There are currently no cabs in the fleet.");
         }
-
-        if (_customerStatusMap.All(x => x.Value != CustomerStatus.WaitingPickup))
+        var customer = _customerList.PickupCustomer();
+        _fleet.PickupCustomer(customer);
+        if (_fleet.IsEnroute(customer))
         {
-            throw new SystemException("There are currently no customer's assigned to cabs.");
+            _customerList.PutCustomerInRoute(customer);
         }
-        if (_customerStatusMap.All(x => x.Value != CustomerStatus.WaitingPickup))
-        {
-            throw new SystemException("No customers currently waiting pickup");
-        }
-        var firstCustomer = _customerStatusMap
-            .FirstOrDefault(x => x.Value == CustomerStatus.WaitingPickup)
-            .Key;
-        _fleet.PickupCustomer(firstCustomer);
-        if (_fleet.IsEnroute(firstCustomer))
-        {
-            _customerStatusMap[firstCustomer] = CustomerStatus.Enroute;
-        }
-        
     }
 
     public void DropOffCustomer()
@@ -102,17 +80,9 @@ public class DispatcherCoordinator
         {
             throw new SystemException("There are currently no customer's assigned to cabs.");
         }
-
-        if (_customerStatusMap
-                .FirstOrDefault(x => x.Value == CustomerStatus.Enroute)
-                .Key == null)
-        {
-            throw new SystemException("No customer to drop off.");
-        }
+        _customerList.ValidateCanDropOffCustomer();
         _fleet.DropOffCustomer();
-        _customerStatusMap[_customerStatusMap
-            .FirstOrDefault(x => x.Value == CustomerStatus.Enroute)
-            .Key] = CustomerStatus.Delivered;
+        _customerList.MarkCustomerAsDelivered();
     }
 
     public bool NoCabsInFleet()
@@ -127,19 +97,12 @@ public class DispatcherCoordinator
 
     public void CancelPickup()
     {
-        if (_customerStatusMap.All(x => 
-                x.Value != CustomerStatus.WaitingPickup && x.Value != CustomerStatus.CustomerCallInProgress))
-        {
-            throw new SystemException("No customers are waiting for pickup. Cannot cancel cab.");
-        }
-        var customer = _customerStatusMap.FirstOrDefault().Key;
-        _customerStatusMap.Remove(customer);
+        _customerList.CancelPickup();
     }
 
     public bool CustomerInState(CustomerStatus customerStatus)
     {
-        return _customerStatusMap
-            .Any(x => x.Value == customerStatus);
+        return _customerList.CustomerInState(customerStatus);
     }
 
 }
