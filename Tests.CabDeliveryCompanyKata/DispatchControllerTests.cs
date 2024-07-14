@@ -209,4 +209,30 @@ public class DispatchControllerTests
 
         Assert.Equal("There are currently no customer's assigned to cabs.", sendCabRequest);
     }
+    [Fact]
+    public void CabCanDropOffCustomer()
+    {
+        var radioFleet = new RadioFleet();
+        var dispatchController = new DispatchController(radioFleet);
+        dispatchController.AddCab();
+        dispatchController.CustomerCabCall();
+        dispatchController.SendCabRequest();
+        dispatchController.CabNotifiesPickedUp();
+
+        var droppedOff = dispatchController.CabNotifiesDroppedOff();
+
+        Assert.Equal("Evan's Cab dropped off Emma at 1 Destination Lane.", droppedOff.First());
+    }
+    [Fact]
+    public void CabCannotDropOffCustomerIfNotInTransport()
+    {
+        var radioFleet = new RadioFleet();
+        var dispatchController = new DispatchController(radioFleet);
+        dispatchController.AddCab();
+        dispatchController.CustomerCabCall();
+
+        var droppedOff = dispatchController.CabNotifiesDroppedOff();
+
+        Assert.Equal("There are currently no customer's assigned to cabs.", droppedOff.First());
+    }
 }

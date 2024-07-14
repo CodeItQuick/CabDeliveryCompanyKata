@@ -79,17 +79,15 @@ public class DispatchController(RadioFleet radioFleet)
 
     public string CabNotifiesPickedUp()
     {
-        if (radioFleet.NoCabsInFleet())
+        try
         {
-            return "There are currently no cabs in the fleet.";
+            radioFleet.PickupCustomer();
+            return "Notified dispatcher of pickup";
         }
-
-        if (!radioFleet.CustomerInState(CustomerStatus.WaitingPickup))
+        catch (Exception ex)
         {
-            return "There are currently no customer's assigned to cabs.";
+            return ex.Message;
         }
-        radioFleet.PickupCustomer();
-        return "Notified dispatcher of pickup";
     }
 
     public List<string> CabNotifiesDroppedOff()
@@ -106,8 +104,6 @@ public class DispatchController(RadioFleet radioFleet)
         {
             list.Add($"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}.");
         }
-        // }
-        new List<Customer>();
 
         return list;
     }

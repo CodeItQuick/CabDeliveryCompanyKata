@@ -3,11 +3,13 @@
 ## TODO
 1. Add the Event Storming into Miro
 2. ~~Fix Command/Query Separation~~
-3. Add More testing around the DispatchController
+3. ~~Add More testing around the DispatchController~~
 4. Get the Aggregates Out (fix the object oriented code to figure out the aggregates)
 5. Limit Menu
 6. Figure out Customer Aggregate
-7. Add More Features
+7. Add More Features - Cab company records customer name on call-in
+8. Add More Features - State persists through file saving/loading (in-progress)
+8. Add More Features - Cab's have some concept of general location
 
 ## Story
 A cab company currently operates with "old school" technology. The cab company wants to upgrade their technology offering

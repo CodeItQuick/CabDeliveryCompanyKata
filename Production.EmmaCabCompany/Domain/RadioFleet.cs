@@ -74,6 +74,15 @@ public class RadioFleet
 
     public void PickupCustomer()
     {
+        if (NoCabsInFleet())
+        {
+            throw new SystemException("There are currently no cabs in the fleet.");
+        }
+
+        if (!CustomerInState(CustomerStatus.WaitingPickup))
+        {
+            throw new SystemException("There are currently no customer's assigned to cabs.");
+        }
         var hasWaitingPickup = _customerStatusMap
             .Any(x => x.Value == CustomerStatus.WaitingPickup);
         if (!hasWaitingPickup)
