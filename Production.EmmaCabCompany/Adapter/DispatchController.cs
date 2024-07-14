@@ -39,7 +39,7 @@ public class DispatchController(RadioFleet radioFleet)
             "Bob",
             "Arlo"
         };
-        radioFleet.CustomerCabCall(customerName);
+        radioFleet.CustomerCabCall(customerName[_currentNameIdx]);
         return $"Received customer ride request from {customerName[_currentNameIdx++]}";
     }
 
@@ -66,7 +66,7 @@ public class DispatchController(RadioFleet radioFleet)
             
             return
             [
-                $"{cabInfo.CabName} picked up {cabInfo.PassengerName} at {cabInfo.StartLocation}.",
+                $"{cabInfo?.CabName} picked up {cabInfo?.PassengerName} at {cabInfo?.StartLocation}.",
                 "Cab assigned to customer."
             ];
         }

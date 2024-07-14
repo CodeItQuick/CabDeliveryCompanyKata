@@ -2,7 +2,6 @@ namespace Production.EmmaCabCompany.Domain;
 
 public class RadioFleet
 {
-    private int _currentNameIdx = 0;
     private readonly Fleet _fleet = new();
     private Dictionary<Customer, CustomerStatus> _customerStatusMap = new();
 
@@ -25,11 +24,10 @@ public class RadioFleet
         _fleet.RemoveCab();
     }
 
-    public void CustomerCabCall(List<string> customerNames)
+    // TODO: get rid of customerNames as this is not the correct behaviour
+    public void CustomerCabCall(string customerCallInName)
     {
-        var customerName = customerNames[_currentNameIdx];
-        _currentNameIdx++;
-        var customer = new Customer(customerName, "1 Fulton Drive", "1 Destination Lane");
+        var customer = new Customer(customerCallInName, "1 Fulton Drive", "1 Destination Lane");
         _customerStatusMap.Add(customer, CustomerStatus.CustomerCallInProgress);
     }
 
@@ -88,7 +86,7 @@ public class RadioFleet
         if (!hasWaitingPickup)
         {
             throw new SystemException("No customers currently waiting pickup");
-        };
+        }
         var firstCustomer = _customerStatusMap
             .FirstOrDefault(x => x.Value == CustomerStatus.WaitingPickup)
             .Key;
