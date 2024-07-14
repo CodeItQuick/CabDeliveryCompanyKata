@@ -26,14 +26,21 @@ public class DispatchController(RadioFleet radioFleet)
         }
     }
 
-    public string CustomerCabCall(
-        List<string> customerNames)
+    public string CustomerCabCall()
     {
-        var customerName = customerNames[_currentNameIdx];
-        _currentNameIdx++;
-        var customer = new Customer(customerName, "1 Fulton Drive", "1 Destination Lane");
-        radioFleet.CustomerCabCall(customer);
-        return $"Received customer ride request from {customerName}";
+        var customerName = new List<string>()
+        {
+            "Emma",
+            "Lisa",
+            "Dan",
+            "Evan",
+            "Darrell",
+            "Diane",
+            "Bob",
+            "Arlo"
+        };
+        radioFleet.CustomerCabCall(customerName);
+        return $"Received customer ride request from {customerName[_currentNameIdx++]}";
     }
 
     public List<string> CustomerCancelledCabRide()

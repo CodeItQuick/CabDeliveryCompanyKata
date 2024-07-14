@@ -15,7 +15,7 @@ public class RadioFleetTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
-        dispatch.CustomerCabCall(customer);
+        dispatch.CustomerCabCall(new List<string>() { "Emma" });
         dispatch.RideRequest();
 
         dispatch.PickupCustomer();
@@ -39,11 +39,12 @@ public class RadioFleetTests
             "2 Fulton Drive", 
             "2 Final Destination Lane");
         dispatch.AddCab(cabs);
-        dispatch.CustomerCabCall(customer);
+        var customerNames = new List<string>() { "Emma", "Lisa" };
+        dispatch.CustomerCabCall(customerNames);
         dispatch.RideRequest();
         dispatch.PickupCustomer();
         dispatch.AddCab(cabTwo);
-        dispatch.CustomerCabCall(customerTwo);
+        dispatch.CustomerCabCall(customerNames);
         dispatch.RideRequest();
         dispatch.PickupCustomer();
 
@@ -69,9 +70,10 @@ public class RadioFleetTests
             "2 Final Destination Lane");
         dispatch.AddCab(cabs);
         dispatch.AddCab(cabTwo);
-        dispatch.CustomerCabCall(customer);
+        var customerNames = new List<string>() { "Emma", "Lisa" };
+        dispatch.CustomerCabCall(customerNames);
         dispatch.RideRequest();
-        dispatch.CustomerCabCall(customerTwo);
+        dispatch.CustomerCabCall(customerNames);
         dispatch.RideRequest();
         dispatch.PickupCustomer();
         dispatch.PickupCustomer();
@@ -98,7 +100,7 @@ public class RadioFleetTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
-        dispatch.CustomerCabCall(customer);
+        dispatch.CustomerCabCall(new List<string>() { "Dan" });
         var rideRequest = cabs.RequestRideFor(customerTwo);
 
         Assert.Throws<SystemException>(() => dispatch.PickupCustomer());
@@ -128,7 +130,7 @@ public class RadioFleetTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
-        dispatch.CustomerCabCall(customer);
+        dispatch.CustomerCabCall(new List<string>() { "Dan" });
         Assert.Throws<SystemException>(() => dispatch.PickupCustomer());
         Assert.Null(dispatch.FindEnroutePassenger(CustomerStatus.Enroute));
         Assert.Throws<SystemException>(() => dispatch.DropOffCustomer());
@@ -145,7 +147,7 @@ public class RadioFleetTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
-        dispatch.CustomerCabCall(customer);
+        dispatch.CustomerCabCall(new List<string>() { "Dan" });
         dispatch.RideRequest();
         Assert.NotNull(dispatch.FindEnroutePassenger(CustomerStatus.WaitingPickup));
         Assert.Throws<SystemException>(() => dispatch.DropOffCustomer());
@@ -166,8 +168,8 @@ public class RadioFleetTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
-        dispatch.CustomerCabCall(customer);
-        dispatch.CustomerCabCall(customerTwo);
+        dispatch.CustomerCabCall(new List<string>() { "Emma", "Lisa" });
+        dispatch.CustomerCabCall(new List<string>() { "Emma", "Lisa" });
         dispatch.RideRequest();
         Assert.Throws<SystemException>(() => dispatch.RideRequest());
         

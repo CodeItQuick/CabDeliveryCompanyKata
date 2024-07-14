@@ -1,8 +1,8 @@
 namespace Production.EmmaCabCompany.Domain;
 
-public class RadioFleet 
+public class RadioFleet
 {
-    
+    private int _currentNameIdx = 0;
     private readonly Fleet _fleet = new();
     private Dictionary<Customer, CustomerStatus> _customerStatusMap = new();
 
@@ -25,8 +25,11 @@ public class RadioFleet
         _fleet.RemoveCab();
     }
 
-    public void CustomerCabCall(Customer customer)
+    public void CustomerCabCall(List<string> customerNames)
     {
+        var customerName = customerNames[_currentNameIdx];
+        _currentNameIdx++;
+        var customer = new Customer(customerName, "1 Fulton Drive", "1 Destination Lane");
         _customerStatusMap.Add(customer, CustomerStatus.CustomerCallInProgress);
     }
 

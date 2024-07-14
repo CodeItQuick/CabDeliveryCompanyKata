@@ -81,7 +81,7 @@ public class UserInterface
                     customerCancelledOutput.ForEach(x => _cabCompanyPrinter.WriteLine(x));
                     break;
                 case 7:
-                    var cabCalledOutput = dispatchController.CustomerCabCall(customerNames);
+                    var cabCalledOutput = dispatchController.CustomerCabCall();
                     _cabCompanyPrinter.WriteLine(cabCalledOutput);
                     break;
             }
