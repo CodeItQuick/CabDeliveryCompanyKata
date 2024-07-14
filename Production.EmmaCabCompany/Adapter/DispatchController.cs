@@ -2,19 +2,12 @@ using Production.EmmaCabCompany.Domain;
 
 namespace Production.EmmaCabCompany.Service;
 
-public class DispatchController
+public class DispatchController(RadioFleet radioFleet)
 {
-    private readonly RadioFleet _radioFleet;
-
-    public DispatchController(RadioFleet radioFleet)
-    {
-        _radioFleet = radioFleet;
-    }
-
     public string AddCab()
     {
         var cabName = "Evan's Cab";
-        _radioFleet.AddCab(new Cab(cabName, 20));
+        radioFleet.AddCab(new Cab(cabName, 20));
         
         return "Added Evan's Cab to fleet";
     }
@@ -23,7 +16,7 @@ public class DispatchController
     {
         try
         {
-            _radioFleet.RemoveCab();
+            radioFleet.RemoveCab();
             return "Cab removed from fleet";
         }
         catch (Exception ex)
@@ -39,7 +32,7 @@ public class DispatchController
         var customerName = customerNames[numCustomersServed];
         numCustomersServed++;
         var customer = new Customer(customerName, "1 Fulton Drive", "1 Destination Lane");
-        _radioFleet.CustomerCabCall(customer);
+        radioFleet.CustomerCabCall(customer);
         return $"Received customer ride request from {customerName}";
     }
 
@@ -47,7 +40,7 @@ public class DispatchController
     {
         try
         {
-            _radioFleet.CancelPickup();
+            radioFleet.CancelPickup();
             return [];
         }
         catch (Exception ex)
@@ -60,9 +53,9 @@ public class DispatchController
     {
         try
         {
-            _radioFleet.RideRequest();
+            radioFleet.RideRequest();
 
-            var cabInfo = _radioFleet.FindEnroutePassenger(CustomerStatus.WaitingPickup);
+            var cabInfo = radioFleet.FindEnroutePassenger(CustomerStatus.WaitingPickup);
             
             return
             [
@@ -79,29 +72,29 @@ public class DispatchController
 
     public string CabNotifiesPickedUp()
     {
-        if (_radioFleet.NoCabsInFleet())
+        if (radioFleet.NoCabsInFleet())
         {
             return "There are currently no cabs in the fleet.";
         }
 
-        if (!_radioFleet.CustomerInState(CustomerStatus.WaitingPickup))
+        if (!radioFleet.CustomerInState(CustomerStatus.WaitingPickup))
         {
             return "There are currently no customer's assigned to cabs.";
         }
-        _radioFleet.PickupCustomer();
+        radioFleet.PickupCustomer();
         return "Notified dispatcher of pickup";
     }
 
     public List<string> CabNotifiesDroppedOff()
     {
         var list = new List<string>();
-        if (!_radioFleet.CustomersStillInTransport())
+        if (!radioFleet.CustomersStillInTransport())
         {
             return ["There are currently no customer's assigned to cabs."];
         }
 
-        _radioFleet.DropOffCustomer();
-        var droppedOff = _radioFleet.DroppedOffCustomers();
+        radioFleet.DropOffCustomer();
+        var droppedOff = radioFleet.DroppedOffCustomers();
         foreach (var cabInfo in droppedOff)
         {
             list.Add($"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}.");
