@@ -2,13 +2,13 @@ using Production.EmmaCabCompany.Domain;
 
 namespace Production.EmmaCabCompany.Service;
 
-public class DispatchController(RadioFleet radioFleet)
+public class DispatchController(DispatcherCoordinator dispatcherCoordinator)
 {
     private int _currentNameIdx = 0;
     public string AddCab()
     {
         var cabName = "Evan's Cab";
-        radioFleet.AddCab(new Cab(cabName, 20));
+        dispatcherCoordinator.AddCab(new Cab(cabName, 20));
         
         return "Added Evan's Cab to fleet";
     }
@@ -17,7 +17,7 @@ public class DispatchController(RadioFleet radioFleet)
     {
         try
         {
-            radioFleet.RemoveCab();
+            dispatcherCoordinator.RemoveCab();
             return "Cab removed from fleet";
         }
         catch (Exception ex)
@@ -39,7 +39,7 @@ public class DispatchController(RadioFleet radioFleet)
             "Bob",
             "Arlo"
         };
-        radioFleet.CustomerCabCall(customerName[_currentNameIdx]);
+        dispatcherCoordinator.CustomerCabCall(customerName[_currentNameIdx]);
         return $"Received customer ride request from {customerName[_currentNameIdx++]}";
     }
 
@@ -47,7 +47,7 @@ public class DispatchController(RadioFleet radioFleet)
     {
         try
         {
-            radioFleet.CancelPickup();
+            dispatcherCoordinator.CancelPickup();
             return ["Customer cancelled cab ride successfully."];
         }
         catch (Exception ex)
@@ -60,9 +60,9 @@ public class DispatchController(RadioFleet radioFleet)
     {
         try
         {
-            radioFleet.RideRequest();
+            dispatcherCoordinator.RideRequest();
 
-            var cabInfo = radioFleet.FindEnroutePassenger(CustomerStatus.WaitingPickup);
+            var cabInfo = dispatcherCoordinator.FindEnroutePassenger(CustomerStatus.WaitingPickup);
             
             return
             [
@@ -81,7 +81,7 @@ public class DispatchController(RadioFleet radioFleet)
     {
         try
         {
-            radioFleet.PickupCustomer();
+            dispatcherCoordinator.PickupCustomer();
             return "Notified dispatcher of pickup";
         }
         catch (Exception ex)
@@ -94,8 +94,8 @@ public class DispatchController(RadioFleet radioFleet)
     {
         try
         {
-            radioFleet.DropOffCustomer();
-            var droppedOff = radioFleet.DroppedOffCustomer();
+            dispatcherCoordinator.DropOffCustomer();
+            var droppedOff = dispatcherCoordinator.DroppedOffCustomer();
 
             return [$"{droppedOff[0]?.CabName} dropped off {droppedOff[0]?.PassengerName} at {droppedOff[0]?.Destination}."];
         }

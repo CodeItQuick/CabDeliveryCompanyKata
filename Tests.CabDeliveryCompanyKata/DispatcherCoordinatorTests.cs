@@ -3,13 +3,13 @@ using Production.EmmaCabCompany.Domain;
 
 namespace Tests.CabDeliveryCompanyKata;
 
-public class RadioFleetTests
+public class DispatcherCoordinatorTests
 {
     [Fact]
     public void CanPickupCustomer()
     {
         var cabs = new Cab("Diane's Cab", 20);
-        var dispatch = new RadioFleet();
+        var dispatch = new DispatcherCoordinator();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -29,7 +29,7 @@ public class RadioFleetTests
     {
         var cabs = new Cab("Dan's Cab", 20);
         var cabTwo = new Cab("Evan's Cab", 20);
-        var dispatch = new RadioFleet();
+        var dispatch = new DispatcherCoordinator();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -59,7 +59,7 @@ public class RadioFleetTests
     {
         var cabs = new Cab("Dan's Cab", 20);
         var cabTwo = new Cab("Evan's Cab", 20);
-        var dispatch = new RadioFleet();
+        var dispatch = new DispatcherCoordinator();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -89,7 +89,7 @@ public class RadioFleetTests
     public void CannotPickupCustomerIfNotAvailable()
     {
         var cabs = new Cab("Dan's Cab", 20);
-        var dispatch = new RadioFleet();
+        var dispatch = new DispatcherCoordinator();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -109,7 +109,7 @@ public class RadioFleetTests
     [Fact]
     public void CannotPickupCustomerIfNoCabs()
     {
-        var dispatch = new RadioFleet();
+        var dispatch = new DispatcherCoordinator();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -123,7 +123,7 @@ public class RadioFleetTests
     public void CabNotRequestedByDispatcherAllCallsFail()
     {
         var cabs = new Cab("Diane's Cab", 20);
-        var dispatch = new RadioFleet();
+        var dispatch = new DispatcherCoordinator();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -140,7 +140,7 @@ public class RadioFleetTests
     public void CustomerNotPickedUpCannotDropOff()
     {
         var cabs = new Cab("Diane's Cab", 20);
-        var dispatch = new RadioFleet();
+        var dispatch = new DispatcherCoordinator();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 
@@ -157,7 +157,7 @@ public class RadioFleetTests
     public void CannotPickupTwoCustomerFares()
     {
         var cabs = new Cab("Diane's Cab", 20);
-        var dispatch = new RadioFleet();
+        var dispatch = new DispatcherCoordinator();
         var customer = new Customer(
             "Emma", 
             "1 Fulton Drive", 

@@ -1,9 +1,9 @@
 namespace Production.EmmaCabCompany.Domain;
 
-public class RadioFleet
+public class DispatcherCoordinator
 {
     private readonly Fleet _fleet = new();
-    private Dictionary<Customer, CustomerStatus> _customerStatusMap = new();
+    private Dictionary<Customer, CustomerStatus> _customerStatusMap = new(); // TODO: move this into its own class?
 
     public void AddCab(Cab cab)
     {
@@ -37,7 +37,7 @@ public class RadioFleet
         {
             throw new SystemException("There are currently no cabs in the fleet.");
         }
-        if (!CustomerInState(CustomerStatus.CustomerCallInProgress))
+        if (_customerStatusMap.All(x => x.Value != CustomerStatus.CustomerCallInProgress))
         {
             throw new SystemException("There are currently no customer's waiting for cabs.");
         }
@@ -72,18 +72,16 @@ public class RadioFleet
 
     public void PickupCustomer()
     {
-        if (NoCabsInFleet())
+        if (_fleet.NoCabsInFleet())
         {
             throw new SystemException("There are currently no cabs in the fleet.");
         }
 
-        if (!CustomerInState(CustomerStatus.WaitingPickup))
+        if (_customerStatusMap.All(x => x.Value != CustomerStatus.WaitingPickup))
         {
             throw new SystemException("There are currently no customer's assigned to cabs.");
         }
-        var hasWaitingPickup = _customerStatusMap
-            .Any(x => x.Value == CustomerStatus.WaitingPickup);
-        if (!hasWaitingPickup)
+        if (_customerStatusMap.All(x => x.Value != CustomerStatus.WaitingPickup))
         {
             throw new SystemException("No customers currently waiting pickup");
         }
@@ -100,30 +98,26 @@ public class RadioFleet
 
     public void DropOffCustomer()
     {
-        if (!CustomersStillInTransport())
+        if (!_fleet.CustomersStillInTransport())
         {
             throw new SystemException("There are currently no customer's assigned to cabs.");
         }
-        
-        var lastCustomer = _customerStatusMap
-            .FirstOrDefault(x => x.Value == CustomerStatus.Enroute)
-            .Key;
-        if (lastCustomer == null)
+
+        if (_customerStatusMap
+                .FirstOrDefault(x => x.Value == CustomerStatus.Enroute)
+                .Key == null)
         {
             throw new SystemException("No customer to drop off.");
         }
         _fleet.DropOffCustomer();
-        _customerStatusMap[lastCustomer] = CustomerStatus.Delivered;
+        _customerStatusMap[_customerStatusMap
+            .FirstOrDefault(x => x.Value == CustomerStatus.Enroute)
+            .Key] = CustomerStatus.Delivered;
     }
 
     public bool NoCabsInFleet()
     {
         return _fleet.NoCabsInFleet();
-    }
-
-    public bool CustomersStillInTransport()
-    {
-        return _fleet.CustomersStillInTransport();
     }
 
     public List<CabInfo?> DroppedOffCustomer()
@@ -133,7 +127,8 @@ public class RadioFleet
 
     public void CancelPickup()
     {
-        if (!CustomerInState(CustomerStatus.WaitingPickup) && !CustomerInState(CustomerStatus.CustomerCallInProgress))
+        if (_customerStatusMap.All(x => 
+                x.Value != CustomerStatus.WaitingPickup && x.Value != CustomerStatus.CustomerCallInProgress))
         {
             throw new SystemException("No customers are waiting for pickup. Cannot cancel cab.");
         }

@@ -17,7 +17,7 @@ public class UserInterface
     public void Run()
     {
         int selection;
-        var dispatch = new RadioFleet();
+        var dispatch = new DispatcherCoordinator();
         var dispatchController = new DispatchController(dispatch);
         do
         {
