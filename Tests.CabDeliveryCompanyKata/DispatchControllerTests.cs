@@ -224,6 +224,43 @@ public class DispatchControllerTests
         Assert.Equal("Evan's Cab dropped off Emma at 1 Destination Lane.", droppedOff.First());
     }
     [Fact]
+    public void CabCanDropOffOnlyOneCustomerAtATime()
+    {
+        var radioFleet = new RadioFleet();
+        var dispatchController = new DispatchController(radioFleet);
+        dispatchController.AddCab();
+        dispatchController.AddCab();
+        dispatchController.CustomerCabCall();
+        dispatchController.CustomerCabCall();
+        dispatchController.SendCabRequest();
+        dispatchController.SendCabRequest();
+        dispatchController.CabNotifiesPickedUp();
+        dispatchController.CabNotifiesPickedUp();
+
+        var droppedOff = dispatchController.CabNotifiesDroppedOff();
+
+        Assert.Equal("Evan's Cab dropped off Emma at 1 Destination Lane.", droppedOff.Single());
+    }
+    [Fact]
+    public void CabCanDropOffTwoCustomers()
+    {
+        var radioFleet = new RadioFleet();
+        var dispatchController = new DispatchController(radioFleet);
+        dispatchController.AddCab();
+        dispatchController.AddCab();
+        dispatchController.CustomerCabCall();
+        dispatchController.CustomerCabCall();
+        dispatchController.SendCabRequest();
+        dispatchController.SendCabRequest();
+        dispatchController.CabNotifiesPickedUp();
+        dispatchController.CabNotifiesPickedUp();
+        dispatchController.CabNotifiesDroppedOff();
+
+        var droppedOff = dispatchController.CabNotifiesDroppedOff();
+
+        Assert.Equal("Evan's Cab dropped off Lisa at 1 Destination Lane.", droppedOff.Single());
+    }
+    [Fact]
     public void CabCannotDropOffCustomerIfNotInTransport()
     {
         var radioFleet = new RadioFleet();

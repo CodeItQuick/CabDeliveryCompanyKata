@@ -92,19 +92,23 @@ public class DispatchController(RadioFleet radioFleet)
 
     public List<string> CabNotifiesDroppedOff()
     {
-        var list = new List<string>();
-        if (!radioFleet.CustomersStillInTransport())
+        try
         {
-            return ["There are currently no customer's assigned to cabs."];
-        }
+            if (!radioFleet.CustomersStillInTransport())
+            {
+                return ["There are currently no customer's assigned to cabs."];
+            }
 
-        radioFleet.DropOffCustomer();
-        var droppedOff = radioFleet.DroppedOffCustomers();
-        foreach (var cabInfo in droppedOff)
+            radioFleet.DropOffCustomer();
+            var droppedOff = radioFleet.DroppedOffCustomer();
+
+            var cabInfo = droppedOff[0];
+            
+            return [$"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}."];
+        }
+        catch (Exception ex)
         {
-            list.Add($"{cabInfo.CabName} dropped off {cabInfo.PassengerName} at {cabInfo.Destination}.");
+            return [ex.Message];
         }
-
-        return list;
     }
 }

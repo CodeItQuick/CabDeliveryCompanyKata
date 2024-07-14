@@ -123,7 +123,7 @@ public class RadioFleet
         return _fleet.CustomersStillInTransport();
     }
 
-    public List<CabInfo?> DroppedOffCustomers()
+    public List<CabInfo?> DroppedOffCustomer()
     {
         return [_fleet.LastAssigned()];
     }

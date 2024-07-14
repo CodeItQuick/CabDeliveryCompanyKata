@@ -81,10 +81,10 @@ public class RadioFleetTests
         Assert.NotNull(dispatch.FindEnroutePassenger(CustomerStatus.Enroute));
 
         dispatch.DropOffCustomer();
-        Assert.Equal("Emma", dispatch.DroppedOffCustomers().Single().PassengerName);
+        Assert.Equal("Emma", dispatch.DroppedOffCustomer().Single().PassengerName);
         dispatch.DropOffCustomer();
 
-        Assert.Equal("Lisa", dispatch.DroppedOffCustomers().Single().PassengerName);
+        Assert.Equal("Lisa", dispatch.DroppedOffCustomer().Single().PassengerName);
     }
     [Fact]
     public void CannotPickupCustomerIfNotAvailable()
