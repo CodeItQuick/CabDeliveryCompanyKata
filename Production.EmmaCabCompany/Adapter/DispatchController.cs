@@ -58,16 +58,6 @@ public class DispatchController
 
     public List<string> SendCabRequest()
     {
-        if (_radioFleet.NoCabsInFleet())
-        {
-            return ["There are currently no cabs in the fleet."];
-        }
-
-        if (!_radioFleet.CustomerInState(CustomerStatus.CustomerCallInProgress))
-        {
-            return ["There are currently no customer's waiting for cabs."];
-        }
-        
         try
         {
             _radioFleet.RideRequest();

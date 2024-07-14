@@ -32,9 +32,13 @@ public class RadioFleet
 
     public void RideRequest()
     {
+        if (_fleet.NoCabsInFleet())
+        {
+            throw new SystemException("There are currently no cabs in the fleet.");
+        }
         if (!CustomerInState(CustomerStatus.CustomerCallInProgress))
         {
-            throw new SystemException("No customer waiting for a ride");
+            throw new SystemException("There are currently no customer's waiting for cabs.");
         }
         var customer = _customerStatusMap
             .FirstOrDefault(x => x.Value == CustomerStatus.CustomerCallInProgress)
