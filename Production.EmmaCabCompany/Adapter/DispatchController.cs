@@ -2,7 +2,7 @@ using Production.EmmaCabCompany.Domain;
 
 namespace Production.EmmaCabCompany.Service;
 
-public class DispatchController(DispatcherCoordinator dispatcherCoordinator)
+public class DispatchController(DispatcherCoordinator dispatcherCoordinator, CabService cabService)
 {
     private int _currentNameIdx = 0;
     public string AddCab()
@@ -12,7 +12,6 @@ public class DispatchController(DispatcherCoordinator dispatcherCoordinator)
         
         return "Added Evan's Cab to fleet";
     }
-
     public string RemoveCab()
     {
         try
@@ -25,7 +24,6 @@ public class DispatchController(DispatcherCoordinator dispatcherCoordinator)
             return ex.Message;
         }
     }
-
     public string CustomerCabCall()
     {
         var customerName = new List<string>()
@@ -39,15 +37,16 @@ public class DispatchController(DispatcherCoordinator dispatcherCoordinator)
             "Bob",
             "Arlo"
         };
-        dispatcherCoordinator.CustomerCabCall(customerName[_currentNameIdx]);
-        return $"Received customer ride request from {customerName[_currentNameIdx++]}";
+        var customerCabCall = cabService.CustomerCabCall(customerName[_currentNameIdx]);
+        var resultText = $"Received customer ride request from {customerCabCall}";
+        _currentNameIdx += 1;
+        return resultText;
     }
-
     public List<string> CustomerCancelledCabRide()
     {
         try
         {
-            dispatcherCoordinator.CancelPickup();
+            cabService.CancelPickup();
             return ["Customer cancelled cab ride successfully."];
         }
         catch (Exception ex)
@@ -55,20 +54,12 @@ public class DispatchController(DispatcherCoordinator dispatcherCoordinator)
             return [ex.Message];
         }
     }
-
     public List<string> SendCabRequest()
     {
         try
         {
-            dispatcherCoordinator.RideRequest();
-
-            var cabInfo = dispatcherCoordinator.FindEnroutePassenger(CustomerStatus.WaitingPickup);
-            
-            return
-            [
-                $"{cabInfo?.CabName} picked up {cabInfo?.PassengerName} at {cabInfo?.StartLocation}.",
-                "Cab assigned to customer."
-            ];
+            var response = cabService.SendCabRequest();
+            return response.ToList();
         }
         catch (Exception ex)
         {
@@ -76,12 +67,11 @@ public class DispatchController(DispatcherCoordinator dispatcherCoordinator)
         }
         
     }
-
     public string CabNotifiesPickedUp()
     {
         try
         {
-            dispatcherCoordinator.PickupCustomer();
+            cabService.PickupCustomer();
             return "Notified dispatcher of pickup";
         }
         catch (Exception ex)
@@ -89,14 +79,11 @@ public class DispatchController(DispatcherCoordinator dispatcherCoordinator)
             return ex.Message;
         }
     }
-
     public List<string> CabNotifiesDroppedOff()
     {
         try
         {
-            dispatcherCoordinator.DropOffCustomer();
-            var droppedOff = dispatcherCoordinator.DroppedOffCustomer();
-
+            var droppedOff = cabService.DropOffCustomer();
             return [$"{droppedOff[0]?.CabName} dropped off {droppedOff[0]?.PassengerName} at {droppedOff[0]?.Destination}."];
         }
         catch (Exception ex)

@@ -2,9 +2,8 @@ namespace Production.EmmaCabCompany.Domain;
 
 public class CustomerList
 {
-    private Dictionary<Customer, CustomerStatus> _customerStatusMap = new(); // TODO: move this into its own class?
+    private readonly Dictionary<Customer, CustomerStatus> _customerStatusMap = new();
 
-    // TODO: get rid of customerNames as this is not the correct behaviour
     public void CustomerCabCall(string customerCallInName)
     {
         var customer = new Customer(customerCallInName, "1 Fulton Drive", "1 Destination Lane");
@@ -46,10 +45,6 @@ public class CustomerList
         {
             throw new SystemException("There are currently no customer's assigned to cabs.");
         }
-        if (_customerStatusMap.All(x => x.Value != CustomerStatus.WaitingPickup))
-        {
-            throw new SystemException("No customers currently waiting pickup");
-        }
         var firstCustomer = _customerStatusMap
             .FirstOrDefault(x => x.Value == CustomerStatus.WaitingPickup)
             .Key;
@@ -86,7 +81,8 @@ public class CustomerList
         {
             throw new SystemException("No customers are waiting for pickup. Cannot cancel cab.");
         }
-        var customer = _customerStatusMap.FirstOrDefault().Key;
+        var customer = _customerStatusMap.FirstOrDefault(x => 
+            x.Value is CustomerStatus.WaitingPickup or CustomerStatus.CustomerCallInProgress).Key;
         _customerStatusMap.Remove(customer);
     }
     
@@ -94,10 +90,5 @@ public class CustomerList
     {
         return _customerStatusMap
             .Any(x => x.Value == customerStatus);
-    }
-
-    public Customer PickedUpCustomer()
-    {
-        throw new NotImplementedException();
     }
 }

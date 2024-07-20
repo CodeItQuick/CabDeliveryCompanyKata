@@ -20,7 +20,6 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var mockFileReadWriter = new MockFileReadWriter();
         var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
@@ -40,7 +39,6 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var mockFileReadWriter = new MockFileReadWriter();
         var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
@@ -59,7 +57,6 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var mockFileReadWriter = new MockFileReadWriter();
         var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
@@ -98,7 +95,6 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var mockFileReadWriter = new MockFileReadWriter();
         var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
@@ -117,7 +113,6 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var mockFileReadWriter = new MockFileReadWriter();
         var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
@@ -136,7 +131,6 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var mockFileReadWriter = new MockFileReadWriter();
         var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
@@ -162,7 +156,6 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var mockFileReadWriter = new MockFileReadWriter();
         var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
@@ -188,7 +181,6 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var mockFileReadWriter = new MockFileReadWriter();
         var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
         userInterface.Run();
         
@@ -245,5 +237,37 @@ public class AcceptanceTests
         
         Assert.Contains("No customers are waiting for pickup. Cannot cancel cab.", 
             cabCompanyPrinter.List());
+    }
+    [Fact(Skip = "First lets create the service")]
+    public void PersistsStateAfterCallForCabDelivery()
+    {
+        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        var commandList = new List<string>()
+        {
+            "1",
+            "7",
+            "0",
+            "3",
+            "4",
+            "5",
+            "0"
+        };
+        FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
+        {
+            CommandList = commandList
+        };
+        var userInterface = new UserInterface(cabCompanyPrinter, cabCompanyReader);
+        userInterface.Run();
+        var userInterfaceSecondRun = new UserInterface(
+            cabCompanyPrinter, 
+            new FakeCabCompanyReader()
+            {
+                CommandList = commandList.Skip(3).ToList()
+            });
+        
+        userInterfaceSecondRun.Run();
+        
+        Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.List());
+        Assert.Contains("Evan's Cab dropped off Emma at 1 Destination Lane.", cabCompanyPrinter.List());
     }
 }
