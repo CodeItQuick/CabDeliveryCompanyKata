@@ -1,14 +1,12 @@
-using Production.EmmaCabCompany.Domain;
-
 namespace Production.EmmaCabCompany.Service;
 
-public class DispatchController(DispatcherCoordinator dispatcherCoordinator, CabService cabService)
+public class DispatchController(CabService cabService)
 {
     private int _currentNameIdx = 0;
     public string AddCab()
     {
         var cabName = "Evan's Cab";
-        dispatcherCoordinator.AddCab(new Cab(cabName, 20));
+        cabService.AddCab(new Cab(cabName, 20));
         
         return "Added Evan's Cab to fleet";
     }
@@ -16,7 +14,7 @@ public class DispatchController(DispatcherCoordinator dispatcherCoordinator, Cab
     {
         try
         {
-            dispatcherCoordinator.RemoveCab();
+            cabService.RemoveCab();
             return "Cab removed from fleet";
         }
         catch (Exception ex)

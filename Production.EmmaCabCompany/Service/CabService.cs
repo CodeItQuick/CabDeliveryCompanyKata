@@ -60,4 +60,14 @@ public class CabService(DispatcherCoordinator dispatcherCoordinator)
             throw new SystemException(ex.Message);
         }
     }
+
+    public void AddCab(Cab cab)
+    {
+        dispatcherCoordinator.AddCab(cab);
+    }
+
+    public void RemoveCab()
+    {
+        dispatcherCoordinator.RemoveCab();
+    }
 }

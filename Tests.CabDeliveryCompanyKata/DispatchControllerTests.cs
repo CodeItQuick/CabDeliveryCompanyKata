@@ -10,7 +10,7 @@ public class DispatchControllerTests
     public void CanAddCabsToTheFleet()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
 
         var addCabMessage = dispatchController.AddCab();
 
@@ -20,7 +20,7 @@ public class DispatchControllerTests
     public void CanRemoveCabsFromTheFleet()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
         var cabsAvailable = radioFleet.NoCabsInFleet();
         var removeCab = dispatchController.RemoveCab();
@@ -35,7 +35,7 @@ public class DispatchControllerTests
     public void CannotRemoveCabsFromEmptyFleet()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
 
         var result = dispatchController.RemoveCab();
         
@@ -45,7 +45,7 @@ public class DispatchControllerTests
     public void CannotRemoveCabsWithPassengerInIt()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
         dispatchController.SendCabRequest();
@@ -59,7 +59,7 @@ public class DispatchControllerTests
     public void CanRemoveCabsWithoutPassengerInside()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
@@ -74,7 +74,7 @@ public class DispatchControllerTests
     public void CustomerCanCallInCab()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
 
         var customerCabCall = dispatchController.CustomerCabCall();
@@ -85,7 +85,7 @@ public class DispatchControllerTests
     public void TwoCustomersCanCallInCab()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
 
@@ -97,7 +97,7 @@ public class DispatchControllerTests
     public void FirstCustomerCallInCancelsSecondCustomerCanCallInCab()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
         dispatchController.CustomerCancelledCabRide();
@@ -110,7 +110,7 @@ public class DispatchControllerTests
     public void CannotPickupUnlessCustomersWaiting()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         
         var customerCabCall = dispatchController.CustomerCancelledCabRide();
         
@@ -120,7 +120,7 @@ public class DispatchControllerTests
     public void CanCancelPickup()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
         
@@ -132,7 +132,7 @@ public class DispatchControllerTests
     public void CanCancelPickupAtAnyTime()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
         dispatchController.SendCabRequest();
@@ -145,7 +145,7 @@ public class DispatchControllerTests
     public void CabCanDriveToCustomerAfterCabRequest()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
 
@@ -158,7 +158,7 @@ public class DispatchControllerTests
     public void CannotSendCabRequestUntilCustomerCallsIn()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
 
         var sendCabRequest = dispatchController.SendCabRequest();
@@ -169,7 +169,7 @@ public class DispatchControllerTests
     public void CannotSendCabRequestUntilCabsAreInFleet()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
 
         var sendCabRequest = dispatchController.SendCabRequest();
 
@@ -179,7 +179,7 @@ public class DispatchControllerTests
     public void CabCanPickupCustomer()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
         dispatchController.SendCabRequest();
@@ -192,7 +192,7 @@ public class DispatchControllerTests
     public void CabCannotPickupCustomerIfNoCabsInFleet()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
 
         var sendCabRequest = dispatchController.CabNotifiesPickedUp();
 
@@ -202,7 +202,7 @@ public class DispatchControllerTests
     public void CabCannotPickupCustomerIfCustomerNotWaitingPickup()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
 
@@ -214,7 +214,7 @@ public class DispatchControllerTests
     public void CabCanDropOffCustomer()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
         dispatchController.SendCabRequest();
@@ -228,7 +228,7 @@ public class DispatchControllerTests
     public void CabCanDropOffOnlyOneCustomerAtATime()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
@@ -246,7 +246,7 @@ public class DispatchControllerTests
     public void CabCanDropOffTwoCustomers()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
@@ -265,7 +265,7 @@ public class DispatchControllerTests
     public void CabCannotDropOffCustomerIfNotInTransport()
     {
         var radioFleet = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(radioFleet, new CabService(radioFleet));
+        var dispatchController = new DispatchController(new CabService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
 
