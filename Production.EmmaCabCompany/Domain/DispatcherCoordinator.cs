@@ -105,6 +105,11 @@ public class DispatcherCoordinator
         return _customerList.CustomerInState(customerStatus);
     }
 
+    public Dictionary<Customer, CustomerStatus> ExportCustomerList()
+    {
+        return _customerList.Export();
+    }
+
 }
 
 public enum CustomerStatus

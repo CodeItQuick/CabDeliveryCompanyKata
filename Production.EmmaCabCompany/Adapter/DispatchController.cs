@@ -63,7 +63,6 @@ public class DispatchController(CabService cabService)
         {
             return [ex.Message];
         }
-        
     }
     public string CabNotifiesPickedUp()
     {

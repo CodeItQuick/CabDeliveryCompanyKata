@@ -30,16 +30,7 @@ public class DispatcherCoordinatorTests
         var cabs = new Cab("Dan's Cab", 20);
         var cabTwo = new Cab("Evan's Cab", 20);
         var dispatch = new DispatcherCoordinator();
-        var customer = new Customer(
-            "Emma", 
-            "1 Fulton Drive", 
-            "1 Final Destination Lane");
-        var customerTwo = new Customer(
-            "Lisa", 
-            "2 Fulton Drive", 
-            "2 Final Destination Lane");
         dispatch.AddCab(cabs);
-        var customerNames = new List<string>() { "Emma", "Lisa" };
         dispatch.CustomerCabCall("Emma");
         dispatch.RideRequest();
         dispatch.PickupCustomer();
@@ -60,14 +51,6 @@ public class DispatcherCoordinatorTests
         var cabs = new Cab("Dan's Cab", 20);
         var cabTwo = new Cab("Evan's Cab", 20);
         var dispatch = new DispatcherCoordinator();
-        var customer = new Customer(
-            "Emma", 
-            "1 Fulton Drive", 
-            "1 Final Destination Lane");
-        var customerTwo = new Customer(
-            "Lisa", 
-            "2 Fulton Drive", 
-            "2 Final Destination Lane");
         dispatch.AddCab(cabs);
         dispatch.AddCab(cabTwo);
         dispatch.CustomerCabCall("Emma");
@@ -90,10 +73,6 @@ public class DispatcherCoordinatorTests
     {
         var cabs = new Cab("Dan's Cab", 20);
         var dispatch = new DispatcherCoordinator();
-        var customer = new Customer(
-            "Emma", 
-            "1 Fulton Drive", 
-            "1 Final Destination Lane");
         var customerTwo = new Customer(
             "Lisa", 
             "1 Fulton Drive", 
@@ -110,11 +89,7 @@ public class DispatcherCoordinatorTests
     public void CannotPickupCustomerIfNoCabs()
     {
         var dispatch = new DispatcherCoordinator();
-        var customer = new Customer(
-            "Emma", 
-            "1 Fulton Drive", 
-            "1 Final Destination Lane");
-        
+
         Assert.Throws<SystemException>(() => dispatch.RideRequest());
         Assert.Throws<SystemException>(() => dispatch.PickupCustomer());
         Assert.Throws<SystemException>(() => dispatch.DropOffCustomer());
@@ -124,10 +99,6 @@ public class DispatcherCoordinatorTests
     {
         var cabs = new Cab("Diane's Cab", 20);
         var dispatch = new DispatcherCoordinator();
-        var customer = new Customer(
-            "Emma", 
-            "1 Fulton Drive", 
-            "1 Final Destination Lane");
         dispatch.AddCab(cabs);
         dispatch.CustomerCabCall("Emma");
         Assert.Throws<SystemException>(() => dispatch.PickupCustomer());
@@ -141,10 +112,6 @@ public class DispatcherCoordinatorTests
     {
         var cabs = new Cab("Diane's Cab", 20);
         var dispatch = new DispatcherCoordinator();
-        var customer = new Customer(
-            "Emma", 
-            "1 Fulton Drive", 
-            "1 Final Destination Lane");
         dispatch.AddCab(cabs);
         dispatch.CustomerCabCall("Emma");
         dispatch.RideRequest();
@@ -156,22 +123,37 @@ public class DispatcherCoordinatorTests
     [Fact]
     public void CannotPickupTwoCustomerFares()
     {
-        var cabs = new Cab("Diane's Cab", 20);
         var dispatch = new DispatcherCoordinator();
-        var customer = new Customer(
-            "Emma", 
-            "1 Fulton Drive", 
-            "1 Final Destination Lane");
-        var customerTwo = new Customer(
-            "Lisa", 
-            "1 Fulton Drive", 
-            "1 Final Destination Lane");
+        var cabs = new Cab("Diane's Cab", 20);
         dispatch.AddCab(cabs);
         dispatch.CustomerCabCall("Emma");
-        dispatch.CustomerCabCall("Emma");
+        dispatch.CustomerCabCall("Lisa");
         dispatch.RideRequest();
         Assert.Throws<SystemException>(() => dispatch.RideRequest());
         
         Assert.True(dispatch.CustomerInState(CustomerStatus.CustomerCallInProgress));
+    }
+
+    [Fact]
+    public void CanExportCustomerListToFile()
+    {
+        var dispatch = new DispatcherCoordinator();
+
+        var exportCustomerList = dispatch.ExportCustomerList();
+        
+        Assert.Equal(0, exportCustomerList.Count);
+    }
+    [Fact]
+    public void CanExportCustomerCallInProgressListToFile()
+    {
+        var dispatch = new DispatcherCoordinator();
+
+        var cabs = new Cab("Diane's Cab", 20);
+        dispatch.AddCab(cabs);
+        dispatch.CustomerCabCall("Emma");
+        
+        var exportCustomerList = dispatch.ExportCustomerList();
+        
+        Assert.Equal(1, exportCustomerList.Count);
     }
 }

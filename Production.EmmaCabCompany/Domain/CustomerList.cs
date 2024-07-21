@@ -91,4 +91,9 @@ public class CustomerList
         return _customerStatusMap
             .Any(x => x.Value == customerStatus);
     }
+
+    public Dictionary<Customer, CustomerStatus> Export()
+    {
+        return _customerStatusMap;
+    }
 }

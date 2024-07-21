@@ -10,12 +10,10 @@ public class CabService(DispatcherCoordinator dispatcherCoordinator)
         dispatcherCoordinator.CustomerCabCall(customerName);
         return customerName;
     }
-
     public void CancelPickup()
     {
         dispatcherCoordinator.CancelPickup();
     }
-
     public string[] SendCabRequest()
     {
         try
@@ -35,7 +33,6 @@ public class CabService(DispatcherCoordinator dispatcherCoordinator)
             throw new SystemException(ex.Message);
         }
     }
-
     public void PickupCustomer()
     {
         try
@@ -47,7 +44,6 @@ public class CabService(DispatcherCoordinator dispatcherCoordinator)
             throw new SystemException(ex.Message);
         }
     }
-
     public List<CabInfo?> DropOffCustomer()
     {
         try
@@ -60,12 +56,10 @@ public class CabService(DispatcherCoordinator dispatcherCoordinator)
             throw new SystemException(ex.Message);
         }
     }
-
     public void AddCab(Cab cab)
     {
         dispatcherCoordinator.AddCab(cab);
     }
-
     public void RemoveCab()
     {
         dispatcherCoordinator.RemoveCab();
