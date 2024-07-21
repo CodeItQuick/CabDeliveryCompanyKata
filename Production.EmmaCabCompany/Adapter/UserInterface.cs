@@ -9,7 +9,10 @@ public class UserInterface(ICabCompanyPrinter cabCompanyPrinter, ICabCompanyRead
     {
         int selection;
         var dispatch = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(new CabService(dispatch, new FileWriter("default_save_file.csv"), new FileReader("default_save_file.csv")));
+        var fileWriter = new FileWriter("customer_list_default.csv", "cab_list_default.csv");
+        var fileReader = new FileReader("customer_list_default.csv", "cab_list_default.csv");
+        var cabService = new CabService(dispatch, fileWriter, fileReader);
+        var dispatchController = new DispatchController(cabService);
         do
         {
             cabCompanyPrinter.WriteLine("Please choose a selection from the list: ");

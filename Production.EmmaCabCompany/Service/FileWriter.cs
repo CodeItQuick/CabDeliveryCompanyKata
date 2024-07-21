@@ -1,9 +1,19 @@
 namespace Production.EmmaCabCompany;
 
-public class FileWriter(string filename) : IFileWriter
+public class FileWriter(string customerListFilename, string cabListFilename) : IFileWriter
 {
-    public void Write(string[] fileContents)
+    public void Write(string filename, string[] fileContents)
     {
-        File.WriteAllLines(filename, fileContents);
+        if (customerListFilename == filename)
+        {
+            File.WriteAllLines(filename, fileContents);
+            return;
+        } 
+        if (cabListFilename == filename)
+        {
+            File.WriteAllLines(filename, fileContents);
+            return;
+        }
+        throw new IOException($"{filename} does not match {customerListFilename} or {cabListFilename}");
     }
 }

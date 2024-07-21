@@ -109,4 +109,9 @@ public class DispatcherCoordinator
     {
         return _customerList.Export();
     }
+
+    public string[] ExportCabList()
+    {
+        return _fleet.ExportCabs();
+    }
 }

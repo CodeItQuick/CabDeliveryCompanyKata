@@ -16,7 +16,7 @@ public class CabService(DispatcherCoordinator dispatcherCoordinator, IFileWriter
                 $"{x.Key.startLocation}," +
                 $"{x.Value}\n"
             ).ToArray();
-        fileWriter.Write(exportedCustomers);
+        fileWriter.Write("customer_list_default.csv", exportedCustomers);
         return customerName;
     }
     public void CancelPickup()
@@ -68,6 +68,8 @@ public class CabService(DispatcherCoordinator dispatcherCoordinator, IFileWriter
     public void AddCab(Cab cab)
     {
         dispatcherCoordinator.AddCab(cab);
+        string[] cabList = dispatcherCoordinator.ExportCabList();
+        fileWriter.Write("cab_list_default.csv", cabList);
     }
     public void RemoveCab()
     {

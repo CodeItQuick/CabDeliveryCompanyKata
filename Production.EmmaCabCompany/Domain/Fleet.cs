@@ -105,4 +105,15 @@ public class Fleet
     {
         return _fleet.All(x => x.ContainsPassenger());
     }
+
+    public string[] ExportCabs()
+    {
+        return _fleet
+            .Select(x => 
+                $"{x.CabInfo()?.CabName}," +
+                $"{x.CabInfo()?.PassengerName}," +
+                $"{x.CabInfo()?.StartLocation}," +
+                $"{x.CabInfo()?.Destination}\n")
+            .ToArray();
+    }
 }

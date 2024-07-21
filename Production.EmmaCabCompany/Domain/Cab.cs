@@ -67,13 +67,9 @@ public class Cab
     {
         return _status == CabStatus.Available;
     }
-
+    
     public CabInfo? CabInfo()
     {
-        if (_assignedPassenger == null)
-        {
-            return null;
-        }
         
         return new CabInfo()
         {
