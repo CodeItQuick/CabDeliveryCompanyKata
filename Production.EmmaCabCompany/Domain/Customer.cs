@@ -2,31 +2,31 @@
 
 public class Customer
 {
-    public string name;
-    public string startLocation;
-    public string endLocation;
-    private Cab? currentCab;
+    public readonly string Name;
+    public readonly string StartLocation;
+    public readonly string EndLocation;
+    private Cab? _currentCab;
 
     public Customer(string customerName, string startLocation, string endLocation)
     {
-        name = customerName;
-        this.startLocation = startLocation;
-        this.endLocation = endLocation;
+        Name = customerName;
+        this.StartLocation = startLocation;
+        this.EndLocation = endLocation;
     }
 
     public bool IsPickedUp()
     {
-        return currentCab != null;
+        return _currentCab != null;
     }
 
     public void IsInCab(Cab cab)
     {
-        currentCab = cab;
+        _currentCab = cab;
     }
 
     // TODO: Not tested directly yet
     public void ExitCab()
     {
-        currentCab = null;
+        _currentCab = null;
     }
 }

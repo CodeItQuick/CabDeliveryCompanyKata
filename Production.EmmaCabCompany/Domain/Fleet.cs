@@ -18,7 +18,7 @@ public class Fleet
     }
     public bool IsEnroute(Customer customer)
     {
-        return _fleet.Any(x => x.CabInfo()?.PassengerName == customer.name);
+        return _fleet.Any(x => x.CabInfo()?.PassengerName == customer.Name);
     }
     public void RideRequested(Customer? customer)
     {
@@ -40,7 +40,7 @@ public class Fleet
         // dispatcher
         if (_rideRequested == false && customer != null)
         {
-            throw new SystemException($"Dispatch failed to pickup {customer.name} as there are no available cabs.");
+            throw new SystemException($"Dispatch failed to pickup {customer.Name} as there are no available cabs.");
         }
     }
     
@@ -92,7 +92,7 @@ public class Fleet
 
     public string? FindCab(Customer customer)
     {
-        return _fleet.First(x => x.CabInfo()?.PassengerName == customer.name).CabInfo()?.CabName;
+        return _fleet.First(x => x.CabInfo()?.PassengerName == customer.Name).CabInfo()?.CabName;
     }
 
     public bool AllCabsOccupied()

@@ -294,8 +294,8 @@ public class AcceptanceTests
         var customerListFilename = $"customer_list_default_repeatable.csv";
         var cabListFilename = $"cab_list_default_repeatable.csv";
         var fakeFileReadWriter = new FakeFileReadWriter(customerListFilename, cabListFilename);
-        fakeFileReadWriter.WriteCabList(["Evan,,,"]);
-        fakeFileReadWriter.WriteCustomerList(["Emma,1 Destination Lane,1 Fulton Drive,CustomerCallInProgress"]);
+        fakeFileReadWriter.WriteCabList(["Evan's Cab,,,"]);
+        fakeFileReadWriter.WriteCustomerList(["Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress"]);
         var userInterfaceSecondRun = new UserInterface(
             cabCompanyPrinter, 
             new FakeCabCompanyReader()

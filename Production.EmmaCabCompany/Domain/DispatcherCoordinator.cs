@@ -50,10 +50,10 @@ public class DispatcherCoordinator
         var findCab = _fleet.FindCab(customer);
         return new CabInfo()
             {
-                PassengerName = customer.name,
+                PassengerName = customer.Name,
                 CabName = findCab,
-                StartLocation = customer.startLocation,
-                Destination = customer.endLocation
+                StartLocation = customer.StartLocation,
+                Destination = customer.EndLocation
             };
     }
 

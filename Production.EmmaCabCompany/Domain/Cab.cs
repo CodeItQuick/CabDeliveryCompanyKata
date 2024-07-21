@@ -39,7 +39,7 @@ public class Cab
 
     public bool IsEnrouteFor(Customer customer)
     {
-        return _status == CabStatus.CustomerRideRequested && customer.name == _assignedPassenger?.name;
+        return _status == CabStatus.CustomerRideRequested && customer.Name == _assignedPassenger?.Name;
     }
 
     public bool IsStatus(CabStatus requestedStatus)
@@ -73,10 +73,10 @@ public class Cab
         
         return new CabInfo()
         {
-            PassengerName = _assignedPassenger?.name,
+            PassengerName = _assignedPassenger?.Name,
             CabName = _cabName,
-            StartLocation = _assignedPassenger?.startLocation,
-            Destination = _assignedPassenger?.endLocation,
+            StartLocation = _assignedPassenger?.StartLocation,
+            Destination = _assignedPassenger?.EndLocation,
         };
     }
 

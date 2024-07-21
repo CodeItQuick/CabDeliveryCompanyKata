@@ -43,9 +43,9 @@ public class CabService
         var exportedCustomerList = dispatcherCoordinator.ExportCustomerList();
         string[] exportedCustomers = exportedCustomerList
             .Select(x => 
-                $"{x.Key.name}," +
-                $"{x.Key.endLocation}," +
-                $"{x.Key.startLocation}," +
+                $"{x.Key.Name}," +
+                $"{x.Key.EndLocation}," +
+                $"{x.Key.StartLocation}," +
                 $"{x.Value}"
             ).ToArray();
         _fileHandler.WriteCustomerList(exportedCustomers);
@@ -95,9 +95,9 @@ public class CabService
             return [new CabInfo()
             {
                 CabName = "Evan's Cab",
-                StartLocation = customerInState.startLocation,
-                Destination = customerInState.endLocation,
-                PassengerName = customerInState.name
+                StartLocation = customerInState.StartLocation,
+                Destination = customerInState.EndLocation,
+                PassengerName = customerInState.Name
             }];
         }
         catch (Exception ex)

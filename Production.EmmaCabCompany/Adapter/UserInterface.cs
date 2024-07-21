@@ -15,17 +15,7 @@ public class UserInterface(
         var dispatchController = new DispatchController(cabService);
         do
         {
-            cabCompanyPrinter.WriteLine("Please choose a selection from the list: ");
-            // also in the command pattern
-            // command -> menu option string, -> execute with parameters
-            cabCompanyPrinter.WriteLine("0. Exit");
-            cabCompanyPrinter.WriteLine("1. (Incoming Radio) Add New Cab Driver");
-            cabCompanyPrinter.WriteLine("2. (Incoming Radio) Remove Cab Driver"); // TODO: weird tricks here could cause bugs
-            cabCompanyPrinter.WriteLine("3. (Outgoing Radio) Send Cab Driver Ride Request");
-            cabCompanyPrinter.WriteLine("4. (Incoming Radio) Cab Notifies Passenger Picked Up");
-            cabCompanyPrinter.WriteLine("5. (Incoming Radio) Cab Notifies Passenger Dropped Off");
-            cabCompanyPrinter.WriteLine("6. (Incoming Call) Cancel Cab Driver Fare");
-            cabCompanyPrinter.WriteLine("7. (Incoming Call) Customer Request Ride");
+            WriteMenu();
             var lineEntered = cabCompanyReader.ReadLine();
 
             cabCompanyPrinter.WriteLine($"You selected: {lineEntered}");
@@ -35,39 +25,44 @@ public class UserInterface(
                 continue;
             }
 
-            switch (selection)
-            {
-                // command pattern
-                case 1:
-                    var addCabCommand = dispatchController.AddCab();
-                    cabCompanyPrinter.WriteLine(addCabCommand);
-                    break;
-                case 2:
-                    var removeCabCommand = dispatchController.RemoveCab();
-                    cabCompanyPrinter.WriteLine(removeCabCommand);
-                    break;
-                case 3:
-                    var sendCabRequestCommand = dispatchController
-                        .SendCabRequest();
-                    sendCabRequestCommand.ForEach(x => cabCompanyPrinter.WriteLine(x));
-                    break;
-                case 4:
-                    var cabNotifiesOfPickup = dispatchController.CabNotifiesPickedUp();
-                    cabCompanyPrinter.WriteLine(cabNotifiesOfPickup);
-                    break;
-                case 5:
-                    var customersPickedUpOutput = dispatchController.CabNotifiesDroppedOff();
-                    customersPickedUpOutput.ForEach(x => cabCompanyPrinter.WriteLine(x));
-                    break;
-                case 6:
-                    var customerCancelledOutput = dispatchController.CustomerCancelledCabRide();
-                    customerCancelledOutput.ForEach(x => cabCompanyPrinter.WriteLine(x));
-                    break;
-                case 7:
-                    var cabCalledOutput = dispatchController.CustomerCabCall();
-                    cabCompanyPrinter.WriteLine(cabCalledOutput);
-                    break;
-            }
+            var output = ExecuteCommand(selection, dispatchController); 
+            output.ForEach(cabCompanyPrinter.WriteLine);
         } while (selection != 0);
+    }
+
+    private static void WriteMenu()
+    {
+        Console.WriteLine("Please choose a selection from the list: ");
+        Console.WriteLine("0. Exit");
+        Console.WriteLine("1. (Incoming Radio) Add New Cab Driver");
+        Console.WriteLine("2. (Incoming Radio) Remove Cab Driver"); // TODO: weird tricks here could cause bugs
+        Console.WriteLine("3. (Outgoing Radio) Send Cab Driver Ride Request");
+        Console.WriteLine("4. (Incoming Radio) Cab Notifies Passenger Picked Up");
+        Console.WriteLine("5. (Incoming Radio) Cab Notifies Passenger Dropped Off");
+        Console.WriteLine("6. (Incoming Call) Cancel Cab Driver Fare");
+        Console.WriteLine("7. (Incoming Call) Customer Request Ride");
+    }
+
+    public static List<string> ExecuteCommand(int selection, DispatchController dispatchController)
+    {
+        switch (selection)
+        {
+            case 1:
+                return [dispatchController.AddCab()];
+            case 2:
+                return [dispatchController.RemoveCab()];
+            case 3:
+                return dispatchController.SendCabRequest();
+            case 4:
+                return [dispatchController.CabNotifiesPickedUp()];
+            case 5:
+                return dispatchController.CabNotifiesDroppedOff();
+            case 6:
+                return dispatchController.CustomerCancelledCabRide();
+            case 7:
+                return [dispatchController.CustomerCabCall()];
+            default:
+                return [];
+        }
     }
 }
