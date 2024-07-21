@@ -12,7 +12,6 @@ public class FleetTests
         var customer = new Customer("Evan", "1 Fulton Drive", "2 Destination Lane");
 
         Assert.Throws<SystemException>(() => fleet.RideRequested(customer));
-        Assert.Null(fleet.LastAssigned());
     }
     [Fact]
     public void DispatchCanAssignPassengerToFleet()
@@ -40,11 +39,12 @@ public class FleetTests
         var customer = new Customer("Evan", "1 Fulton Drive", "2 Destination Lane");
 
         fleet.RideRequested(customer);
+        fleet.RideRequested(customer);
         
         Assert.Equivalent(new CabInfo()
         {
             PassengerName = "Evan",
-            CabName = "Dan's Cab",
+            CabName = "Lisa's Cab",
             Destination = "2 Destination Lane",
             StartLocation = "1 Fulton Drive"
         }, fleet.LastRideAssigned());

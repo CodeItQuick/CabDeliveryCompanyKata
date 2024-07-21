@@ -2,8 +2,40 @@ using Production.EmmaCabCompany.Domain;
 
 namespace Production.EmmaCabCompany;
 
-public class CabService(DispatcherCoordinator dispatcherCoordinator, IFileWriter fileWriter, IFileReader fileReader)
+public class CabService
 {
+    private readonly DispatcherCoordinator dispatcherCoordinator;
+    private readonly IFileHandler _fileHandler;
+
+    public CabService(DispatcherCoordinator dispatcherCoordinator, IFileHandler fileHandler)
+    {
+        var customerList = fileHandler.ReadCustomerList();
+        var customerListStrings = customerList.Select(x => x);
+        Dictionary<Customer, CustomerStatus> customerDictionary = new Dictionary<Customer, CustomerStatus>();
+        foreach (var customer in customerListStrings)
+        {
+            var customerAttribs = customer.Split(",");
+            if (customerAttribs.Length <= 2) continue;
+            var customerKey = new Customer(customerAttribs[0], customerAttribs[1], customerAttribs[2]);
+            var customerStatus = Enum.Parse<CustomerStatus>(customerAttribs[3], true);
+            customerDictionary.Add(customerKey, customerStatus);
+        }
+        dispatcherCoordinator.RebuildCustomerDictionary(customerDictionary);
+        var cabList = fileHandler.ReadReadCabList();
+        var cabListStrings = cabList.Select(x => x).ToList();
+        List<Cab> cabStoredList = new List<Cab>();
+        foreach (var cab in cabListStrings)
+        {
+            var cabAttributes = cab.Split(",");
+            if (cabAttributes.Length < 1 || string.IsNullOrWhiteSpace(cabAttributes[0])) continue;
+            var cabValue = new Cab(cabAttributes[0], 20);
+            cabStoredList.Add(cabValue);
+        }
+        dispatcherCoordinator.RebuildCabList(cabStoredList);
+        this.dispatcherCoordinator = dispatcherCoordinator;
+        _fileHandler = fileHandler;
+    }
+
     public string CustomerCabCall(string customerName)
     {
         
@@ -14,9 +46,9 @@ public class CabService(DispatcherCoordinator dispatcherCoordinator, IFileWriter
                 $"{x.Key.name}," +
                 $"{x.Key.endLocation}," +
                 $"{x.Key.startLocation}," +
-                $"{x.Value}\n"
+                $"{x.Value}"
             ).ToArray();
-        fileWriter.Write("customer_list_default.csv", exportedCustomers);
+        _fileHandler.WriteCustomerList(exportedCustomers);
         return customerName;
     }
     public void CancelPickup()
@@ -58,7 +90,15 @@ public class CabService(DispatcherCoordinator dispatcherCoordinator, IFileWriter
         try
         {
             dispatcherCoordinator.DropOffCustomer();
-            return dispatcherCoordinator.DroppedOffCustomer();
+            var customerInState = dispatcherCoordinator
+                .RetrieveCustomerInState(CustomerStatus.Delivered);
+            return [new CabInfo()
+            {
+                CabName = "Evan's Cab",
+                StartLocation = customerInState.startLocation,
+                Destination = customerInState.endLocation,
+                PassengerName = customerInState.name
+            }];
         }
         catch (Exception ex)
         {
@@ -69,10 +109,14 @@ public class CabService(DispatcherCoordinator dispatcherCoordinator, IFileWriter
     {
         dispatcherCoordinator.AddCab(cab);
         string[] cabList = dispatcherCoordinator.ExportCabList();
-        fileWriter.Write("cab_list_default.csv", cabList);
+        _fileHandler.WriteCabList(cabList);
     }
     public void RemoveCab()
     {
         dispatcherCoordinator.RemoveCab();
     }
+}
+
+public interface IFileHandler : IFileReader, IFileWriter
+{
 }

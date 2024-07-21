@@ -63,10 +63,10 @@ public class DispatcherCoordinatorTests
         Assert.NotNull(dispatch.FindEnroutePassenger(CustomerStatus.Enroute));
 
         dispatch.DropOffCustomer();
-        Assert.Equal("Emma", dispatch.DroppedOffCustomer().Single().PassengerName);
+        Assert.Equal("Emma", dispatch.RetrieveCustomerInState(CustomerStatus.Delivered)?.name);
         dispatch.DropOffCustomer();
 
-        Assert.Equal("Lisa", dispatch.DroppedOffCustomer().Single().PassengerName);
+        Assert.Equal("Lisa", dispatch.RetrieveCustomerInState(CustomerStatus.Delivered)?.name);
     }
     [Fact]
     public void CannotPickupCustomerIfNotAvailable()

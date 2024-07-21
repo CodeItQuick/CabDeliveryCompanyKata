@@ -7,7 +7,11 @@ public class Program
         var cabCompanyPrinter = new CabCompanyPrinter();
         var cabCompanyReader = new CabCompanyReader();
 
-        var dispatch = new UserInterface(cabCompanyPrinter, cabCompanyReader);
+        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
+        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
+        var dispatch = new UserInterface(
+            cabCompanyPrinter, 
+            cabCompanyReader, new FileHandler(customerListFilename, cabListFilename));
         dispatch.Run();
     }
 }

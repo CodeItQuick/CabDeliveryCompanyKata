@@ -10,7 +10,7 @@ public class DispatchControllerTests
     public void CanAddCabsToTheFleet()
     {
         var radioFleet = new DispatcherCoordinator();
-        var cabService = new CabService(radioFleet, new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"));
+        var cabService = new CabService(radioFleet, new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"));
         var dispatchController = new DispatchController
             (cabService)
             ;
@@ -26,7 +26,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
         var cabsAvailable = radioFleet.NoCabsInFleet();
@@ -44,7 +44,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
 
         var result = dispatchController.RemoveCab();
@@ -57,7 +57,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
@@ -74,7 +74,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
         dispatchController.AddCab();
@@ -92,7 +92,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
 
@@ -106,7 +106,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
@@ -121,7 +121,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
@@ -137,7 +137,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         
         var customerCabCall = dispatchController.CustomerCancelledCabRide();
@@ -150,7 +150,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
@@ -165,7 +165,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
@@ -181,7 +181,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
@@ -197,7 +197,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
 
@@ -211,7 +211,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
 
         var sendCabRequest = dispatchController.SendCabRequest();
@@ -224,7 +224,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
@@ -240,7 +240,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
 
         var sendCabRequest = dispatchController.CabNotifiesPickedUp();
@@ -253,7 +253,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
@@ -268,7 +268,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
@@ -285,7 +285,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
         dispatchController.AddCab();
@@ -306,7 +306,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
         dispatchController.AddCab();
@@ -328,7 +328,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
-            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv"), new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
+            new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
             ));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();

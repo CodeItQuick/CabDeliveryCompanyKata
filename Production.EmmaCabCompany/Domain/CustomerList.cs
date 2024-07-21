@@ -2,7 +2,7 @@ namespace Production.EmmaCabCompany.Domain;
 
 public class CustomerList
 {
-    private readonly Dictionary<Customer, CustomerStatus> _customerStatusMap = new();
+    private Dictionary<Customer, CustomerStatus> _customerStatusMap = new();
 
     public void CustomerCabCall(string customerCallInName)
     {
@@ -10,7 +10,7 @@ public class CustomerList
         _customerStatusMap.Add(customer, CustomerStatus.CustomerCallInProgress);
     }
 
-    public Customer? RideRequestedCustomer()
+    public Customer? FindRideRequestedCustomer()
     {
         if (_customerStatusMap.All(x => x.Value != CustomerStatus.CustomerCallInProgress))
         {
@@ -95,5 +95,10 @@ public class CustomerList
     public Dictionary<Customer, CustomerStatus> Export()
     {
         return _customerStatusMap;
+    }
+
+    public void Rebuild(Dictionary<Customer,CustomerStatus> customerDictionary)
+    {
+        _customerStatusMap = customerDictionary;
     }
 }

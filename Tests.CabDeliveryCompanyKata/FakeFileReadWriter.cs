@@ -2,7 +2,7 @@ using Production.EmmaCabCompany;
 
 namespace Tests.CabDeliveryCompanyKata;
 
-public class FakeFileReadWriter(string customerListFilename, string cabListFilename) : IFileWriter, IFileReader
+public class FakeFileReadWriter(string customerListFilename, string cabListFilename) : IFileHandler
 {
     private string[] customerListFileContents = Array.Empty<string>();
     private string[] cabListFileContents = Array.Empty<string>();
@@ -21,6 +21,16 @@ public class FakeFileReadWriter(string customerListFilename, string cabListFilen
         }
 
         throw new IOException($"{filename} does not match {customerListFilename} or {cabListFilename}");
+    }
+
+    public void WriteCabList(string[] cabList)
+    {
+        Write(cabListFilename, cabList);
+    }
+
+    public void WriteCustomerList(string[] exportedCustomers)
+    {
+        Write(customerListFilename, exportedCustomers);
     }
 
     public int CountLines()
@@ -48,5 +58,14 @@ public class FakeFileReadWriter(string customerListFilename, string cabListFilen
         throw new IOException($"{filename} does not match {customerListFilename} or {cabListFilename}");
         
     }
-    
+
+    public string[] ReadCustomerList()
+    {
+        return customerListFileContents;
+    }
+
+    public string[] ReadReadCabList()
+    {
+        return cabListFileContents;
+    }
 }

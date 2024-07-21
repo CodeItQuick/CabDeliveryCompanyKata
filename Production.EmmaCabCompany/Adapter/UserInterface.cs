@@ -3,15 +3,15 @@ using Production.EmmaCabCompany.Service;
 
 namespace Production.EmmaCabCompany;
 
-public class UserInterface(ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader)
+public class UserInterface(
+    ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader,
+    IFileHandler writer)
 {
     public void Run()
     {
         int selection;
         var dispatch = new DispatcherCoordinator();
-        var fileWriter = new FileWriter("customer_list_default.csv", "cab_list_default.csv");
-        var fileReader = new FileReader("customer_list_default.csv", "cab_list_default.csv");
-        var cabService = new CabService(dispatch, fileWriter, fileReader);
+        var cabService = new CabService(dispatch, writer);
         var dispatchController = new DispatchController(cabService);
         do
         {

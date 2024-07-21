@@ -2,5 +2,6 @@ namespace Production.EmmaCabCompany;
 
 public interface IFileWriter
 {
-    public void Write(string filename, string[] fileContents);
+    public void WriteCabList(string[] cabList);
+    public void WriteCustomerList(string[] exportedCustomers);
 }

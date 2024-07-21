@@ -35,12 +35,9 @@ public class DispatcherCoordinator
         {
             throw new SystemException("There are currently no cabs in the fleet.");
         }
-        var customer = _customerList.RideRequestedCustomer();
+        var customer = _customerList.FindRideRequestedCustomer();
         _fleet.RideRequested(customer);
-        if (customer != null && _fleet.LastRideAssigned()?.PassengerName == customer.name)
-        {
-            _customerList.RideRequest();
-        }
+        _customerList.RideRequest();
     }
     
     public CabInfo? FindEnroutePassenger(CustomerStatus customerStatus)
@@ -90,11 +87,6 @@ public class DispatcherCoordinator
         return _fleet.NoCabsInFleet();
     }
 
-    public List<CabInfo?> DroppedOffCustomer()
-    {
-        return [_fleet.LastAssigned()];
-    }
-
     public void CancelPickup()
     {
         _customerList.CancelPickup();
@@ -113,5 +105,20 @@ public class DispatcherCoordinator
     public string[] ExportCabList()
     {
         return _fleet.ExportCabs();
+    }
+
+    public void RebuildCustomerDictionary(Dictionary<Customer,CustomerStatus> customerDictionary)
+    {
+        _customerList.Rebuild(customerDictionary);
+    }
+
+    public void RebuildCabList(List<Cab> cabStoredList)
+    {
+        _fleet.RebuildCabList(cabStoredList);
+    }
+
+    public Customer? RetrieveCustomerInState(CustomerStatus enroute)
+    {
+        return _customerList.FindEnroutePassenger(enroute);
     }
 }

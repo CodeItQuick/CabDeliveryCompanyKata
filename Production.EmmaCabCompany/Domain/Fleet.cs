@@ -2,11 +2,9 @@ namespace Production.EmmaCabCompany;
 
 public class Fleet 
 {
-    private readonly List<Cab> _fleet = new();
+    private List<Cab> _fleet = new();
     private bool _rideRequested;
-    private List<CabInfo?> _lastAssignedCab = new();
-    private List<CabInfo?> _lastRideAssigned = new();
-
+    
     public void AddCab(Cab cab)
     {
         _fleet.Add(cab);
@@ -38,7 +36,6 @@ public class Fleet
             
             _rideRequested = true;
             cab.RequestRideFor(customer);
-            _lastRideAssigned.Add(cab.CabInfo());
         }
         // dispatcher
         if (_rideRequested == false && customer != null)
@@ -73,7 +70,6 @@ public class Fleet
         foreach (var cab in _fleet)
         {
             if (!cab.IsStatus(CabStatus.TransportingCustomer)) continue;
-            _lastAssignedCab.Add(cab.CabInfo());
             cab.DropOffCustomer();
             break;
         }
@@ -87,13 +83,11 @@ public class Fleet
     {
         return _fleet.Any(x => x.ContainsPassenger());
     }
-    public CabInfo? LastAssigned()
-    {
-        return _lastAssignedCab.LastOrDefault();
-    }
     public CabInfo? LastRideAssigned()
     {
-        return _lastRideAssigned.LastOrDefault();
+        return _fleet
+            .LastOrDefault(x => x.IsStatus(CabStatus.CustomerRideRequested))
+            ?.CabInfo();
     }
 
     public string? FindCab(Customer customer)
@@ -116,4 +110,10 @@ public class Fleet
                 $"{x.CabInfo()?.Destination}\n")
             .ToArray();
     }
+
+    public void RebuildCabList(List<Cab> cabStoredList)
+    {
+        _fleet = cabStoredList;
+    }
+
 }

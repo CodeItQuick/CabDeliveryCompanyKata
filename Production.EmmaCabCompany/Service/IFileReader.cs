@@ -2,5 +2,6 @@ namespace Production.EmmaCabCompany;
 
 public interface IFileReader
 {
-    public string[] Read(string filename);
+    public string[] ReadCustomerList();
+    public string[] ReadReadCabList();
 }
