@@ -2,11 +2,11 @@ using Production.EmmaCabCompany;
 
 namespace Tests.CabDeliveryCompanyKata;
 
-public class MockFileReadWriter : IFileWriter, IFileReader
+public class FakeFileReadWriter : IFileWriter, IFileReader
 {
     private string[] fileContents = Array.Empty<string>();
 
-    public void Write(string filename, string[] fileContents)
+    public void Write(string[] fileContents)
     {
         this.fileContents = fileContents;
     }
@@ -21,7 +21,7 @@ public class MockFileReadWriter : IFileWriter, IFileReader
         return fileContents[i];
     }
 
-    public string[] Read(string filename)
+    public string[] Read()
     {
         return fileContents;
     }

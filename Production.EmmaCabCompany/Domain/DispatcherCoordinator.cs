@@ -109,13 +109,4 @@ public class DispatcherCoordinator
     {
         return _customerList.Export();
     }
-
-}
-
-public enum CustomerStatus
-{
-    WaitingPickup,
-    Enroute,
-    Delivered,
-    CustomerCallInProgress
 }

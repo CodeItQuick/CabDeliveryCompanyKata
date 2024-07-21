@@ -2,12 +2,21 @@ using Production.EmmaCabCompany.Domain;
 
 namespace Production.EmmaCabCompany;
 
-public class CabService(DispatcherCoordinator dispatcherCoordinator)
+public class CabService(DispatcherCoordinator dispatcherCoordinator, IFileWriter fileWriter, IFileReader fileReader)
 {
     public string CustomerCabCall(string customerName)
     {
         
         dispatcherCoordinator.CustomerCabCall(customerName);
+        var exportedCustomerList = dispatcherCoordinator.ExportCustomerList();
+        string[] exportedCustomers = exportedCustomerList
+            .Select(x => 
+                $"{x.Key.name}," +
+                $"{x.Key.endLocation}," +
+                $"{x.Key.startLocation}," +
+                $"{x.Value}\n"
+            ).ToArray();
+        fileWriter.Write(exportedCustomers);
         return customerName;
     }
     public void CancelPickup()

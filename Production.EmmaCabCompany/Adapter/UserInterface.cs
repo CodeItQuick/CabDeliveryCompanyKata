@@ -9,7 +9,7 @@ public class UserInterface(ICabCompanyPrinter cabCompanyPrinter, ICabCompanyRead
     {
         int selection;
         var dispatch = new DispatcherCoordinator();
-        var dispatchController = new DispatchController(new CabService(dispatch));
+        var dispatchController = new DispatchController(new CabService(dispatch, new FileWriter("default_save_file.csv"), new FileReader("default_save_file.csv")));
         do
         {
             cabCompanyPrinter.WriteLine("Please choose a selection from the list: ");

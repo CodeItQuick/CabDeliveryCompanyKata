@@ -1,8 +1,8 @@
 namespace Production.EmmaCabCompany;
 
-public class FileReader : IFileReader
+public class FileReader(string filename) : IFileReader
 {
-    public string[] Read(string filename)
+    public string[] Read()
     {
         return File.ReadAllLines(filename);
     }

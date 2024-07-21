@@ -1,8 +1,8 @@
 namespace Production.EmmaCabCompany;
 
-public class FileWriter : IFileWriter
+public class FileWriter(string filename) : IFileWriter
 {
-    public void Write(string filename, string[] fileContents)
+    public void Write(string[] fileContents)
     {
         File.WriteAllLines(filename, fileContents);
     }

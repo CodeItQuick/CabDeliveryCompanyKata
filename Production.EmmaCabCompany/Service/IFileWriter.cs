@@ -1,6 +1,6 @@
 namespace Production.EmmaCabCompany;
 
-public class IFileWriter
+public interface IFileWriter
 {
-    
+    public void Write(string[] fileContents);
 }
