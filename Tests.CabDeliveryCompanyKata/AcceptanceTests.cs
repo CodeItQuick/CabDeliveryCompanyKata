@@ -315,7 +315,7 @@ public class AcceptanceTests
         Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.List());
         Assert.Contains("Evan's Cab dropped off Emma at 1 Destination Lane.", cabCompanyPrinter.List());
     }
-    [Fact(Skip = "Future test")]
+    [Fact]
     public void PersistsAllStateAfterCallForCabDelivery()
     {
         FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
@@ -326,30 +326,37 @@ public class AcceptanceTests
             "3",
             "4",
             "0",
-            "5",
-            "0"
         };
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
             CommandList = commandList
         };
-        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
+        var customerListFilename = $"customer_list_persisted_state.csv";
+        var cabListFilename = $"cab_list_persisted_state.csv";
+        var fakeFileReadWriter = new FakeFileReadWriter(customerListFilename, cabListFilename);
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
             cabCompanyReader, 
-            new FakeFileReadWriter(customerListFilename, cabListFilename));
+            fakeFileReadWriter);
         userInterface.Run();
+        Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.List());
         var userInterfaceSecondRun = new UserInterface(
             cabCompanyPrinter, 
             new FakeCabCompanyReader()
             {
-                CommandList = commandList.Skip(5).ToList()
-            }, new FileHandler(customerListFilename, cabListFilename));
+                CommandList =
+                [
+                    "5",
+                    "0"
+                ]
+            }, 
+            fakeFileReadWriter);
         
         userInterfaceSecondRun.Run();
-        
-        Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.List());
-        Assert.Contains("Evan's Cab dropped off Emma at 1 Destination Lane.", cabCompanyPrinter.List());
+
+        Assert.Contains("Emma,1 Fulton Drive,1 Destination Lane,Delivered", fakeFileReadWriter.Read(customerListFilename));
+        Assert.Contains(
+            "Evan's Cab dropped off Emma at 1 Destination Lane.", 
+            cabCompanyPrinter.List());
     }
 }

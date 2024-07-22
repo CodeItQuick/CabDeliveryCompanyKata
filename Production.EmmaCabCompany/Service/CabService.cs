@@ -29,6 +29,11 @@ public class CabService
             var cabAttributes = cab.Split(",");
             if (cabAttributes.Length < 1 || string.IsNullOrWhiteSpace(cabAttributes[0])) continue;
             var cabValue = new Cab(cabAttributes[0], 20);
+            if (cabAttributes[1] != null && !string.IsNullOrWhiteSpace(cabAttributes[1]))
+            {
+                var customer = new Customer(cabAttributes[1], cabAttributes[2], cabAttributes[3]);
+                cabValue.RequestRideFor(customer);
+            }
             cabStoredList.Add(cabValue);
         }
         dispatcherCoordinator.RebuildCabList(cabStoredList);
@@ -58,6 +63,7 @@ public class CabService
 
             var cabInfo = dispatcherCoordinator.FindEnroutePassenger(CustomerStatus.WaitingPickup);
             
+            ExportPersistence();
             return
             [
                 $"{cabInfo?.CabName} picked up {cabInfo?.PassengerName} at {cabInfo?.StartLocation}.",
@@ -75,15 +81,7 @@ public class CabService
         try
         {
             dispatcherCoordinator.PickupCustomer();
-            var exportedCustomerList = dispatcherCoordinator.ExportCustomerList();
-            string[] exportedCustomers = exportedCustomerList
-                .Select(x => 
-                    $"{x.Key.Name}," +
-                    $"{x.Key.EndLocation}," +
-                    $"{x.Key.StartLocation}," +
-                    $"{x.Value}"
-                ).ToArray();
-            _fileHandler.WriteCustomerList(exportedCustomers);
+            ExportPersistence();
         }
         catch (Exception ex)
         {
@@ -121,6 +119,7 @@ public class CabService
     public void RemoveCab()
     {
         dispatcherCoordinator.RemoveCab();
+        ExportPersistence();
     }
     private void ExportPersistence()
     {

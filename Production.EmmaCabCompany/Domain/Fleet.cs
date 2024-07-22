@@ -107,7 +107,7 @@ public class Fleet
                 $"{x.CabInfo()?.CabName}," +
                 $"{x.CabInfo()?.PassengerName}," +
                 $"{x.CabInfo()?.StartLocation}," +
-                $"{x.CabInfo()?.Destination}\n")
+                $"{x.CabInfo()?.Destination}")
             .ToArray();
     }
 
