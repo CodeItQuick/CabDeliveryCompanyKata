@@ -5,5 +5,6 @@ public enum CustomerStatus
     WaitingPickup,
     Enroute,
     Delivered,
-    CustomerCallInProgress
+    CustomerCallInProgress,
+    CancelledCall
 }

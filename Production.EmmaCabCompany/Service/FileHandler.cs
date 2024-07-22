@@ -2,6 +2,26 @@ namespace Production.EmmaCabCompany;
 
 public class FileHandler(string customerListFilename, string cabListFilename) : IFileHandler
 {
+    public void WriteCabList(string[] cabList)
+    {
+        Write(cabListFilename, cabList);
+    }
+
+    public void WriteCustomerList(string[] exportedCustomers)
+    {
+        Write(customerListFilename, exportedCustomers);
+    }
+
+    public string[] ReadCustomerList()
+    {
+        return Read(customerListFilename);
+    }
+
+    public string[] ReadReadCabList()
+    {
+        return Read(cabListFilename);
+    }
+
     private void Write(string filename, string[] fileContents)
     {
         if (customerListFilename == filename)
@@ -34,7 +54,6 @@ public class FileHandler(string customerListFilename, string cabListFilename) : 
 
     private string[] Read(string filename)
     {
-        // TODO: obvious duplication
         if (filename == customerListFilename || filename == cabListFilename)
         {
             if (File.Exists(filename)) return File.ReadAllLines(filename);
@@ -45,25 +64,5 @@ public class FileHandler(string customerListFilename, string cabListFilename) : 
         }
 
         throw new IOException($"{filename} does not match {customerListFilename} or {cabListFilename}");
-    }
-
-    public void WriteCabList(string[] cabList)
-    {
-        Write(cabListFilename, cabList);
-    }
-
-    public void WriteCustomerList(string[] exportedCustomers)
-    {
-        Write(customerListFilename, exportedCustomers);
-    }
-
-    public string[] ReadCustomerList()
-    {
-        return Read(customerListFilename);
-    }
-
-    public string[] ReadReadCabList()
-    {
-        return Read(cabListFilename);
     }
 }

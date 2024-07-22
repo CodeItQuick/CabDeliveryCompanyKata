@@ -45,7 +45,6 @@ public class FakeFileReadWriter(string customerListFilename, string cabListFilen
 
     public string[] Read(string filename)
     {
-        
         if (filename == customerListFilename)
         {
             return customerListFileContents;

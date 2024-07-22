@@ -83,7 +83,7 @@ public class CustomerList
         }
         var customer = _customerStatusMap.FirstOrDefault(x => 
             x.Value is CustomerStatus.WaitingPickup or CustomerStatus.CustomerCallInProgress).Key;
-        _customerStatusMap.Remove(customer);
+        _customerStatusMap[customer] = CustomerStatus.CancelledCall;
     }
     
     public bool CustomerInState(CustomerStatus customerStatus)

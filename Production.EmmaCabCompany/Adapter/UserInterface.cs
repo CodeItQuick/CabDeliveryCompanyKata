@@ -45,24 +45,16 @@ public class UserInterface(
 
     public static List<string> ExecuteCommand(int selection, DispatchController dispatchController)
     {
-        switch (selection)
+        return selection switch
         {
-            case 1:
-                return [dispatchController.AddCab()];
-            case 2:
-                return [dispatchController.RemoveCab()];
-            case 3:
-                return dispatchController.SendCabRequest();
-            case 4:
-                return [dispatchController.CabNotifiesPickedUp()];
-            case 5:
-                return dispatchController.CabNotifiesDroppedOff();
-            case 6:
-                return dispatchController.CustomerCancelledCabRide();
-            case 7:
-                return [dispatchController.CustomerCabCall()];
-            default:
-                return [];
-        }
+            1 => [dispatchController.AddCab()],
+            2 => [dispatchController.RemoveCab()],
+            3 => dispatchController.SendCabRequest(),
+            4 => [dispatchController.CabNotifiesPickedUp()],
+            5 => dispatchController.CabNotifiesDroppedOff(),
+            6 => dispatchController.CustomerCancelledCabRide(),
+            7 => [dispatchController.CustomerCabCall()],
+            _ => []
+        };
     }
 }

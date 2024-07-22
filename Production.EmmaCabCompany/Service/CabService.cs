@@ -40,21 +40,16 @@ public class CabService
     {
         
         dispatcherCoordinator.CustomerCabCall(customerName);
-        var exportedCustomerList = dispatcherCoordinator.ExportCustomerList();
-        string[] exportedCustomers = exportedCustomerList
-            .Select(x => 
-                $"{x.Key.Name}," +
-                $"{x.Key.EndLocation}," +
-                $"{x.Key.StartLocation}," +
-                $"{x.Value}"
-            ).ToArray();
-        _fileHandler.WriteCustomerList(exportedCustomers);
+        ExportPersistence();
         return customerName;
     }
+
     public void CancelPickup()
     {
         dispatcherCoordinator.CancelPickup();
+        ExportPersistence();
     }
+
     public string[] SendCabRequest()
     {
         try
@@ -74,17 +69,28 @@ public class CabService
             throw new SystemException(ex.Message);
         }
     }
+
     public void PickupCustomer()
     {
         try
         {
             dispatcherCoordinator.PickupCustomer();
+            var exportedCustomerList = dispatcherCoordinator.ExportCustomerList();
+            string[] exportedCustomers = exportedCustomerList
+                .Select(x => 
+                    $"{x.Key.Name}," +
+                    $"{x.Key.EndLocation}," +
+                    $"{x.Key.StartLocation}," +
+                    $"{x.Value}"
+                ).ToArray();
+            _fileHandler.WriteCustomerList(exportedCustomers);
         }
         catch (Exception ex)
         {
             throw new SystemException(ex.Message);
         }
     }
+
     public List<CabInfo?> DropOffCustomer()
     {
         try
@@ -92,6 +98,7 @@ public class CabService
             dispatcherCoordinator.DropOffCustomer();
             var customerInState = dispatcherCoordinator
                 .RetrieveCustomerInState(CustomerStatus.Delivered);
+            ExportPersistence();
             return [new CabInfo()
             {
                 CabName = "Evan's Cab",
@@ -105,15 +112,29 @@ public class CabService
             throw new SystemException(ex.Message);
         }
     }
+
     public void AddCab(Cab cab)
     {
         dispatcherCoordinator.AddCab(cab);
-        string[] cabList = dispatcherCoordinator.ExportCabList();
-        _fileHandler.WriteCabList(cabList);
+        ExportPersistence();
     }
     public void RemoveCab()
     {
         dispatcherCoordinator.RemoveCab();
+    }
+    private void ExportPersistence()
+    {
+        var exportedCustomerList = dispatcherCoordinator.ExportCustomerList();
+        string[] exportedCustomers = exportedCustomerList
+            .Select(x => 
+                $"{x.Key.Name}," +
+                $"{x.Key.StartLocation}," +
+                $"{x.Key.EndLocation}," +
+                $"{x.Value}"
+            ).ToArray();
+        _fileHandler.WriteCustomerList(exportedCustomers);
+        string[] cabList = dispatcherCoordinator.ExportCabList();
+        _fileHandler.WriteCabList(cabList);
     }
 }
 
