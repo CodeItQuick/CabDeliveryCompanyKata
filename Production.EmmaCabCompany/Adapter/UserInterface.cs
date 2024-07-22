@@ -1,5 +1,6 @@
 using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Service;
+using Tests.CabDeliveryCompanyKata;
 
 namespace Production.EmmaCabCompany;
 
@@ -7,11 +8,14 @@ public class UserInterface(
     ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader,
     IFileHandler writer)
 {
+    private MenuController _menuController;
+
     public void Run()
     {
         int selection;
         var dispatch = new DispatcherCoordinator();
         var cabService = new CabService(dispatch, writer);
+        _menuController = new MenuController(new MenuService(dispatch));
         var dispatchController = new DispatchController(cabService);
         do
         {
@@ -30,17 +34,10 @@ public class UserInterface(
         } while (selection != 0);
     }
 
-    private static void WriteMenu()
+    private void WriteMenu()
     {
-        Console.WriteLine("Please choose a selection from the list: ");
-        Console.WriteLine("0. Exit");
-        Console.WriteLine("1. (Incoming Radio) Add New Cab Driver");
-        Console.WriteLine("2. (Incoming Radio) Remove Cab Driver"); 
-        Console.WriteLine("3. (Outgoing Radio) Send Cab Driver Ride Request");
-        Console.WriteLine("4. (Incoming Radio) Cab Notifies Passenger Picked Up");
-        Console.WriteLine("5. (Incoming Radio) Cab Notifies Passenger Dropped Off");
-        Console.WriteLine("6. (Incoming Call) Cancel Cab Driver Fare");
-        Console.WriteLine("7. (Incoming Call) Customer Request Ride");
+        var menu = _menuController.DisplayMenu();
+        menu.ForEach(Console.WriteLine);
     }
 
     public static List<string> ExecuteCommand(int selection, DispatchController dispatchController)
