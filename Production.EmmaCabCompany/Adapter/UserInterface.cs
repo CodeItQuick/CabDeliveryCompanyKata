@@ -35,7 +35,7 @@ public class UserInterface(
         Console.WriteLine("Please choose a selection from the list: ");
         Console.WriteLine("0. Exit");
         Console.WriteLine("1. (Incoming Radio) Add New Cab Driver");
-        Console.WriteLine("2. (Incoming Radio) Remove Cab Driver"); // TODO: weird tricks here could cause bugs
+        Console.WriteLine("2. (Incoming Radio) Remove Cab Driver"); 
         Console.WriteLine("3. (Outgoing Radio) Send Cab Driver Ride Request");
         Console.WriteLine("4. (Incoming Radio) Cab Notifies Passenger Picked Up");
         Console.WriteLine("5. (Incoming Radio) Cab Notifies Passenger Dropped Off");

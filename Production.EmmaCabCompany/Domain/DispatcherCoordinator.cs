@@ -121,4 +121,24 @@ public class DispatcherCoordinator
     {
         return _customerList.FindEnroutePassenger(enroute);
     }
+
+    public List<int> MenuState()
+    {
+        var menuState = new List<int>();
+        if (!_fleet.NoCabsInFleet() && _customerList.CustomerInState(CustomerStatus.CustomerCallInProgress))
+        {
+            menuState.Add(3);
+            menuState.Add(6);
+        }
+        if (!_fleet.NoCabsInFleet() && _customerList.CustomerInState(CustomerStatus.WaitingPickup))
+        {
+            menuState.Add(4);
+        }
+        if (!_fleet.NoCabsInFleet() && _customerList.CustomerInState(CustomerStatus.Enroute))
+        {
+            menuState.Add(5);
+        }
+
+        return menuState;
+    }
 }
