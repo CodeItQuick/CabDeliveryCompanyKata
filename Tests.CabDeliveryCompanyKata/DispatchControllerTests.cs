@@ -58,7 +58,7 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
             new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
-            ), new MenuService(new DispatcherCoordinator()));
+            ), new MenuService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
         dispatchController.SendCabRequest();
@@ -138,11 +138,11 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
             new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
-            ), new MenuService(new DispatcherCoordinator()));
+            ), new MenuService(radioFleet));
         
         var customerCabCall = dispatchController.CustomerCancelledCabRide();
         
-        Assert.Equal("No customers are waiting for pickup. Cannot cancel cab.", customerCabCall.First());
+        Assert.Equal("This is not a valid option.", customerCabCall.First());
     }
     [Fact]
     public void CanCancelPickup()
@@ -151,7 +151,7 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
             new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
-            ), new MenuService(new DispatcherCoordinator()));
+            ), new MenuService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
         
@@ -166,14 +166,14 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
             new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
-            ), new MenuService(new DispatcherCoordinator()));
+            ), new MenuService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
         dispatchController.SendCabRequest();
         
         var customerCabCall = dispatchController.CustomerCancelledCabRide();
         
-        Assert.Equal("Customer cancelled cab ride successfully.", customerCabCall.First());
+        Assert.Equal("This is not a valid option.", customerCabCall.First());
     }
     [Fact]
     public void CabCanDriveToCustomerAfterCabRequest()
@@ -182,7 +182,7 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
             new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
-            ), new MenuService(new DispatcherCoordinator()));
+            ), new MenuService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
 
@@ -198,12 +198,12 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
             new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
-            ), new MenuService(new DispatcherCoordinator()));
+            ), new MenuService(radioFleet));
         dispatchController.AddCab();
 
         var sendCabRequest = dispatchController.SendCabRequest();
 
-        Assert.Equal("There are currently no customer's waiting for cabs.", sendCabRequest.First());
+        Assert.Equal("This is not a valid option.", sendCabRequest.First());
     }
     [Fact]
     public void CannotSendCabRequestUntilCabsAreInFleet()
@@ -212,11 +212,11 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
             new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
-            ), new MenuService(new DispatcherCoordinator()));
+            ), new MenuService(radioFleet));
 
         var sendCabRequest = dispatchController.SendCabRequest();
 
-        Assert.Equal("There are currently no cabs in the fleet.", sendCabRequest.First());
+        Assert.Equal("This is not a valid option.", sendCabRequest.First());
     }
     [Fact]
     public void CabCanPickupCustomer()
@@ -225,7 +225,7 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
             new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
-            ), new MenuService(new DispatcherCoordinator()));
+            ), new MenuService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
         dispatchController.SendCabRequest();
@@ -241,11 +241,11 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
             new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
-            ), new MenuService(new DispatcherCoordinator()));
+            ), new MenuService(radioFleet));
 
         var sendCabRequest = dispatchController.CabNotifiesPickedUp();
 
-        Assert.Equal("There are currently no cabs in the fleet.", sendCabRequest);
+        Assert.Equal("This is not a valid option.", sendCabRequest);
     }
     [Fact]
     public void CabCannotPickupCustomerIfCustomerNotWaitingPickup()
@@ -254,13 +254,13 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, 
             new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv")
-            ), new MenuService(new DispatcherCoordinator()));
+            ), new MenuService(radioFleet));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall();
 
         var sendCabRequest = dispatchController.CabNotifiesPickedUp();
 
-        Assert.Equal("There are currently no customer's assigned to cabs.", sendCabRequest);
+        Assert.Equal("This is not a valid option.", sendCabRequest);
     }
     [Fact]
     public void CabCanDropOffCustomer()

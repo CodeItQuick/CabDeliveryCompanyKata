@@ -55,6 +55,10 @@ public class DispatchController
     {
         try
         {
+            if (!_menuService.IsValidMenuOption(6))
+            {
+                throw new SystemException("This is not a valid option.");
+            }
             cabService.CancelPickup();
             return ["Customer cancelled cab ride successfully."];
         }
@@ -67,6 +71,10 @@ public class DispatchController
     {
         try
         {
+            if (!_menuService.IsValidMenuOption(3))
+            {
+                throw new SystemException("This is not a valid option.");
+            }
             var response = cabService.SendCabRequest();
             return response.ToList();
         }
@@ -79,6 +87,10 @@ public class DispatchController
     {
         try
         {
+            if (!_menuService.IsValidMenuOption(4))
+            {
+                throw new SystemException("This is not a valid option.");
+            }
             cabService.PickupCustomer();
             return "Notified dispatcher of pickup";
         }

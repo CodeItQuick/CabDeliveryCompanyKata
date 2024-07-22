@@ -51,7 +51,7 @@ public class AcceptanceTests
             cabCompanyReader, new FileHandler(customerListFilename, cabListFilename));
         userInterface.Run();
         
-        Assert.Contains("There are currently no customer's waiting for cabs.", cabCompanyPrinter.List());
+        Assert.Contains("This is not a valid option.", cabCompanyPrinter.List());
     }
     [Fact]
     public void TheCabCompanyReportsFailureIfCannotDropOffCustomerDueToNoCustomerRequests()
@@ -74,7 +74,7 @@ public class AcceptanceTests
             new FileHandler(customerListFilename, cabListFilename));
         userInterface.Run();
         
-        Assert.Contains("There are currently no customer's assigned to cabs.", cabCompanyPrinter.List());
+        Assert.Contains("This is not a valid option.", cabCompanyPrinter.List());
     }
     [Fact]
     public void CannotRemoveCabOnceCustomerPickedUp()
@@ -121,7 +121,7 @@ public class AcceptanceTests
             cabCompanyReader, new FileHandler(customerListFilename, cabListFilename));
         userInterface.Run();
         
-        Assert.Contains("There are currently no cabs in the fleet.", cabCompanyPrinter.List());
+        Assert.Contains("This is not a valid option.", cabCompanyPrinter.List());
     }
     [Fact]
     public void TheCabCompanyReportsFailureIfCannotDropoffCustomerDueToNoRequestedCabs()
@@ -144,7 +144,7 @@ public class AcceptanceTests
             new FileHandler(customerListFilename, cabListFilename));
         userInterface.Run();
         
-        Assert.Contains("There are currently no customer's assigned to cabs.", cabCompanyPrinter.List());
+        Assert.Contains("This is not a valid option.", cabCompanyPrinter.List());
     }
     [Fact]
     public void TheCabCompanyReportsFailureIfNoCabsAvailable()
@@ -166,7 +166,7 @@ public class AcceptanceTests
             cabCompanyReader, new FileHandler(customerListFilename, cabListFilename));
         userInterface.Run();
         
-        Assert.Contains("There are currently no cabs in the fleet.", cabCompanyPrinter.List());
+        Assert.Contains("This is not a valid option.", cabCompanyPrinter.List());
     }
     [Fact]
     public void TheCabCompanyCanPickupTwoCustomerAtAnAddress()
@@ -284,7 +284,7 @@ public class AcceptanceTests
             cabCompanyReader, new FileHandler(customerListFilename, cabListFilename));
         userInterface.Run();
         
-        Assert.Contains("No customers are waiting for pickup. Cannot cancel cab.", 
+        Assert.Contains("This is not a valid option.", 
             cabCompanyPrinter.List());
     }
     [Fact]
