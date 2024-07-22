@@ -40,7 +40,7 @@ public class UserInterface(
         menu.ForEach(Console.WriteLine);
     }
 
-    public static List<string> ExecuteCommand(int selection, DispatchController dispatchController)
+    private static List<string> ExecuteCommand(int selection, DispatchController dispatchController)
     {
         return selection switch
         {
