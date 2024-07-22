@@ -90,4 +90,26 @@ public class MenuServiceTests
         
         Assert.Equivalent(new List<int>{ 0, 1, 2, 3, 4, 5, 6, 7 }, displayMenu);
     }
+    [Fact]
+    public void KnowsIfOptionIsInvalid()
+    {
+        var dispatcherCoordinator = new DispatcherCoordinator();
+        var menuController = new MenuService(dispatcherCoordinator);
+
+        var displayMenu = menuController.IsValidMenuOption(3);
+        
+        Assert.False(displayMenu);
+    }
+    [Fact]
+    public void KnowsIfOptionIsValid()
+    {
+        var dispatcherCoordinator = new DispatcherCoordinator();
+        dispatcherCoordinator.AddCab(new Cab("Evan", 20));
+        dispatcherCoordinator.CustomerCabCall("Emma");
+        var menuController = new MenuService(dispatcherCoordinator);
+
+        var displayMenu = menuController.IsValidMenuOption(3);
+        
+        Assert.True(displayMenu);
+    }
 }
