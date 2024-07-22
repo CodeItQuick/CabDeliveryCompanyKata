@@ -271,11 +271,11 @@ public class AcceptanceTests
         FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
-            CommandList = new List<string>()
-            {
+            CommandList =
+            [
                 "6",
                 "0"
-            }
+            ]
         };
         var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
         var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";

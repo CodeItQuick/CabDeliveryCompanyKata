@@ -1,8 +1,19 @@
+using Tests.CabDeliveryCompanyKata;
+
 namespace Production.EmmaCabCompany.Service;
 
-public class DispatchController(CabService cabService)
+public class DispatchController
 {
     private int _currentNameIdx = 0;
+    private MenuService _menuService;
+    private readonly CabService cabService;
+    public DispatchController(CabService cabService, MenuService menuService)
+    {
+        _menuService = menuService;
+        this.cabService = cabService;
+    }
+
+
     public string AddCab()
     {
         var cabName = "Evan's Cab";
@@ -80,6 +91,10 @@ public class DispatchController(CabService cabService)
     {
         try
         {
+            if (!_menuService.IsValidMenuOption(5))
+            {
+                throw new SystemException("This is not a valid option.");
+            }
             var droppedOff = cabService.DropOffCustomer();
             return [$"{droppedOff[0]?.CabName} dropped off {droppedOff[0]?.PassengerName} at {droppedOff[0]?.Destination}."];
         }

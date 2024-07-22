@@ -16,7 +16,7 @@ public class UserInterface(
         var dispatch = new DispatcherCoordinator();
         var cabService = new CabService(dispatch, writer);
         _menuController = new MenuController(new MenuService(dispatch));
-        var dispatchController = new DispatchController(cabService);
+        var dispatchController = new DispatchController(cabService, new MenuService(dispatch));
         do
         {
             WriteMenu();
