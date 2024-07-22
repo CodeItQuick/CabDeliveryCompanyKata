@@ -1,10 +1,10 @@
 using Production.EmmaCabCompany.Domain;
 
-namespace Production.EmmaCabCompany;
+namespace Production.EmmaCabCompany.Service;
 
 public class CabService
 {
-    private readonly DispatcherCoordinator dispatcherCoordinator;
+    private readonly DispatcherCoordinator _dispatcherCoordinator;
     private readonly IFileHandler _fileHandler;
 
     public CabService(DispatcherCoordinator dispatcherCoordinator, IFileHandler fileHandler)
@@ -22,14 +22,16 @@ public class CabService
         }
         dispatcherCoordinator.RebuildCustomerDictionary(customerDictionary);
         var cabList = fileHandler.ReadReadCabList();
-        var cabListStrings = cabList.Select(x => x).ToList();
+        var cabListStrings = cabList
+            .Select(x => x)
+            .ToList();
         List<Cab> cabStoredList = new List<Cab>();
         foreach (var cab in cabListStrings)
         {
             var cabAttributes = cab.Split(",");
             if (cabAttributes.Length < 1 || string.IsNullOrWhiteSpace(cabAttributes[0])) continue;
             var cabValue = new Cab(cabAttributes[0], 20);
-            if (cabAttributes[1] != null && !string.IsNullOrWhiteSpace(cabAttributes[1]))
+            if (!string.IsNullOrWhiteSpace(cabAttributes[1]))
             {
                 var customer = new Customer(cabAttributes[1], cabAttributes[2], cabAttributes[3]);
                 cabValue.RequestRideFor(customer);
@@ -37,21 +39,21 @@ public class CabService
             cabStoredList.Add(cabValue);
         }
         dispatcherCoordinator.RebuildCabList(cabStoredList);
-        this.dispatcherCoordinator = dispatcherCoordinator;
+        this._dispatcherCoordinator = dispatcherCoordinator;
         _fileHandler = fileHandler;
     }
 
     public string CustomerCabCall(string customerName)
     {
         
-        dispatcherCoordinator.CustomerCabCall(customerName);
+        _dispatcherCoordinator.CustomerCabCall(customerName);
         ExportPersistence();
         return customerName;
     }
 
     public void CancelPickup()
     {
-        dispatcherCoordinator.CancelPickup();
+        _dispatcherCoordinator.CancelPickup();
         ExportPersistence();
     }
 
@@ -59,9 +61,9 @@ public class CabService
     {
         try
         {
-            dispatcherCoordinator.RideRequest();
+            _dispatcherCoordinator.RideRequest();
 
-            var cabInfo = dispatcherCoordinator.FindEnroutePassenger(CustomerStatus.WaitingPickup);
+            var cabInfo = _dispatcherCoordinator.FindEnroutePassenger(CustomerStatus.WaitingPickup);
             
             ExportPersistence();
             return
@@ -80,7 +82,7 @@ public class CabService
     {
         try
         {
-            dispatcherCoordinator.PickupCustomer();
+            _dispatcherCoordinator.PickupCustomer();
             ExportPersistence();
         }
         catch (Exception ex)
@@ -93,16 +95,16 @@ public class CabService
     {
         try
         {
-            dispatcherCoordinator.DropOffCustomer();
-            var customerInState = dispatcherCoordinator
+            _dispatcherCoordinator.DropOffCustomer();
+            var customerInState = _dispatcherCoordinator
                 .RetrieveCustomerInState(CustomerStatus.Delivered);
             ExportPersistence();
             return [new CabInfo()
             {
                 CabName = "Evan's Cab",
-                StartLocation = customerInState.StartLocation,
-                Destination = customerInState.EndLocation,
-                PassengerName = customerInState.Name
+                StartLocation = customerInState?.StartLocation,
+                Destination = customerInState?.EndLocation,
+                PassengerName = customerInState?.Name
             }];
         }
         catch (Exception ex)
@@ -113,17 +115,17 @@ public class CabService
 
     public void AddCab(Cab cab)
     {
-        dispatcherCoordinator.AddCab(cab);
+        _dispatcherCoordinator.AddCab(cab);
         ExportPersistence();
     }
     public void RemoveCab()
     {
-        dispatcherCoordinator.RemoveCab();
+        _dispatcherCoordinator.RemoveCab();
         ExportPersistence();
     }
     private void ExportPersistence()
     {
-        var exportedCustomerList = dispatcherCoordinator.ExportCustomerList();
+        var exportedCustomerList = _dispatcherCoordinator.ExportCustomerList();
         string[] exportedCustomers = exportedCustomerList
             .Select(x => 
                 $"{x.Key.Name}," +
@@ -132,7 +134,7 @@ public class CabService
                 $"{x.Value}"
             ).ToArray();
         _fileHandler.WriteCustomerList(exportedCustomers);
-        string[] cabList = dispatcherCoordinator.ExportCabList();
+        string[] cabList = _dispatcherCoordinator.ExportCabList();
         _fileHandler.WriteCabList(cabList);
     }
 }

@@ -1,4 +1,4 @@
-using Production.EmmaCabCompany;
+using Production.EmmaCabCompany.Service;
 
 namespace Tests.CabDeliveryCompanyKata;
 
