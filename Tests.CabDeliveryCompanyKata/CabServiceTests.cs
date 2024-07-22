@@ -66,7 +66,8 @@ public class CabServiceTests
     [Fact]
     public void CanConstructPreviousStateAndAddAdditionalCab()
     {
-        var fakeFileReadWriter = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var fakeFileReadWriter = new FakeFileReadWriter(
+            "customer_list_default.csv", "cab_list_default.csv");
         fakeFileReadWriter.Write("customer_list_default.csv",
             ["Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress"]);
         fakeFileReadWriter.Write("cab_list_default.csv", ["Evan,,,"]);

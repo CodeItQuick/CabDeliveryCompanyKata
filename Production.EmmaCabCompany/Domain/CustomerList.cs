@@ -97,8 +97,23 @@ public class CustomerList
         return _customerStatusMap;
     }
 
-    public void Rebuild(Dictionary<Customer,CustomerStatus> customerDictionary)
+    public void Rebuild(Dictionary<Customer, CustomerStatus> customerDictionary)
     {
         _customerStatusMap = customerDictionary;
+    }
+
+    public static Dictionary<Customer, CustomerStatus> CreateCustomerState(string[] customerList)
+    {
+        Dictionary<Customer, CustomerStatus> customerDictionary = new Dictionary<Customer, CustomerStatus>();
+        foreach (var customer in customerList)
+        {
+            var customerAttribs = customer.Split(",");
+            if (customerAttribs.Length <= 2) continue;
+            var customerKey = new Customer(customerAttribs[0], customerAttribs[1], customerAttribs[2]);
+            var customerStatus = Enum.Parse<CustomerStatus>(customerAttribs[3], true);
+            customerDictionary.Add(customerKey, customerStatus);
+        }
+
+        return customerDictionary;
     }
 }

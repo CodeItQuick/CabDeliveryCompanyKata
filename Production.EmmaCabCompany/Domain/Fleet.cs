@@ -1,4 +1,4 @@
-namespace Production.EmmaCabCompany;
+namespace Production.EmmaCabCompany.Domain;
 
 public class Fleet 
 {
@@ -116,4 +116,25 @@ public class Fleet
         _fleet = cabStoredList;
     }
 
+    public static List<Cab> CreateCabState(string[] cabList)
+    {
+        var cabListStrings = cabList
+            .Select(x => x)
+            .ToList();
+        List<Cab> cabStoredList = new List<Cab>();
+        foreach (var cab in cabListStrings)
+        {
+            var cabAttributes = cab.Split(",");
+            if (cabAttributes.Length < 1 || string.IsNullOrWhiteSpace(cabAttributes[0])) continue;
+            var cabValue = new Cab(cabAttributes[0], 20);
+            if (!string.IsNullOrWhiteSpace(cabAttributes[1]))
+            {
+                var customer = new Customer(cabAttributes[1], cabAttributes[2], cabAttributes[3]);
+                cabValue.RequestRideFor(customer);
+            }
+            cabStoredList.Add(cabValue);
+        }
+
+        return cabStoredList;
+    }
 }

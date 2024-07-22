@@ -5,7 +5,7 @@
 2. ~~Fix Command/Query Separation~~
 3. ~~Add More testing around the DispatchController~~
 4. Get the Aggregates Out (fix the object oriented code to figure out the aggregates)
-5. Limit Menu
+5. ~~Limit Menu~~
 6. ~~Figure out Customer Aggregate~~
 7. Add More Features - Cab company records customer name on call-in
 8. ~~Add More Features - State persists through file saving/loading (in-progress)~~

@@ -1,3 +1,4 @@
+using Production.EmmaCabCompany.Adapter;
 using Production.EmmaCabCompany.Domain;
 
 namespace Production.EmmaCabCompany.Service;
@@ -9,37 +10,13 @@ public class CabService
 
     public CabService(DispatcherCoordinator dispatcherCoordinator, IFileHandler fileHandler)
     {
-        var customerList = fileHandler.ReadCustomerList();
-        var customerListStrings = customerList.Select(x => x);
-        Dictionary<Customer, CustomerStatus> customerDictionary = new Dictionary<Customer, CustomerStatus>();
-        foreach (var customer in customerListStrings)
-        {
-            var customerAttribs = customer.Split(",");
-            if (customerAttribs.Length <= 2) continue;
-            var customerKey = new Customer(customerAttribs[0], customerAttribs[1], customerAttribs[2]);
-            var customerStatus = Enum.Parse<CustomerStatus>(customerAttribs[3], true);
-            customerDictionary.Add(customerKey, customerStatus);
-        }
-        dispatcherCoordinator.RebuildCustomerDictionary(customerDictionary);
-        var cabList = fileHandler.ReadReadCabList();
-        var cabListStrings = cabList
-            .Select(x => x)
-            .ToList();
-        List<Cab> cabStoredList = new List<Cab>();
-        foreach (var cab in cabListStrings)
-        {
-            var cabAttributes = cab.Split(",");
-            if (cabAttributes.Length < 1 || string.IsNullOrWhiteSpace(cabAttributes[0])) continue;
-            var cabValue = new Cab(cabAttributes[0], 20);
-            if (!string.IsNullOrWhiteSpace(cabAttributes[1]))
-            {
-                var customer = new Customer(cabAttributes[1], cabAttributes[2], cabAttributes[3]);
-                cabValue.RequestRideFor(customer);
-            }
-            cabStoredList.Add(cabValue);
-        }
-        dispatcherCoordinator.RebuildCabList(cabStoredList);
-        this._dispatcherCoordinator = dispatcherCoordinator;
+        var customerDirectory = CabFileRepository.LoadedCustomerDirectory(fileHandler);
+        dispatcherCoordinator.RebuildCustomerDictionary(customerDirectory);
+        
+        var loadedFleetState = CabFileRepository.LoadedFleetState(fileHandler);
+        dispatcherCoordinator.RebuildCabList(loadedFleetState);
+        
+        _dispatcherCoordinator = dispatcherCoordinator;
         _fileHandler = fileHandler;
     }
 
@@ -137,8 +114,4 @@ public class CabService
         string[] cabList = _dispatcherCoordinator.ExportCabList();
         _fileHandler.WriteCabList(cabList);
     }
-}
-
-public interface IFileHandler : IFileReader, IFileWriter
-{
 }
