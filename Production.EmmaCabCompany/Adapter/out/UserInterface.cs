@@ -1,8 +1,9 @@
+using Production.EmmaCabCompany.Adapter.@in;
 using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Service;
 using Tests.CabDeliveryCompanyKata;
 
-namespace Production.EmmaCabCompany;
+namespace Production.EmmaCabCompany.Adapter.@out;
 
 public class UserInterface(
     ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader,

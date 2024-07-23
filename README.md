@@ -14,7 +14,8 @@
     ~~8c. Create Service Layer~~
     ~~8d. Persist state to file system~~
 8. Add More Features - Cab's have some concept of general location
-
+9. Repository needs to be injected into CabService
+10. Export in CabService is a private method and doesn't belong there
 ## Story
 A cab company currently operates with "old school" technology. The cab company wants to upgrade their technology offering
 to include a software solution that helps them pickup customers from one location and drop them off at another location.

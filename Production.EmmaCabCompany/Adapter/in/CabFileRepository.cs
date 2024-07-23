@@ -1,7 +1,6 @@
 using Production.EmmaCabCompany.Domain;
-using Production.EmmaCabCompany.Service;
 
-namespace Production.EmmaCabCompany.Adapter;
+namespace Production.EmmaCabCompany.Adapter.@in;
 
 public class CabFileRepository(IFileHandler fileHandler)
 {

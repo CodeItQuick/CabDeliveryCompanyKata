@@ -1,6 +1,7 @@
+using Production.EmmaCabCompany.Service;
 using Tests.CabDeliveryCompanyKata;
 
-namespace Production.EmmaCabCompany.Service;
+namespace Production.EmmaCabCompany.Adapter.@out;
 
 public class DispatchController
 {

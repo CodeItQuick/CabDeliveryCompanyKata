@@ -1,4 +1,6 @@
-namespace Tests.CabDeliveryCompanyKata;
+using Tests.CabDeliveryCompanyKata;
+
+namespace Production.EmmaCabCompany.Adapter.@out;
 
 public class MenuController
 {

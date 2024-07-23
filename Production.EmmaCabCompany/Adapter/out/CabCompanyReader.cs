@@ -1,4 +1,4 @@
-namespace Production.EmmaCabCompany;
+namespace Production.EmmaCabCompany.Adapter.@out;
 
 public class CabCompanyReader : ICabCompanyReader
 {
