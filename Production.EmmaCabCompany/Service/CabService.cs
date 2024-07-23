@@ -8,16 +8,17 @@ public class CabService
     private readonly DispatcherCoordinator _dispatcherCoordinator;
     private readonly IFileHandler _fileHandler;
 
-    public CabService(DispatcherCoordinator dispatcherCoordinator, IFileHandler fileHandler)
+    public CabService(DispatcherCoordinator dispatcherCoordinator, IFileHandler handler)
     {
-        var customerDirectory = CabFileRepository.LoadedCustomerDirectory(fileHandler);
+        var cabFileRepository = new CabFileRepository(handler);
+        var customerDirectory = cabFileRepository.LoadedCustomerDirectory();
         dispatcherCoordinator.RebuildCustomerDictionary(customerDirectory);
         
-        var loadedFleetState = CabFileRepository.LoadedFleetState(fileHandler);
+        var loadedFleetState = cabFileRepository.LoadedFleetState();
         dispatcherCoordinator.RebuildCabList(loadedFleetState);
         
         _dispatcherCoordinator = dispatcherCoordinator;
-        _fileHandler = fileHandler;
+        _fileHandler = handler;
     }
 
     public string CustomerCabCall(string customerName)

@@ -3,16 +3,16 @@ using Production.EmmaCabCompany.Service;
 
 namespace Production.EmmaCabCompany.Adapter;
 
-public class CabFileRepository
+public class CabFileRepository(IFileHandler fileHandler)
 {
-    public static Dictionary<Customer, CustomerStatus> LoadedCustomerDirectory(IFileHandler fileHandler)
+    public Dictionary<Customer, CustomerStatus> LoadedCustomerDirectory()
     {
         var customerList = fileHandler.ReadCustomerList();
         var customerDirectory = CustomerList.CreateCustomerState(customerList);
         return customerDirectory;
     }
 
-    public static List<Cab> LoadedFleetState(IFileHandler fileHandler)
+    public List<Cab> LoadedFleetState()
     {
         var cabList = fileHandler.ReadReadCabList();
         var loadedFleetState = Fleet.CreateCabState(cabList);

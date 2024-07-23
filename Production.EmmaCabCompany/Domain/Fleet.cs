@@ -50,15 +50,8 @@ public class Fleet
         {
             throw new SystemException("Cannot drop off customers as there are no cabs in the fleet");
         }
-        foreach (var cab in _fleet)
-        {
-            if (!cab.IsEnrouteFor(customer))
-            {
-                continue;
-            }
-            cab.PickupAssignedCustomer(customer);
-            break;
-        }
+        var enrouteCab = _fleet?.FirstOrDefault(x => x.IsEnrouteFor(customer));
+        enrouteCab?.PickupAssignedCustomer(customer);
     }
     
     public void DropOffCustomer()
@@ -67,12 +60,9 @@ public class Fleet
         {
             throw new SystemException("Cannot drop off customers as there are no cabs in the fleet");
         }
-        foreach (var cab in _fleet)
-        {
-            if (!cab.IsStatus(CabStatus.TransportingCustomer)) continue;
-            cab.DropOffCustomer();
-            break;
-        }
+
+        var enrouteCab = _fleet.FirstOrDefault(x => x.IsStatus(CabStatus.TransportingCustomer));
+        enrouteCab?.DropOffCustomer();
     }
 
     public bool NoCabsInFleet()
