@@ -29,4 +29,9 @@ public class Customer
     {
         _currentCab = null;
     }
+
+    public (double, double) PickupLocation()
+    {
+        return (46.5556, 63.1311);
+    }
 }

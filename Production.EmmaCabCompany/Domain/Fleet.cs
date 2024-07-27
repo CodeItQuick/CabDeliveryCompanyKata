@@ -20,30 +20,45 @@ public class Fleet
     {
         return _fleet.Any(x => x.CabInfo()?.PassengerName == customer.Name);
     }
-    public void RideRequested(Customer? customer)
+    public void RideRequested(Customer customer)
     {
-        // query to fleet from dispatcher
-        if (!_fleet.Any())
-        {
-            throw new SystemException("There are currently no cabs in the fleet");
-        }
-        _rideRequested = false;
-        foreach (var cab in _fleet)
-        {
-            if (_rideRequested) continue;
-
-            if (!cab.IsStatus(CabStatus.Available)) continue;
-            
-            _rideRequested = true;
-            cab.RequestRideFor(customer);
-        }
-        // dispatcher
-        if (_rideRequested == false && customer != null)
+        var availableCabList = _fleet
+            .Where(x => x.IsStatus(CabStatus.Available))
+            .ToList();
+        if (availableCabList.Count == 0)
         {
             throw new SystemException($"Dispatch failed to pickup {customer.Name} as there are no available cabs.");
         }
+        Cab? assignedCab = null;
+        foreach (var cab in availableCabList)
+        {
+            if (assignedCab != null)
+            {
+                if (cab.IsCloserThan(assignedCab, customer))
+                {
+                    assignedCab = cab;
+                }
+
+                continue;
+            }
+            
+            assignedCab = cab;
+        }
+        assignedCab?.RequestRideFor(customer);
     }
-    
+
+    private static double CalculateDistanceBetweenTwoPoints((double?, double?) firstLocation, (double, double) secondLocation)
+    {
+        var formulaOne =
+            Math.Sqrt(Math.Pow(firstLocation.Item1 ?? 0 - secondLocation.Item1, 2.0) +
+                      Math.Pow(firstLocation.Item2 ?? 0 - secondLocation.Item2, 2.0));
+        var formulaTwo =
+            Math.Sqrt(Math.Pow(firstLocation.Item1 - secondLocation.Item1 ?? 0, 2.0) +
+                      Math.Pow(firstLocation.Item2 - secondLocation.Item2 ?? 0, 2.0));
+        return formulaOne < formulaTwo ? formulaOne : formulaTwo;
+     
+    }
+
     public void PickupCustomer(Customer customer)
     {
         if (_fleet.Count == 0)

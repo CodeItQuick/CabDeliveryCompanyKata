@@ -261,7 +261,7 @@ public class AcceptanceTests
                 "7",
                 "Emma",
                 "1 Fulton Drive",
-            "1 Destination Lane",
+                "1 Destination Lane",
                 "7",
                 "Lisa",
                 "1 Fulton Drive",

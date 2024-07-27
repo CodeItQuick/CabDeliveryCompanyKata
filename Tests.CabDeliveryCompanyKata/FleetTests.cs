@@ -62,12 +62,53 @@ public class FleetTests
 
         fleet.RideRequested(customerTwo);
         
-        Assert.Equivalent(new CabInfo()
-        {
-            PassengerName = "Emma",
-            CabName = "Lisa's Cab",
-            Destination = "3 Destination Lane",
-            StartLocation = "2 Fulton Drive"
-        }, fleet.LastRideAssigned());
+        Assert.Equal("Dan's Cab", fleet.FindCab(customer));
+        Assert.Equal("Lisa's Cab", fleet.FindCab(customerTwo));
+    }
+
+    [Fact]
+    public void FleetCanDecideWhichCabToSendByLatitude()
+    {
+        var fleet = new Fleet();
+        var cab = new Cab("Evan's Cab", 20, 46.2382, 63.1311);
+        var cabTwo = new Cab("Dan's Cab", 20, 46.5555, 63.1311);
+        fleet.AddCab(cab);
+        fleet.AddCab(cabTwo);
+        // Customer Location GPS: 46.5556, 63.1311
+        var customer = new Customer("Evan", "1 Fulton Drive", "2 Destination Lane");
+        
+        fleet.RideRequested(customer);
+
+        Assert.Equal("Dan's Cab", fleet.FindCab(customer));
+    }
+    [Fact]
+    public void FleetCanDecideWhichCabToSendByLongitude()
+    {
+        var fleet = new Fleet();
+        var cab = new Cab("Evan's Cab", 20, 46.5556, 63.1333);
+        var cabTwo = new Cab("Dan's Cab", 20, 46.5556, 63.1312);
+        fleet.AddCab(cab);
+        fleet.AddCab(cabTwo);
+        // Customer Location GPS: 46.5556, 63.1311
+        var customer = new Customer("Evan", "1 Fulton Drive", "2 Destination Lane");
+        
+        fleet.RideRequested(customer);
+
+        Assert.Equal("Dan's Cab", fleet.FindCab(customer));
+    }
+    [Fact]
+    public void FleetCanDecideWhichCabToSendByLongitudeAndLatitude()
+    {
+        var fleet = new Fleet();
+        var cab = new Cab("Evan's Cab", 20, 46.5554, 63.1310);
+        var cabTwo = new Cab("Dan's Cab", 20, 46.7556, 63.7312);
+        fleet.AddCab(cab);
+        fleet.AddCab(cabTwo);
+        // Customer Location GPS: 46.5556, 63.1311
+        var customer = new Customer("Evan", "1 Fulton Drive", "2 Destination Lane");
+        
+        fleet.RideRequested(customer);
+
+        Assert.Equal("Evan's Cab", fleet.FindCab(customer));
     }
 }

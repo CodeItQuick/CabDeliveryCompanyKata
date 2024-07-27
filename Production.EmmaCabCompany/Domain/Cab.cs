@@ -85,6 +85,24 @@ public class Cab
     {
         return (_latitude, _longitude);
     }
+
+    public bool IsCloserThan(Cab assignedCab, Customer customer)
+    {
+        return CalculateDistanceBetweenTwoPoints(CurrentLocation(), customer.PickupLocation()) <
+               CalculateDistanceBetweenTwoPoints(assignedCab.CurrentLocation(), customer.PickupLocation());
+    }
+    
+    private static double CalculateDistanceBetweenTwoPoints((double?, double?) firstLocation, (double, double) secondLocation)
+    {
+        var formulaOne =
+            Math.Sqrt(Math.Pow(firstLocation.Item1 ?? 0 - secondLocation.Item1, 2.0) +
+                      Math.Pow(firstLocation.Item2 ?? 0 - secondLocation.Item2, 2.0));
+        var formulaTwo =
+            Math.Sqrt(Math.Pow(firstLocation.Item1 - secondLocation.Item1 ?? 0, 2.0) +
+                      Math.Pow(firstLocation.Item2 - secondLocation.Item2 ?? 0, 2.0));
+        return formulaOne < formulaTwo ? formulaOne : formulaTwo;
+     
+    }
 }
 
 public enum CabStatus
