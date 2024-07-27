@@ -6,19 +6,18 @@ namespace Production.EmmaCabCompany.Service;
 public class CabService
 {
     private readonly DispatcherCoordinator _dispatcherCoordinator;
-    private readonly IFileHandler _fileHandler;
+    private CabFileRepository _cabFileRepository;
 
     public CabService(DispatcherCoordinator dispatcherCoordinator, IFileHandler handler)
     {
-        var cabFileRepository = new CabFileRepository(handler);
-        var customerDirectory = cabFileRepository.LoadedCustomerDirectory();
+        _cabFileRepository = new CabFileRepository(handler);
+        var customerDirectory = _cabFileRepository.LoadedCustomerDirectory();
         dispatcherCoordinator.RebuildCustomerDictionary(customerDirectory);
         
-        var loadedFleetState = cabFileRepository.LoadedFleetState();
+        var loadedFleetState = _cabFileRepository.LoadedFleetState();
         dispatcherCoordinator.RebuildCabList(loadedFleetState);
         
         _dispatcherCoordinator = dispatcherCoordinator;
-        _fileHandler = handler;
     }
 
     public string CustomerCabCall(string customerName)
@@ -111,8 +110,8 @@ public class CabService
                 $"{x.Key.EndLocation}," +
                 $"{x.Value}"
             ).ToArray();
-        _fileHandler.WriteCustomerList(exportedCustomers);
+        _cabFileRepository.WriteCustomerList(exportedCustomers);
         string[] cabList = _dispatcherCoordinator.ExportCabList();
-        _fileHandler.WriteCabList(cabList);
+        _cabFileRepository.WriteCabList(cabList);
     }
 }

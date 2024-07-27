@@ -17,4 +17,13 @@ public class CabFileRepository(IFileHandler fileHandler)
         var loadedFleetState = Fleet.CreateCabState(cabList);
         return loadedFleetState;
     }
+    public void WriteCustomerList(string[] exportedCustomers)
+    {
+        fileHandler.WriteCustomerList(exportedCustomers);
+    }
+
+    public void WriteCabList(string[] cabList)
+    {
+        fileHandler.WriteCabList(cabList);
+    }
 }
