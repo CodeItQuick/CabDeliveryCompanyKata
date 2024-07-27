@@ -116,7 +116,7 @@ public class Fleet
         {
             string?[] cabAttributes = cab.Split(",");
             if (cabAttributes.Length < 1 || string.IsNullOrWhiteSpace(cabAttributes[0])) continue;
-            var cabValue = new Cab(cabAttributes[0], 20);
+            var cabValue = new Cab(cabAttributes[0], 20, 46.2382, 63.1311);
             if (!string.IsNullOrWhiteSpace(cabAttributes[1]))
             {
                 var customer = new Customer(cabAttributes[1], cabAttributes[2], cabAttributes[3]);

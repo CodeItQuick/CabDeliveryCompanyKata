@@ -6,11 +6,15 @@ public class Cab
     private readonly int _wallet;
     private CabStatus _status = CabStatus.Available;
     private Customer? _assignedPassenger;
+    private readonly double _latitude;
+    private readonly double _longitude;
 
-    public Cab(string? cabName, int wallet)
+    public Cab(string? cabName, int wallet, double latitude, double longitude)
     {
         _cabName = cabName;
         _wallet = wallet;
+        _latitude = latitude;
+        _longitude = longitude;
     }
 
     public bool RequestRideFor(Customer? customer)
@@ -24,11 +28,6 @@ public class Cab
         return true;
     }
 
-    public bool IsAvailable()
-    {
-        return _status != CabStatus.Available || _assignedPassenger != null;
-    }
-
     public bool PickupAssignedCustomer(Customer customer)
     {
         if (!IsEnrouteFor(customer)) return false;
@@ -39,18 +38,15 @@ public class Cab
 
     public bool IsEnrouteFor(Customer customer)
     {
-        return _status == CabStatus.CustomerRideRequested && customer.Name == _assignedPassenger?.Name;
+        return _status == CabStatus.CustomerRideRequested && 
+               customer.Name == _assignedPassenger?.Name;
     }
 
     public bool IsStatus(CabStatus requestedStatus)
     {
         return _status == requestedStatus;
     }
-    
-    public bool IsEnroute()
-    {
-        return _status == CabStatus.TransportingCustomer;
-    }
+
     public bool DropOffCustomer()
     {
         if (_status != CabStatus.TransportingCustomer)
@@ -83,6 +79,11 @@ public class Cab
     public bool ContainsPassenger()
     {
         return _assignedPassenger != null;
+    }
+
+    public (double, double) CurrentLocation()
+    {
+        return (_latitude, _longitude);
     }
 }
 

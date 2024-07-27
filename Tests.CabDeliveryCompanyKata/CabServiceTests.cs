@@ -14,7 +14,7 @@ public class CabServiceTests
             "customer_list_default.csv", "cab_list_default.csv");
         var cabService = new CabService(new DispatcherCoordinator(), new CabFileRepository(fakeFileReadWriter));
         
-        cabService.AddCab(new Cab("Evan", 20));
+        cabService.AddCab(new Cab("Evan", 20, 46.2382, 63.1311));
         
         Assert.Equal("Evan,,,", fakeFileReadWriter.Read("cab_list_default.csv").First());
     }
@@ -23,7 +23,7 @@ public class CabServiceTests
     {
         var fakeFileReadWriter = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
         var cabService = new CabService(new DispatcherCoordinator(), new CabFileRepository(fakeFileReadWriter));
-        cabService.AddCab(new Cab("Evan", 20));
+        cabService.AddCab(new Cab("Evan", 20, 46.2382, 63.1311));
         
         var customerCabCall = cabService.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         
@@ -36,7 +36,7 @@ public class CabServiceTests
     {
         var fakeFileReadWriter = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
         var cabService = new CabService(new DispatcherCoordinator(), new CabFileRepository(fakeFileReadWriter));
-        cabService.AddCab(new Cab("Evan", 20));
+        cabService.AddCab(new Cab("Evan", 20, 46.2382, 63.1311));
         
         var customerCabCall = cabService.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         var customerCabCallTwo = cabService.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane");
@@ -75,7 +75,7 @@ public class CabServiceTests
         var dispatcherCoordinator = new DispatcherCoordinator();
         var cabService = new CabService(dispatcherCoordinator, new CabFileRepository(fakeFileReadWriter));
         
-        cabService.AddCab(new Cab("Evan", 20));
+        cabService.AddCab(new Cab("Evan", 20, 46.2382, 63.1311));
         
         Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress", fakeFileReadWriter.Read("customer_list_default.csv").First());
         Assert.Single(fakeFileReadWriter.Read("customer_list_default.csv"));

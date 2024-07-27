@@ -18,7 +18,7 @@ public class FleetTests
     public void DispatchCanAssignPassengerToFleet()
     {
         var fleet = new Fleet();
-        fleet.AddCab(new Cab("Dan's Cab", 20));
+        fleet.AddCab(new Cab("Dan's Cab", 20, 46.2382, 63.1311));
         var customer = new Customer("Evan", "1 Fulton Drive", "2 Destination Lane");
 
         fleet.RideRequested(customer);
@@ -35,8 +35,8 @@ public class FleetTests
     public void DispatchCanAssignPassengerToTwoPassengerFleet()
     {
         var fleet = new Fleet();
-        fleet.AddCab(new Cab("Dan's Cab", 20));
-        fleet.AddCab(new Cab("Lisa's Cab", 20));
+        fleet.AddCab(new Cab("Dan's Cab", 20, 46.2382, 63.1311));
+        fleet.AddCab(new Cab("Lisa's Cab", 20, 46.2382, 63.1311));
         var customer = new Customer("Evan", "1 Fulton Drive", "2 Destination Lane");
 
         fleet.RideRequested(customer);
@@ -54,8 +54,8 @@ public class FleetTests
     public void DispatchCanAssignTwoPassengerToTwoPassengerFleet()
     {
         var fleet = new Fleet();
-        fleet.AddCab(new Cab("Dan's Cab", 20));
-        fleet.AddCab(new Cab("Lisa's Cab", 20));
+        fleet.AddCab(new Cab("Dan's Cab", 20, 46.2382, 63.1311));
+        fleet.AddCab(new Cab("Lisa's Cab", 20, 46.2382, 63.1311));
         var customer = new Customer("Evan", "1 Fulton Drive", "2 Destination Lane");
         var customerTwo = new Customer("Emma", "2 Fulton Drive", "3 Destination Lane");
         fleet.RideRequested(customer);

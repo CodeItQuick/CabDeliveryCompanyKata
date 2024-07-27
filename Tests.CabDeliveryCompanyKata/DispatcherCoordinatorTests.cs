@@ -8,7 +8,7 @@ public class DispatcherCoordinatorTests
     [Fact]
     public void CanPickupCustomer()
     {
-        var cabs = new Cab("Diane's Cab", 20);
+        var cabs = new Cab("Diane's Cab", 20, 46.2382, 63.1311);
         var dispatch = new DispatcherCoordinator();
         var customer = new Customer(
             "Emma", 
@@ -27,8 +27,8 @@ public class DispatcherCoordinatorTests
     [Fact]
     public void CanPickupTwoCustomersWithTwoCabs()
     {
-        var cabs = new Cab("Dan's Cab", 20);
-        var cabTwo = new Cab("Evan's Cab", 20);
+        var cabs = new Cab("Dan's Cab", 20, 46.2382, 63.1311);
+        var cabTwo = new Cab("Evan's Cab", 20, 46.2382, 63.1311);
         var dispatch = new DispatcherCoordinator();
         dispatch.AddCab(cabs);
         dispatch.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -48,8 +48,8 @@ public class DispatcherCoordinatorTests
     [Fact]
     public void CanPickupTwoCustomersWithTwoCabsSecondOrdering()
     {
-        var cabs = new Cab("Dan's Cab", 20);
-        var cabTwo = new Cab("Evan's Cab", 20);
+        var cabs = new Cab("Dan's Cab", 20, 46.2382, 63.1311);
+        var cabTwo = new Cab("Evan's Cab", 20, 46.2382, 63.1311);
         var dispatch = new DispatcherCoordinator();
         dispatch.AddCab(cabs);
         dispatch.AddCab(cabTwo);
@@ -71,7 +71,7 @@ public class DispatcherCoordinatorTests
     [Fact]
     public void CannotPickupCustomerIfNotAvailable()
     {
-        var cabs = new Cab("Dan's Cab", 20);
+        var cabs = new Cab("Dan's Cab", 20, 46.2382, 63.1311);
         var dispatch = new DispatcherCoordinator();
         var customerTwo = new Customer(
             "Lisa", 
@@ -97,7 +97,7 @@ public class DispatcherCoordinatorTests
     [Fact]
     public void CabNotRequestedByDispatcherAllCallsFail()
     {
-        var cabs = new Cab("Diane's Cab", 20);
+        var cabs = new Cab("Diane's Cab", 20, 46.2382, 63.1311);
         var dispatch = new DispatcherCoordinator();
         dispatch.AddCab(cabs);
         dispatch.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -110,7 +110,7 @@ public class DispatcherCoordinatorTests
     [Fact]
     public void CustomerNotPickedUpCannotDropOff()
     {
-        var cabs = new Cab("Diane's Cab", 20);
+        var cabs = new Cab("Diane's Cab", 20, 46.2382, 63.1311);
         var dispatch = new DispatcherCoordinator();
         dispatch.AddCab(cabs);
         dispatch.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -124,7 +124,7 @@ public class DispatcherCoordinatorTests
     public void CannotPickupTwoCustomerFares()
     {
         var dispatch = new DispatcherCoordinator();
-        var cabs = new Cab("Diane's Cab", 20);
+        var cabs = new Cab("Diane's Cab", 20, 46.2382, 63.1311);
         dispatch.AddCab(cabs);
         dispatch.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatch.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane");
@@ -148,7 +148,7 @@ public class DispatcherCoordinatorTests
     {
         var dispatch = new DispatcherCoordinator();
 
-        var cabs = new Cab("Diane's Cab", 20);
+        var cabs = new Cab("Diane's Cab", 20, 46.2382, 63.1311);
         dispatch.AddCab(cabs);
         dispatch.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         

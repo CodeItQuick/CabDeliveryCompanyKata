@@ -18,7 +18,7 @@ public class DispatchController
     public string AddCab()
     {
         var cabName = "Evan's Cab";
-        cabService.AddCab(new Cab(cabName, 20));
+        cabService.AddCab(new Cab(cabName, 20, 46.2382, 63.1311));
         
         return "Added Evan's Cab to fleet";
     }
