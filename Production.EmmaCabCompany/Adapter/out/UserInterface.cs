@@ -30,9 +30,26 @@ public class UserInterface(
                 continue;
             }
 
-            var output = ExecuteCommand(selection, dispatchController); 
-            output.ForEach(cabCompanyPrinter.WriteLine);
+            var paramList = RequestParamList(selection);
+
+            var output = ExecuteCommand(selection, dispatchController, paramList); 
+                output.ForEach(cabCompanyPrinter.WriteLine);
         } while (selection != 0);
+    }
+
+    private string RequestParamList(int selection)
+    {
+        string? paramList = "";
+        if (selection == 7)
+        {
+            while (paramList == null || string.IsNullOrWhiteSpace(paramList))
+            {
+                cabCompanyPrinter.WriteLine($"Enter customer name: ");
+                paramList = cabCompanyReader.ReadLine();
+            }
+        }
+
+        return paramList;
     }
 
     private void WriteMenu()
@@ -41,7 +58,7 @@ public class UserInterface(
         menu.ForEach(Console.WriteLine);
     }
 
-    private static List<string> ExecuteCommand(int selection, DispatchController dispatchController)
+    private static List<string> ExecuteCommand(int selection, DispatchController dispatchController, params string[] commandParams)
     {
         return selection switch
         {
@@ -51,7 +68,7 @@ public class UserInterface(
             4 => [dispatchController.CabNotifiesPickedUp()],
             5 => dispatchController.CabNotifiesDroppedOff(),
             6 => dispatchController.CustomerCancelledCabRide(),
-            7 => [dispatchController.CustomerCabCall()],
+            7 => [dispatchController.CustomerCabCall(commandParams[0])],
             _ => []
         };
     }

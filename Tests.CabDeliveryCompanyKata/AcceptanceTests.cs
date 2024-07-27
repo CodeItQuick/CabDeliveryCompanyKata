@@ -15,6 +15,36 @@ public class AcceptanceTests
             {
                 "1",
                 "7",
+                "Emma",
+                "3",
+                "4",
+                "5",
+                "0"
+            }
+        };
+        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
+        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
+        var userInterface = new UserInterface(
+            cabCompanyPrinter, 
+            cabCompanyReader, 
+            new FileHandler(customerListFilename, cabListFilename));
+        userInterface.Run();
+        
+        Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.List());
+        Assert.Contains("Evan's Cab dropped off Emma at 1 Destination Lane.", cabCompanyPrinter.List());
+    }
+    [Fact]
+    public void TheCabCompanyCanRePromptOnBadCustomerName()
+    {
+        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
+        {
+            CommandList = new List<string>()
+            {
+                "1",
+                "7",
+                "",
+                "Emma",
                 "3",
                 "4",
                 "5",
@@ -87,6 +117,7 @@ public class AcceptanceTests
             {
                 "1",
                 "7",
+                "Emma",
                 "3",
                 "4",
                 "2",
@@ -156,6 +187,7 @@ public class AcceptanceTests
             CommandList = new List<string>()
             {
                 "7",
+                "Emma",
                 "3",
                 "0"
             }
@@ -179,7 +211,9 @@ public class AcceptanceTests
             {
                 "1",
                 "7",
+                "Emma",
                 "7",
+                "Lisa",
                 "3",
                 "4",
                 "5",
@@ -213,7 +247,9 @@ public class AcceptanceTests
             {
                 "1",
                 "7",
+                "Emma",
                 "7",
+                "Lisa",
                 "3",
                 "3",
                 "0"
@@ -240,7 +276,9 @@ public class AcceptanceTests
                 "1",
                 "1",
                 "7",
+                "Emma",
                 "7",
+                "Lisa",
                 "3",
                 "3",
                 "4",
@@ -324,6 +362,7 @@ public class AcceptanceTests
         {
             "1",
             "7",
+                "Emma",
             "3",
             "4",
             "0",
