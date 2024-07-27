@@ -8,9 +8,9 @@ public class CabService
     private readonly DispatcherCoordinator _dispatcherCoordinator;
     private CabFileRepository _cabFileRepository;
 
-    public CabService(DispatcherCoordinator dispatcherCoordinator, IFileHandler handler)
+    public CabService(DispatcherCoordinator dispatcherCoordinator, CabFileRepository cabFileRepository)
     {
-        _cabFileRepository = new CabFileRepository(handler);
+        _cabFileRepository = cabFileRepository;
         var customerDirectory = _cabFileRepository.LoadedCustomerDirectory();
         dispatcherCoordinator.RebuildCustomerDictionary(customerDirectory);
         

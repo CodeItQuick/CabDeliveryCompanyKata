@@ -15,7 +15,7 @@ public class UserInterface(
     {
         int selection;
         var dispatch = new DispatcherCoordinator();
-        var cabService = new CabService(dispatch, writer);
+        var cabService = new CabService(dispatch, new CabFileRepository(writer));
         _menuController = new MenuController(new MenuService(dispatch));
         var dispatchController = new DispatchController(cabService, new MenuService(dispatch));
         do

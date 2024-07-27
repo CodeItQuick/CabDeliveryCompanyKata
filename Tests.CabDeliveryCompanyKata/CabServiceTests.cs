@@ -1,4 +1,5 @@
 using Production.EmmaCabCompany;
+using Production.EmmaCabCompany.Adapter.@in;
 using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Service;
 
@@ -11,7 +12,7 @@ public class CabServiceTests
     {
         var fakeFileReadWriter = new FakeFileReadWriter(
             "customer_list_default.csv", "cab_list_default.csv");
-        var cabService = new CabService(new DispatcherCoordinator(), fakeFileReadWriter);
+        var cabService = new CabService(new DispatcherCoordinator(), new CabFileRepository(fakeFileReadWriter));
         
         cabService.AddCab(new Cab("Evan", 20));
         
@@ -21,7 +22,7 @@ public class CabServiceTests
     public void CanPickupCustomer()
     {
         var fakeFileReadWriter = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabService = new CabService(new DispatcherCoordinator(), fakeFileReadWriter);
+        var cabService = new CabService(new DispatcherCoordinator(), new CabFileRepository(fakeFileReadWriter));
         cabService.AddCab(new Cab("Evan", 20));
         
         var customerCabCall = cabService.CustomerCabCall("Emma");
@@ -34,7 +35,7 @@ public class CabServiceTests
     public void CanPickupMultipleCustomers()
     {
         var fakeFileReadWriter = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabService = new CabService(new DispatcherCoordinator(), fakeFileReadWriter);
+        var cabService = new CabService(new DispatcherCoordinator(), new CabFileRepository(fakeFileReadWriter));
         cabService.AddCab(new Cab("Evan", 20));
         
         var customerCabCall = cabService.CustomerCabCall("Emma");
@@ -56,7 +57,7 @@ public class CabServiceTests
         fakeFileReadWriter.Write("cab_list_default.csv", ["Evan,,,"]);
         var dispatcherCoordinator = new DispatcherCoordinator();
         
-        var cabService = new CabService(dispatcherCoordinator, fakeFileReadWriter);
+        var cabService = new CabService(dispatcherCoordinator, new CabFileRepository(fakeFileReadWriter));
         
         Assert.Equal("Emma,1 Destination Lane,1 Fulton Drive,CustomerCallInProgress", fakeFileReadWriter.Read("customer_list_default.csv").First());
         Assert.Single(fakeFileReadWriter.Read("customer_list_default.csv"));
@@ -72,7 +73,7 @@ public class CabServiceTests
             ["Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress"]);
         fakeFileReadWriter.Write("cab_list_default.csv", ["Evan,,,"]);
         var dispatcherCoordinator = new DispatcherCoordinator();
-        var cabService = new CabService(dispatcherCoordinator, fakeFileReadWriter);
+        var cabService = new CabService(dispatcherCoordinator, new CabFileRepository(fakeFileReadWriter));
         
         cabService.AddCab(new Cab("Evan", 20));
         
@@ -90,7 +91,7 @@ public class CabServiceTests
             ["Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress"]);
         fakeFileReadWriter.Write("cab_list_default.csv", ["Evan,,,"]);
         var dispatcherCoordinator = new DispatcherCoordinator();
-        var cabService = new CabService(dispatcherCoordinator, fakeFileReadWriter);
+        var cabService = new CabService(dispatcherCoordinator, new CabFileRepository(fakeFileReadWriter));
         
         cabService.SendCabRequest();
         
@@ -107,7 +108,7 @@ public class CabServiceTests
             ["Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress"]);
         fakeFileReadWriter.Write("cab_list_default.csv", ["Evan,,,"]);
         var dispatcherCoordinator = new DispatcherCoordinator();
-        var cabService = new CabService(dispatcherCoordinator, fakeFileReadWriter);
+        var cabService = new CabService(dispatcherCoordinator, new CabFileRepository(fakeFileReadWriter));
         cabService.SendCabRequest();
         
         cabService.PickupCustomer();
@@ -127,7 +128,7 @@ public class CabServiceTests
             ["Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress"]);
         fakeFileReadWriter.Write("cab_list_default.csv", ["Evan,,,"]);
         var dispatcherCoordinator = new DispatcherCoordinator();
-        var cabService = new CabService(dispatcherCoordinator, fakeFileReadWriter);
+        var cabService = new CabService(dispatcherCoordinator, new CabFileRepository(fakeFileReadWriter));
         cabService.SendCabRequest();
         cabService.PickupCustomer();
         
@@ -146,7 +147,7 @@ public class CabServiceTests
             ["Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress"]);
         fakeFileReadWriter.Write("cab_list_default.csv", ["Evan,,,"]);
         var dispatcherCoordinator = new DispatcherCoordinator();
-        var cabService = new CabService(dispatcherCoordinator, fakeFileReadWriter);
+        var cabService = new CabService(dispatcherCoordinator, new CabFileRepository(fakeFileReadWriter));
         
         cabService.CancelPickup();
         
