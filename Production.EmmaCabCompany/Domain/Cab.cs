@@ -32,7 +32,6 @@ public class Cab
     {
         if (!IsEnrouteFor(customer)) return false;
         _status = CabStatus.TransportingCustomer;
-        customer.IsInCab(this);
         return true;
     }
 
@@ -54,7 +53,6 @@ public class Cab
             return false;
         }
         _status = CabStatus.Available;
-        _assignedPassenger?.ExitCab();
         _assignedPassenger = null;
         return _status == CabStatus.Available;
     }
@@ -88,8 +86,8 @@ public class Cab
 
     public bool IsCloserThan(Cab assignedCab, Customer customer)
     {
-        return CalculateDistanceBetweenTwoPoints(CurrentLocation(), customer.PickupLocation()) <
-               CalculateDistanceBetweenTwoPoints(assignedCab.CurrentLocation(), customer.PickupLocation());
+        return CalculateDistanceBetweenTwoPoints(CurrentLocation(), customer.PickupLocation) <
+               CalculateDistanceBetweenTwoPoints(assignedCab.CurrentLocation(), customer.PickupLocation);
     }
     
     private static double CalculateDistanceBetweenTwoPoints((double?, double?) firstLocation, (double, double) secondLocation)
