@@ -34,9 +34,9 @@ public class DispatchController
             return ex.Message;
         }
     }
-    public string CustomerCabCall(string customerName)
+    public string CustomerCabCall(string? customerName, string? startLocation, string? destinationLane)
     {
-        var customerCabCall = cabService.CustomerCabCall(customerName);
+        var customerCabCall = cabService.CustomerCabCall(customerName, startLocation, destinationLane);
         var resultText = $"Received customer ride request from {customerCabCall}";
         _currentNameIdx += 1;
         return resultText;

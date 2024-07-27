@@ -114,7 +114,7 @@ public class Fleet
         List<Cab> cabStoredList = new List<Cab>();
         foreach (var cab in cabListStrings)
         {
-            var cabAttributes = cab.Split(",");
+            string?[] cabAttributes = cab.Split(",");
             if (cabAttributes.Length < 1 || string.IsNullOrWhiteSpace(cabAttributes[0])) continue;
             var cabValue = new Cab(cabAttributes[0], 20);
             if (!string.IsNullOrWhiteSpace(cabAttributes[1]))

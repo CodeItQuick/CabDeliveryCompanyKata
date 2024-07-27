@@ -25,7 +25,7 @@ public class CabServiceTests
         var cabService = new CabService(new DispatcherCoordinator(), new CabFileRepository(fakeFileReadWriter));
         cabService.AddCab(new Cab("Evan", 20));
         
-        var customerCabCall = cabService.CustomerCabCall("Emma");
+        var customerCabCall = cabService.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         
         Assert.Equal("Emma", customerCabCall);
         Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress", 
@@ -38,8 +38,8 @@ public class CabServiceTests
         var cabService = new CabService(new DispatcherCoordinator(), new CabFileRepository(fakeFileReadWriter));
         cabService.AddCab(new Cab("Evan", 20));
         
-        var customerCabCall = cabService.CustomerCabCall("Emma");
-        var customerCabCallTwo = cabService.CustomerCabCall("Lisa");
+        var customerCabCall = cabService.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
+        var customerCabCallTwo = cabService.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane");
         
         Assert.Equal("Emma", customerCabCall);
         Assert.Equal("Lisa", customerCabCallTwo);

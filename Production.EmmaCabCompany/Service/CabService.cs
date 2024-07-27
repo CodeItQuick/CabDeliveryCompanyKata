@@ -20,10 +20,10 @@ public class CabService
         _dispatcherCoordinator = dispatcherCoordinator;
     }
 
-    public string CustomerCabCall(string customerName)
+    public string? CustomerCabCall(string? customerName, string? startLocation, string? destinationLane)
     {
         
-        _dispatcherCoordinator.CustomerCabCall(customerName);
+        _dispatcherCoordinator.CustomerCabCall(customerName, startLocation, destinationLane);
         ExportPersistence();
         return customerName;
     }

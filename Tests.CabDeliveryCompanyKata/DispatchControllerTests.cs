@@ -59,7 +59,7 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet));
         dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma");
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
         dispatchController.CabNotifiesPickedUp();
         
@@ -76,7 +76,7 @@ public class DispatchControllerTests
             new CabService(radioFleet, new CabFileRepository(handler)), new MenuService(new DispatcherCoordinator()));
         dispatchController.AddCab();
         dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma");
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
         dispatchController.CabNotifiesPickedUp();
         
@@ -93,7 +93,7 @@ public class DispatchControllerTests
             new CabService(radioFleet, new CabFileRepository(handler)), new MenuService(new DispatcherCoordinator()));
         dispatchController.AddCab();
 
-        var customerCabCall = dispatchController.CustomerCabCall("Emma");
+        var customerCabCall = dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         
         Assert.Equal("Received customer ride request from Emma", customerCabCall);
     }
@@ -105,9 +105,9 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, new CabFileRepository(handler)), new MenuService(new DispatcherCoordinator()));
         dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma");
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
-        var customerCabCall = dispatchController.CustomerCabCall("Lisa");
+        var customerCabCall = dispatchController.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane");
         
         Assert.Equal("Received customer ride request from Lisa", customerCabCall);
     }
@@ -119,10 +119,10 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, new CabFileRepository(handler)), new MenuService(new DispatcherCoordinator()));
         dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma");
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.CustomerCancelledCabRide();
 
-        var customerCabCall = dispatchController.CustomerCabCall("Lisa");
+        var customerCabCall = dispatchController.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane");
         
         Assert.Equal("Received customer ride request from Lisa", customerCabCall);
     }
@@ -146,7 +146,7 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet));
         dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma");
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         
         var customerCabCall = dispatchController.CustomerCancelledCabRide();
         
@@ -160,7 +160,7 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet));
         dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma");
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
         
         var customerCabCall = dispatchController.CustomerCancelledCabRide();
@@ -175,7 +175,7 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet));
         dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma");
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
         var sendCabRequest = dispatchController.SendCabRequest();
 
@@ -215,7 +215,7 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet));
         dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma");
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
 
         var sendCabRequest = dispatchController.CabNotifiesPickedUp();
@@ -242,7 +242,7 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet));
         dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma");
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
         var sendCabRequest = dispatchController.CabNotifiesPickedUp();
 
@@ -256,7 +256,7 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet));
         dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma");
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
         dispatchController.CabNotifiesPickedUp();
 
@@ -273,8 +273,8 @@ public class DispatchControllerTests
             new CabService(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet));
         dispatchController.AddCab();
         dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma");
-        dispatchController.CustomerCabCall("Emma");
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
         dispatchController.SendCabRequest();
         dispatchController.CabNotifiesPickedUp();
@@ -293,8 +293,8 @@ public class DispatchControllerTests
             new CabService(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet));
         dispatchController.AddCab();
         dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma");
-        dispatchController.CustomerCabCall("Lisa");
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
+        dispatchController.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
         dispatchController.SendCabRequest();
         dispatchController.CabNotifiesPickedUp();
@@ -313,7 +313,7 @@ public class DispatchControllerTests
         var dispatchController = new DispatchController(
             new CabService(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet));
         dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma");
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
         var droppedOff = dispatchController.CabNotifiesDroppedOff();
 

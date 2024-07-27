@@ -2,12 +2,12 @@ namespace Production.EmmaCabCompany;
 
 public class Cab
 {
-    private readonly string _cabName;
+    private readonly string? _cabName;
     private readonly int _wallet;
     private CabStatus _status = CabStatus.Available;
     private Customer? _assignedPassenger;
 
-    public Cab(string cabName, int wallet)
+    public Cab(string? cabName, int wallet)
     {
         _cabName = cabName;
         _wallet = wallet;

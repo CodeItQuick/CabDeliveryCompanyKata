@@ -32,24 +32,38 @@ public class UserInterface(
 
             var paramList = RequestParamList(selection);
 
-            var output = ExecuteCommand(selection, dispatchController, paramList); 
+            var output = ExecuteCommand(selection, dispatchController, paramList.ToArray()); 
                 output.ForEach(cabCompanyPrinter.WriteLine);
         } while (selection != 0);
     }
 
-    private string RequestParamList(int selection)
+    private List<string?> RequestParamList(int selection)
     {
-        string? paramList = "";
+        List<string?> paramList = [];
         if (selection == 7)
         {
-            while (paramList == null || string.IsNullOrWhiteSpace(paramList))
-            {
-                cabCompanyPrinter.WriteLine($"Enter customer name: ");
-                paramList = cabCompanyReader.ReadLine();
-            }
+            paramList.Add(ExtractParam($"Enter customer name: "));
+            paramList.Add(ExtractParam($"Enter start location: "));
+            paramList.Add(ExtractParam($"Enter end location: "));
         }
 
         return paramList;
+    }
+
+    private string ExtractParam(string prompt)
+    {
+        string param = "";
+        while (string.IsNullOrWhiteSpace(param))
+        {
+            cabCompanyPrinter.WriteLine(prompt);
+            string? customerName = cabCompanyReader.ReadLine();
+            if (!string.IsNullOrWhiteSpace(customerName))
+            {
+                param = customerName;
+            }
+        }
+
+        return param;
     }
 
     private void WriteMenu()
@@ -58,7 +72,7 @@ public class UserInterface(
         menu.ForEach(Console.WriteLine);
     }
 
-    private static List<string> ExecuteCommand(int selection, DispatchController dispatchController, params string[] commandParams)
+    private static List<string> ExecuteCommand(int selection, DispatchController dispatchController, params string?[] commandParams)
     {
         return selection switch
         {
@@ -68,7 +82,7 @@ public class UserInterface(
             4 => [dispatchController.CabNotifiesPickedUp()],
             5 => dispatchController.CabNotifiesDroppedOff(),
             6 => dispatchController.CustomerCancelledCabRide(),
-            7 => [dispatchController.CustomerCabCall(commandParams[0])],
+            7 => [dispatchController.CustomerCabCall(commandParams[0], commandParams[1], commandParams[2])],
             _ => []
         };
     }

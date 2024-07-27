@@ -7,7 +7,7 @@
 4. Get the Aggregates Out (fix the object oriented code to figure out the aggregates)
 5. ~~Limit Menu~~
 6. ~~Figure out Customer Aggregate~~
-7. Add More Features - Cab company records customer name on call-in
+7. ~~Add More Features - Cab company records customer name on call-in~~
 8. ~~Add More Features - State persists through file saving/loading (in-progress)~~
    ~~8a. Create DispatcherCoordinator Concept~~
     ~~8b. Create tests around DispatcherCoordinator and move the tests around/refactor as some are in the wrong spot~~

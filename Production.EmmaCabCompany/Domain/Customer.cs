@@ -2,12 +2,12 @@
 
 public class Customer
 {
-    public readonly string Name;
-    public readonly string StartLocation;
-    public readonly string EndLocation;
+    public readonly string? Name;
+    public readonly string? StartLocation;
+    public readonly string? EndLocation;
     private Cab? _currentCab;
 
-    public Customer(string customerName, string startLocation, string endLocation)
+    public Customer(string? customerName, string? startLocation, string? endLocation)
     {
         Name = customerName;
         this.StartLocation = startLocation;

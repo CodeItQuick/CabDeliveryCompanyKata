@@ -19,7 +19,7 @@ public class MenuServiceTests
     {
         var dispatcherCoordinator = new DispatcherCoordinator();
         dispatcherCoordinator.AddCab(new Cab("Evan", 20));
-        dispatcherCoordinator.CustomerCabCall("Emma");
+        dispatcherCoordinator.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         var menuController = new MenuService(dispatcherCoordinator);
 
         var displayMenu = menuController.DisplayMenu();
@@ -31,7 +31,7 @@ public class MenuServiceTests
     {
         var dispatcherCoordinator = new DispatcherCoordinator();
         dispatcherCoordinator.AddCab(new Cab("Evan", 20));
-        dispatcherCoordinator.CustomerCabCall("Emma");
+        dispatcherCoordinator.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatcherCoordinator.RideRequest();
         var menuController = new MenuService(dispatcherCoordinator);
 
@@ -44,7 +44,7 @@ public class MenuServiceTests
     {
         var dispatcherCoordinator = new DispatcherCoordinator();
         dispatcherCoordinator.AddCab(new Cab("Evan", 20));
-        dispatcherCoordinator.CustomerCabCall("Emma");
+        dispatcherCoordinator.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatcherCoordinator.RideRequest();
         dispatcherCoordinator.PickupCustomer();
         var menuController = new MenuService(dispatcherCoordinator);
@@ -58,7 +58,7 @@ public class MenuServiceTests
     {
         var dispatcherCoordinator = new DispatcherCoordinator();
         dispatcherCoordinator.AddCab(new Cab("Evan", 20));
-        dispatcherCoordinator.CustomerCabCall("Emma");
+        dispatcherCoordinator.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         var menuController = new MenuService(dispatcherCoordinator);
 
         var displayMenu = menuController.DisplayMenu();
@@ -74,10 +74,10 @@ public class MenuServiceTests
         dispatcherCoordinator.AddCab(new Cab("Evan", 20));
         dispatcherCoordinator.AddCab(new Cab("Evan", 20));
         dispatcherCoordinator.AddCab(new Cab("Evan", 20));
-        dispatcherCoordinator.CustomerCabCall("Emma");
-        dispatcherCoordinator.CustomerCabCall("Emma");
-        dispatcherCoordinator.CustomerCabCall("Emma");
-        dispatcherCoordinator.CustomerCabCall("Emma");
+        dispatcherCoordinator.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
+        dispatcherCoordinator.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
+        dispatcherCoordinator.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
+        dispatcherCoordinator.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatcherCoordinator.RideRequest();
         dispatcherCoordinator.RideRequest();
         dispatcherCoordinator.RideRequest();
@@ -105,7 +105,7 @@ public class MenuServiceTests
     {
         var dispatcherCoordinator = new DispatcherCoordinator();
         dispatcherCoordinator.AddCab(new Cab("Evan", 20));
-        dispatcherCoordinator.CustomerCabCall("Emma");
+        dispatcherCoordinator.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         var menuController = new MenuService(dispatcherCoordinator);
 
         var displayMenu = menuController.IsValidMenuOption(3);

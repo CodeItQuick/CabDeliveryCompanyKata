@@ -24,9 +24,12 @@ public class DispatcherCoordinator
         _fleet.RemoveCab();
     }
 
-    public void CustomerCabCall(string customerCallInName)
+    public void CustomerCabCall(string? customerCallInName, string? startLocation, string? destinationLane)
     {
-        _customerList.CustomerCabCall(customerCallInName);
+        _customerList.CustomerCabCall(
+            customerCallInName, 
+            startLocation, 
+            destinationLane);
     }
 
     public void RideRequest()

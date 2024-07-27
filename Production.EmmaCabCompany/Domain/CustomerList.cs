@@ -4,9 +4,9 @@ public class CustomerList
 {
     private Dictionary<Customer, CustomerStatus> _customerStatusMap = new();
 
-    public void CustomerCabCall(string customerCallInName)
+    public void CustomerCabCall(string? customerCallInName, string? startLocation, string? destinationLane)
     {
-        var customer = new Customer(customerCallInName, "1 Fulton Drive", "1 Destination Lane");
+        var customer = new Customer(customerCallInName, startLocation, destinationLane);
         _customerStatusMap.Add(customer, CustomerStatus.CustomerCallInProgress);
     }
 
@@ -107,7 +107,7 @@ public class CustomerList
         Dictionary<Customer, CustomerStatus> customerDictionary = new Dictionary<Customer, CustomerStatus>();
         foreach (var customer in customerList)
         {
-            var customerAttribs = customer.Split(",");
+            string?[] customerAttribs = customer.Split(",");
             if (customerAttribs.Length <= 2) continue;
             var customerKey = new Customer(customerAttribs[0], customerAttribs[1], customerAttribs[2]);
             var customerStatus = Enum.Parse<CustomerStatus>(customerAttribs[3], true);

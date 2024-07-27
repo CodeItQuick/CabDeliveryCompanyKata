@@ -15,7 +15,7 @@ public class DispatcherCoordinatorTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
-        dispatch.CustomerCabCall("Emma");
+        dispatch.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatch.RideRequest();
 
         dispatch.PickupCustomer();
@@ -31,11 +31,11 @@ public class DispatcherCoordinatorTests
         var cabTwo = new Cab("Evan's Cab", 20);
         var dispatch = new DispatcherCoordinator();
         dispatch.AddCab(cabs);
-        dispatch.CustomerCabCall("Emma");
+        dispatch.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatch.RideRequest();
         dispatch.PickupCustomer();
         dispatch.AddCab(cabTwo);
-        dispatch.CustomerCabCall("Emma");
+        dispatch.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatch.RideRequest();
         dispatch.PickupCustomer();
 
@@ -53,9 +53,9 @@ public class DispatcherCoordinatorTests
         var dispatch = new DispatcherCoordinator();
         dispatch.AddCab(cabs);
         dispatch.AddCab(cabTwo);
-        dispatch.CustomerCabCall("Emma");
+        dispatch.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatch.RideRequest();
-        dispatch.CustomerCabCall("Lisa");
+        dispatch.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane");
         dispatch.RideRequest();
         dispatch.PickupCustomer();
         dispatch.PickupCustomer();
@@ -78,7 +78,7 @@ public class DispatcherCoordinatorTests
             "1 Fulton Drive", 
             "1 Final Destination Lane");
         dispatch.AddCab(cabs);
-        dispatch.CustomerCabCall("Emma");
+        dispatch.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         var rideRequest = cabs.RequestRideFor(customerTwo);
 
         Assert.Throws<SystemException>(() => dispatch.PickupCustomer());
@@ -100,7 +100,7 @@ public class DispatcherCoordinatorTests
         var cabs = new Cab("Diane's Cab", 20);
         var dispatch = new DispatcherCoordinator();
         dispatch.AddCab(cabs);
-        dispatch.CustomerCabCall("Emma");
+        dispatch.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         Assert.Throws<SystemException>(() => dispatch.PickupCustomer());
         Assert.Null(dispatch.FindEnroutePassenger(CustomerStatus.Enroute));
         Assert.Throws<SystemException>(() => dispatch.DropOffCustomer());
@@ -113,7 +113,7 @@ public class DispatcherCoordinatorTests
         var cabs = new Cab("Diane's Cab", 20);
         var dispatch = new DispatcherCoordinator();
         dispatch.AddCab(cabs);
-        dispatch.CustomerCabCall("Emma");
+        dispatch.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatch.RideRequest();
         Assert.NotNull(dispatch.FindEnroutePassenger(CustomerStatus.WaitingPickup));
         Assert.Throws<SystemException>(() => dispatch.DropOffCustomer());
@@ -126,8 +126,8 @@ public class DispatcherCoordinatorTests
         var dispatch = new DispatcherCoordinator();
         var cabs = new Cab("Diane's Cab", 20);
         dispatch.AddCab(cabs);
-        dispatch.CustomerCabCall("Emma");
-        dispatch.CustomerCabCall("Lisa");
+        dispatch.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
+        dispatch.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane");
         dispatch.RideRequest();
         Assert.Throws<SystemException>(() => dispatch.RideRequest());
         
@@ -150,7 +150,7 @@ public class DispatcherCoordinatorTests
 
         var cabs = new Cab("Diane's Cab", 20);
         dispatch.AddCab(cabs);
-        dispatch.CustomerCabCall("Emma");
+        dispatch.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         
         var exportCustomerList = dispatch.ExportCustomerList();
         
