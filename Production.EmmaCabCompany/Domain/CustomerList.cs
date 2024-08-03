@@ -4,9 +4,8 @@ public class CustomerList
 {
     private Dictionary<Customer, CustomerStatus> _customerStatusMap = new();
 
-    public void CustomerCabCall(string? customerCallInName, string? startLocation, string? destinationLane)
+    public void CustomerCabCall(Customer customer)
     {
-        var customer = new Customer(customerCallInName, startLocation, destinationLane);
         _customerStatusMap.Add(customer, CustomerStatus.CustomerCallInProgress);
     }
 

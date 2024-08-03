@@ -75,7 +75,7 @@ public class FleetTests
         fleet.AddCab(cab);
         fleet.AddCab(cabTwo);
         // Customer Location GPS: 46.5556, 63.1311
-        var customer = new Customer("Evan", "1 Fulton Drive", "2 Destination Lane");
+        var customer = new Customer("Evan", "Summerside", "2 Destination Lane");
         
         fleet.RideRequested(customer);
 
@@ -90,7 +90,7 @@ public class FleetTests
         fleet.AddCab(cab);
         fleet.AddCab(cabTwo);
         // Customer Location GPS: 46.5556, 63.1311
-        var customer = new Customer("Evan", "1 Fulton Drive", "2 Destination Lane");
+        var customer = new Customer("Evan", "Summerside", "2 Destination Lane");
         
         fleet.RideRequested(customer);
 
@@ -105,7 +105,7 @@ public class FleetTests
         fleet.AddCab(cab);
         fleet.AddCab(cabTwo);
         // Customer Location GPS: 46.5556, 63.1311
-        var customer = new Customer("Evan", "1 Fulton Drive", "2 Destination Lane");
+        var customer = new Customer("Evan", "Summerside", "2 Destination Lane");
         
         fleet.RideRequested(customer);
 

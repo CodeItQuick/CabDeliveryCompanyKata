@@ -382,9 +382,9 @@ public class AcceptanceTests
         {
             "1",
             "7",
-                "Emma",
-            "1 Fulton Drive",
-        "1 Destination Lane",
+            "Emma",
+            "Bowling Alley",
+            "1 Destination Lane",
             "3",
             "4",
             "0",
@@ -401,7 +401,7 @@ public class AcceptanceTests
             cabCompanyReader, 
             fakeFileReadWriter);
         userInterface.Run();
-        Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.List());
+        Assert.Contains("Evan's Cab picked up Emma at Bowling Alley.", cabCompanyPrinter.List());
         var userInterfaceSecondRun = new UserInterface(
             cabCompanyPrinter, 
             new FakeCabCompanyReader()
@@ -416,7 +416,7 @@ public class AcceptanceTests
         
         userInterfaceSecondRun.Run();
 
-        Assert.Contains("Emma,1 Fulton Drive,1 Destination Lane,Delivered", fakeFileReadWriter.Read(customerListFilename));
+        Assert.Contains("Emma,Bowling Alley,1 Destination Lane,Delivered,46.23496,-63.12495", fakeFileReadWriter.Read(customerListFilename));
         Assert.Contains(
             "Evan's Cab dropped off Emma at 1 Destination Lane.", 
             cabCompanyPrinter.List());

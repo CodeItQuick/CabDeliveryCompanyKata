@@ -28,7 +28,7 @@ public class MenuControllerTest
         var menuService = new MenuService(dispatcherCoordinator);
         var menuController = new MenuController(menuService);
         dispatcherCoordinator.AddCab(new Cab("Evan", 20, 46.2382, 63.1311));
-        dispatcherCoordinator.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
+        dispatcherCoordinator.CustomerCabCall(new Customer("Emma", "1 Fulton Drive", "1 Destination Lane"));
 
         var displayMenu = menuController.DisplayMenu();
         
@@ -51,10 +51,10 @@ public class MenuControllerTest
         dispatcherCoordinator.AddCab(new Cab("Evan", 20, 46.2382, 63.1311));
         dispatcherCoordinator.AddCab(new Cab("Evan", 20, 46.2382, 63.1311));
         dispatcherCoordinator.AddCab(new Cab("Evan", 20, 46.2382, 63.1311));
-        dispatcherCoordinator.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
-        dispatcherCoordinator.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
-        dispatcherCoordinator.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
-        dispatcherCoordinator.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
+        dispatcherCoordinator.CustomerCabCall(new Customer("Emma", "1 Fulton Drive", "1 Destination Lane"));
+        dispatcherCoordinator.CustomerCabCall(new Customer("Emma", "1 Fulton Drive", "1 Destination Lane"));
+        dispatcherCoordinator.CustomerCabCall(new Customer("Emma", "1 Fulton Drive", "1 Destination Lane"));
+        dispatcherCoordinator.CustomerCabCall(new Customer("Emma", "1 Fulton Drive", "1 Destination Lane"));
         dispatcherCoordinator.RideRequest();
         dispatcherCoordinator.RideRequest();
         dispatcherCoordinator.RideRequest();

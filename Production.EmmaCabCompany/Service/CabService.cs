@@ -22,8 +22,8 @@ public class CabService
 
     public string? CustomerCabCall(string? customerName, string? startLocation, string? destinationLane)
     {
-        
-        _dispatcherCoordinator.CustomerCabCall(customerName, startLocation, destinationLane);
+        var customer = new Customer(customerName, startLocation, destinationLane);
+        _dispatcherCoordinator.CustomerCabCall(customer);
         ExportPersistence();
         return customerName;
     }
@@ -108,7 +108,9 @@ public class CabService
                 $"{x.Key.Name}," +
                 $"{x.Key.StartLocation}," +
                 $"{x.Key.EndLocation}," +
-                $"{x.Value}"
+                $"{x.Value}," +
+                $"{x.Key.PickupLocation.Item1}," +
+                $"{x.Key.PickupLocation.Item2}"
             ).ToArray();
         _cabFileRepository.WriteCustomerList(exportedCustomers);
         string[] cabList = _dispatcherCoordinator.ExportCabList();

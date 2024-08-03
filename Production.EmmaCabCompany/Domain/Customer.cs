@@ -7,12 +7,24 @@ public class Customer
     public readonly string? EndLocation;
     public (double, double) PickupLocation;
 
-    public Customer(string? customerName, string? startLocation, string? endLocation)
+    public Customer(string? customerName, string startLocation, string? endLocation)
     {
         Name = customerName;
         StartLocation = startLocation;
         EndLocation = endLocation;
-        PickupLocation = (46.5556, 63.1311);
+        (double, double) pickupLocation = PickupAssignmentLocations.LocationCoordinates[startLocation];
+        PickupLocation = pickupLocation;
     }
+}
 
+public static class PickupAssignmentLocations
+{
+    public static Dictionary<string, (double, double)> LocationCoordinates = new Dictionary<string, (double, double)>()
+    {
+        ["1 Fulton Drive"] = (46.238888, -63.129166),
+        ["2 Fulton Drive"] = (46.238888, -63.129166),
+        ["Bowling Alley"] = (46.23496, -63.12495),
+        ["Walmart"] = (46.26205, -63.15237),
+        ["Summerside"] = (46.5556, 63.1311) // "Summerside", but not actually the coordinates
+    };
 }

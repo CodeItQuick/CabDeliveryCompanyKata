@@ -28,7 +28,7 @@ public class CabServiceTests
         var customerCabCall = cabService.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         
         Assert.Equal("Emma", customerCabCall);
-        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress", 
+        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress,46.238888,-63.129166", 
             fakeFileReadWriter.Read("customer_list_default.csv").First());
     }
     [Fact]
@@ -43,9 +43,9 @@ public class CabServiceTests
         
         Assert.Equal("Emma", customerCabCall);
         Assert.Equal("Lisa", customerCabCallTwo);
-        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress", 
+        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress,46.238888,-63.129166", 
             fakeFileReadWriter.Read("customer_list_default.csv").First());
-        Assert.Equal("Lisa,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress", 
+        Assert.Equal("Lisa,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress,46.238888,-63.129166", 
             fakeFileReadWriter.Read("customer_list_default.csv").Skip(1).First());
     }
     [Fact]
@@ -53,13 +53,13 @@ public class CabServiceTests
     {
         var fakeFileReadWriter = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
         fakeFileReadWriter.Write("customer_list_default.csv",
-            ["Emma,1 Destination Lane,1 Fulton Drive,CustomerCallInProgress"]);
+            ["Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress"]);
         fakeFileReadWriter.Write("cab_list_default.csv", ["Evan,,,"]);
         var dispatcherCoordinator = new DispatcherCoordinator();
         
         var cabService = new CabService(dispatcherCoordinator, new CabFileRepository(fakeFileReadWriter));
         
-        Assert.Equal("Emma,1 Destination Lane,1 Fulton Drive,CustomerCallInProgress", fakeFileReadWriter.Read("customer_list_default.csv").First());
+        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress", fakeFileReadWriter.Read("customer_list_default.csv").First());
         Assert.Single(fakeFileReadWriter.Read("customer_list_default.csv"));
         Assert.Equal("Evan,,,", fakeFileReadWriter.Read("cab_list_default.csv").First());
         Assert.Single(fakeFileReadWriter.Read("cab_list_default.csv"));
@@ -77,7 +77,7 @@ public class CabServiceTests
         
         cabService.AddCab(new Cab("Evan", 20, 46.2382, 63.1311));
         
-        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress", fakeFileReadWriter.Read("customer_list_default.csv").First());
+        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress,46.238888,-63.129166", fakeFileReadWriter.Read("customer_list_default.csv").First());
         Assert.Single(fakeFileReadWriter.Read("customer_list_default.csv"));
         Assert.Equal("Evan,,,", fakeFileReadWriter.Read("cab_list_default.csv").First());
         Assert.Equal("Evan,,,", fakeFileReadWriter.Read("cab_list_default.csv").Skip(1).First());
@@ -95,7 +95,7 @@ public class CabServiceTests
         
         cabService.SendCabRequest();
         
-        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,WaitingPickup", fakeFileReadWriter.Read("customer_list_default.csv").First());
+        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,WaitingPickup,46.238888,-63.129166", fakeFileReadWriter.Read("customer_list_default.csv").First());
         Assert.Single(fakeFileReadWriter.Read("customer_list_default.csv"));
         Assert.Equal("Evan,Emma,1 Fulton Drive,1 Destination Lane", fakeFileReadWriter.Read("cab_list_default.csv").First());
         Assert.Single(fakeFileReadWriter.Read("cab_list_default.csv"));
@@ -113,7 +113,7 @@ public class CabServiceTests
         
         cabService.PickupCustomer();
         
-        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,Enroute", fakeFileReadWriter.Read("customer_list_default.csv").First());
+        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,Enroute,46.238888,-63.129166", fakeFileReadWriter.Read("customer_list_default.csv").First());
         Assert.Single(fakeFileReadWriter.Read("customer_list_default.csv"));
         Assert.Equal("Evan,Emma,1 Fulton Drive,1 Destination Lane", fakeFileReadWriter.Read("cab_list_default.csv").First());
         Assert.Single(fakeFileReadWriter.Read("cab_list_default.csv"));
@@ -134,7 +134,7 @@ public class CabServiceTests
         
         cabService.DropOffCustomer();
         
-        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,Delivered", fakeFileReadWriter.Read("customer_list_default.csv").First());
+        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,Delivered,46.238888,-63.129166", fakeFileReadWriter.Read("customer_list_default.csv").First());
         Assert.Single(fakeFileReadWriter.Read("customer_list_default.csv"));
         Assert.Equal("Evan,,,", fakeFileReadWriter.Read("cab_list_default.csv").First());
         Assert.Single(fakeFileReadWriter.Read("cab_list_default.csv"));
@@ -147,13 +147,33 @@ public class CabServiceTests
             ["Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress"]);
         fakeFileReadWriter.Write("cab_list_default.csv", ["Evan,,,"]);
         var dispatcherCoordinator = new DispatcherCoordinator();
-        var cabService = new CabService(dispatcherCoordinator, new CabFileRepository(fakeFileReadWriter));
+        var cabFileRepository = new CabFileRepository(fakeFileReadWriter);
+        var cabService = new CabService(dispatcherCoordinator, cabFileRepository);
         
         cabService.CancelPickup();
         
-        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,CancelledCall", fakeFileReadWriter.Read("customer_list_default.csv").First());
+        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,CancelledCall,46.238888,-63.129166", fakeFileReadWriter.Read("customer_list_default.csv").First());
         Assert.Single(fakeFileReadWriter.Read("customer_list_default.csv"));
         Assert.Equal("Evan,,,", fakeFileReadWriter.Read("cab_list_default.csv").First());
         Assert.Single(fakeFileReadWriter.Read("cab_list_default.csv"));
+    }
+    [Fact]
+    public void CanConstructCurrentLocationBasedOnStartLocation()
+    {
+        var fakeFileReadWriter = new FakeFileReadWriter(
+            "customer_list_default.csv", 
+            "cab_list_default.csv");
+        var dispatcherCoordinator = new DispatcherCoordinator();
+        var cabFileRepository = new CabFileRepository(fakeFileReadWriter);
+        var cabService = new CabService(dispatcherCoordinator, cabFileRepository);
+        
+        cabService.CustomerCabCall(
+            "Emma", 
+            "1 Fulton Drive", 
+            "1 Destination Lane");
+        
+        Assert.Equal(
+            "Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress,46.238888,-63.129166", 
+            fakeFileReadWriter.Read("customer_list_default.csv").First());
     }
 }
