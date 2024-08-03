@@ -12,14 +12,17 @@ public class Customer
         Name = customerName;
         StartLocation = startLocation;
         EndLocation = endLocation;
-        (double, double) pickupLocation = PickupAssignmentLocations.LocationCoordinates[startLocation];
-        PickupLocation = pickupLocation;
+        var isAssignable = PickupAssignmentLocations.LocationCoordinates
+            .TryGetValue(startLocation, out var pickupLocation);
+        PickupLocation = isAssignable ? 
+            pickupLocation : 
+            PickupAssignmentLocations.LocationCoordinates["Summerside"];
     }
 }
 
 public static class PickupAssignmentLocations
 {
-    public static Dictionary<string, (double, double)> LocationCoordinates = new Dictionary<string, (double, double)>()
+    public static readonly Dictionary<string, (double, double)> LocationCoordinates = new()
     {
         ["1 Fulton Drive"] = (46.238888, -63.129166),
         ["2 Fulton Drive"] = (46.238888, -63.129166),

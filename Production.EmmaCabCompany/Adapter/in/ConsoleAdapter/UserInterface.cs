@@ -31,9 +31,9 @@ public class UserInterface(
             }
 
             var paramList = RequestParamList(selection);
-
+            
             var output = ExecuteCommand(selection, dispatchController, paramList.ToArray()); 
-                output.ForEach(cabCompanyPrinter.WriteLine);
+            output.ForEach(cabCompanyPrinter.WriteLine);
         } while (selection != 0);
     }
 
@@ -43,6 +43,12 @@ public class UserInterface(
         if (selection == 7)
         {
             paramList.Add(ExtractParam($"Enter customer name: "));
+            Console.WriteLine("Location List");
+            Console.WriteLine("1 Fulton Drive");
+            Console.WriteLine("2 Fulton Drive");
+            Console.WriteLine("Bowling Alley");
+            Console.WriteLine("Walmart");
+            Console.WriteLine("Summerside");
             paramList.Add(ExtractParam($"Enter start location: "));
             paramList.Add(ExtractParam($"Enter end location: "));
         }

@@ -10,9 +10,13 @@ public class FleetTests
     public void DispatchCannotAssignPassengerToEmptyFleet()
     {
         var fleet = new Fleet();
-        var customer = new Customer("Evan", "1 Fulton Drive", "2 Destination Lane");
+        var customer = new Customer(
+            "Evan", 
+            "1 Invalid Drive", 
+            "2 Destination Lane");
 
-        Assert.Throws<SystemException>(() => fleet.RideRequested(customer));
+        Assert.Throws<SystemException>(
+            () => fleet.RideRequested(customer));
     }
     [Fact]
     public void DispatchCanAssignPassengerToFleet()

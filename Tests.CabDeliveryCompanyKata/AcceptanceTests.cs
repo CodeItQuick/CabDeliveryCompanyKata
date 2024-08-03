@@ -294,10 +294,10 @@ public class AcceptanceTests
                 "7",
                 "Emma",
                 "1 Fulton Drive",
-            "1 Destination Lane",
+                "1 Destination Lane",
                 "7",
                 "Lisa",
-                "1 Fulton Drive",
+                "Walmart",
                 "1 Destination Lane",
                 "3",
                 "3",
@@ -315,7 +315,7 @@ public class AcceptanceTests
             cabCompanyReader, new FileHandler(customerListFilename, cabListFilename));
         userInterface.Run();
         
-        Assert.Contains("Evan's Cab picked up Lisa at 1 Fulton Drive.", 
+        Assert.Contains("Evan's Cab picked up Lisa at Walmart.", 
             cabCompanyPrinter.List());
         Assert.Contains("Evan's Cab dropped off Lisa at 1 Destination Lane.", 
             cabCompanyPrinter.List());
