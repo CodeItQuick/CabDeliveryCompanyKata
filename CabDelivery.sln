@@ -1,8 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.CabDeliveryCompanyKata", "Tests.CabDeliveryCompanyKata\Tests.CabDeliveryCompanyKata.csproj", "{E2206694-7662-41A1-B69D-93A3925E9B00}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.CabDeliveryCompanyKata", "Tests.CabDeliveryCompanyKata\Tests.CabDeliveryCompanyKata.csproj", "{E2206694-7662-41A1-B69D-93A3925E9B00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Production.EmmaCabCompany", "Production.EmmaCabCompany\Production.EmmaCabCompany.csproj", "{FE9C99A7-4B0E-4946-9C08-8F97DAA97897}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Production.EmmaCabCompany", "Production.EmmaCabCompany\Production.EmmaCabCompany.csproj", "{FE9C99A7-4B0E-4946-9C08-8F97DAA97897}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CabDelivery.WebApplication", "CabDelivery.WebApplication\CabDelivery.WebApplication.csproj", "{DF0CD3E8-5B5B-49E5-8E03-9E336397429B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +23,12 @@ Global
 		{FE9C99A7-4B0E-4946-9C08-8F97DAA97897}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE9C99A7-4B0E-4946-9C08-8F97DAA97897}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE9C99A7-4B0E-4946-9C08-8F97DAA97897}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF0CD3E8-5B5B-49E5-8E03-9E336397429B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF0CD3E8-5B5B-49E5-8E03-9E336397429B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF0CD3E8-5B5B-49E5-8E03-9E336397429B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF0CD3E8-5B5B-49E5-8E03-9E336397429B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

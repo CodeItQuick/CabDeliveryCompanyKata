@@ -13,9 +13,9 @@
     ~~8b. Create tests around DispatcherCoordinator and move the tests around/refactor as some are in the wrong spot~~
     ~~8c. Create Service Layer~~
     ~~8d. Persist state to file system~~
-8. Add More Features - Cab's have some concept of general location
+8. ~~Add More Features - Cab's have some concept of general location~~
    8a. ~~Add basic concept of location~~
-   8b. Need a service to populate the data for geolocation
+   8b. ~~Need a service to populate the data for geolocation~~
 9. ~~Repository needs to be injected into CabService~~
 10. Export in CabService is a private method and doesn't belong there?!?
 ## Story

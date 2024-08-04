@@ -8,7 +8,7 @@ public class AcceptanceTests
     [Fact]
     public void TheCabCompanyCanPickupACustomerAtAnAddress()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
             CommandList = new List<string>()
@@ -38,7 +38,7 @@ public class AcceptanceTests
     [Fact]
     public void TheCabCompanyCanRePromptOnBadCustomerName()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
             CommandList = new List<string>()
@@ -69,7 +69,7 @@ public class AcceptanceTests
     [Fact]
     public void TheCabCompanyReportsFailureIfCannotPickupCustomerDueToNoCalls()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
             CommandList = new List<string>()
@@ -91,7 +91,7 @@ public class AcceptanceTests
     [Fact]
     public void TheCabCompanyReportsFailureIfCannotDropOffCustomerDueToNoCustomerRequests()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
             CommandList = new List<string>()
@@ -114,7 +114,7 @@ public class AcceptanceTests
     [Fact]
     public void CannotRemoveCabOnceCustomerPickedUp()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
             CommandList = new List<string>()
@@ -143,7 +143,7 @@ public class AcceptanceTests
     [Fact]
     public void TheCabCompanyReportsFailureIfCannotPickupCustomerDueToNoCustomerRequests()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
             CommandList = new List<string>()
@@ -164,7 +164,7 @@ public class AcceptanceTests
     [Fact]
     public void TheCabCompanyReportsFailureIfCannotDropoffCustomerDueToNoRequestedCabs()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
             CommandList = new List<string>()
@@ -187,7 +187,7 @@ public class AcceptanceTests
     [Fact]
     public void TheCabCompanyReportsFailureIfNoCabsAvailable()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
             CommandList = new List<string>()
@@ -212,7 +212,7 @@ public class AcceptanceTests
     [Fact]
     public void TheCabCompanyCanPickupTwoCustomerAtAnAddress()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
             CommandList = new List<string>()
@@ -252,7 +252,7 @@ public class AcceptanceTests
     [Fact]
     public void TheCabCompanyReportsFailureWhenItCannotMakeAPickupDueToNoAvailableCabs()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
             CommandList = new List<string>()
@@ -284,7 +284,7 @@ public class AcceptanceTests
     [Fact]
     public void TheCabCompanyCanPickupTwoCustomerInAMessyOrderingAtAnAddress()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
             CommandList = new List<string>()
@@ -327,7 +327,7 @@ public class AcceptanceTests
     [Fact]
     public void CancellingCabWithoutWaitingPickupDisplaysError()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
             CommandList =
@@ -349,7 +349,7 @@ public class AcceptanceTests
     [Fact]
     public void PersistsStateAfterCallForCabDelivery()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         var customerListFilename = $"customer_list_default_repeatable.csv";
         var cabListFilename = $"cab_list_default_repeatable.csv";
         var fakeFileReadWriter = new FakeFileReadWriter(customerListFilename, cabListFilename);
@@ -377,7 +377,7 @@ public class AcceptanceTests
     [Fact]
     public void PersistsAllStateAfterCallForCabDelivery()
     {
-        FakeCabCompanyPrinter cabCompanyPrinter = new FakeCabCompanyPrinter();
+        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         var commandList = new List<string>()
         {
             "1",

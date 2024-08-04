@@ -2,7 +2,7 @@ using Production.EmmaCabCompany.Adapter.@out;
 
 namespace Tests.CabDeliveryCompanyKata;
 
-public class FakeCabCompanyPrinter : ICabCompanyPrinter
+public class SpyCabCompanyPrinter : ICabCompanyPrinter
 {
     private List<string> Messages { get; set; } = new List<string>();
 
