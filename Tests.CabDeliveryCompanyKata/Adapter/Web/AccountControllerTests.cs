@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.Testing.Handlers;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace Tests.CabDeliveryCompanyKata.Adapter.Web;
 
@@ -49,6 +50,33 @@ public class AccountControllerTests : IClassFixture<TestingWebApiFactory>
 
         Assert.True(response.IsSuccessStatusCode);
     }
+    [Fact]
+    public void CanChangePassword()
+    {
+        var antiForgeryToken = NavigateToPage("Account/Login");
+        DefaultLogin(antiForgeryToken, $"{Guid.NewGuid().ToString()}@test.com");
+        NavigateToPage($"Manage/Index");
+        var antiforgeryTokenTwo = NavigateToPage($"Manage/ChangePassword");
+
+        var response = ChangePassword("Password.2", antiforgeryTokenTwo);
+
+        Assert.True(response.IsSuccessStatusCode);
+    }
+
+    private HttpResponseMessage ChangePassword(string password, string antiForgeryToken)
+    {
+        var loginAttempt = _httpClient.PostAsync("/Account/Login",
+                new FormUrlEncodedContent(new Dictionary<string, string>()
+                {
+                    { "OldPassword", "Password.1" },
+                    { "NewPassword", password },
+                    { "ConfirmPassword", password },
+                    { "__RequestVerificationToken", antiForgeryToken },
+                }))
+            .Result;
+        return loginAttempt;
+    }
+    
     private string NavigateToPage(string? pageAddress)
     {
         var content = _httpClient.GetAsync(pageAddress)
