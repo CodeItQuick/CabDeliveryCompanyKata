@@ -59,3 +59,16 @@ Current Driver Request Confirmations: 2
 Noteable Constraints: 
 No location data for cabs or customers  
 Fare amount not recorded yet  
+
+Notes: Different Storage Options  
+SQL   
+Customer: Id, Name, Wallet, StartDestination, EndDestination    
+CabDriver: Id, Name  
+CabCustomers: CustomerId, CabDriverId  
+RideHistory: Id, CustomerId,  
+RideHistoryLocations: RideHistoryId, PickupDate    
+
+NoSQL (Dispatcher Bounded Context)  
+Customer: Id, Name, StartDestination, EndDestination, RideHistory: [{ CustomerRating }]  
+CabDriver: Id, CabId, Name, Fare: [{ Customers: [{ Id, Name, PickupLocation, DropOffLocation, PickupDate }] }]  
+RideHistory: CustomerId, CustomerName, CustomerRating, PickupLocations: [{ location, PickupDate }]  

@@ -68,9 +68,10 @@ public class CabTests
     [Fact]
     public void CabDenyRideRequestWhenNotAvailableAfterPickingUpAnotherFare()
     {
-        var cab = new Cab("Evan's Cab", 20, 46.2382, 63.1311);
-        var passenger = new Customer("Lisa", "1 Fulton Drive", "1 Destination Avenue");
-        var passengerDenied = new Customer("Emma", "2 Fulton Drive", "2 Destination Avenue");
+        var cab = ObjectMother.CreateDefaultCab();
+        var passenger = ObjectMother.CreateDefaultCustomer(customerName: "Lisa");
+        var passengerDenied = ObjectMother.CreateDefaultCustomer(customerName: "Emma");
+        
         var acceptedRide = cab.RequestRideFor(passenger);
         var pickupCustomer = cab.PickupAssignedCustomer(passengerDenied);
 

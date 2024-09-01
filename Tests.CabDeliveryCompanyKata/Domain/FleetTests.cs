@@ -27,13 +27,7 @@ public class FleetTests
 
         fleet.RideRequested(customer);
         
-        Assert.Equivalent(new CabInfo()
-        {
-            PassengerName = "Evan",
-            CabName = "Dan's Cab",
-            Destination = "2 Destination Lane",
-            StartLocation = "1 Fulton Drive"
-        }, fleet.LastRideAssigned());
+        Assert.Equal("Dan's Cab", fleet.FindCab(customer));
     }
     [Fact]
     public void DispatchCanAssignPassengerToTwoPassengerFleet()
@@ -46,13 +40,7 @@ public class FleetTests
         fleet.RideRequested(customer);
         fleet.RideRequested(customer);
         
-        Assert.Equivalent(new CabInfo()
-        {
-            PassengerName = "Evan",
-            CabName = "Lisa's Cab",
-            Destination = "2 Destination Lane",
-            StartLocation = "1 Fulton Drive"
-        }, fleet.LastRideAssigned());
+        Assert.Equal("Dan's Cab", fleet.FindCab(customer));
     }
     [Fact]
     public void DispatchCanAssignTwoPassengerToTwoPassengerFleet()

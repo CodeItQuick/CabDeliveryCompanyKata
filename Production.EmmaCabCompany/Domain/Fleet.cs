@@ -3,8 +3,7 @@ namespace Production.EmmaCabCompany.Domain;
 public class Fleet 
 {
     private List<Cab> _fleet = new();
-    private bool _rideRequested;
-    
+
     public void AddCab(Cab cab)
     {
         _fleet.Add(cab);
@@ -47,18 +46,6 @@ public class Fleet
         assignedCab?.RequestRideFor(customer);
     }
 
-    private static double CalculateDistanceBetweenTwoPoints((double?, double?) firstLocation, (double, double) secondLocation)
-    {
-        var formulaOne =
-            Math.Sqrt(Math.Pow(firstLocation.Item1 ?? 0 - secondLocation.Item1, 2.0) +
-                      Math.Pow(firstLocation.Item2 ?? 0 - secondLocation.Item2, 2.0));
-        var formulaTwo =
-            Math.Sqrt(Math.Pow(firstLocation.Item1 - secondLocation.Item1 ?? 0, 2.0) +
-                      Math.Pow(firstLocation.Item2 - secondLocation.Item2 ?? 0, 2.0));
-        return formulaOne < formulaTwo ? formulaOne : formulaTwo;
-     
-    }
-
     public void PickupCustomer(Customer customer)
     {
         if (_fleet.Count == 0)
@@ -88,13 +75,6 @@ public class Fleet
     {
         return _fleet.Any(x => x.ContainsPassenger());
     }
-    public CabInfo? LastRideAssigned()
-    {
-        return _fleet
-            .LastOrDefault(x => x.IsStatus(CabStatus.CustomerRideRequested))
-            ?.CabInfo();
-    }
-
     public string? FindCab(Customer customer)
     {
         return _fleet.First(x => x.CabInfo()?.PassengerName == customer.Name).CabInfo()?.CabName;
@@ -121,12 +101,12 @@ public class Fleet
         _fleet = cabStoredList;
     }
 
-    public static List<Cab> CreateCabState(string[] cabList)
+    public Fleet(string[] cabList)
     {
         var cabListStrings = cabList
             .Select(x => x)
             .ToList();
-        List<Cab> cabStoredList = new List<Cab>();
+        _fleet = new List<Cab>();
         foreach (var cab in cabListStrings)
         {
             string?[] cabAttributes = cab.Split(",");
@@ -137,9 +117,12 @@ public class Fleet
                 var customer = new Customer(cabAttributes[1], cabAttributes[2], cabAttributes[3]);
                 cabValue.RequestRideFor(customer);
             }
-            cabStoredList.Add(cabValue);
+            _fleet.Add(cabValue);
         }
+    }
 
-        return cabStoredList;
+    public Fleet()
+    {
+        
     }
 }

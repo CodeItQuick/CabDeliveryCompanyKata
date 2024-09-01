@@ -11,10 +11,10 @@ public class CabFileRepository(IFileHandler fileHandler)
         return customerDirectory;
     }
 
-    public List<Cab> LoadedFleetState()
+    public Fleet LoadedFleetState()
     {
         var cabList = fileHandler.ReadReadCabList();
-        var loadedFleetState = Fleet.CreateCabState(cabList);
+        var loadedFleetState = new Fleet(cabList);
         return loadedFleetState;
     }
     public void WriteCustomerList(string[] exportedCustomers)

@@ -2,7 +2,7 @@ namespace Production.EmmaCabCompany.Domain;
 
 public class DispatcherCoordinator
 {
-    private readonly Fleet _fleet = new();
+    private Fleet _fleet = new();
     private readonly CustomerList _customerList = new();
 
     public void AddCab(Cab cab)
@@ -112,9 +112,9 @@ public class DispatcherCoordinator
         _customerList.Rebuild(customerDictionary);
     }
 
-    public void RebuildCabList(List<Cab> cabStoredList)
+    public void RebuildCabList(Fleet cabStoredList)
     {
-        _fleet.RebuildCabList(cabStoredList);
+        _fleet = cabStoredList;
     }
 
     public Customer? RetrieveCustomerInState(CustomerStatus enroute)
