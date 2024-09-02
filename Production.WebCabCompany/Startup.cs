@@ -70,6 +70,12 @@ public class Startup
         }
 
         CreateRoles(serviceProvider).GetAwaiter().GetResult();
+
+        app.UseCors(builder => builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+        );
         
         app.UseStaticFiles();
 

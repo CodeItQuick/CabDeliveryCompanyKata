@@ -1858,4 +1858,8 @@
       <_ContentIncludedByDefault Remove="Views\aspnetcore-main\src\ProjectTemplates\Web.ProjectTemplates\content\RazorClassLibrary-CSharp\_Imports.razor" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Production.EmmaCabCompany\Production.EmmaCabCompany.csproj" />
+    </ItemGroup>
+
 </Project>

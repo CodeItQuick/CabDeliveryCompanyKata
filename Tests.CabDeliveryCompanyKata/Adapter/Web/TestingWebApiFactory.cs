@@ -63,6 +63,7 @@ public class TestingWebApiFactory: WebApplicationFactory<Program>
             //
             //
             services.AddHttpClient("test", o => new HttpClient(new HttpClientHandler() { CookieContainer = new CookieContainer()}));
+            services.AddCors();
             var sp = services.BuildServiceProvider();
             using (var scope = sp.CreateScope())
             using (var appContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
