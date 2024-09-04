@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Production.EmmaCabCompany;
 using Production.EmmaCabCompany.Adapter.@in;
 using Production.EmmaCabCompany.Domain;
@@ -14,15 +15,15 @@ namespace Production.WebCabCompany.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private CabService _cabService;
-    private MenuService _menuService;
+    private readonly CabService _cabService;
+    private readonly MenuService _menuService;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IOptions<FileSettings> fileSettings)
     {
         _logger = logger;
         var fileHandler = new FileHandler(
-            "customer-file-name.csv", 
-            "cab-file-name.csv"); // TODO: inject file handler
+            fileSettings.Value.CustomerFileNameCsv, 
+            fileSettings.Value.CabFileNameCsv);
         var dispatcherCoordinator = new DispatcherCoordinator();
         _cabService = new CabService(dispatcherCoordinator, new CabFileRepository(fileHandler));
         _menuService = new MenuService(dispatcherCoordinator);
@@ -85,6 +86,12 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+}
+
+public class FileSettings
+{
+    public string CustomerFileNameCsv { get; init; } = "customer-file-name.csv";
+    public string CabFileNameCsv { get; init; } = "cab-file-name.csv";
 }
 
 public class CabDisplayModel

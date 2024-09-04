@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Production.WebCabCompany.Controllers;
 using Production.WebCabCompany.Models;
 using Production.WebCabCompany.Services;
 
@@ -26,11 +27,14 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+        
         // Add framework services.
         services.AddDbContext<ApplicationDbContext>(options =>
             options.ConfigureWarnings(b => b.Log(CoreEventId.ManyServiceProvidersCreatedWarning))
                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+
+        services.Configure<FileSettings>(Configuration);
         services.AddMvc();
 
         services.AddIdentityCore<ApplicationUser>()
