@@ -1,13 +1,43 @@
 namespace Production.EmmaCabCompany.Domain;
 
+// Aggregate Root Id
 public class Fleet 
 {
     private List<Cab> _fleet = new();
+
+    public void CreateFleet(string[] cabList)
+    {
+        var cabListStrings = cabList
+            .Select(x => x)
+            .ToList();
+        _fleet = new List<Cab>();
+        foreach (var cab in cabListStrings)
+        {
+            string?[] cabAttributes = cab.Split(",");
+            if (cabAttributes.Length < 1 || string.IsNullOrWhiteSpace(cabAttributes[0]))
+            {
+            }
+            else
+            {
+                var cabValue = new Cab(cabAttributes[0], 20, 46.2382, 63.1311);
+                if (!string.IsNullOrWhiteSpace(cabAttributes[1]))
+                {
+                    var customer = new Customer(
+                        cabAttributes[1], 
+                        cabAttributes[2], 
+                        cabAttributes[3]);
+                    cabValue.RequestRideFor(customer);
+                }
+                _fleet.Add(cabValue);
+            }
+        }
+    }
 
     public void AddCab(Cab cab)
     {
         _fleet.Add(cab);
     }
+
     public void RemoveCab()
     {
         if (_fleet[^1].RideInProgress())
@@ -15,10 +45,12 @@ public class Fleet
             _fleet.RemoveAt(_fleet.Count - 1);
         }
     }
+
     public bool IsEnroute(Customer customer)
     {
         return _fleet.Any(x => x.CabInfo()?.PassengerName == customer.Name);
     }
+
     public void RideRequested(Customer customer)
     {
         var availableCabList = _fleet
@@ -55,7 +87,7 @@ public class Fleet
         var enrouteCab = _fleet?.FirstOrDefault(x => x.IsEnrouteFor(customer));
         enrouteCab?.PickupAssignedCustomer(customer);
     }
-    
+
     public void DropOffCustomer()
     {
         if (_fleet.Count == 0)
@@ -71,10 +103,12 @@ public class Fleet
     {
         return _fleet.Count == 0;
     }
+
     public bool CustomersStillInTransport()
     {
         return _fleet.Any(x => x.ContainsPassenger());
     }
+
     public string? FindCab(Customer customer)
     {
         return _fleet.First(x => x.CabInfo()?.PassengerName == customer.Name).CabInfo()?.CabName;
@@ -94,31 +128,6 @@ public class Fleet
                 $"{x.CabInfo()?.StartLocation}," +
                 $"{x.CabInfo()?.Destination}")
             .ToArray();
-    }
-
-    public void RebuildCabList(List<Cab> cabStoredList)
-    {
-        _fleet = cabStoredList;
-    }
-
-    public Fleet(string[] cabList)
-    {
-        var cabListStrings = cabList
-            .Select(x => x)
-            .ToList();
-        _fleet = new List<Cab>();
-        foreach (var cab in cabListStrings)
-        {
-            string?[] cabAttributes = cab.Split(",");
-            if (cabAttributes.Length < 1 || string.IsNullOrWhiteSpace(cabAttributes[0])) continue;
-            var cabValue = new Cab(cabAttributes[0], 20, 46.2382, 63.1311);
-            if (!string.IsNullOrWhiteSpace(cabAttributes[1]))
-            {
-                var customer = new Customer(cabAttributes[1], cabAttributes[2], cabAttributes[3]);
-                cabValue.RequestRideFor(customer);
-            }
-            _fleet.Add(cabValue);
-        }
     }
 
     public Fleet()

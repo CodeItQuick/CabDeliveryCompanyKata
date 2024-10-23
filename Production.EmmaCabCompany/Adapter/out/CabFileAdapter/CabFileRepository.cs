@@ -1,6 +1,7 @@
+using Production.EmmaCabCompany.Adapter.@in;
 using Production.EmmaCabCompany.Domain;
 
-namespace Production.EmmaCabCompany.Adapter.@in;
+namespace Production.EmmaCabCompany.Adapter.@out.CabFileAdapter;
 
 public class CabFileRepository(IFileHandler fileHandler)
 {
@@ -14,8 +15,17 @@ public class CabFileRepository(IFileHandler fileHandler)
     public Fleet LoadedFleetState()
     {
         var cabList = fileHandler.ReadReadCabList();
-        var loadedFleetState = new Fleet(cabList);
-        return loadedFleetState;
+        var newFleet = new Fleet();
+        newFleet.CreateFleet(cabList);
+        return newFleet;
+    }
+
+    public CustomerList LoadedCustomerListState()
+    {
+        var customerList = fileHandler.ReadCustomerList();
+        var newFleet = new CustomerList();
+        newFleet.CreateCustomerList(customerList);
+        return newFleet;
     }
     public void WriteCustomerList(string[] exportedCustomers)
     {

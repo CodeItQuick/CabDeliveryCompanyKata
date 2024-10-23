@@ -1,4 +1,5 @@
 using Production.EmmaCabCompany.Adapter.@in;
+using Production.EmmaCabCompany.Adapter.@out.CabFileAdapter;
 using Production.EmmaCabCompany.Domain;
 
 namespace Production.EmmaCabCompany.Service;

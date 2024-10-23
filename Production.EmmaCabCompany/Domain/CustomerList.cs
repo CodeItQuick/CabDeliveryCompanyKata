@@ -19,6 +19,30 @@ public class CustomerList
             .FirstOrDefault(x => x.Value == CustomerStatus.CustomerCallInProgress)
             .Key;
     }
+    // TODO: Write Aggregate Root Tests
+    public void CreateCustomerList(string[] customerList)
+    {
+        _customerStatusMap = new Dictionary<Customer, CustomerStatus>();
+        foreach (var customerStr in customerList)
+        {
+            string?[] customerAttributes = customerStr.Split(",");
+            if (customerAttributes.Length < 1 || string.IsNullOrWhiteSpace(customerAttributes[0]))
+            {
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(customerAttributes[0]))
+                {
+                    var customer = new Customer(
+                        customerAttributes[0], 
+                        customerAttributes[1], 
+                        customerAttributes[2]);
+                    CustomerStatus.TryParse(customerAttributes[3], out CustomerStatus customerStatus);
+                    _customerStatusMap.Add(customer, customerStatus);
+                }
+            }
+        }
+    }
     
     public void RideRequest()
     {
