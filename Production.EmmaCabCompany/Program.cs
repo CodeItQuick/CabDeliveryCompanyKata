@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using Production.EmmaCabCompany.Adapter.@in;
+using Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 using Production.EmmaCabCompany.Adapter.@out;
 
 namespace Production.EmmaCabCompany;

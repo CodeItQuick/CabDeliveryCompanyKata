@@ -7,18 +7,18 @@ public class DispatchController
 {
     private int _currentNameIdx = 0;
     private MenuService _menuService;
-    private readonly CabService cabService;
-    public DispatchController(CabService cabService, MenuService menuService)
+    private readonly CabServiceHandler _cabServiceHandler;
+    public DispatchController(CabServiceHandler cabServiceHandler, MenuService menuService)
     {
         _menuService = menuService;
-        this.cabService = cabService;
+        this._cabServiceHandler = cabServiceHandler;
     }
 
 
     public string AddCab()
     {
         var cabName = "Evan's Cab";
-        cabService.AddCab(new Cab(cabName, 20, 46.2382, 63.1311));
+        _cabServiceHandler.AddCab(new Cab(cabName, 20, 46.2382, 63.1311));
         
         return "Added Evan's Cab to fleet";
     }
@@ -26,7 +26,7 @@ public class DispatchController
     {
         try
         {
-            cabService.RemoveCab();
+            _cabServiceHandler.RemoveCab();
             return "Cab removed from fleet";
         }
         catch (Exception ex)
@@ -36,7 +36,7 @@ public class DispatchController
     }
     public string CustomerCabCall(string? customerName, string? startLocation, string? destinationLane)
     {
-        var customerCabCall = cabService.CustomerCabCall(customerName, startLocation, destinationLane);
+        var customerCabCall = _cabServiceHandler.CustomerCabCall(customerName, startLocation, destinationLane);
         var resultText = $"Received customer ride request from {customerCabCall}";
         _currentNameIdx += 1;
         return resultText;
@@ -49,7 +49,7 @@ public class DispatchController
             {
                 throw new SystemException("This is not a valid option.");
             }
-            cabService.CancelPickup();
+            _cabServiceHandler.CancelPickup();
             return ["Customer cancelled cab ride successfully."];
         }
         catch (Exception ex)
@@ -65,7 +65,7 @@ public class DispatchController
             {
                 throw new SystemException("This is not a valid option.");
             }
-            var response = cabService.SendCabRequest();
+            var response = _cabServiceHandler.SendCabRequest();
             return response.ToList();
         }
         catch (Exception ex)
@@ -81,7 +81,7 @@ public class DispatchController
             {
                 throw new SystemException("This is not a valid option.");
             }
-            cabService.PickupCustomer();
+            _cabServiceHandler.PickupCustomer();
             return "Notified dispatcher of pickup";
         }
         catch (Exception ex)
@@ -97,7 +97,7 @@ public class DispatchController
             {
                 throw new SystemException("This is not a valid option.");
             }
-            var droppedOff = cabService.DropOffCustomer();
+            var droppedOff = _cabServiceHandler.DropOffCustomer();
             return [$"{droppedOff[0]?.CabName} dropped off {droppedOff[0]?.PassengerName} at {droppedOff[0]?.Destination}."];
         }
         catch (Exception ex)

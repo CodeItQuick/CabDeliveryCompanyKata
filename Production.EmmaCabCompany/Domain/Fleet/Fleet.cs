@@ -1,8 +1,15 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
 namespace Production.EmmaCabCompany.Domain;
 
 // Aggregate Root Id
-public class Fleet 
+[PrimaryKey("Id")]
+[Table("Fleet")]
+public class Fleet
 {
+    public int Id = 1;
     private List<Cab> _fleet = new();
 
     public void CreateFleet(string[] cabList)
@@ -128,10 +135,5 @@ public class Fleet
                 $"{x.CabInfo()?.StartLocation}," +
                 $"{x.CabInfo()?.Destination}")
             .ToArray();
-    }
-
-    public Fleet()
-    {
-        
     }
 }

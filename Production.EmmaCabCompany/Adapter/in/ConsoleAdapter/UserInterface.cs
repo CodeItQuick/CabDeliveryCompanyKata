@@ -1,10 +1,10 @@
-using Production.EmmaCabCompany.Adapter.@in;
+using Production.EmmaCabCompany.Adapter.@out;
 using Production.EmmaCabCompany.Adapter.@out.CabFileAdapter;
 using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Service;
 using Tests.CabDeliveryCompanyKata;
 
-namespace Production.EmmaCabCompany.Adapter.@out;
+namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 
 public class UserInterface(
     ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader,
@@ -16,7 +16,7 @@ public class UserInterface(
     {
         int selection;
         var dispatch = new DispatcherCoordinator();
-        var cabService = new CabService(dispatch, new CabFileRepository(writer));
+        var cabService = new CabServiceHandler(dispatch, new CabFileRepository(writer));
         _menuController = new MenuController(new MenuService(dispatch));
         var dispatchController = new DispatchController(cabService, new MenuService(dispatch));
         do

@@ -1,7 +1,10 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Production.EmmaCabCompany.Adapter.@out.CabFileAdapter;
+using Production.EmmaCabCompany.Application;
 using Production.WebCabCompany.Controllers;
 using Production.WebCabCompany.Models;
 using Production.WebCabCompany.Services;
@@ -35,6 +38,17 @@ public class Startup
             options.ConfigureWarnings(b => b.Log(CoreEventId.ManyServiceProvidersCreatedWarning))
                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+        services.AddDbContext<CabContext>(options =>
+        {
+            var connectionFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "production_db.db");
+            if (!File.Exists(connectionFile))
+            {
+                File.Create(connectionFile);
+            }
+            options.UseSqlite($"Data Source={connectionFile}");
+        });
+
 
         services.Configure<FileSettings>(Configuration);
         services.AddMvc();
@@ -56,6 +70,8 @@ public class Startup
         // Add application services.
         services.AddTransient<IEmailSender, AuthMessageSender>();
         services.AddTransient<ISmsSender, AuthMessageSender>();
+        services.AddSingleton<IFleetRepository, FleetRepository>();
+        services.AddSingleton<IAddCabCommandHandler, AddCabCommandHandler>();
 
         // Does not work on this dotnet?
         // services.AddDatabaseDeveloperPageExceptionFilter();

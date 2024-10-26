@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Production.EmmaCabCompany;
 using Production.EmmaCabCompany.Adapter.@in;
 using Production.EmmaCabCompany.Adapter.@out.CabFileAdapter;
+using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Service;
 using Production.WebCabCompany.Models;
@@ -16,17 +17,21 @@ namespace Production.WebCabCompany.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly CabService _cabService;
+    private readonly IFleetRepository _fleetRepository;
+    private readonly CabServiceHandler _cabService;
     private readonly MenuService _menuService;
 
-    public HomeController(ILogger<HomeController> logger, IOptions<FileSettings> fileSettings)
+    public HomeController(ILogger<HomeController> logger, 
+        IOptions<FileSettings> fileSettings, 
+        IFleetRepository fleetRepository)
     {
         _logger = logger;
+        _fleetRepository = fleetRepository;
         var fileHandler = new FileHandler(
             fileSettings.Value.CustomerFileNameCsv, 
             fileSettings.Value.CabFileNameCsv);
         var dispatcherCoordinator = new DispatcherCoordinator();
-        _cabService = new CabService(dispatcherCoordinator, new CabFileRepository(fileHandler));
+        _cabService = new CabServiceHandler(dispatcherCoordinator, new CabFileRepository(fileHandler));
         _menuService = new MenuService(dispatcherCoordinator);
     }
 
@@ -39,6 +44,7 @@ public class HomeController : Controller
     public IActionResult AddCabDriver()
     {
         _cabService.AddCab(new Cab("default", 20, 23.23, 32.32));
+        _fleetRepository.AddCab("default", 23.23, 32.32);
         
         return RedirectToAction(nameof(Index));
     }

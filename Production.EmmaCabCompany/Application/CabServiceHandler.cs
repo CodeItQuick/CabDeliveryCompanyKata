@@ -1,15 +1,16 @@
 using Production.EmmaCabCompany.Adapter.@in;
 using Production.EmmaCabCompany.Adapter.@out.CabFileAdapter;
+using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Domain;
 
 namespace Production.EmmaCabCompany.Service;
 
-public class CabService
+public class CabServiceHandler
 {
     private readonly DispatcherCoordinator _dispatcherCoordinator;
     private CabFileRepository _cabFileRepository;
 
-    public CabService(DispatcherCoordinator dispatcherCoordinator, CabFileRepository cabFileRepository)
+    public CabServiceHandler(DispatcherCoordinator dispatcherCoordinator, CabFileRepository cabFileRepository)
     {
         _cabFileRepository = cabFileRepository;
         var customerDirectory = _cabFileRepository.LoadedCustomerDirectory();
@@ -93,8 +94,13 @@ public class CabService
 
     public void AddCab(Cab cab)
     {
+        // add the cab to the domain
         _dispatcherCoordinator.AddCab(cab);
-        ExportPersistence();
+        
+        
+        // export the cab list with the new cab
+        string[] cabList = _dispatcherCoordinator.ExportCabList();
+        _cabFileRepository.WriteCabList(cabList);
     }
     public void RemoveCab()
     {
