@@ -37,10 +37,17 @@ public class FleetRepository : IFleetRepository
 
     public void RemoveCab(int fleetId)
     {
-        var fleet = _cabContext.Fleet.Include(x => x.FleetOfCabs)
-            .FirstOrDefault(x => x.Id == fleetId);
-        _cabContext.Cabs.Remove(fleet!.SignedOutCab());
-        _cabContext.SaveChanges();
+        try
+        {
+            var fleet = _cabContext.Fleet.Include(x => x.FleetOfCabs)
+                .FirstOrDefault(x => x.Id == fleetId);
+            _cabContext.Cabs.Remove(fleet!.SignedOutCab());
+            _cabContext.SaveChanges();
+        }
+        catch (ArgumentNullException)
+        {
+            throw new Exception("Cab cannot be removed until passenger dropped off.");
+        }
     }
 
     public void EmptyFleet(int fleetId)

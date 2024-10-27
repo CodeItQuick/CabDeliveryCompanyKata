@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Domain;
+using Production.EmmaCabCompany.Domain.Menu;
 
 namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
@@ -11,9 +12,17 @@ public class CustomerListRepository : ICustomerListRepository
     public CustomerListRepository(CabContext cabContext)
     {
         _cabContext = cabContext;
+        EnsureMenuExistsForSingleUser();
         EnsureFleetExistsForSingleUser();
     }
 
+    private void EnsureMenuExistsForSingleUser()
+    {
+        var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
+        if (fleetExists) return;
+        _cabContext.Menu.Add(new Menu() { Id = 1 });
+        _cabContext.SaveChanges();
+    }
     private void EnsureFleetExistsForSingleUser()
     {
         var fleetExists = _cabContext.CustomerList.Any(x => x.Id == 1);

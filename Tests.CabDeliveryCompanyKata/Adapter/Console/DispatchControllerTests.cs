@@ -8,19 +8,26 @@ namespace Tests.CabDeliveryCompanyKata;
 
 public class DispatchControllerTests
 {
+    private readonly CabContext _cabContext;
+
+    public DispatchControllerTests()
+    {
+        _cabContext = new CabContext(
+            new DbContextOptionsBuilder<CabContext>()
+                .UseSqlite($"Data Source={Guid.NewGuid()}.db").Options);
+        _cabContext.Database.Migrate();
+    }
+
     [Fact]
     public void CanAddCabsToTheFleet()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
         var cabService = new CabServiceHandler(radioFleet, new CabFileRepository(handler));
-        var cabContext = new CabContext(
-            new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(cabService, new MenuService(
                 new DispatcherCoordinator()),
-            new CustomerListRepository(cabContext),
-            new FleetRepository(cabContext));
+            new CustomerListRepository(_cabContext),
+            new FleetRepository(_cabContext));
 
         var addCabMessage = dispatchController.AddCab();
 
@@ -32,13 +39,10 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(
-            new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
-            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(cabContext),
-            new FleetRepository(cabContext));
+            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(_cabContext),
+            new FleetRepository(_cabContext));
         dispatchController.AddCab();
         var cabsAvailable = radioFleet.NoCabsInFleet();
         var removeCab = dispatchController.RemoveCab();
@@ -55,13 +59,10 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(
-            new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
-            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(cabContext),
-            new FleetRepository(cabContext));
+            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(_cabContext),
+            new FleetRepository(_cabContext));
 
         var result = dispatchController.RemoveCab();
 
@@ -73,11 +74,9 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
-            new CustomerListRepository(cabContext), new FleetRepository(cabContext));
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
@@ -93,13 +92,10 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(
-            new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
-            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(cabContext),
-            new FleetRepository(cabContext));
+            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(_cabContext),
+            new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -116,13 +112,10 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(
-            new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
-            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(cabContext),
-            new FleetRepository(cabContext));
+            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(_cabContext),
+            new FleetRepository(_cabContext));
         dispatchController.AddCab();
 
         var customerCabCall = dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -135,13 +128,10 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(
-            new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
-            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(cabContext),
-            new FleetRepository(cabContext));
+            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(_cabContext),
+            new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
@@ -155,13 +145,10 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(
-            new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
-            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(cabContext),
-            new FleetRepository(cabContext));
+            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(_cabContext),
+            new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.CustomerCancelledCabRide();
@@ -176,11 +163,9 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
-            new CustomerListRepository(cabContext), new FleetRepository(cabContext));
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
 
         var customerCabCall = dispatchController.CustomerCancelledCabRide();
 
@@ -192,11 +177,9 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
-            new CustomerListRepository(cabContext), new FleetRepository(cabContext));
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
@@ -210,11 +193,9 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
-            new CustomerListRepository(cabContext), new FleetRepository(cabContext));
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
@@ -229,11 +210,9 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
-            new CustomerListRepository(cabContext), new FleetRepository(cabContext));
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
@@ -248,11 +227,9 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
-            new CustomerListRepository(cabContext), new FleetRepository(cabContext));
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
 
         var sendCabRequest = dispatchController.SendCabRequest();
@@ -265,11 +242,9 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
-            new CustomerListRepository(cabContext), new FleetRepository(cabContext));
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
 
         var sendCabRequest = dispatchController.SendCabRequest();
 
@@ -281,11 +256,9 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
-            new CustomerListRepository(cabContext), new FleetRepository(cabContext));
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
@@ -300,11 +273,9 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
-            new CustomerListRepository(cabContext), new FleetRepository(cabContext));
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
 
         var sendCabRequest = dispatchController.CabNotifiesPickedUp();
 
@@ -316,11 +287,9 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
-            new CustomerListRepository(cabContext), new FleetRepository(cabContext));
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
@@ -334,11 +303,9 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
-            new CustomerListRepository(cabContext), new FleetRepository(cabContext));
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
@@ -354,11 +321,9 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
-            new CustomerListRepository(cabContext), new FleetRepository(cabContext));
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -378,12 +343,10 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        cabContext.Database.Migrate();
+                _cabContext.Database.Migrate();
         var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
-            new CustomerListRepository(cabContext), new FleetRepository(cabContext));
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -404,11 +367,9 @@ public class DispatchControllerTests
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
-            new CustomerListRepository(cabContext), new FleetRepository(cabContext));
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
@@ -423,14 +384,11 @@ public class DispatchControllerTests
     public void InvalidOptionSelectedReturnsError()
     {
         IFileHandler handler = new FakeFileReadWriter("customer_filename.csv", "cab_list_filename.csv");
-        var cabContext = new CabContext(
-            new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
-        var dispatchController = new DispatchController(
+                var dispatchController = new DispatchController(
             new CabServiceHandler(
                 new DispatcherCoordinator(), new CabFileRepository(handler)),
-            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(cabContext),
-            new FleetRepository(cabContext));
+            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(_cabContext),
+            new FleetRepository(_cabContext));
 
         var dispatch = dispatchController.CabNotifiesDroppedOff();
 

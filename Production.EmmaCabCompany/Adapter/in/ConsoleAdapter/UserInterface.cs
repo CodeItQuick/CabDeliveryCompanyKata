@@ -22,8 +22,15 @@ public class UserInterface
         this.cabCompanyPrinter = cabCompanyPrinter;
         this.cabCompanyReader = cabCompanyReader;
         this.writer = writer;
+        var connectionFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "production_db.db");
+        if (!File.Exists(connectionFile))
+        {
+            File.Create(connectionFile);
+        }
+
         var dbContextOptions = new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite("Data Source=console_production.db");
+            .UseSqlite($"Data Source={connectionFile}");
         _cabContext = new CabContext(dbContextOptions.Options);
         _cabContext.Database.Migrate();
     }
@@ -34,9 +41,8 @@ public class UserInterface
         var dispatch = new DispatcherCoordinator();
         var cabService = new CabServiceHandler(dispatch, new CabFileRepository(writer));
         _menuController = new MenuController(new MenuService(dispatch));
-        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite("Data Source=console_production.db").Options);
-        var dispatchController = new DispatchController(cabService, new MenuService(dispatch), new CustomerListRepository(cabContext), new FleetRepository(cabContext));
+        var dispatchController = new DispatchController(cabService, new MenuService(dispatch),
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         do
         {
             WriteMenu();
@@ -50,8 +56,8 @@ public class UserInterface
             }
 
             var paramList = RequestParamList(selection);
-            
-            var output = ExecuteCommand(selection, dispatchController, paramList.ToArray()); 
+
+            var output = ExecuteCommand(selection, dispatchController, paramList.ToArray());
             output.ForEach(cabCompanyPrinter.WriteLine);
         } while (selection != 0);
     }
@@ -97,7 +103,8 @@ public class UserInterface
         menu.ForEach(Console.WriteLine);
     }
 
-    private static List<string> ExecuteCommand(int selection, DispatchController dispatchController, params string?[] commandParams)
+    private static List<string> ExecuteCommand(int selection, DispatchController dispatchController,
+        params string?[] commandParams)
     {
         return selection switch
         {

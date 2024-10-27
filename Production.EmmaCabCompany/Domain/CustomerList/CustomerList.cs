@@ -9,7 +9,7 @@ namespace Production.EmmaCabCompany.Domain;
 public class CustomerList
 {
     public int Id { get; set; } = 1;
-    [ForeignKey("Customer")]
+    [ForeignKey("CustomerId")]
     public virtual List<Customer> Customers { get; set; }
 
     private Dictionary<Customer, CustomerStatus> _customerStatusMap = new();

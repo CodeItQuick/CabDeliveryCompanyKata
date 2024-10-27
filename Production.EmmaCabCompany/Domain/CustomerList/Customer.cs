@@ -23,6 +23,9 @@ public class Customer
     [Column("Status")]
     public CustomerStatus Status { get; set; }
 
+    [Column("MenuId")] public int? MenuId { get; set; } = 1;
+    [Column("CustomerId")] public int? CustomerId { get; set; } = 1;
+
     public Customer()
     {
     }

@@ -10,6 +10,7 @@ public class DispatchController
     private int _currentNameIdx = 0;
     private MenuService _menuService;
     private readonly CustomerListRepository _customerListRepository;
+    private readonly FleetRepository _fleetRepository;
     private readonly CabServiceHandler _cabServiceHandler;
     private CustomerCabRequestedHandler _customerCabRequestedHandler;
     private CustomerRideRequestedHandler _customerRideRequestedHandler;
@@ -18,10 +19,12 @@ public class DispatchController
     private CustomerEnroutedHandler _customerEnroutedHandler;
     private CustomerPickedUpHandler _customerPickedUpHandler;
 
-    public DispatchController(CabServiceHandler cabServiceHandler, MenuService menuService, CustomerListRepository customerListRepository, FleetRepository fleetRepository)
+    public DispatchController(CabServiceHandler cabServiceHandler, MenuService menuService,
+        CustomerListRepository customerListRepository, FleetRepository fleetRepository)
     {
         _menuService = menuService;
         _customerListRepository = customerListRepository;
+        _fleetRepository = fleetRepository;
         _cabServiceHandler = cabServiceHandler;
         _customerCabRequestedHandler = new CustomerCabRequestedHandler(_customerListRepository);
         _customerCancelledCabHandler = new CustomerCancelledCabHandler(_customerListRepository);
@@ -34,14 +37,17 @@ public class DispatchController
     public string AddCab()
     {
         var cabName = "Evan's Cab";
+        _fleetRepository.AddCab(cabName, 46.2382, 63.1311);
         _cabServiceHandler.AddCab(new Cab(cabName, 20, 46.2382, 63.1311));
-        
+
         return "Added Evan's Cab to fleet";
     }
+
     public string RemoveCab()
     {
         try
         {
+            _fleetRepository.RemoveCab(1);
             _cabServiceHandler.RemoveCab();
             return "Cab removed from fleet";
         }
@@ -50,6 +56,7 @@ public class DispatchController
             return ex.Message;
         }
     }
+
     public string CustomerCabCall(string? customerName, string? startLocation, string? destinationLane)
     {
         var customerCabCall = _cabServiceHandler.CustomerCabCall(customerName, startLocation, destinationLane);
@@ -58,6 +65,7 @@ public class DispatchController
         _customerCabRequestedHandler.Handle(new CustomerCabRequested(customerName, startLocation, destinationLane));
         return resultText;
     }
+
     public List<string> CustomerCancelledCabRide()
     {
         try
@@ -66,6 +74,7 @@ public class DispatchController
             {
                 throw new SystemException("This is not a valid option.");
             }
+
             _cabServiceHandler.CancelPickup();
             _customerCancelledCabHandler.Handle(new CustomerCancelledCab());
             return ["Customer cancelled cab ride successfully."];
@@ -75,6 +84,7 @@ public class DispatchController
             return [ex.Message];
         }
     }
+
     public List<string> SendCabRequest()
     {
         try
@@ -83,9 +93,10 @@ public class DispatchController
             {
                 throw new SystemException("This is not a valid option.");
             }
+
             var response = _cabServiceHandler.SendCabRequest();
             _customerRideRequestedHandler.Handle(new CustomerRideRequested());
-            
+
             return response.ToList();
         }
         catch (Exception ex)
@@ -93,6 +104,7 @@ public class DispatchController
             return [ex.Message];
         }
     }
+
     public string CabNotifiesPickedUp()
     {
         try
@@ -101,6 +113,7 @@ public class DispatchController
             {
                 throw new SystemException("This is not a valid option.");
             }
+
             _cabServiceHandler.PickupCustomer();
             _customerPickedUpHandler.Handle(new CustomerPickedUp());
             return "Notified dispatcher of pickup";
@@ -110,6 +123,7 @@ public class DispatchController
             return ex.Message;
         }
     }
+
     public List<string> CabNotifiesDroppedOff()
     {
         try
@@ -118,9 +132,13 @@ public class DispatchController
             {
                 throw new SystemException("This is not a valid option.");
             }
+
             var droppedOff = _cabServiceHandler.DropOffCustomer();
             _customerDeliveredHandler.Handle(new CustomerDelivered());
-            return [$"{droppedOff[0]?.CabName} dropped off {droppedOff[0]?.PassengerName} at {droppedOff[0]?.Destination}."];
+            return
+            [
+                $"{droppedOff[0]?.CabName} dropped off {droppedOff[0]?.PassengerName} at {droppedOff[0]?.Destination}."
+            ];
         }
         catch (Exception ex)
         {

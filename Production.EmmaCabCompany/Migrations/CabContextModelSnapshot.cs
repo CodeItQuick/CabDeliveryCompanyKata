@@ -55,12 +55,17 @@ namespace Production.EmmaCabCompany.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("Customer")
-                        .HasColumnType("INTEGER");
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("CustomerId");
 
                     b.Property<string>("EndLocation")
                         .HasColumnType("TEXT")
                         .HasColumnName("EndLocation");
+
+                    b.Property<int?>("MenuId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("MenuId");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT")
@@ -76,7 +81,9 @@ namespace Production.EmmaCabCompany.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Customer");
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("MenuId");
 
                     b.ToTable("Customers");
                 });
@@ -103,6 +110,17 @@ namespace Production.EmmaCabCompany.Migrations
                     b.ToTable("Fleet");
                 });
 
+            modelBuilder.Entity("Production.EmmaCabCompany.Domain.Menu.Menu", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Menu");
+                });
+
             modelBuilder.Entity("Production.EmmaCabCompany.Cab", b =>
                 {
                     b.HasOne("Production.EmmaCabCompany.Domain.Fleet", null)
@@ -114,7 +132,11 @@ namespace Production.EmmaCabCompany.Migrations
                 {
                     b.HasOne("Production.EmmaCabCompany.Domain.CustomerList", null)
                         .WithMany("Customers")
-                        .HasForeignKey("Customer");
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("Production.EmmaCabCompany.Domain.Menu.Menu", null)
+                        .WithMany("Customers")
+                        .HasForeignKey("MenuId");
                 });
 
             modelBuilder.Entity("Production.EmmaCabCompany.Domain.CustomerList", b =>
@@ -125,6 +147,11 @@ namespace Production.EmmaCabCompany.Migrations
             modelBuilder.Entity("Production.EmmaCabCompany.Domain.Fleet", b =>
                 {
                     b.Navigation("FleetOfCabs");
+                });
+
+            modelBuilder.Entity("Production.EmmaCabCompany.Domain.Menu.Menu", b =>
+                {
+                    b.Navigation("Customers");
                 });
 #pragma warning restore 612, 618
         }
