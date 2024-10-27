@@ -16,21 +16,26 @@ public class DispatchControllerTests
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
         var cabService = new CabServiceHandler(radioFleet, new CabFileRepository(handler));
         var dispatchController = new DispatchController
-            (cabService, new MenuService(new DispatcherCoordinator()), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
+        (cabService, new MenuService(new DispatcherCoordinator()), new CustomerListRepository(new CabContext(
+            new DbContextOptionsBuilder<CabContext>()
                 .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
 
         var addCabMessage = dispatchController.AddCab();
 
         Assert.Equal("Added Evan's Cab to fleet", addCabMessage);
     }
+
     [Fact]
     public void CanRemoveCabsFromTheFleet()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(
+            new DbContextOptionsBuilder<CabContext>()
+                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(new DispatcherCoordinator()), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
+            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(cabContext));
         dispatchController.AddCab();
         var cabsAvailable = radioFleet.NoCabsInFleet();
         var removeCab = dispatchController.RemoveCab();
@@ -41,151 +46,186 @@ public class DispatchControllerTests
         Assert.True(noCabsInFleet);
         Assert.Equal("Cab removed from fleet", removeCab);
     }
+
     [Fact]
     public void CannotRemoveCabsFromEmptyFleet()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(
+            new DbContextOptionsBuilder<CabContext>()
+                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(new DispatcherCoordinator()), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
+            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(cabContext));
 
         var result = dispatchController.RemoveCab();
-        
+
         Assert.Equal("Cab cannot be removed until passenger dropped off.", result);
     }
+
     [Fact]
     public void CannotRemoveCabsWithPassengerInIt()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CustomerListRepository(cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
         dispatchController.CabNotifiesPickedUp();
-        
+
         var result = dispatchController.RemoveCab();
-        
+
         Assert.Equal("Cab cannot be removed until passenger dropped off.", result);
     }
+
     [Fact]
     public void CanRemoveCabsWithoutPassengerInside()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(
+            new DbContextOptionsBuilder<CabContext>()
+                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(new DispatcherCoordinator()), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
+            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(cabContext));
         dispatchController.AddCab();
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
         dispatchController.CabNotifiesPickedUp();
-        
+
         var result = dispatchController.RemoveCab();
-        
+
         Assert.Equal("Cab removed from fleet", result);
     }
+
     [Fact]
     public void CustomerCanCallInCab()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(
+            new DbContextOptionsBuilder<CabContext>()
+                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(new DispatcherCoordinator()), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
+            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(cabContext));
         dispatchController.AddCab();
 
         var customerCabCall = dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
-        
+
         Assert.Equal("Received customer ride request from Emma", customerCabCall);
     }
+
     [Fact]
     public void TwoCustomersCanCallInCab()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(
+            new DbContextOptionsBuilder<CabContext>()
+                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(new DispatcherCoordinator()), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
+            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
         var customerCabCall = dispatchController.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane");
-        
+
         Assert.Equal("Received customer ride request from Lisa", customerCabCall);
     }
+
     [Fact]
     public void FirstCustomerCallInCancelsSecondCustomerCanCallInCab()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(
+            new DbContextOptionsBuilder<CabContext>()
+                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(new DispatcherCoordinator()), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
+            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.CustomerCancelledCabRide();
 
         var customerCabCall = dispatchController.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane");
-        
+
         Assert.Equal("Received customer ride request from Lisa", customerCabCall);
     }
+
     [Fact]
     public void CannotPickupUnlessCustomersWaiting()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
-        
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CustomerListRepository(cabContext));
+
         var customerCabCall = dispatchController.CustomerCancelledCabRide();
-        
+
         Assert.Equal("This is not a valid option.", customerCabCall.First());
     }
+
     [Fact]
     public void CanCancelPickup()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CustomerListRepository(cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
-        
+
         var customerCabCall = dispatchController.CustomerCancelledCabRide();
-        
+
         Assert.Equal("Customer cancelled cab ride successfully.", customerCabCall.First());
     }
+
     [Fact]
     public void CanCancelPickupAtAnyTime()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CustomerListRepository(cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
-        
+
         var customerCabCall = dispatchController.CustomerCancelledCabRide();
-        
+
         Assert.Equal("This is not a valid option.", customerCabCall.First());
     }
+
     [Fact]
     public void CabCanDriveToCustomerAfterCabRequest()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CustomerListRepository(cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
@@ -194,41 +234,50 @@ public class DispatchControllerTests
         Assert.Equal("Evan's Cab picked up Emma at 1 Fulton Drive.", sendCabRequest.First());
         Assert.Equal("Cab assigned to customer.", sendCabRequest.Skip(1).First());
     }
+
     [Fact]
     public void CannotSendCabRequestUntilCustomerCallsIn()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CustomerListRepository(cabContext));
         dispatchController.AddCab();
 
         var sendCabRequest = dispatchController.SendCabRequest();
 
         Assert.Equal("This is not a valid option.", sendCabRequest.First());
     }
+
     [Fact]
     public void CannotSendCabRequestUntilCabsAreInFleet()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CustomerListRepository(cabContext));
 
         var sendCabRequest = dispatchController.SendCabRequest();
 
         Assert.Equal("This is not a valid option.", sendCabRequest.First());
     }
+
     [Fact]
     public void CabCanPickupCustomer()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CustomerListRepository(cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
@@ -237,27 +286,33 @@ public class DispatchControllerTests
 
         Assert.Equal("Notified dispatcher of pickup", sendCabRequest);
     }
+
     [Fact]
     public void CabCannotPickupCustomerIfNoCabsInFleet()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CustomerListRepository(cabContext));
 
         var sendCabRequest = dispatchController.CabNotifiesPickedUp();
 
         Assert.Equal("This is not a valid option.", sendCabRequest);
     }
+
     [Fact]
     public void CabCannotPickupCustomerIfCustomerNotWaitingPickup()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CustomerListRepository(cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
@@ -265,14 +320,17 @@ public class DispatchControllerTests
 
         Assert.Equal("This is not a valid option.", sendCabRequest);
     }
+
     [Fact]
     public void CabCanDropOffCustomer()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CustomerListRepository(cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
@@ -282,14 +340,17 @@ public class DispatchControllerTests
 
         Assert.Equal("Evan's Cab dropped off Emma at 1 Destination Lane.", droppedOff.First());
     }
+
     [Fact]
     public void CabCanDropOffOnlyOneCustomerAtATime()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CustomerListRepository(cabContext));
         dispatchController.AddCab();
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -303,6 +364,7 @@ public class DispatchControllerTests
 
         Assert.Equal("Evan's Cab dropped off Emma at 1 Destination Lane.", droppedOff.Single());
     }
+
     [Fact]
     public void CabCanDropOffTwoCustomers()
     {
@@ -312,7 +374,8 @@ public class DispatchControllerTests
             .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         cabContext.Database.Migrate();
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet), new CustomerListRepository(cabContext));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CustomerListRepository(cabContext));
         dispatchController.AddCab();
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -327,21 +390,24 @@ public class DispatchControllerTests
 
         Assert.Equal("Evan's Cab dropped off Lisa at 1 Destination Lane.", droppedOff.Single());
     }
+
     [Fact]
     public void CabCannotDropOffCustomerIfNotInTransport()
     {
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CustomerListRepository(cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
         var droppedOff = dispatchController.CabNotifiesDroppedOff();
 
         Assert.Equal(
-            "This is not a valid option.", 
+            "This is not a valid option.",
             droppedOff.First());
     }
 
@@ -349,13 +415,16 @@ public class DispatchControllerTests
     public void InvalidOptionSelectedReturnsError()
     {
         IFileHandler handler = new FakeFileReadWriter("customer_filename.csv", "cab_list_filename.csv");
+        var cabContext = new CabContext(
+            new DbContextOptionsBuilder<CabContext>()
+                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options);
         var dispatchController = new DispatchController(
             new CabServiceHandler(
-                new DispatcherCoordinator(), new CabFileRepository(handler)), new MenuService(new DispatcherCoordinator()), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-                .UseSqlite($"Data Source={Guid.NewGuid}.db").Options)));
+                new DispatcherCoordinator(), new CabFileRepository(handler)),
+            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(cabContext));
 
         var dispatch = dispatchController.CabNotifiesDroppedOff();
-        
+
         Assert.Equal("This is not a valid option.", dispatch.First());
     }
 }
