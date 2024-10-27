@@ -1,0 +1,24 @@
+using Production.EmmaCabCompany.Application;
+
+namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+
+public class CustomerRideRequestedHandler
+{
+    private readonly ICustomerListRepository _customerListRepository;
+
+    // TODO: should be internal, but then how to test?
+    public CustomerRideRequestedHandler(
+        ICustomerListRepository customerListRepository)
+    {
+        _customerListRepository = customerListRepository;
+    }
+
+    public int Handle(CustomerRideRequested request)
+    {
+        var customerList = _customerListRepository.GetById(1);
+        customerList.RideRequest();
+        _customerListRepository.Add(customerList);
+
+        return customerList.Id;
+    }
+}

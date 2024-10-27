@@ -21,11 +21,30 @@ public class CustomerListRepository : ICustomerListRepository
         _cabContext.CustomerList.Add(new CustomerList() { Id = 1 });
         _cabContext.SaveChanges();
     }
-    public void CustomerCabRequest(Customer customer)
+
+    public CustomerList GetById(int customerListId)
+    {
+        return _cabContext.CustomerList
+            .Include(x => x.Customers)
+            .FirstOrDefault(x => x.Id == customerListId)!;
+    }
+    
+    public void Add(CustomerList customerList)
+    {
+        _cabContext.CustomerList.Update(customerList);
+        _cabContext.SaveChanges();
+        _cabContext.ChangeTracker.Clear();
+    }
+    
+    public void CustomerCabRequest(CustomerCabRequested customerCabRequested)
     {
         var customerList = _cabContext.CustomerList
             .Include(x => x.Customers)
             .FirstOrDefault()!;
+        var customer = new Customer(
+            customerCabRequested.CustomerName,
+            customerCabRequested.StartLocation,
+            customerCabRequested.EndLocation);
         customerList.CustomerCabCall(customer);
         _cabContext.CustomerList.Update(customerList);
         _cabContext.SaveChanges();
