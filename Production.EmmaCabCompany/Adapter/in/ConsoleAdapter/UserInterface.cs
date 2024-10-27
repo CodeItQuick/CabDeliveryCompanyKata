@@ -34,8 +34,9 @@ public class UserInterface
         var dispatch = new DispatcherCoordinator();
         var cabService = new CabServiceHandler(dispatch, new CabFileRepository(writer));
         _menuController = new MenuController(new MenuService(dispatch));
-        var dispatchController = new DispatchController(cabService, new MenuService(dispatch), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
-            .UseSqlite("Data Source=console_production.db").Options)));
+        var cabContext = new CabContext(new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite("Data Source=console_production.db").Options);
+        var dispatchController = new DispatchController(cabService, new MenuService(dispatch), new CustomerListRepository(cabContext), new FleetRepository(cabContext));
         do
         {
             WriteMenu();

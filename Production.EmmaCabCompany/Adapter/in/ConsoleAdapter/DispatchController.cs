@@ -1,10 +1,9 @@
-using Microsoft.EntityFrameworkCore;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Service;
 using Tests.CabDeliveryCompanyKata;
 
-namespace Production.EmmaCabCompany.Adapter.@out;
+namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 
 public class DispatchController
 {
@@ -19,7 +18,7 @@ public class DispatchController
     private CustomerEnroutedHandler _customerEnroutedHandler;
     private CustomerPickedUpHandler _customerPickedUpHandler;
 
-    public DispatchController(CabServiceHandler cabServiceHandler, MenuService menuService, CustomerListRepository customerListRepository)
+    public DispatchController(CabServiceHandler cabServiceHandler, MenuService menuService, CustomerListRepository customerListRepository, FleetRepository fleetRepository)
     {
         _menuService = menuService;
         _customerListRepository = customerListRepository;
