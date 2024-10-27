@@ -1,5 +1,5 @@
 using Production.EmmaCabCompany.Adapter.@out;
-using Production.EmmaCabCompany.Adapter.@out.CabFileAdapter;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Service;
 using Tests.CabDeliveryCompanyKata;

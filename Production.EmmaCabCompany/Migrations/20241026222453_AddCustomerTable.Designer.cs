@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
@@ -10,9 +11,11 @@ using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 namespace Production.EmmaCabCompany.Migrations
 {
     [DbContext(typeof(CabContext))]
-    partial class CabContextModelSnapshot : ModelSnapshot
+    [Migration("20241026222453_AddCustomerTable")]
+    partial class AddCustomerTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -69,10 +72,6 @@ namespace Production.EmmaCabCompany.Migrations
                     b.Property<string>("StartLocation")
                         .HasColumnType("TEXT")
                         .HasColumnName("StartLocation");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("Status");
 
                     b.HasKey("Id");
 

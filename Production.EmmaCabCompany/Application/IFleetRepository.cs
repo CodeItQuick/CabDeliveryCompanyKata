@@ -1,4 +1,4 @@
-namespace Production.EmmaCabCompany.Adapter.@out.CabFileAdapter;
+namespace Production.EmmaCabCompany.Application;
 
 public interface IFleetRepository
 {

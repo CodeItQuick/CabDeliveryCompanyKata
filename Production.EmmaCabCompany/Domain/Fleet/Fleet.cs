@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,14 +9,20 @@ namespace Production.EmmaCabCompany.Domain;
 public class Fleet
 {
     public int Id = 1;
-    private List<Cab> _fleet = new();
+    [ForeignKey("Cab")] public virtual List<Cab> FleetOfCabs { get; set; }
+
+    public Fleet()
+    {
+        FleetOfCabs = new();
+    }
+
 
     public void CreateFleet(string[] cabList)
     {
         var cabListStrings = cabList
             .Select(x => x)
             .ToList();
-        _fleet = new List<Cab>();
+        FleetOfCabs = new List<Cab>();
         foreach (var cab in cabListStrings)
         {
             string?[] cabAttributes = cab.Split(",");
@@ -35,32 +40,32 @@ public class Fleet
                         cabAttributes[3]);
                     cabValue.RequestRideFor(customer);
                 }
-                _fleet.Add(cabValue);
+                FleetOfCabs.Add(cabValue);
             }
         }
     }
 
     public void AddCab(Cab cab)
     {
-        _fleet.Add(cab);
+        FleetOfCabs.Add(cab);
     }
 
     public void RemoveCab()
     {
-        if (_fleet[^1].RideInProgress())
+        if (FleetOfCabs[^1].RideInProgress())
         {
-            _fleet.RemoveAt(_fleet.Count - 1);
+            FleetOfCabs.RemoveAt(FleetOfCabs.Count - 1);
         }
     }
 
     public bool IsEnroute(Customer customer)
     {
-        return _fleet.Any(x => x.CabInfo()?.PassengerName == customer.Name);
+        return FleetOfCabs.Any(x => x.CabInfo()?.PassengerName == customer.Name);
     }
 
     public void RideRequested(Customer customer)
     {
-        var availableCabList = _fleet
+        var availableCabList = FleetOfCabs
             .Where(x => x.IsStatus(CabStatus.Available))
             .ToList();
         if (availableCabList.Count == 0)
@@ -87,53 +92,58 @@ public class Fleet
 
     public void PickupCustomer(Customer customer)
     {
-        if (_fleet.Count == 0)
+        if (FleetOfCabs.Count == 0)
         {
             throw new SystemException("Cannot drop off customers as there are no cabs in the fleet");
         }
-        var enrouteCab = _fleet?.FirstOrDefault(x => x.IsEnrouteFor(customer));
+        var enrouteCab = FleetOfCabs?.FirstOrDefault(x => x.IsEnrouteFor(customer));
         enrouteCab?.PickupAssignedCustomer(customer);
     }
 
     public void DropOffCustomer()
     {
-        if (_fleet.Count == 0)
+        if (FleetOfCabs.Count == 0)
         {
             throw new SystemException("Cannot drop off customers as there are no cabs in the fleet");
         }
 
-        var enrouteCab = _fleet.FirstOrDefault(x => x.IsStatus(CabStatus.TransportingCustomer));
+        var enrouteCab = FleetOfCabs.FirstOrDefault(x => x.IsStatus(CabStatus.TransportingCustomer));
         enrouteCab?.DropOffCustomer();
     }
 
     public bool NoCabsInFleet()
     {
-        return _fleet.Count == 0;
+        return FleetOfCabs.Count == 0;
     }
 
     public bool CustomersStillInTransport()
     {
-        return _fleet.Any(x => x.ContainsPassenger());
+        return FleetOfCabs.Any(x => x.ContainsPassenger());
     }
 
     public string? FindCab(Customer customer)
     {
-        return _fleet.First(x => x.CabInfo()?.PassengerName == customer.Name).CabInfo()?.CabName;
+        return FleetOfCabs.First(x => x.CabInfo()?.PassengerName == customer.Name).CabInfo()?.CabName;
     }
 
     public bool AllCabsOccupied()
     {
-        return _fleet.All(x => x.ContainsPassenger());
+        return FleetOfCabs.All(x => x.ContainsPassenger());
     }
 
     public string[] ExportCabs()
     {
-        return _fleet
+        return FleetOfCabs
             .Select(x => 
                 $"{x.CabInfo()?.CabName}," +
                 $"{x.CabInfo()?.PassengerName}," +
                 $"{x.CabInfo()?.StartLocation}," +
                 $"{x.CabInfo()?.Destination}")
             .ToArray();
+    }
+
+    public Cab SignedOutCab()
+    {
+        return FleetOfCabs.FirstOrDefault()!;
     }
 }

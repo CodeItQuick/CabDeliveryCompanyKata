@@ -1,4 +1,6 @@
-namespace Production.EmmaCabCompany.Adapter.@in;
+using Production.EmmaCabCompany.Adapter.@in;
+
+namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
 public class FileHandler(string customerListFilename, string cabListFilename) : IFileHandler
 {

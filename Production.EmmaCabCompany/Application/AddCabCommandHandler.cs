@@ -1,4 +1,4 @@
-using Production.EmmaCabCompany.Adapter.@out.CabFileAdapter;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
 namespace Production.EmmaCabCompany.Application;
 
@@ -15,7 +15,6 @@ public class AddCabCommandHandler : IAddCabCommandHandler
     public void Handle(AddCabCommand addCabCommand)
     {
         _fleetRepository.AddCab(addCabCommand.CabName, addCabCommand.Latitude, addCabCommand.Longitude);
-
     }
 }
 

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Production.EmmaCabCompany;
 using Production.EmmaCabCompany.Adapter.@in;
-using Production.EmmaCabCompany.Adapter.@out.CabFileAdapter;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Service;
@@ -18,15 +18,18 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IFleetRepository _fleetRepository;
+    private readonly IAddCabCommandHandler _addCabCommandHandler;
     private readonly CabServiceHandler _cabService;
     private readonly MenuService _menuService;
 
     public HomeController(ILogger<HomeController> logger, 
         IOptions<FileSettings> fileSettings, 
-        IFleetRepository fleetRepository)
+        IFleetRepository fleetRepository,
+        IAddCabCommandHandler addCabCommandHandler)
     {
         _logger = logger;
         _fleetRepository = fleetRepository;
+        _addCabCommandHandler = addCabCommandHandler;
         var fileHandler = new FileHandler(
             fileSettings.Value.CustomerFileNameCsv, 
             fileSettings.Value.CabFileNameCsv);
@@ -44,7 +47,7 @@ public class HomeController : Controller
     public IActionResult AddCabDriver()
     {
         _cabService.AddCab(new Cab("default", 20, 23.23, 32.32));
-        _fleetRepository.AddCab("default", 23.23, 32.32);
+        _addCabCommandHandler.Handle(new AddCabCommand("default", 23.23, 32.32));
         
         return RedirectToAction(nameof(Index));
     }

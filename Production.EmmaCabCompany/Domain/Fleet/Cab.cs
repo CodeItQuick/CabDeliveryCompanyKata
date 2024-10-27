@@ -1,13 +1,30 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+using Production.EmmaCabCompany.Domain;
+
 namespace Production.EmmaCabCompany;
 
+[Table("Cabs")]
+[PrimaryKey("Id")]
 public class Cab
 {
-    private readonly string? _cabName;
-    private readonly int _wallet;
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; init; }
+    [Column("CabName")]
+    public string? _cabName { get; set; }
+    [Column("Wallet")]
+    public  int _wallet { get; set; }
     private CabStatus _status = CabStatus.Available;
     private Customer? _assignedPassenger;
-    private readonly double _latitude;
-    private readonly double _longitude;
+    [Column("Latitude")]
+    public double _latitude { get; set; }
+    [Column("Longitude")]
+    public double _longitude { get; set; }
+    
+    // [ForeignKey(nameof(Fleet.Id))]
+    // public virtual Fleet Fleet { get; set; }
 
     public Cab(string? cabName, int wallet, double latitude, double longitude)
     {
@@ -72,6 +89,10 @@ public class Cab
             StartLocation = _assignedPassenger?.StartLocation,
             Destination = _assignedPassenger?.EndLocation,
         };
+    }
+    public string AssignedPassenger()
+    {
+        return _assignedPassenger!.Name!;
     }
 
     public bool ContainsPassenger()

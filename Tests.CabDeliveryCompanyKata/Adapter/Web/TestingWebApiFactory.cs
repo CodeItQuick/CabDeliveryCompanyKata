@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Production.EmmaCabCompany.Adapter.@out.CabFileAdapter;
 using Production.WebCabCompany;
 using Production.WebCabCompany.Models;
 
@@ -29,10 +28,6 @@ public class TestingWebApiFactory: WebApplicationFactory<Program>
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseInMemoryDatabase("testing_blog-application-2");
-            });
-            services.AddDbContext<CabContext>(options =>
-            {
-                options.UseSqlite($"Data Source={Guid.NewGuid()}");
             });
             // // antiforgery
             // services.AddScoped<IExistingExpensesRepository, FakeAPIApplicationRepository>();

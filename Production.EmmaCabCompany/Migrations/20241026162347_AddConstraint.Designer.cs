@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
@@ -10,9 +11,11 @@ using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 namespace Production.EmmaCabCompany.Migrations
 {
     [DbContext(typeof(CabContext))]
-    partial class CabContextModelSnapshot : ModelSnapshot
+    [Migration("20241026162347_AddConstraint")]
+    partial class AddConstraint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -49,49 +52,6 @@ namespace Production.EmmaCabCompany.Migrations
                     b.ToTable("Cabs");
                 });
 
-            modelBuilder.Entity("Production.EmmaCabCompany.Customer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("Customer")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("EndLocation")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("EndLocation");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("CustomerName");
-
-                    b.Property<string>("StartLocation")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("StartLocation");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("Status");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Customer");
-
-                    b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("Production.EmmaCabCompany.Domain.CustomerList", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CustomerList");
-                });
-
             modelBuilder.Entity("Production.EmmaCabCompany.Domain.Fleet", b =>
                 {
                     b.Property<int>("Id")
@@ -108,18 +68,6 @@ namespace Production.EmmaCabCompany.Migrations
                     b.HasOne("Production.EmmaCabCompany.Domain.Fleet", null)
                         .WithMany("FleetOfCabs")
                         .HasForeignKey("Cab");
-                });
-
-            modelBuilder.Entity("Production.EmmaCabCompany.Customer", b =>
-                {
-                    b.HasOne("Production.EmmaCabCompany.Domain.CustomerList", null)
-                        .WithMany("Customers")
-                        .HasForeignKey("Customer");
-                });
-
-            modelBuilder.Entity("Production.EmmaCabCompany.Domain.CustomerList", b =>
-                {
-                    b.Navigation("Customers");
                 });
 
             modelBuilder.Entity("Production.EmmaCabCompany.Domain.Fleet", b =>

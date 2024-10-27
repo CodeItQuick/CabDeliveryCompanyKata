@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Production.EmmaCabCompany.Adapter.@out.CabFileAdapter;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Application;
 using Production.WebCabCompany.Controllers;
 
@@ -14,6 +14,7 @@ public class HomeControllerIntegrationTests
 {
     private CabContext _cabContext;
     private FleetRepository _fleetRepository;
+    private AddCabCommandHandler _addCabCommandHandler;
 
     public HomeControllerIntegrationTests()
     {
@@ -23,6 +24,7 @@ public class HomeControllerIntegrationTests
         _cabContext = new CabContext(cabContextOptions.Options);
         _cabContext.Database.Migrate();
         _fleetRepository = new FleetRepository(_cabContext);
+        _addCabCommandHandler = new AddCabCommandHandler(_fleetRepository);
     }
 
     [Fact]
@@ -37,7 +39,8 @@ public class HomeControllerIntegrationTests
         var homeController = new HomeController(
             new NullLogger<HomeController>(), 
             options, 
-            _fleetRepository);
+            _fleetRepository,
+            _addCabCommandHandler);
         
         var claimsIdentity = new ClaimsIdentity(
             new List<Claim>()

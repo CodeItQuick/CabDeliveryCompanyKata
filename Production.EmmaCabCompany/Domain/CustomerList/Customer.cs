@@ -1,11 +1,31 @@
-﻿namespace Production.EmmaCabCompany;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+using Production.EmmaCabCompany.Domain;
 
+namespace Production.EmmaCabCompany;
+
+[Table("Customers")]
+[PrimaryKey("Id")]
 public class Customer
 {
-    public readonly string? Name;
-    public readonly string? StartLocation;
-    public readonly string? EndLocation;
-    public (double, double) PickupLocation;
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; init; }
+    [Column("CustomerName")]
+    public string? Name { get; init; }
+    [Column("StartLocation")]
+    public string? StartLocation { get; init; }
+    [Column("EndLocation")]
+    public string? EndLocation { get; init; }
+    [NotMapped]
+    public (double, double) PickupLocation { get; init; }
+    [Column("Status")]
+    public CustomerStatus Status { get; set; }
+
+    public Customer()
+    {
+    }
 
     public Customer(string? customerName, string startLocation, string? endLocation)
     {

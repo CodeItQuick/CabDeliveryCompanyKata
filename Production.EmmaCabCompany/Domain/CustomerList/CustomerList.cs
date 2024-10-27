@@ -1,12 +1,29 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
 namespace Production.EmmaCabCompany.Domain;
 
+// Aggregate Root Id
+[PrimaryKey("Id")]
+[Table("CustomerList")]
 public class CustomerList
 {
+    public int Id { get; set; } = 1;
+    [ForeignKey("Customer")]
+    public virtual List<Customer> Customers { get; set; }
+
     private Dictionary<Customer, CustomerStatus> _customerStatusMap = new();
+
+    public CustomerList()
+    {
+        Customers = new();
+    }
 
     public void CustomerCabCall(Customer customer)
     {
         _customerStatusMap.Add(customer, CustomerStatus.CustomerCallInProgress);
+        customer.Status = CustomerStatus.CustomerCallInProgress;
+        Customers.Add(customer);
     }
 
     public Customer? FindRideRequestedCustomer()
@@ -46,6 +63,15 @@ public class CustomerList
     
     public void RideRequest()
     {
+        // TODO: get rid of second if condition
+        if (Customers.Any(x => x.Status == CustomerStatus.CustomerCallInProgress) && 
+            _customerStatusMap.All(x => x.Value != CustomerStatus.CustomerCallInProgress))
+        {
+            Customers.FirstOrDefault(x => x.Status == CustomerStatus.CustomerCallInProgress)!.Status = 
+                CustomerStatus.WaitingPickup;
+            return;
+        }
+        // TODO: get rid of below
         if (_customerStatusMap.All(x => x.Value != CustomerStatus.CustomerCallInProgress))
         {
             throw new SystemException("There are currently no customer's waiting for cabs.");
@@ -64,6 +90,13 @@ public class CustomerList
     
     public Customer PickupCustomer()
     {
+        if (Customers.Any(x => x.Status == CustomerStatus.WaitingPickup) &&
+            _customerStatusMap.All(x => x.Value != CustomerStatus.WaitingPickup))
+        {
+            var customerToChange = Customers.FirstOrDefault(x => x.Status == CustomerStatus.WaitingPickup);
+            customerToChange!.Status = CustomerStatus.WaitingPickup;
+            return customerToChange;
+        }
         if (_customerStatusMap.All(x => x.Value != CustomerStatus.WaitingPickup))
         {
             throw new SystemException("There are currently no customer's assigned to cabs.");
@@ -78,6 +111,14 @@ public class CustomerList
     {
         // TODO: move throws to this method, not the query
         _customerStatusMap[firstCustomer] = CustomerStatus.Enroute;
+    }
+    public void PutCustomerEnroute()
+    {
+        if (Customers.Any(x => x.Status == CustomerStatus.WaitingPickup))
+        {
+            var customerWaiting = Customers.FirstOrDefault(x => x.Status == CustomerStatus.WaitingPickup)!;
+            customerWaiting.Status = CustomerStatus.Enroute;
+        }
     }
     
     public void ValidateCanDropOffCustomer()
@@ -99,6 +140,13 @@ public class CustomerList
     
     public void CancelPickup()
     {
+        if (Customers.Any(x => x.Status == CustomerStatus.CustomerCallInProgress) &&
+            _customerStatusMap.All(x => x.Value != CustomerStatus.CustomerCallInProgress))
+        {
+            var customerToChange = Customers.FirstOrDefault(x => x.Status == CustomerStatus.CustomerCallInProgress);
+            customerToChange!.Status = CustomerStatus.CancelledCall;
+            return;
+        }
         if (_customerStatusMap.All(x => 
                 x.Value != CustomerStatus.WaitingPickup && x.Value != CustomerStatus.CustomerCallInProgress))
         {
@@ -138,5 +186,14 @@ public class CustomerList
         }
 
         return customerDictionary;
+    }
+
+    public void PutCustomerDelivered()
+    {
+        if (Customers.Any(x => x.Status == CustomerStatus.Enroute))
+        {
+            var customerWaiting = Customers.FirstOrDefault(x => x.Status == CustomerStatus.Enroute)!;
+            customerWaiting.Status = CustomerStatus.Delivered;
+        }
     }
 }
