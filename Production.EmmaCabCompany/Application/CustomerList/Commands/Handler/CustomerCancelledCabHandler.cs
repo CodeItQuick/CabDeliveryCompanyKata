@@ -13,7 +13,7 @@ public class CustomerCancelledCabHandler
         _customerListRepository = customerListRepository;
     }
 
-    public int Handle(CustomerEnrouted request)
+    public int Handle(CustomerCancelledCab request)
     {
         var customerList = _customerListRepository.GetById(1);
         customerList.CancelPickup();

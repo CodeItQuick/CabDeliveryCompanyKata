@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Production.EmmaCabCompany.Adapter.@out;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Domain;
@@ -6,11 +7,26 @@ using Tests.CabDeliveryCompanyKata;
 
 namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 
-public class UserInterface(
-    ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader,
-    IFileHandler writer)
+public class UserInterface
 {
+    private readonly ICabCompanyPrinter cabCompanyPrinter;
+    private readonly ICabCompanyReader cabCompanyReader;
+    private readonly IFileHandler writer;
     private MenuController _menuController;
+    private CabContext _cabContext;
+
+    public UserInterface(
+        ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader,
+        IFileHandler writer)
+    {
+        this.cabCompanyPrinter = cabCompanyPrinter;
+        this.cabCompanyReader = cabCompanyReader;
+        this.writer = writer;
+        var dbContextOptions = new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite("Data Source=console_production.db");
+        _cabContext = new CabContext(dbContextOptions.Options);
+        _cabContext.Database.Migrate();
+    }
 
     public void Run()
     {
@@ -18,7 +34,8 @@ public class UserInterface(
         var dispatch = new DispatcherCoordinator();
         var cabService = new CabServiceHandler(dispatch, new CabFileRepository(writer));
         _menuController = new MenuController(new MenuService(dispatch));
-        var dispatchController = new DispatchController(cabService, new MenuService(dispatch));
+        var dispatchController = new DispatchController(cabService, new MenuService(dispatch), new CustomerListRepository(new CabContext(new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite("Data Source=console_production.db").Options)));
         do
         {
             WriteMenu();

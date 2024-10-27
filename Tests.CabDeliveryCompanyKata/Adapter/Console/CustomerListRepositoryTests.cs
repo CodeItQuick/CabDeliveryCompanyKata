@@ -151,7 +151,7 @@ public class CustomerListCommandsTests
         _customerCabRequestedHandler.Handle(
             new CustomerCabRequested(
                 "Dan", "1 Fulton Drive", "2 Destination Lane"));
-        _customerCancelledCabHandler.Handle(new CustomerEnrouted());
+        _customerCancelledCabHandler.Handle(new CustomerCancelledCab());
         Assert.Equal(1, _cabContext.CustomerList
             .Include(customerList => customerList.Customers!)
             .FirstOrDefault()!.Customers!.Count);

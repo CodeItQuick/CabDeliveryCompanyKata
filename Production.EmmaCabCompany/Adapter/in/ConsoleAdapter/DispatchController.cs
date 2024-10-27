@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Service;
 using Tests.CabDeliveryCompanyKata;
 
@@ -7,13 +10,27 @@ public class DispatchController
 {
     private int _currentNameIdx = 0;
     private MenuService _menuService;
+    private readonly CustomerListRepository _customerListRepository;
     private readonly CabServiceHandler _cabServiceHandler;
-    public DispatchController(CabServiceHandler cabServiceHandler, MenuService menuService)
+    private CustomerCabRequestedHandler _customerCabRequestedHandler;
+    private CustomerRideRequestedHandler _customerRideRequestedHandler;
+    private CustomerCancelledCabHandler _customerCancelledCabHandler;
+    private CustomerDeliveredHandler _customerDeliveredHandler;
+    private CustomerEnroutedHandler _customerEnroutedHandler;
+    private CustomerPickedUpHandler _customerPickedUpHandler;
+
+    public DispatchController(CabServiceHandler cabServiceHandler, MenuService menuService, CustomerListRepository customerListRepository)
     {
         _menuService = menuService;
-        this._cabServiceHandler = cabServiceHandler;
+        _customerListRepository = customerListRepository;
+        _cabServiceHandler = cabServiceHandler;
+        _customerCabRequestedHandler = new CustomerCabRequestedHandler(_customerListRepository);
+        _customerCancelledCabHandler = new CustomerCancelledCabHandler(_customerListRepository);
+        _customerDeliveredHandler = new CustomerDeliveredHandler(_customerListRepository);
+        _customerEnroutedHandler = new CustomerEnroutedHandler(_customerListRepository);
+        _customerPickedUpHandler = new CustomerPickedUpHandler(_customerListRepository);
+        _customerRideRequestedHandler = new CustomerRideRequestedHandler(_customerListRepository);
     }
-
 
     public string AddCab()
     {
@@ -39,6 +56,7 @@ public class DispatchController
         var customerCabCall = _cabServiceHandler.CustomerCabCall(customerName, startLocation, destinationLane);
         var resultText = $"Received customer ride request from {customerCabCall}";
         _currentNameIdx += 1;
+        _customerCabRequestedHandler.Handle(new CustomerCabRequested(customerName, startLocation, destinationLane));
         return resultText;
     }
     public List<string> CustomerCancelledCabRide()
@@ -50,6 +68,7 @@ public class DispatchController
                 throw new SystemException("This is not a valid option.");
             }
             _cabServiceHandler.CancelPickup();
+            _customerCancelledCabHandler.Handle(new CustomerCancelledCab());
             return ["Customer cancelled cab ride successfully."];
         }
         catch (Exception ex)
@@ -66,6 +85,8 @@ public class DispatchController
                 throw new SystemException("This is not a valid option.");
             }
             var response = _cabServiceHandler.SendCabRequest();
+            _customerRideRequestedHandler.Handle(new CustomerRideRequested());
+            
             return response.ToList();
         }
         catch (Exception ex)
@@ -82,6 +103,7 @@ public class DispatchController
                 throw new SystemException("This is not a valid option.");
             }
             _cabServiceHandler.PickupCustomer();
+            _customerPickedUpHandler.Handle(new CustomerPickedUp());
             return "Notified dispatcher of pickup";
         }
         catch (Exception ex)
@@ -98,6 +120,7 @@ public class DispatchController
                 throw new SystemException("This is not a valid option.");
             }
             var droppedOff = _cabServiceHandler.DropOffCustomer();
+            _customerDeliveredHandler.Handle(new CustomerDelivered());
             return [$"{droppedOff[0]?.CabName} dropped off {droppedOff[0]?.PassengerName} at {droppedOff[0]?.Destination}."];
         }
         catch (Exception ex)
