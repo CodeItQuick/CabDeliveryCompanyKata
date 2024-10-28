@@ -6,6 +6,8 @@ using Production.EmmaCabCompany.Domain.CustomerList;
 namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
 // Aggregate Root Id
+// TODO: This class has behaviour mixed in it, I think "CustomerList" should also be a domain object, that object contains the
+// TODO: behaviour, and this object should be constructing/mapping domain objects from database DTOs
 [PrimaryKey("Id")]
 [Table("CustomerList")]
 public class CustomerList
