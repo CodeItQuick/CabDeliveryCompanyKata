@@ -1,4 +1,5 @@
 using Production.EmmaCabCompany;
+using Production.EmmaCabCompany.Domain.CustomerList;
 
 namespace Tests.CabDeliveryCompanyKata;
 

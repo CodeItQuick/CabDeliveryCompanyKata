@@ -1,12 +1,12 @@
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
+using Production.EmmaCabCompany.Domain.CustomerList;
 
 namespace Production.EmmaCabCompany.Domain;
 
 public class DispatcherCoordinator
 {
     private Fleet _fleet = new();
-    private readonly CustomerList _customerList = new();
+    private readonly Adapter.OutAdapter.CabFileAdapter.CustomerList _customerList = new();
 
     public void AddCab(Cab cab)
     {

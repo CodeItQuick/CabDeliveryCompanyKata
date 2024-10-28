@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Production.EmmaCabCompany.Domain.CustomerList;
 
 namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 

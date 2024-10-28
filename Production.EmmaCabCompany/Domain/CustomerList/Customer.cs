@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using Production.EmmaCabCompany.Domain;
 
-namespace Production.EmmaCabCompany;
+namespace Production.EmmaCabCompany.Domain.CustomerList;
 
 // TODO: there should be a DTO on the aggregate, that then creates a Customer domain object
 [Table("Customers")]

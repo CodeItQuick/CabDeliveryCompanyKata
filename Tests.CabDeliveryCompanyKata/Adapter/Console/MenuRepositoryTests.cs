@@ -4,6 +4,7 @@ using Production.EmmaCabCompany;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Domain;
+using Production.EmmaCabCompany.Domain.CustomerList;
 
 namespace Tests.CabDeliveryCompanyKata.Adapter.Console;
 

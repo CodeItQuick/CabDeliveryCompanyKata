@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Production.EmmaCabCompany.Domain;
+using Production.EmmaCabCompany.Domain.CustomerList;
 
 namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
