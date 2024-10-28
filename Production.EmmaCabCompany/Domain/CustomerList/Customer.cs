@@ -5,6 +5,7 @@ using Production.EmmaCabCompany.Domain;
 
 namespace Production.EmmaCabCompany;
 
+// TODO: there should be a DTO on the aggregate, that then creates a Customer domain object
 [Table("Customers")]
 [PrimaryKey("Id")]
 public class Customer

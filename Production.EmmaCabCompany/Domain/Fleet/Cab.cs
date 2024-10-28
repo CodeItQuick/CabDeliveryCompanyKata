@@ -90,10 +90,6 @@ public class Cab
             Destination = _assignedPassenger?.EndLocation,
         };
     }
-    public string AssignedPassenger()
-    {
-        return _assignedPassenger!.Name!;
-    }
 
     public bool ContainsPassenger()
     {
