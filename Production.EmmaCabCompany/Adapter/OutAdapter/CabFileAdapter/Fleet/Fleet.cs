@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Production.EmmaCabCompany.Domain;
+namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 
 // Aggregate Root Id
 [PrimaryKey("Id")]

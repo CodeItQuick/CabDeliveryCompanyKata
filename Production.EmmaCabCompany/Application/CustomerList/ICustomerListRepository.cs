@@ -1,3 +1,4 @@
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Domain;
 
 namespace Production.EmmaCabCompany.Application;

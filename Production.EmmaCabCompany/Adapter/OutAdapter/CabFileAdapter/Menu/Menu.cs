@@ -1,4 +1,6 @@
-namespace Production.EmmaCabCompany.Domain.Menu;
+using Production.EmmaCabCompany.Domain;
+
+namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
 public class Menu
 {

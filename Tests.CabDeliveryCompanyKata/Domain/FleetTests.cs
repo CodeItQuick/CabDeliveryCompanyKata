@@ -1,4 +1,5 @@
 using Production.EmmaCabCompany;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 using Production.EmmaCabCompany.Domain;
 
 namespace Tests.CabDeliveryCompanyKata;

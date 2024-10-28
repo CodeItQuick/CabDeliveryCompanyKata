@@ -12,10 +12,10 @@ public class CabFileRepository(IFileHandler fileHandler)
         return customerDirectory;
     }
 
-    public Fleet LoadedFleetState()
+    public Fleet.Fleet LoadedFleetState()
     {
         var cabList = fileHandler.ReadReadCabList();
-        var newFleet = new Fleet();
+        var newFleet = new Fleet.Fleet();
         newFleet.CreateFleet(cabList);
         return newFleet;
     }

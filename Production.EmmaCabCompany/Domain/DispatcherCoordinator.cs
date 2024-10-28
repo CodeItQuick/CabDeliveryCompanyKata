@@ -1,3 +1,6 @@
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
+
 namespace Production.EmmaCabCompany.Domain;
 
 public class DispatcherCoordinator
