@@ -22,95 +22,43 @@ public class CustomerListRepository : ICustomerListRepository
         if (fleetExists) return;
         _cabContext.Menu.Add(new Menu() { Id = 1 });
         _cabContext.SaveChanges();
+        _cabContext.ChangeTracker.Clear();
     }
+
     private void EnsureFleetExistsForSingleUser()
     {
         var fleetExists = _cabContext.CustomerList.Any(x => x.Id == 1);
         if (fleetExists) return;
-        _cabContext.CustomerList.Add(new CustomerList() { Id = 1 });
+        _cabContext.CustomerList.Add(new CustomerListDto() { Id = 1 });
         _cabContext.SaveChanges();
+        _cabContext.ChangeTracker.Clear();
     }
 
     public CustomerList GetById(int customerListId)
     {
-        return _cabContext.CustomerList
+        var customerListDto = _cabContext.CustomerList
             .Include(x => x.Customers)
             .FirstOrDefault(x => x.Id == customerListId)!;
+        var customers = customerListDto.Customers.Select(x =>
+            new Customer(x.Name, x.StartLocation!, x.EndLocation) { Status = x.Status }).ToList();
+        var customerList = CustomerList.CreateCustomerList(customerListDto.Id,
+            customers);
+        return customerList;
     }
-    
+
     public void Add(CustomerList customerList)
     {
-        _cabContext.CustomerList.Update(customerList);
-        _cabContext.SaveChanges();
-        _cabContext.ChangeTracker.Clear();
-    }
-    
-    public void CustomerCabRequest(CustomerCabRequested customerCabRequested)
-    {
-        var customerList = _cabContext.CustomerList
+        var customerListDto = _cabContext.CustomerList
             .Include(x => x.Customers)
-            .FirstOrDefault()!;
-        var customer = new Customer(
-            customerCabRequested.CustomerName,
-            customerCabRequested.StartLocation,
-            customerCabRequested.EndLocation);
-        customerList.CustomerCabCall(customer);
-        _cabContext.CustomerList.Update(customerList);
-        _cabContext.SaveChanges();
-        _cabContext.ChangeTracker.Clear();
-    }
-
-    public void RideRequest()
-    {
-        var customerList = _cabContext.CustomerList
-            .Include(x => x.Customers)
-            .FirstOrDefault()!;
-        customerList.RideRequest();
-        _cabContext.CustomerList.Update(customerList);
-        _cabContext.SaveChanges();
-        _cabContext.ChangeTracker.Clear();
-    }
-
-    public void PickupCustomer()
-    {
-        var customerList = _cabContext.CustomerList
-            .Include(x => x.Customers)
-            .FirstOrDefault()!;
-        customerList.PickupCustomer();
-        _cabContext.CustomerList.Update(customerList);
-        _cabContext.SaveChanges();
-        _cabContext.ChangeTracker.Clear();
-    }
-
-    public void PutCustomerEnroute()
-    {
-        var customerList = _cabContext.CustomerList
-            .Include(x => x.Customers)
-            .FirstOrDefault()!;
-        customerList.PutCustomerEnroute();
-        _cabContext.CustomerList.Update(customerList);
-        _cabContext.SaveChanges();
-        _cabContext.ChangeTracker.Clear();
-    }
-
-    public void PutCustomerDelivered()
-    {
-        var customerList = _cabContext.CustomerList
-            .Include(x => x.Customers)
-            .FirstOrDefault()!;
-        customerList.PutCustomerDelivered();
-        _cabContext.CustomerList.Update(customerList);
-        _cabContext.SaveChanges();
-        _cabContext.ChangeTracker.Clear();
-    }
-
-    public void CancelledCall()
-    {
-        var customerList = _cabContext.CustomerList
-            .Include(x => x.Customers)
-            .FirstOrDefault()!;
-        customerList.CancelPickup();
-        _cabContext.CustomerList.Update(customerList);
+            .FirstOrDefault(x => x.Id == customerList.Id)!;
+        var customerDtos = customerList.Customers
+            .Select(x => new CustomerDto()
+            {
+                CustomerId = customerList.Id, Id = x.Id, Name = x.Name, Status = x.Status, EndLocation = x.EndLocation,
+                StartLocation = x.StartLocation
+            }).ToList();
+        customerListDto.Customers = customerDtos;
+        _cabContext.Update(customerListDto); 
         _cabContext.SaveChanges();
         _cabContext.ChangeTracker.Clear();
     }

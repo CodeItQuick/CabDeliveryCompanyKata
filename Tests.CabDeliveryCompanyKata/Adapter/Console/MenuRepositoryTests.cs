@@ -49,8 +49,11 @@ public class MenuCommandTests
         // _cabContext.CustomerList.Add(new CustomerList() { Id = 1 });
         // _cabContext.SaveChanges();
         _cabContext.Customers.Add(
-            new Customer("Dan", "1 Fulton Drive", "2 Destination Lane")
-            { Status = CustomerStatus.CustomerCallInProgress, MenuId = 1, CustomerId = 1 });
+            new CustomerDto()
+            {
+                Name = "Dan", StartLocation = "1 Fulton Drive", EndLocation = "2 Destination Lane",
+                Status = CustomerStatus.CustomerCallInProgress, MenuId = 1, CustomerId = 1
+            });
         _cabContext.SaveChanges();
         _cabContext.ChangeTracker.Clear();
 
@@ -63,14 +66,19 @@ public class MenuCommandTests
         Assert.Contains(3, handle.MenuOptions);
         Assert.Contains(6, handle.MenuOptions);
     }
+
     [Fact]
     public void MenuDisplaysOptionsFourWhenCustomerWaitingPickup()
     {
         _cabContext.Customers.Add(
-            new Customer("Dan", "1 Fulton Drive", "2 Destination Lane")
-            { Status = CustomerStatus.WaitingPickup, MenuId = 1, CustomerId = 1 });
+            new CustomerDto()
+            {
+                Name = "Dan", StartLocation = "1 Fulton Drive", EndLocation = "2 Destination Lane",
+                Status = CustomerStatus.WaitingPickup, MenuId = 1, CustomerId = 1
+            });
+
         _cabContext.SaveChanges();
-    
+
         var handle = _menuRequestedHandler.Handle(new MenuRequested(1));
         Assert.NotNull(handle);
         Assert.Contains(0, handle.MenuOptions);
@@ -79,14 +87,18 @@ public class MenuCommandTests
         Assert.Contains(7, handle.MenuOptions);
         Assert.Contains(4, handle.MenuOptions);
     }
+
     [Fact]
     public void MenuDisplaysOptionsFiveWhenCustomerEnroute()
     {
         _cabContext.Customers.Add(
-            new Customer("Dan", "1 Fulton Drive", "2 Destination Lane")
-            { Status = CustomerStatus.Enroute, MenuId = 1, CustomerId = 1 });
+            new CustomerDto()
+            {
+                Name = "Dan", StartLocation = "1 Fulton Drive", EndLocation = "2 Destination Lane",
+                Status = CustomerStatus.Enroute, MenuId = 1, CustomerId = 1
+            });
         _cabContext.SaveChanges();
-    
+
         var handle = _menuRequestedHandler.Handle(new MenuRequested(1));
         Assert.NotNull(handle);
         Assert.Contains(0, handle.MenuOptions);

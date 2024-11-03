@@ -1,19 +1,14 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using Production.EmmaCabCompany.Domain;
-using Production.EmmaCabCompany.Domain.CustomerList;
 
-namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+namespace Production.EmmaCabCompany.Domain.CustomerList;
 
 // Aggregate Root Id
 // TODO: This class has behaviour mixed in it, I think "CustomerList" should also be a domain object, that object contains the
 // TODO: behaviour, and this object should be constructing/mapping domain objects from database DTOs
-[PrimaryKey("Id")]
-[Table("CustomerList")]
 public class CustomerList
 {
     public int Id { get; set; } = 1;
-    [ForeignKey("CustomerId")]
     public virtual List<Customer> Customers { get; set; }
 
     private Dictionary<Customer, CustomerStatus> _customerStatusMap = new();
@@ -21,6 +16,11 @@ public class CustomerList
     public CustomerList()
     {
         Customers = new();
+    }
+
+    public static CustomerList CreateCustomerList(int id, List<Customer> customers)
+    {
+        return new CustomerList() { Id = id, Customers = customers};
     }
 
     public void CustomerCabCall(Customer customer)
@@ -64,7 +64,6 @@ public class CustomerList
             }
         }
     }
-    
     public void RideRequest()
     {
         // TODO: get rid of second if condition

@@ -8,8 +8,8 @@ public class CabContext : DbContext
 {
     public DbSet<Fleet.Fleet> Fleet { get; set; }
     public DbSet<Cab> Cabs { get; set; }
-    public DbSet<Customer> Customers { get; set; }
-    public DbSet<CustomerList> CustomerList { get; set; }
+    public DbSet<CustomerDto> Customers { get; set; }
+    public DbSet<CustomerListDto> CustomerList { get; set; }
     public DbSet<Menu> Menu { get; set; }
 
     public CabContext(DbContextOptions<CabContext> options) : base(options) { }

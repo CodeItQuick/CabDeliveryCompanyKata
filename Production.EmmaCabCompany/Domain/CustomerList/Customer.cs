@@ -5,26 +5,16 @@ using Microsoft.EntityFrameworkCore;
 namespace Production.EmmaCabCompany.Domain.CustomerList;
 
 // TODO: there should be a DTO on the aggregate, that then creates a Customer domain object
-[Table("Customers")]
-[PrimaryKey("Id")]
 public class Customer
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; init; }
-    [Column("CustomerName")]
     public string? Name { get; init; }
-    [Column("StartLocation")]
     public string? StartLocation { get; init; }
-    [Column("EndLocation")]
     public string? EndLocation { get; init; }
-    [NotMapped]
     public (double, double) PickupLocation { get; init; }
-    [Column("Status")]
     public CustomerStatus Status { get; set; }
-
-    [Column("MenuId")] public int? MenuId { get; set; } = 1;
-    [Column("CustomerId")] public int? CustomerId { get; set; } = 1;
+    public int? MenuId { get; set; } = 1;
+    public int? CustomerId { get; set; } = 1;
 
     public Customer()
     {

@@ -21,13 +21,6 @@ public class CabFileRepository(IFileHandler fileHandler)
         return newFleet;
     }
 
-    public CustomerList LoadedCustomerListState()
-    {
-        var customerList = fileHandler.ReadCustomerList();
-        var newFleet = new CustomerList();
-        newFleet.CreateCustomerList(customerList);
-        return newFleet;
-    }
     public void WriteCustomerList(string[] exportedCustomers)
     {
         fileHandler.WriteCustomerList(exportedCustomers);

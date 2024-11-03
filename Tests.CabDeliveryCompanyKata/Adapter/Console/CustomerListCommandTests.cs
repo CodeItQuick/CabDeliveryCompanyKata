@@ -23,6 +23,7 @@ public class CustomerListCommandsTests
             .UseSqlite($"Data Source={Guid.NewGuid()}");
         _cabContext = new CabContext(dbContextOptionsBuilder.Options);
         _cabContext.Database.Migrate();
+        _cabContext.ChangeTracker.Clear();
         _customerListRepository = new CustomerListRepository(_cabContext);
         _customerCabRequestedHandler = new CustomerCabRequestedHandler(_customerListRepository);
         _customerDeliveredHandler = new CustomerDeliveredHandler(_customerListRepository);
@@ -67,7 +68,7 @@ public class CustomerListCommandsTests
     [Fact]
     public void CustomerCanRequestCabAndBeSentCab()
     {
-        _customerCabRequestedHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destionation Lane"));      Assert.Equal(1, _cabContext.CustomerList.Count());
+        _customerCabRequestedHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destination Lane"));      Assert.Equal(1, _cabContext.CustomerList.Count());
         _customerRideRequestedHandler.Handle(new CustomerRideRequested() { CustomerListId = 1});      
         Assert.Equal(1, _cabContext.CustomerList.Count());
         Assert.Equal("Dan", _cabContext.CustomerList

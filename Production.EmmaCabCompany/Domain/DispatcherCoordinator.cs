@@ -6,7 +6,7 @@ namespace Production.EmmaCabCompany.Domain;
 public class DispatcherCoordinator
 {
     private Fleet _fleet = new();
-    private readonly Adapter.OutAdapter.CabFileAdapter.CustomerList _customerList = new();
+    private readonly CustomerList.CustomerList _customerList = new();
 
     public void AddCab(Cab cab)
     {

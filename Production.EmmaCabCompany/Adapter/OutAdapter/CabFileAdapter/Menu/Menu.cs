@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Domain.CustomerList;
 
@@ -6,7 +7,7 @@ namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 public class Menu
 {
     public int Id { get; set; }
-    public virtual List<Customer> Customers { get; init; }
+    public virtual List<CustomerDto> Customers { get; init; }
 
     public List<int> MenuOptions()
     {
