@@ -6,18 +6,18 @@ namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
 public class CabFileRepository(IFileHandler fileHandler)
 {
-    public Dictionary<Customer, CustomerStatus> LoadedCustomerDirectory()
+    public Dictionary<Customer, CustomerStatus> RetrieveCustomerDirectory()
     {
         var customerList = fileHandler.ReadCustomerList();
         var customerDirectory = CustomerList.CreateCustomerState(customerList);
         return customerDirectory;
     }
 
-    public Fleet.Fleet LoadedFleetState()
+    public Fleet.Fleet RetrieveFleet()
     {
         var cabList = fileHandler.ReadReadCabList();
         var newFleet = new Fleet.Fleet();
-        newFleet.CreateFleet(cabList, LoadedCustomerDirectory());
+        newFleet.CreateFleet(cabList, RetrieveCustomerDirectory());
         return newFleet;
     }
 

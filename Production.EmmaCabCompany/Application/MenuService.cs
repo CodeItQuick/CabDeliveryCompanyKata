@@ -7,9 +7,9 @@ public class MenuService(DispatcherCoordinator dispatcherCoordinator, CabFileRep
 {
     public List<int> DisplayMenu()
     {
-        var customerDirectory = cabFileRepository.LoadedCustomerDirectory();
+        var customerDirectory = cabFileRepository.RetrieveCustomerDirectory();
         dispatcherCoordinator.RebuildCustomerDictionary(customerDirectory);
-        var loadedFleetState = cabFileRepository.LoadedFleetState();
+        var loadedFleetState = cabFileRepository.RetrieveFleet();
         dispatcherCoordinator.RebuildCabList(loadedFleetState);
         
         var menuState = dispatcherCoordinator.MenuState();
@@ -21,9 +21,9 @@ public class MenuService(DispatcherCoordinator dispatcherCoordinator, CabFileRep
 
     public bool IsValidMenuOption(int option)
     {
-        var customerDirectory = cabFileRepository.LoadedCustomerDirectory();
+        var customerDirectory = cabFileRepository.RetrieveCustomerDirectory();
         dispatcherCoordinator.RebuildCustomerDictionary(customerDirectory);
-        var loadedFleetState = cabFileRepository.LoadedFleetState();
+        var loadedFleetState = cabFileRepository.RetrieveFleet();
         dispatcherCoordinator.RebuildCabList(loadedFleetState);
         
         var menuState = dispatcherCoordinator.MenuState();

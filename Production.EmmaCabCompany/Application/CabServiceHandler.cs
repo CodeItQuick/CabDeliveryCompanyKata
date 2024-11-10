@@ -19,9 +19,9 @@ public class CabServiceHandler
 
     public string? CustomerCabCall(string? customerName, string? startLocation, string? destinationLane)
     {
-        var customerDirectory = _cabFileRepository.LoadedCustomerDirectory();
+        var customerDirectory = _cabFileRepository.RetrieveCustomerDirectory();
         _dispatcherCoordinator.RebuildCustomerDictionary(customerDirectory);
-        var loadedFleetState = _cabFileRepository.LoadedFleetState();
+        var loadedFleetState = _cabFileRepository.RetrieveFleet();
         _dispatcherCoordinator.RebuildCabList(loadedFleetState);
         
         var customer = new Customer(customerName, startLocation, destinationLane);
@@ -32,9 +32,9 @@ public class CabServiceHandler
 
     public void CancelPickup()
     {
-        var customerDirectory = _cabFileRepository.LoadedCustomerDirectory();
+        var customerDirectory = _cabFileRepository.RetrieveCustomerDirectory();
         _dispatcherCoordinator.RebuildCustomerDictionary(customerDirectory);
-        var loadedFleetState = _cabFileRepository.LoadedFleetState();
+        var loadedFleetState = _cabFileRepository.RetrieveFleet();
         _dispatcherCoordinator.RebuildCabList(loadedFleetState);
 
         _dispatcherCoordinator.CancelPickup();
@@ -45,9 +45,9 @@ public class CabServiceHandler
     {
         try
         {
-            var customerDirectory = _cabFileRepository.LoadedCustomerDirectory();
+            var customerDirectory = _cabFileRepository.RetrieveCustomerDirectory();
             _dispatcherCoordinator.RebuildCustomerDictionary(customerDirectory);
-            var loadedFleetState = _cabFileRepository.LoadedFleetState();
+            var loadedFleetState = _cabFileRepository.RetrieveFleet();
             _dispatcherCoordinator.RebuildCabList(loadedFleetState);
 
             _dispatcherCoordinator.RideRequest();
@@ -71,9 +71,9 @@ public class CabServiceHandler
     {
         try
         {
-            var customerDirectory = _cabFileRepository.LoadedCustomerDirectory();
+            var customerDirectory = _cabFileRepository.RetrieveCustomerDirectory();
             _dispatcherCoordinator.RebuildCustomerDictionary(customerDirectory);
-            var loadedFleetState = _cabFileRepository.LoadedFleetState();
+            var loadedFleetState = _cabFileRepository.RetrieveFleet();
             _dispatcherCoordinator.RebuildCabList(loadedFleetState);
 
             _dispatcherCoordinator.PickupCustomer();
@@ -89,9 +89,9 @@ public class CabServiceHandler
     {
         try
         {
-            var customerDirectory = _cabFileRepository.LoadedCustomerDirectory();
+            var customerDirectory = _cabFileRepository.RetrieveCustomerDirectory();
             _dispatcherCoordinator.RebuildCustomerDictionary(customerDirectory);
-            var loadedFleetState = _cabFileRepository.LoadedFleetState();
+            var loadedFleetState = _cabFileRepository.RetrieveFleet();
             _dispatcherCoordinator.RebuildCabList(loadedFleetState);
 
             _dispatcherCoordinator.DropOffCustomer();
@@ -114,9 +114,9 @@ public class CabServiceHandler
 
     public void AddCab(Cab cab)
     {
-        var customerDirectory = _cabFileRepository.LoadedCustomerDirectory();
+        var customerDirectory = _cabFileRepository.RetrieveCustomerDirectory();
         _dispatcherCoordinator.RebuildCustomerDictionary(customerDirectory);
-        var loadedFleetState = _cabFileRepository.LoadedFleetState();
+        var loadedFleetState = _cabFileRepository.RetrieveFleet();
         _dispatcherCoordinator.RebuildCabList(loadedFleetState);
         
         // add the cab to the domain
@@ -128,9 +128,9 @@ public class CabServiceHandler
     }
     public void RemoveCab()
     {
-        var customerDirectory = _cabFileRepository.LoadedCustomerDirectory();
+        var customerDirectory = _cabFileRepository.RetrieveCustomerDirectory();
         _dispatcherCoordinator.RebuildCustomerDictionary(customerDirectory);
-        var loadedFleetState = _cabFileRepository.LoadedFleetState();
+        var loadedFleetState = _cabFileRepository.RetrieveFleet();
         _dispatcherCoordinator.RebuildCabList(loadedFleetState);
 
         _dispatcherCoordinator.RemoveCab();
