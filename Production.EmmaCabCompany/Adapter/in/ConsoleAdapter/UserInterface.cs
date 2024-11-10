@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Production.EmmaCabCompany.Adapter.@out;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Service;
 using Tests.CabDeliveryCompanyKata;
@@ -39,9 +40,11 @@ public class UserInterface
     {
         int selection;
         var dispatch = new DispatcherCoordinator();
-        var cabService = new CabServiceHandler(dispatch, new CabFileRepository(writer));
-        _menuController = new MenuController(new MenuService(dispatch));
-        var dispatchController = new DispatchController(cabService, new MenuService(dispatch),
+        var cabFileRepository = new CabFileRepository(writer);
+        var cabService = new CabServiceHandler(dispatch, cabFileRepository);
+        var menuService = new MenuService(dispatch, cabFileRepository);
+        _menuController = new MenuController(menuService);
+        var dispatchController = new DispatchController(cabService, menuService,
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         do
         {

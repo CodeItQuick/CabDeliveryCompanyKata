@@ -17,7 +17,7 @@ public class CabFileRepository(IFileHandler fileHandler)
     {
         var cabList = fileHandler.ReadReadCabList();
         var newFleet = new Fleet.Fleet();
-        newFleet.CreateFleet(cabList);
+        newFleet.CreateFleet(cabList, LoadedCustomerDirectory());
         return newFleet;
     }
 

@@ -148,11 +148,11 @@ public class AcceptanceTests
         SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
-            CommandList = new List<string>()
-            {
+            CommandList =
+            [
                 "3",
                 "0"
-            }
+            ]
         };
         var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
         var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
@@ -169,12 +169,12 @@ public class AcceptanceTests
         SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
-            CommandList = new List<string>()
-            {
+            CommandList =
+            [
                 "1",
                 "4",
                 "0"
-            }
+            ]
         };
         var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
         var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
@@ -192,15 +192,15 @@ public class AcceptanceTests
         SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
-            CommandList = new List<string>()
-            {
+            CommandList =
+            [
                 "7",
                 "Emma",
                 "1 Fulton Drive",
                 "1 Destination Lane",
                 "3",
                 "0"
-            }
+            ]
         };
         var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
         var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
@@ -217,13 +217,14 @@ public class AcceptanceTests
         SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
-            CommandList = new List<string>()
-            {
+            CommandList =
+            [
+                "1",
                 "1",
                 "7",
                 "Emma",
                 "1 Fulton Drive",
-            "1 Destination Lane",
+                "1 Destination Lane",
                 "7",
                 "Lisa",
                 "1 Fulton Drive",
@@ -235,7 +236,7 @@ public class AcceptanceTests
                 "4",
                 "5",
                 "0"
-            }
+            ]
         };
         var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
         var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";

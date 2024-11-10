@@ -34,8 +34,9 @@ public class HomeController : Controller
             fileSettings.Value.CustomerFileNameCsv, 
             fileSettings.Value.CabFileNameCsv);
         var dispatcherCoordinator = new DispatcherCoordinator();
-        _cabService = new CabServiceHandler(dispatcherCoordinator, new CabFileRepository(fileHandler));
-        _menuService = new MenuService(dispatcherCoordinator);
+        var cabFileRepository = new CabFileRepository(fileHandler);
+        _cabService = new CabServiceHandler(dispatcherCoordinator, cabFileRepository);
+        _menuService = new MenuService(dispatcherCoordinator, cabFileRepository);
     }
 
     public IActionResult Index()

@@ -135,7 +135,8 @@ public class CabServiceHandlerTests
         
         cabService.DropOffCustomer();
         
-        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,Delivered,46.238888,-63.129166", fakeFileReadWriter.Read("customer_list_default.csv").First());
+        Assert.Equal("Emma,1 Fulton Drive,1 Destination Lane,Delivered,46.238888,-63.129166", 
+            fakeFileReadWriter.Read("customer_list_default.csv").First());
         Assert.Single(fakeFileReadWriter.Read("customer_list_default.csv"));
         Assert.Equal("Evan,,,", fakeFileReadWriter.Read("cab_list_default.csv").First());
         Assert.Single(fakeFileReadWriter.Read("cab_list_default.csv"));

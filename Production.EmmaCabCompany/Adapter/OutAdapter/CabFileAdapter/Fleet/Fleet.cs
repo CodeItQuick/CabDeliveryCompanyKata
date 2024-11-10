@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Domain.CustomerList;
 
 namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
@@ -18,7 +19,7 @@ public class Fleet
     }
 
 
-    public void CreateFleet(string[] cabList)
+    public void CreateFleet(string[] cabList, Dictionary<Customer, CustomerStatus> loadedCustomerDirectory)
     {
         var cabListStrings = cabList
             .Select(x => x)
@@ -33,14 +34,34 @@ public class Fleet
             else
             {
                 var cabValue = new Cab(cabAttributes[0], 20, 46.2382, 63.1311);
+                var customerCallInProgress = loadedCustomerDirectory
+                    .FirstOrDefault(x => x.Key.Status == CustomerStatus.CustomerCallInProgress);
                 if (!string.IsNullOrWhiteSpace(cabAttributes[1]))
                 {
                     var customer = new Customer(
-                        cabAttributes[1], 
-                        cabAttributes[2], 
+                        cabAttributes[1],
+                        cabAttributes[2],
                         cabAttributes[3]);
                     cabValue.RequestRideFor(customer);
+                    // this is a mess but eventually I won't be doing the loading from FileRepository at all
+                    var customerState = loadedCustomerDirectory
+                        .FirstOrDefault(x => x.Key.Name == customer.Name)
+                        .Value;
+                    if (customerState == CustomerStatus.WaitingPickup)
+                    {
+                        cabValue.PickupAssignedCustomer(customer);
+                    }
+                    if (customerState == CustomerStatus.Enroute)
+                    {
+                        cabValue.PickupAssignedCustomer(customer);
+                    }
+                    if (customerState == CustomerStatus.Delivered)
+                    {
+                        cabValue.PickupAssignedCustomer(customer);
+                        cabValue.DropOffCustomer();
+                    }
                 }
+
                 FleetOfCabs.Add(cabValue);
             }
         }
@@ -73,6 +94,7 @@ public class Fleet
         {
             throw new SystemException($"Dispatch failed to pickup {customer.Name} as there are no available cabs.");
         }
+
         Cab? assignedCab = null;
         foreach (var cab in availableCabList)
         {
@@ -85,9 +107,10 @@ public class Fleet
 
                 continue;
             }
-            
+
             assignedCab = cab;
         }
+
         assignedCab?.RequestRideFor(customer);
     }
 
@@ -97,6 +120,7 @@ public class Fleet
         {
             throw new SystemException("Cannot drop off customers as there are no cabs in the fleet");
         }
+
         var enrouteCab = FleetOfCabs?.FirstOrDefault(x => x.IsEnrouteFor(customer));
         enrouteCab?.PickupAssignedCustomer(customer);
     }
@@ -135,7 +159,7 @@ public class Fleet
     public string[] ExportCabs()
     {
         return FleetOfCabs
-            .Select(x => 
+            .Select(x =>
                 $"{x.CabInfo()?.CabName}," +
                 $"{x.CabInfo()?.PassengerName}," +
                 $"{x.CabInfo()?.StartLocation}," +

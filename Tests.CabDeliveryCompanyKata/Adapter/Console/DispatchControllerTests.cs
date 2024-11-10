@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Service;
 
@@ -25,7 +26,7 @@ public class DispatchControllerTests
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
         var cabService = new CabServiceHandler(radioFleet, new CabFileRepository(handler));
         var dispatchController = new DispatchController(cabService, new MenuService(
-                new DispatcherCoordinator()),
+                new DispatcherCoordinator(), new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"))),
             new CustomerListRepository(_cabContext),
             new FleetRepository(_cabContext));
 
@@ -41,7 +42,7 @@ public class DispatchControllerTests
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
                 var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
-            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(_cabContext),
+            new MenuService(new DispatcherCoordinator(), new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"))), new CustomerListRepository(_cabContext),
             new FleetRepository(_cabContext));
         dispatchController.AddCab();
         var cabsAvailable = radioFleet.NoCabsInFleet();
@@ -61,7 +62,7 @@ public class DispatchControllerTests
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
                 var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
-            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(_cabContext),
+            new MenuService(new DispatcherCoordinator(), new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"))), new CustomerListRepository(_cabContext),
             new FleetRepository(_cabContext));
 
         var result = dispatchController.RemoveCab();
@@ -73,9 +74,14 @@ public class DispatchControllerTests
     public void CannotRemoveCabsWithPassengerInIt()
     {
         var radioFleet = new DispatcherCoordinator();
-        IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var customerListFilename = $"customer_list_{Guid.NewGuid()}.csv";
+        var cabListFilename = $"cab_list_{Guid.NewGuid()}.csv";
+        IFileHandler handler = new FakeFileReadWriter(customerListFilename, cabListFilename);
+        var cabFileRepository = new CabFileRepository(handler);
+        var menuService = new MenuService(radioFleet, 
+            cabFileRepository);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CabServiceHandler(radioFleet, cabFileRepository), menuService,
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -94,7 +100,7 @@ public class DispatchControllerTests
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
                 var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
-            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(_cabContext),
+            new MenuService(new DispatcherCoordinator(), new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"))), new CustomerListRepository(_cabContext),
             new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.AddCab();
@@ -114,7 +120,7 @@ public class DispatchControllerTests
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
                 var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
-            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(_cabContext),
+            new MenuService(new DispatcherCoordinator(), new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"))), new CustomerListRepository(_cabContext),
             new FleetRepository(_cabContext));
         dispatchController.AddCab();
 
@@ -130,7 +136,7 @@ public class DispatchControllerTests
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
                 var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
-            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(_cabContext),
+            new MenuService(new DispatcherCoordinator(), new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"))), new CustomerListRepository(_cabContext),
             new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -147,7 +153,7 @@ public class DispatchControllerTests
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
                 var dispatchController = new DispatchController(
             new CabServiceHandler(radioFleet, new CabFileRepository(handler)),
-            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(_cabContext),
+            new MenuService(new DispatcherCoordinator(), new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"))), new CustomerListRepository(_cabContext),
             new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -164,7 +170,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet, new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"))),
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
 
         var customerCabCall = dispatchController.CustomerCancelledCabRide();
@@ -176,9 +182,14 @@ public class DispatchControllerTests
     public void CanCancelPickup()
     {
         var radioFleet = new DispatcherCoordinator();
-        IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
+        var customerListFilename = $"customer_list_{Guid.NewGuid()}.csv";
+        var cabListFilename = $"cab_list_{Guid.NewGuid()}.csv";
+        IFileHandler handler = new FakeFileReadWriter(customerListFilename, cabListFilename);
+        var cabFileRepository = new CabFileRepository(handler);
+        var menuService = new MenuService(radioFleet, 
+            cabFileRepository);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CabServiceHandler(radioFleet, cabFileRepository), menuService,
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -194,7 +205,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet, new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"))),
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -209,9 +220,14 @@ public class DispatchControllerTests
     public void CabCanDriveToCustomerAfterCabRequest()
     {
         var radioFleet = new DispatcherCoordinator();
-        IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-                var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+        var customerListFilename = $"customer_list_{Guid.NewGuid()}.csv";
+        var cabListFilename = $"cab_list_{Guid.NewGuid()}.csv";
+        IFileHandler handler = new FakeFileReadWriter(customerListFilename, cabListFilename);
+        var cabFileRepository = new CabFileRepository(handler);
+        var menuService = new MenuService(radioFleet, 
+            cabFileRepository);
+        var dispatchController = new DispatchController(
+            new CabServiceHandler(radioFleet, cabFileRepository), menuService,
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -228,7 +244,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
                 var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet, new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"))),
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
 
@@ -243,7 +259,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
                 var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet, new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"))),
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
 
         var sendCabRequest = dispatchController.SendCabRequest();
@@ -255,9 +271,13 @@ public class DispatchControllerTests
     public void CabCanPickupCustomer()
     {
         var radioFleet = new DispatcherCoordinator();
-        IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-                var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+        var customerListFilename = $"customer_list_{Guid.NewGuid()}.csv";
+        var cabListFilename = $"cab_list_{Guid.NewGuid()}.csv";
+        IFileHandler handler = new FakeFileReadWriter(customerListFilename, cabListFilename);
+        var cabFileRepository = new CabFileRepository(handler);
+        var menuService = new MenuService(radioFleet, cabFileRepository);
+        var dispatchController = new DispatchController(
+            new CabServiceHandler(radioFleet, cabFileRepository), menuService,
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -274,7 +294,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
                 var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet, new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"))),
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
 
         var sendCabRequest = dispatchController.CabNotifiesPickedUp();
@@ -288,7 +308,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
                 var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet, new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"))),
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -302,9 +322,14 @@ public class DispatchControllerTests
     public void CabCanDropOffCustomer()
     {
         var radioFleet = new DispatcherCoordinator();
-        IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-                var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+        var customerListFilename = $"customer_list_{Guid.NewGuid()}.csv";
+        var cabListFilename = $"cab_list_{Guid.NewGuid()}.csv";
+        IFileHandler handler = new FakeFileReadWriter(customerListFilename, cabListFilename);
+        var cabFileRepository = new CabFileRepository(handler);
+        var menuService = new MenuService(radioFleet, 
+            cabFileRepository);
+        var dispatchController = new DispatchController(
+            new CabServiceHandler(radioFleet, cabFileRepository), menuService,
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -320,9 +345,14 @@ public class DispatchControllerTests
     public void CabCanDropOffOnlyOneCustomerAtATime()
     {
         var radioFleet = new DispatcherCoordinator();
-        IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-                var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+        var customerListFilename = $"customer_list_{Guid.NewGuid()}.csv";
+        var cabListFilename = $"cab_list_{Guid.NewGuid()}.csv";
+        IFileHandler handler = new FakeFileReadWriter(customerListFilename, cabListFilename);
+        var cabFileRepository = new CabFileRepository(handler);
+        var menuService = new MenuService(radioFleet, 
+            cabFileRepository);
+        var dispatchController = new DispatchController(
+            new CabServiceHandler(radioFleet, cabFileRepository), menuService,
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.AddCab();
@@ -342,10 +372,14 @@ public class DispatchControllerTests
     public void CabCanDropOffTwoCustomers()
     {
         var radioFleet = new DispatcherCoordinator();
-        IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
-                _cabContext.Database.Migrate();
+        var customerListFilename = $"customer_list_{Guid.NewGuid()}.csv";
+        var cabListFilename = $"cab_list_{Guid.NewGuid()}.csv";
+        IFileHandler handler = new FakeFileReadWriter(customerListFilename, cabListFilename);
+        var cabFileRepository = new CabFileRepository(handler);
+        var menuService = new MenuService(radioFleet, 
+            cabFileRepository);
         var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CabServiceHandler(radioFleet, cabFileRepository), menuService,
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.AddCab();
@@ -368,7 +402,7 @@ public class DispatchControllerTests
         var radioFleet = new DispatcherCoordinator();
         IFileHandler handler = new FakeFileReadWriter("customer_list_default.csv", "cab_list_default.csv");
                 var dispatchController = new DispatchController(
-            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet),
+            new CabServiceHandler(radioFleet, new CabFileRepository(handler)), new MenuService(radioFleet, new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"))),
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -387,7 +421,7 @@ public class DispatchControllerTests
                 var dispatchController = new DispatchController(
             new CabServiceHandler(
                 new DispatcherCoordinator(), new CabFileRepository(handler)),
-            new MenuService(new DispatcherCoordinator()), new CustomerListRepository(_cabContext),
+            new MenuService(new DispatcherCoordinator(), new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"))), new CustomerListRepository(_cabContext),
             new FleetRepository(_cabContext));
 
         var dispatch = dispatchController.CabNotifiesDroppedOff();

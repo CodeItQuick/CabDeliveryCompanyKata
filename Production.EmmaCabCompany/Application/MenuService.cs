@@ -1,11 +1,17 @@
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Domain;
 
-namespace Tests.CabDeliveryCompanyKata;
+namespace Production.EmmaCabCompany.Application;
 
-public class MenuService(DispatcherCoordinator dispatcherCoordinator)
+public class MenuService(DispatcherCoordinator dispatcherCoordinator, CabFileRepository cabFileRepository)
 {
     public List<int> DisplayMenu()
     {
+        var customerDirectory = cabFileRepository.LoadedCustomerDirectory();
+        dispatcherCoordinator.RebuildCustomerDictionary(customerDirectory);
+        var loadedFleetState = cabFileRepository.LoadedFleetState();
+        dispatcherCoordinator.RebuildCabList(loadedFleetState);
+        
         var menuState = dispatcherCoordinator.MenuState();
         List<int> defaultMenuItems = [0, 1, 2, 7];
         defaultMenuItems.AddRange(menuState);
@@ -15,6 +21,11 @@ public class MenuService(DispatcherCoordinator dispatcherCoordinator)
 
     public bool IsValidMenuOption(int option)
     {
+        var customerDirectory = cabFileRepository.LoadedCustomerDirectory();
+        dispatcherCoordinator.RebuildCustomerDictionary(customerDirectory);
+        var loadedFleetState = cabFileRepository.LoadedFleetState();
+        dispatcherCoordinator.RebuildCabList(loadedFleetState);
+        
         var menuState = dispatcherCoordinator.MenuState();
         return menuState.Contains(option);
     }
