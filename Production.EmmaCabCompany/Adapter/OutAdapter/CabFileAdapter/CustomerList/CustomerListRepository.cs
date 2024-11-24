@@ -20,7 +20,7 @@ public class CustomerListRepository : ICustomerListRepository
     {
         var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
         if (fleetExists) return;
-        _cabContext.Menu.Add(new Menu() { Id = 1 });
+        _cabContext.Menu.Add(new Menu.Menu() { Id = 1, Customers = new List<CustomerDto>()});
         _cabContext.SaveChanges();
         _cabContext.ChangeTracker.Clear();
     }
@@ -29,7 +29,7 @@ public class CustomerListRepository : ICustomerListRepository
     {
         var fleetExists = _cabContext.CustomerList.Any(x => x.Id == 1);
         if (fleetExists) return;
-        _cabContext.CustomerList.Add(new CustomerListDto() { Id = 1 });
+        _cabContext.CustomerList.Add(new CustomerListDto() { Id = 1, Customers = new List<CustomerDto>() });
         _cabContext.SaveChanges();
         _cabContext.ChangeTracker.Clear();
     }
@@ -55,7 +55,7 @@ public class CustomerListRepository : ICustomerListRepository
             .Select(x => new CustomerDto()
             {
                 CustomerId = customerList.Id, Id = x.Id, Name = x.Name, Status = x.Status, EndLocation = x.EndLocation,
-                StartLocation = x.StartLocation
+                StartLocation = x.StartLocation, MenuId = 1
             }).ToList();
         customerListDto.Customers = customerDtos;
         _cabContext.Update(customerListDto); 

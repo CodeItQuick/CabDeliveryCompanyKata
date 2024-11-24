@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
@@ -10,9 +11,11 @@ using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 namespace Production.EmmaCabCompany.Migrations
 {
     [DbContext(typeof(CabContext))]
-    partial class CabContextModelSnapshot : ModelSnapshot
+    [Migration("20241117124420_MigrateCustomerTableForMenu")]
+    partial class MigrateCustomerTableForMenu
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -21,6 +24,9 @@ namespace Production.EmmaCabCompany.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("Customer")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("CustomerId")
@@ -49,6 +55,8 @@ namespace Production.EmmaCabCompany.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Customer");
+
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Customers");
@@ -76,7 +84,7 @@ namespace Production.EmmaCabCompany.Migrations
                     b.ToTable("Fleet");
                 });
 
-            modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu.Menu", b =>
+            modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -94,9 +102,6 @@ namespace Production.EmmaCabCompany.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("Cab")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("CabId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("_cabName")
@@ -119,18 +124,16 @@ namespace Production.EmmaCabCompany.Migrations
 
                     b.HasIndex("Cab");
 
-                    b.HasIndex("CabId");
-
                     b.ToTable("Cabs");
                 });
 
             modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerDto", b =>
                 {
-                    b.HasOne("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerListDto", null)
+                    b.HasOne("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu", null)
                         .WithMany("Customers")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("Customer");
 
-                    b.HasOne("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu.Menu", null)
+                    b.HasOne("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerListDto", null)
                         .WithMany("Customers")
                         .HasForeignKey("CustomerId");
                 });
@@ -140,10 +143,6 @@ namespace Production.EmmaCabCompany.Migrations
                     b.HasOne("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet.Fleet", null)
                         .WithMany("FleetOfCabs")
                         .HasForeignKey("Cab");
-
-                    b.HasOne("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu.Menu", null)
-                        .WithMany("Cabs")
-                        .HasForeignKey("CabId");
                 });
 
             modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerListDto", b =>
@@ -156,10 +155,8 @@ namespace Production.EmmaCabCompany.Migrations
                     b.Navigation("FleetOfCabs");
                 });
 
-            modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu.Menu", b =>
+            modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu", b =>
                 {
-                    b.Navigation("Cabs");
-
                     b.Navigation("Customers");
                 });
 #pragma warning restore 612, 618

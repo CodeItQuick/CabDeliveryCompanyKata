@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Application;
+using Production.EmmaCabCompany.Application.Menu;
 using Production.WebCabCompany.Controllers;
 
 namespace Tests.CabDeliveryCompanyKata.Adapter.Web;
@@ -40,7 +41,14 @@ public class HomeControllerIntegrationTests
             new NullLogger<HomeController>(), 
             options, 
             _fleetRepository,
-            _addCabCommandHandler);
+            _addCabCommandHandler,
+            new RemoveCabCommandHandler(new FleetRepository(_cabContext)),
+            new CustomerCabRequestedHandler(new CustomerListRepository(_cabContext)),
+            new CustomerCancelledCabHandler(new CustomerListRepository(_cabContext)),
+            new CustomerDeliveredHandler(new CustomerListRepository(_cabContext)),
+            new CustomerEnroutedHandler(new CustomerListRepository(_cabContext)),
+            new CustomerRideRequestedHandler(new CustomerListRepository(_cabContext)),
+            new MenuRequestedHandler(new MenuRepository(_cabContext)));
         
         var claimsIdentity = new ClaimsIdentity(
             new List<Claim>()

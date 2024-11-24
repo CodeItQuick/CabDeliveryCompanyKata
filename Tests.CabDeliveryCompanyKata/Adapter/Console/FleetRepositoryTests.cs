@@ -30,8 +30,8 @@ public class FleetRepositoryTests
     {
         _fleetRepository.EmptyFleet(1);
         _fleetRepository.AddCab("evan", 1.00, 1.00);
-        Assert.Equal(1, _cabContext.Fleet.Include(x => x.FleetOfCabs)
-            .FirstOrDefault()!.FleetOfCabs.Count);
+        Assert.Single(_cabContext.Fleet.Include(x => x.FleetOfCabs)
+            .FirstOrDefault()!.FleetOfCabs);
     }
     [Fact]
     public void CanAddTwoCabs()

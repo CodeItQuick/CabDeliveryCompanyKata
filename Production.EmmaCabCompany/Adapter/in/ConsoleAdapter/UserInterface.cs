@@ -15,16 +15,21 @@ public class UserInterface
     private readonly IFileHandler writer;
     private MenuController _menuController;
     private CabContext _cabContext;
+    private CabFileRepository _cabFileRepository;
+    private DispatcherCoordinator _dispatch;
+    private CabServiceHandler _cabService;
+    private MenuService _menuService;
+    private DispatchController _dispatchController;
 
     public UserInterface(
         ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader,
-        IFileHandler writer)
+        IFileHandler writer, string? dbName = null)
     {
         this.cabCompanyPrinter = cabCompanyPrinter;
         this.cabCompanyReader = cabCompanyReader;
         this.writer = writer;
         var connectionFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "production_db.db");
+            dbName ?? $"production_db-{Guid.NewGuid()}.db");
         if (!File.Exists(connectionFile))
         {
             File.Create(connectionFile);
@@ -34,18 +39,19 @@ public class UserInterface
             .UseSqlite($"Data Source={connectionFile}");
         _cabContext = new CabContext(dbContextOptions.Options);
         _cabContext.Database.Migrate();
+        _dispatch = new DispatcherCoordinator();
+        _cabFileRepository = new CabFileRepository(writer);
+        _cabService = new CabServiceHandler(_dispatch, _cabFileRepository);
+        _menuService = new MenuService(_dispatch, _cabFileRepository);
+        _menuController = new MenuController(_menuService, new MenuRepository(_cabContext));
+        _dispatchController = new DispatchController(_cabService, _menuService,
+            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+
     }
 
     public void Run()
     {
         int selection;
-        var dispatch = new DispatcherCoordinator();
-        var cabFileRepository = new CabFileRepository(writer);
-        var cabService = new CabServiceHandler(dispatch, cabFileRepository);
-        var menuService = new MenuService(dispatch, cabFileRepository);
-        _menuController = new MenuController(menuService);
-        var dispatchController = new DispatchController(cabService, menuService,
-            new CustomerListRepository(_cabContext), new FleetRepository(_cabContext));
         do
         {
             WriteMenu();
@@ -60,7 +66,7 @@ public class UserInterface
 
             var paramList = RequestParamList(selection);
 
-            var output = ExecuteCommand(selection, dispatchController, paramList.ToArray());
+            var output = ExecuteCommand(selection, _dispatchController, paramList.ToArray());
             output.ForEach(cabCompanyPrinter.WriteLine);
         } while (selection != 0);
     }
@@ -68,7 +74,7 @@ public class UserInterface
     private List<string?> RequestParamList(int selection)
     {
         List<string?> paramList = [];
-        if (selection == 7)
+        if (selection == 7 && _menuController.ContainsOption(7))
         {
             paramList.Add(ExtractParam($"Enter customer name: "));
             Console.WriteLine("Location List");
@@ -106,9 +112,13 @@ public class UserInterface
         menu.ForEach(Console.WriteLine);
     }
 
-    private static List<string> ExecuteCommand(int selection, DispatchController dispatchController,
+    private List<string> ExecuteCommand(int selection, DispatchController dispatchController,
         params string?[] commandParams)
     {
+        if (!_menuController.ContainsOption(selection))
+        {
+            return ["This is not a valid option."];
+        }
         return selection switch
         {
             1 => [dispatchController.AddCab()],

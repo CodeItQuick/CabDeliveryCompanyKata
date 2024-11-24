@@ -1,5 +1,6 @@
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Application;
+using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Service;
 using Tests.CabDeliveryCompanyKata;
 
@@ -11,6 +12,7 @@ public class DispatchController
     private MenuService _menuService;
     private readonly CustomerListRepository _customerListRepository;
     private readonly FleetRepository _fleetRepository;
+    private readonly MenuRepository _menuRepository;
     private readonly CabServiceHandler _cabServiceHandler;
     private CustomerCabRequestedHandler _customerCabRequestedHandler;
     private CustomerRideRequestedHandler _customerRideRequestedHandler;
@@ -18,13 +20,16 @@ public class DispatchController
     private CustomerDeliveredHandler _customerDeliveredHandler;
     private CustomerEnroutedHandler _customerEnroutedHandler;
     private CustomerPickedUpHandler _customerPickedUpHandler;
+    private AddCabCommandHandler _addCabCommandHandler;
+    private RemoveCabCommandHandler _removeCabCommandHandler;
 
     public DispatchController(CabServiceHandler cabServiceHandler, MenuService menuService,
-        CustomerListRepository customerListRepository, FleetRepository fleetRepository)
+        CustomerListRepository customerListRepository, FleetRepository fleetRepository, MenuRepository menuRepository)
     {
         _menuService = menuService;
         _customerListRepository = customerListRepository;
         _fleetRepository = fleetRepository;
+        _menuRepository = menuRepository;
         _cabServiceHandler = cabServiceHandler;
         _customerCabRequestedHandler = new CustomerCabRequestedHandler(_customerListRepository);
         _customerCancelledCabHandler = new CustomerCancelledCabHandler(_customerListRepository);
@@ -32,13 +37,15 @@ public class DispatchController
         _customerEnroutedHandler = new CustomerEnroutedHandler(_customerListRepository);
         _customerPickedUpHandler = new CustomerPickedUpHandler(_customerListRepository);
         _customerRideRequestedHandler = new CustomerRideRequestedHandler(_customerListRepository);
+        _addCabCommandHandler = new AddCabCommandHandler(_fleetRepository);
+        _removeCabCommandHandler = new RemoveCabCommandHandler(_fleetRepository);
     }
 
     public string AddCab()
     {
         var cabName = "Evan's Cab";
-        _fleetRepository.AddCab(cabName, 46.2382, 63.1311);
-        _cabServiceHandler.AddCab(new Cab(cabName, 20, 46.2382, 63.1311));
+        _addCabCommandHandler.Handle(new AddCabCommand(cabName, 46.2382, 63.1311));
+        // _cabServiceHandler.AddCab(new Cab(cabName, 20, 46.2382, 63.1311));
 
         return "Added Evan's Cab to fleet";
     }
@@ -47,9 +54,9 @@ public class DispatchController
     {
         try
         {
-            _fleetRepository.RemoveCab(1);
-            _cabServiceHandler.RemoveCab();
-            return "Cab removed from fleet";
+            _removeCabCommandHandler.Handle(new RemoveCabCommand(1));
+            // _cabServiceHandler.RemoveCab();
+            return "Requested cab removed from fleet";
         }
         catch (Exception ex)
         {
@@ -59,23 +66,24 @@ public class DispatchController
 
     public string CustomerCabCall(string? customerName, string? startLocation, string? destinationLane)
     {
-        var customerCabCall = _cabServiceHandler.CustomerCabCall(customerName, startLocation, destinationLane);
-        var resultText = $"Received customer ride request from {customerCabCall}";
+        // var customerCabCall = _cabServiceHandler.CustomerCabCall(customerName, startLocation, destinationLane);
         _currentNameIdx += 1;
         _customerCabRequestedHandler.Handle(new CustomerCabRequested(customerName, startLocation, destinationLane));
-        return resultText;
+        return $"Received customer ride request from {customerName}";
     }
 
     public List<string> CustomerCancelledCabRide()
     {
         try
         {
-            if (!_menuService.IsValidMenuOption(6))
+            var menuObj = _menuRepository.GetById(1);
+            var hasOption = menuObj.MenuOptions().Contains(6);
+            if (!hasOption)
             {
                 throw new SystemException("This is not a valid option.");
             }
 
-            _cabServiceHandler.CancelPickup();
+            // _cabServiceHandler.CancelPickup();
             _customerCancelledCabHandler.Handle(new CustomerCancelledCab());
             return ["Customer cancelled cab ride successfully."];
         }
@@ -89,15 +97,25 @@ public class DispatchController
     {
         try
         {
-            if (!_menuService.IsValidMenuOption(3))
+            var menuObj = _menuRepository.GetById(1);
+            var hasOption = menuObj.MenuOptions().Contains(3);
+            if (!hasOption)
             {
                 throw new SystemException("This is not a valid option.");
             }
 
-            var response = _cabServiceHandler.SendCabRequest();
+            // var response = _cabServiceHandler.SendCabRequest();
             _customerRideRequestedHandler.Handle(new CustomerRideRequested());
 
-            return response.ToList();
+            // TODO: Fix this - it may have to do a read, which kinda sucks
+            var customerList = _customerListRepository.GetById(1);
+            // TODO: fix this, should not be hardcodedZ
+            var customer = customerList.Customers.Last(x => x.Status == CustomerStatus.WaitingPickup);
+            return 
+            [
+                $"Evan's Cab picked up {customer.Name} at {customer.StartLocation}.",
+                "Cab assigned to customer."
+            ];;
         }
         catch (Exception ex)
         {
@@ -109,12 +127,14 @@ public class DispatchController
     {
         try
         {
-            if (!_menuService.IsValidMenuOption(4))
+            var menuObj = _menuRepository.GetById(1);
+            var hasOption = menuObj.MenuOptions().Contains(4);
+            if (!hasOption)
             {
                 throw new SystemException("This is not a valid option.");
             }
 
-            _cabServiceHandler.PickupCustomer();
+            // _cabServiceHandler.PickupCustomer();
             _customerPickedUpHandler.Handle(new CustomerPickedUp());
             return "Notified dispatcher of pickup";
         }
@@ -128,16 +148,21 @@ public class DispatchController
     {
         try
         {
-            if (!_menuService.IsValidMenuOption(5))
+            var menuObj = _menuRepository.GetById(1);
+            var hasOption = menuObj.MenuOptions().Contains(5);
+            if (!hasOption)
             {
                 throw new SystemException("This is not a valid option.");
             }
 
-            var droppedOff = _cabServiceHandler.DropOffCustomer();
+            // var droppedOff = _cabServiceHandler.DropOffCustomer();
             _customerDeliveredHandler.Handle(new CustomerDelivered());
+            var customerList = _customerListRepository.GetById(1);
+            // TODO: fix this, should not be hardcodedZ
+            var customer = customerList.Customers.Last(x => x.Status == CustomerStatus.Delivered);
             return
             [
-                $"{droppedOff[0]?.CabName} dropped off {droppedOff[0]?.PassengerName} at {droppedOff[0]?.Destination}."
+                $"Evan's Cab dropped off {customer.Name} at {customer.EndLocation}."
             ];
         }
         catch (Exception ex)

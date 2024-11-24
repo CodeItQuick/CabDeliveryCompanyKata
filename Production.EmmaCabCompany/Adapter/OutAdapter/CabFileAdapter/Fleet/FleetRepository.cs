@@ -12,9 +12,25 @@ public class FleetRepository : IFleetRepository
     {
         _cabContext = cabContext;
         EnsureFleetExistsForSingleUser();
+        EnsureMenuExistsForSingleUser();
     }
 
-    // TODO: this isn't actually adding a cab to the db
+    private void EnsureFleetExistsForSingleUser()
+    {
+        var fleetExists = _cabContext.Fleet.Any(x => x.Id == 1);
+        if (fleetExists) return;
+        _cabContext.Fleet.Add(new Fleet.Fleet() { Id = 1 });
+        _cabContext.SaveChanges();
+    }
+
+    private void EnsureMenuExistsForSingleUser()
+    {
+        var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
+        if (fleetExists) return;
+        _cabContext.Menu.Add(new Menu.Menu() { Id = 1 });
+        _cabContext.SaveChanges();
+    }
+
     public void AddCab(string cabName, double latitude, double longitude)
     {
 
@@ -24,15 +40,14 @@ public class FleetRepository : IFleetRepository
         updateFleet.AddCab(cab);
         _cabContext.Fleet.Update(updateFleet);
         _cabContext.SaveChanges();
-        _cabContext.ChangeTracker.Clear();
-    }
-
-    private void EnsureFleetExistsForSingleUser()
-    {
-        var fleetExists = _cabContext.Fleet.Any(x => x.Id == 1);
-        if (fleetExists) return;
-        _cabContext.Fleet.Add(new Fleet.Fleet() { Id = 1 });
+        var updateMenu = _cabContext.Menu
+            .Include(x => x.Customers)
+            .Include(x => x.Cabs)
+            .FirstOrDefault(x => x.Id == 1)!;
+        updateMenu.Cabs.Add(cab);
+        _cabContext.Menu.Update(updateMenu);
         _cabContext.SaveChanges();
+        _cabContext.ChangeTracker.Clear();
     }
 
     public void RemoveCab(int fleetId)

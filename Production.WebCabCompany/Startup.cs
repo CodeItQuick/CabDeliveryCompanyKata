@@ -1,10 +1,10 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Application;
+using Production.EmmaCabCompany.Application.Menu;
 using Production.WebCabCompany.Controllers;
 using Production.WebCabCompany.Models;
 using Production.WebCabCompany.Services;
@@ -71,7 +71,16 @@ public class Startup
         services.AddTransient<IEmailSender, AuthMessageSender>();
         services.AddTransient<ISmsSender, AuthMessageSender>();
         services.AddSingleton<IFleetRepository, FleetRepository>();
-        services.AddSingleton<IAddCabCommandHandler, AddCabCommandHandler>();
+        services.AddSingleton<ICustomerListRepository, CustomerListRepository>();
+        services.AddSingleton<IMenuRepository, MenuRepository>();
+        services.AddScoped<IAddCabCommandHandler, AddCabCommandHandler>();
+        services.AddScoped<IRemoveCabCommandHandler, RemoveCabCommandHandler>();
+        services.AddScoped<ICustomerCabRequestedHandler, CustomerCabRequestedHandler>();
+        services.AddScoped<ICustomerCancelledCabHandler, CustomerCancelledCabHandler>();
+        services.AddScoped<ICustomerDeliveredHandler, CustomerDeliveredHandler>();
+        services.AddScoped<ICustomerEnroutedHandler, CustomerEnroutedHandler>();
+        services.AddScoped<ICustomerRideRequestedHandler, CustomerRideRequestedHandler>();
+        services.AddScoped<IMenuRequestedHandler, MenuRequestedHandler>();
 
         // Does not work on this dotnet?
         // services.AddDatabaseDeveloperPageExceptionFilter();

@@ -10,7 +10,7 @@ public class CabContext : DbContext
     public DbSet<Cab> Cabs { get; set; }
     public DbSet<CustomerDto> Customers { get; set; }
     public DbSet<CustomerListDto> CustomerList { get; set; }
-    public DbSet<Menu> Menu { get; set; }
+    public DbSet<Menu.Menu> Menu { get; set; }
 
     public CabContext(DbContextOptions<CabContext> options) : base(options) { }
 }

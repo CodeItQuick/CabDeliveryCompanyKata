@@ -2,7 +2,7 @@ using Production.EmmaCabCompany.Application;
 
 namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
-public class CustomerPickedUpHandler
+public class CustomerPickedUpHandler : ICustomerPickedUpHandler
 {
     private readonly ICustomerListRepository _customerListRepository;
 
@@ -16,9 +16,13 @@ public class CustomerPickedUpHandler
     public int Handle(CustomerPickedUp request)
     {
         var customerList = _customerListRepository.GetById(1);
-        customerList.PickupCustomer();
+        customerList.PutCustomerEnroute();
         _customerListRepository.Add(customerList);
 
         return customerList.Id;
     }
+}
+public interface ICustomerPickedUpHandler
+{
+    public int Handle(CustomerPickedUp request);
 }

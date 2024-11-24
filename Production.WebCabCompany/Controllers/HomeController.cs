@@ -6,10 +6,12 @@ using Production.EmmaCabCompany;
 using Production.EmmaCabCompany.Adapter.@in;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Application;
+using Production.EmmaCabCompany.Application.Menu;
 using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Service;
 using Production.WebCabCompany.Models;
 using Tests.CabDeliveryCompanyKata;
+using Tests.CabDeliveryCompanyKata.Adapter.Console;
 
 namespace Production.WebCabCompany.Controllers;
 
@@ -19,17 +21,38 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly IFleetRepository _fleetRepository;
     private readonly IAddCabCommandHandler _addCabCommandHandler;
+    private readonly IRemoveCabCommandHandler _removeCabCommandHandler;
+    private readonly ICustomerCabRequestedHandler _customerCabRequestedHandler;
+    private readonly ICustomerCancelledCabHandler _customerCancelledCabHandler;
+    private readonly ICustomerDeliveredHandler _customerDeliveredHandler;
+    private readonly ICustomerEnroutedHandler _customerEnroutedHandler;
+    private readonly ICustomerRideRequestedHandler _customerRideRequestedHandler;
+    private readonly IMenuRequestedHandler _menuRequestedHandler;
     private readonly CabServiceHandler _cabService;
     private readonly MenuService _menuService;
 
     public HomeController(ILogger<HomeController> logger, 
         IOptions<FileSettings> fileSettings, 
         IFleetRepository fleetRepository,
-        IAddCabCommandHandler addCabCommandHandler)
+        IAddCabCommandHandler addCabCommandHandler,
+        IRemoveCabCommandHandler removeCabCommandHandler,
+        ICustomerCabRequestedHandler customerCabRequestedHandler,
+        ICustomerCancelledCabHandler customerCancelledCabHandler,
+        ICustomerDeliveredHandler customerDeliveredHandler,
+        ICustomerEnroutedHandler customerEnroutedHandler,
+        ICustomerRideRequestedHandler customerRideRequestedHandler,
+        IMenuRequestedHandler menuRequestedHandler)
     {
         _logger = logger;
         _fleetRepository = fleetRepository;
         _addCabCommandHandler = addCabCommandHandler;
+        _removeCabCommandHandler = removeCabCommandHandler;
+        _customerCabRequestedHandler = customerCabRequestedHandler;
+        _customerCancelledCabHandler = customerCancelledCabHandler;
+        _customerDeliveredHandler = customerDeliveredHandler;
+        _customerEnroutedHandler = customerEnroutedHandler;
+        _customerRideRequestedHandler = customerRideRequestedHandler;
+        _menuRequestedHandler = menuRequestedHandler;
         var fileHandler = new FileHandler(
             fileSettings.Value.CustomerFileNameCsv, 
             fileSettings.Value.CabFileNameCsv);
@@ -39,54 +62,57 @@ public class HomeController : Controller
         _menuService = new MenuService(dispatcherCoordinator, cabFileRepository);
     }
 
+    // TODO: Not tested
     public IActionResult Index()
     {
-        var displayMenu = _menuService.DisplayMenu();
-        return View(new CabDisplayModel() { DisplayMenu = displayMenu });
+        var displayMenu = _menuRequestedHandler.Handle(new MenuRequested(1));
+        return View(new CabDisplayModel() { DisplayMenu = displayMenu.MenuOptions });
     }
 
     public IActionResult AddCabDriver()
     {
-        _cabService.AddCab(new Cab("default", 20, 23.23, 32.32));
         _addCabCommandHandler.Handle(new AddCabCommand("default", 23.23, 32.32));
         
         return RedirectToAction(nameof(Index));
     }
     public IActionResult RemoveCabDriver()
     {
+        _removeCabCommandHandler.Handle(new RemoveCabCommand(1));
         return RedirectToAction(nameof(Index));
     }
     public IActionResult CustomerRequestRide()
     {
+        _customerRideRequestedHandler.Handle(new CustomerRideRequested());
         return RedirectToAction(nameof(Index));
     }
     public IActionResult CustomerCabCall()
     {
-        _cabService.CustomerCabCall("default customer", "1 Fulton Drive", "2 Destination Lane");
+        _customerCabRequestedHandler.Handle(
+            new CustomerCabRequested("default customer", "1 Fulton Drive", "2 Destination Lane"));
         
         return RedirectToAction(nameof(Index));
     }
     public IActionResult SendCabRequest()
     {
-        _cabService.SendCabRequest();
+        _customerRideRequestedHandler.Handle(new CustomerRideRequested());
         
         return RedirectToAction(nameof(Index));
     }
     public IActionResult CabNotifiesPickedUp()
     {
-        _cabService.PickupCustomer();
+        _customerEnroutedHandler.Handle(new CustomerEnrouted());
         
         return RedirectToAction(nameof(Index));
     }
     public IActionResult CabNotifiesDroppedOff()
     {
-        _cabService.DropOffCustomer();
+        _customerDeliveredHandler.Handle(new CustomerDelivered());
         
         return RedirectToAction(nameof(Index));
     }
     public IActionResult CustomerCancelledCabRide()
     {
-        _cabService.CancelPickup();
+        _customerCancelledCabHandler.Handle(new CustomerCancelledCab());
         
         return RedirectToAction(nameof(Index));
     }

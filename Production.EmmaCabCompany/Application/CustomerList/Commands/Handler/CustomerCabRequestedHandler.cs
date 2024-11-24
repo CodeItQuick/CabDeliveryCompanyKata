@@ -3,7 +3,7 @@ using Production.EmmaCabCompany.Domain.CustomerList;
 
 namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
-public class CustomerCabRequestedHandler
+public class CustomerCabRequestedHandler : ICustomerCabRequestedHandler
 {
     private readonly ICustomerListRepository _customerListRepository;
 
@@ -23,4 +23,8 @@ public class CustomerCabRequestedHandler
 
         return customerList.Id;
     }
+}
+public interface ICustomerCabRequestedHandler
+{
+    public int Handle(CustomerCabRequested addCabCommand);
 }

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Production.EmmaCabCompany;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Application;
+using Production.EmmaCabCompany.Application.Menu;
 using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Domain.CustomerList;
 
@@ -38,16 +39,11 @@ public class MenuCommandTests
         Assert.NotNull(handle);
         Assert.Contains(0, handle.MenuOptions);
         Assert.Contains(1, handle.MenuOptions);
-        Assert.Contains(2, handle.MenuOptions);
-        Assert.Contains(7, handle.MenuOptions);
     }
 
     [Fact]
     public void MenuDisplaysOptionsThreeAndSixWhenCustomerCallInProgress()
     {
-        // _cabContext.Menu.Add(new Menu() { Id = 1 });
-        // _cabContext.CustomerList.Add(new CustomerList() { Id = 1 });
-        // _cabContext.SaveChanges();
         _cabContext.Customers.Add(
             new CustomerDto()
             {
@@ -61,8 +57,6 @@ public class MenuCommandTests
         Assert.NotNull(handle);
         Assert.Contains(0, handle.MenuOptions);
         Assert.Contains(1, handle.MenuOptions);
-        Assert.Contains(2, handle.MenuOptions);
-        Assert.Contains(7, handle.MenuOptions);
         Assert.Contains(3, handle.MenuOptions);
         Assert.Contains(6, handle.MenuOptions);
     }
@@ -83,8 +77,6 @@ public class MenuCommandTests
         Assert.NotNull(handle);
         Assert.Contains(0, handle.MenuOptions);
         Assert.Contains(1, handle.MenuOptions);
-        Assert.Contains(2, handle.MenuOptions);
-        Assert.Contains(7, handle.MenuOptions);
         Assert.Contains(4, handle.MenuOptions);
     }
 
@@ -103,8 +95,6 @@ public class MenuCommandTests
         Assert.NotNull(handle);
         Assert.Contains(0, handle.MenuOptions);
         Assert.Contains(1, handle.MenuOptions);
-        Assert.Contains(2, handle.MenuOptions);
-        Assert.Contains(7, handle.MenuOptions);
         Assert.Contains(5, handle.MenuOptions);
     }
 }

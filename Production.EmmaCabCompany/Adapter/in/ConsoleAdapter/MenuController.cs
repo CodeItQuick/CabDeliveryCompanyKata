@@ -1,20 +1,26 @@
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Application;
+using Production.EmmaCabCompany.Application.Menu;
 using Tests.CabDeliveryCompanyKata;
+using Tests.CabDeliveryCompanyKata.Adapter.Console;
 
 namespace Production.EmmaCabCompany.Adapter.@out;
 
 public class MenuController
 {
     private readonly MenuService _menuService;
+    private readonly MenuRequestedHandler _menuRequested;
 
-    public MenuController(MenuService menuService)
+    public MenuController(MenuService menuService, MenuRepository menuRepository)
     {
         _menuService = menuService;
+        _menuRequested = new MenuRequestedHandler(menuRepository);
     }
 
     public List<string> DisplayMenu()
     {
-        var displayMenu = _menuService.DisplayMenu();
+        // var displayMenu = _menuService.DisplayMenu();
+        var menuOptions = _menuRequested.Handle(new MenuRequested(1));
         var menu = new List<string>()
         {
             "Please choose a selection from the list: ",
@@ -31,8 +37,14 @@ public class MenuController
             "7. (Incoming Call) Customer Request Ride"
         };
         var selectAdditionalOptions = otherMenuOptions
-            .Where((_, idx) => displayMenu.Contains(idx));
+            .Where((_, idx) => menuOptions.MenuOptions.Contains(idx));
         menu.AddRange(selectAdditionalOptions);
         return menu;
+    }
+
+    public bool ContainsOption(int selection)
+    {
+        var menuConfiguration = _menuRequested.Handle(new MenuRequested(1));
+        return menuConfiguration.MenuOptions.Contains(selection);
     }
 }

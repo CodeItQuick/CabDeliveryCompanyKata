@@ -2,7 +2,7 @@ using Production.EmmaCabCompany.Application;
 
 namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
-public class CustomerDeliveredHandler
+public class CustomerDeliveredHandler : ICustomerDeliveredHandler
 {
     private readonly ICustomerListRepository _customerListRepository;
 
@@ -21,4 +21,8 @@ public class CustomerDeliveredHandler
 
         return customerList.Id;
     }
+}
+public interface ICustomerDeliveredHandler
+{
+    public int Handle(CustomerDelivered request);
 }

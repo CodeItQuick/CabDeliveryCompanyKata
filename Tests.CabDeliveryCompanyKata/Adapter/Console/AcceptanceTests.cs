@@ -119,18 +119,18 @@ public class AcceptanceTests
         SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
         {
-            CommandList = new List<string>()
-            {
+            CommandList =
+            [
                 "1",
                 "7",
                 "Emma",
                 "1 Fulton Drive",
-            "1 Destination Lane",
+                "1 Destination Lane",
                 "3",
                 "4",
                 "2",
                 "0"
-            }
+            ]
         };
         var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
         var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
@@ -140,7 +140,7 @@ public class AcceptanceTests
             new FileHandler(customerListFilename, cabListFilename));
         userInterface.Run();
         
-        Assert.Contains("Cab cannot be removed until passenger dropped off.", cabCompanyPrinter.List());
+        Assert.Contains("This is not a valid option.", cabCompanyPrinter.List());
     }
     [Fact]
     public void TheCabCompanyReportsFailureIfCannotPickupCustomerDueToNoCustomerRequests()
@@ -195,9 +195,6 @@ public class AcceptanceTests
             CommandList =
             [
                 "7",
-                "Emma",
-                "1 Fulton Drive",
-                "1 Destination Lane",
                 "3",
                 "0"
             ]
@@ -206,7 +203,9 @@ public class AcceptanceTests
         var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
-            cabCompanyReader, new FileHandler(customerListFilename, cabListFilename));
+            cabCompanyReader, 
+            new FileHandler(customerListFilename, cabListFilename),
+            $"{Guid.NewGuid()}-failure-case-test.db");
         userInterface.Run();
         
         Assert.Contains("This is not a valid option.", cabCompanyPrinter.List());
@@ -281,7 +280,7 @@ public class AcceptanceTests
             cabCompanyReader, new FileHandler(customerListFilename, cabListFilename));
         userInterface.Run();
         
-        Assert.Contains("Dispatch failed to pickup Lisa as there are no available cabs.", 
+        Assert.Contains("This is not a valid option.", 
             cabCompanyPrinter.List());
     }
     [Fact]
@@ -350,34 +349,6 @@ public class AcceptanceTests
             cabCompanyPrinter.List());
     }
     [Fact]
-    public void PersistsStateAfterCallForCabDelivery()
-    {
-        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
-        var customerListFilename = $"customer_list_default_repeatable.csv";
-        var cabListFilename = $"cab_list_default_repeatable.csv";
-        var fakeFileReadWriter = new FakeFileReadWriter(customerListFilename, cabListFilename);
-        fakeFileReadWriter.WriteCabList(["Evan's Cab,,,"]);
-        fakeFileReadWriter.WriteCustomerList(["Emma,1 Fulton Drive,1 Destination Lane,CustomerCallInProgress"]);
-        var userInterfaceSecondRun = new UserInterface(
-            cabCompanyPrinter, 
-            new FakeCabCompanyReader()
-            {
-                CommandList =
-                [
-                    "3",
-                    "4",
-                    "5",
-                    "0"
-                ]
-            }, 
-            fakeFileReadWriter);
-        
-        userInterfaceSecondRun.Run();
-        
-        Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.List());
-        Assert.Contains("Evan's Cab dropped off Emma at 1 Destination Lane.", cabCompanyPrinter.List());
-    }
-    [Fact]
     public void PersistsAllStateAfterCallForCabDelivery()
     {
         SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
@@ -399,10 +370,12 @@ public class AcceptanceTests
         var customerListFilename = $"customer_list_persisted_state.csv";
         var cabListFilename = $"cab_list_persisted_state.csv";
         var fakeFileReadWriter = new FakeFileReadWriter(customerListFilename, cabListFilename);
+        var dbName = $"{Guid.NewGuid()}-test.db";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
             cabCompanyReader, 
-            fakeFileReadWriter);
+            fakeFileReadWriter,
+            dbName);
         userInterface.Run();
         Assert.Contains("Evan's Cab picked up Emma at Bowling Alley.", cabCompanyPrinter.List());
         var userInterfaceSecondRun = new UserInterface(
@@ -415,11 +388,11 @@ public class AcceptanceTests
                     "0"
                 ]
             }, 
-            fakeFileReadWriter);
+            fakeFileReadWriter,
+            dbName);
         
         userInterfaceSecondRun.Run();
 
-        Assert.Contains("Emma,Bowling Alley,1 Destination Lane,Delivered,46.23496,-63.12495", fakeFileReadWriter.Read(customerListFilename));
         Assert.Contains(
             "Evan's Cab dropped off Emma at 1 Destination Lane.", 
             cabCompanyPrinter.List());

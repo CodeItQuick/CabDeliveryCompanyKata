@@ -16,9 +16,9 @@ public class MenuRepository : IMenuRepository
 
     private void EnsureMenuExistsForSingleUser()
     {
-        var fleetExists = Queryable.Any<Menu>(_cabContext.Menu, x => x.Id == 1);
+        var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
         if (fleetExists) return;
-        _cabContext.Menu.Add(new Menu() { Id = 1 });
+        _cabContext.Menu.Add(new Menu.Menu() { Id = 1, Customers = new List<CustomerDto>()});
         _cabContext.SaveChanges();
     }
     private void EnsureCustomerListExistsForSingleUser()
@@ -29,10 +29,11 @@ public class MenuRepository : IMenuRepository
         _cabContext.SaveChanges();
     }
 
-    public Menu GetById(int customerListId)
+    public Menu.Menu GetById(int customerListId)
     {
         var menu = _cabContext.Menu
             .Include(x => x.Customers)
+            .Include(x => x.Cabs)
             .FirstOrDefault(x => x.Id == 1)!;
         return menu;
     }

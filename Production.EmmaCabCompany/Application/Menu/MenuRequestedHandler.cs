@@ -1,8 +1,9 @@
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+using Tests.CabDeliveryCompanyKata.Adapter.Console;
 
-namespace Tests.CabDeliveryCompanyKata.Adapter.Console;
+namespace Production.EmmaCabCompany.Application.Menu;
 
-public class MenuRequestedHandler
+public class MenuRequestedHandler : IMenuRequestedHandler
 {
     private readonly IMenuRepository _menuRepository;
 
@@ -18,4 +19,9 @@ public class MenuRequestedHandler
         menuConfigurationDto.MenuOptions.AddRange(menu.MenuOptions());
         return menuConfigurationDto;
     }
+}
+
+public interface IMenuRequestedHandler
+{
+    public MenuConfigurationDto Handle(MenuRequested menuRequested);
 }
