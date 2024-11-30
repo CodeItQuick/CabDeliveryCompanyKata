@@ -36,14 +36,15 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=FE9C99A7_002D4B0E_002D4946_002D9C08_002D8F97DAA97897_002Ff_003ACabs_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=FE9C99A7_002D4B0E_002D4946_002D9C08_002D8F97DAA97897_002Ff_003AICabCompanyPrinter_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=FE9C99A7_002D4B0E_002D4946_002D9C08_002D8F97DAA97897_002Ff_003ACabCompanyPrinter_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
-	
-	
-	
-	
-	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4e18c990_002D44c7_002D474c_002Db2b7_002D5d960a265514/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ac00094a_002D48ab_002D40e3_002D9297_002Da92b648b12d4/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
+	
+	
+	
+	
+	
+	
 	
 	
 	

@@ -28,21 +28,15 @@ public class DispatchControllerTests
         Assert.Equal("Added Evan's Cab to fleet", addCabMessage);
     }
 
-    [Fact(Skip = "Dispatch Coordinator is not going to exist")]
+    [Fact]
     public void CanRemoveCabsFromTheFleet()
     {
-        var radioFleet = new DispatcherCoordinator();
         var dispatchController = new DispatchController(new CustomerListRepository(_cabContext),
             new FleetRepository(_cabContext), new MenuRepository(_cabContext));
         dispatchController.AddCab();
-        var cabsAvailable = radioFleet.NoCabsInFleet();
         var removeCab = dispatchController.RemoveCab();
 
-        var noCabsInFleet = radioFleet.NoCabsInFleet();
-
-        Assert.False(cabsAvailable);
-        Assert.True(noCabsInFleet);
-        Assert.Equal("Cab removed from fleet", removeCab);
+        Assert.Equal("Requested cab removed from fleet", removeCab);
     }
 
     [Fact]

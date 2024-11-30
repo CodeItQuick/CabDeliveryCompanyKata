@@ -78,7 +78,6 @@ public class Startup
         services.AddScoped<ICustomerCabRequestedHandler, CustomerCabRequestedHandler>();
         services.AddScoped<ICustomerCancelledCabHandler, CustomerCancelledCabHandler>();
         services.AddScoped<ICustomerDeliveredHandler, CustomerDeliveredHandler>();
-        services.AddScoped<ICustomerEnroutedHandler, CustomerEnroutedHandler>();
         services.AddScoped<ICustomerRideRequestedHandler, CustomerRideRequestedHandler>();
         services.AddScoped<IMenuRequestedHandler, MenuRequestedHandler>();
 

@@ -1,9 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Production.EmmaCabCompany.Adapter.@out;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-using Production.EmmaCabCompany.Application;
-using Production.EmmaCabCompany.Domain;
-using Tests.CabDeliveryCompanyKata;
 
 namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 
@@ -14,8 +11,6 @@ public class UserInterface
     private readonly IFileHandler writer;
     private MenuController _menuController;
     private CabContext _cabContext;
-    private CabFileRepository _cabFileRepository;
-    private DispatcherCoordinator _dispatch;
     private DispatchController _dispatchController;
 
     public UserInterface(
@@ -36,8 +31,6 @@ public class UserInterface
             .UseSqlite($"Data Source={connectionFile}");
         _cabContext = new CabContext(dbContextOptions.Options);
         _cabContext.Database.Migrate();
-        _dispatch = new DispatcherCoordinator();
-        _cabFileRepository = new CabFileRepository(writer);
         _menuController = new MenuController(new MenuRepository(_cabContext));
         _dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
 

@@ -7,7 +7,6 @@ namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 
 public class DispatchController
 {
-    private int _currentNameIdx = 0;
     private readonly CustomerListRepository _customerListRepository;
     private readonly FleetRepository _fleetRepository;
     private readonly MenuRepository _menuRepository;
@@ -15,7 +14,6 @@ public class DispatchController
     private CustomerRideRequestedHandler _customerRideRequestedHandler;
     private CustomerCancelledCabHandler _customerCancelledCabHandler;
     private CustomerDeliveredHandler _customerDeliveredHandler;
-    private CustomerEnroutedHandler _customerEnroutedHandler;
     private CustomerPickedUpHandler _customerPickedUpHandler;
     private AddCabCommandHandler _addCabCommandHandler;
     private RemoveCabCommandHandler _removeCabCommandHandler;
@@ -28,7 +26,6 @@ public class DispatchController
         _customerCabRequestedHandler = new CustomerCabRequestedHandler(_customerListRepository);
         _customerCancelledCabHandler = new CustomerCancelledCabHandler(_customerListRepository);
         _customerDeliveredHandler = new CustomerDeliveredHandler(_customerListRepository);
-        _customerEnroutedHandler = new CustomerEnroutedHandler(_customerListRepository);
         _customerPickedUpHandler = new CustomerPickedUpHandler(_customerListRepository);
         _customerRideRequestedHandler = new CustomerRideRequestedHandler(_customerListRepository);
         _addCabCommandHandler = new AddCabCommandHandler(_fleetRepository);
@@ -58,7 +55,6 @@ public class DispatchController
 
     public string CustomerCabCall(string? customerName, string? startLocation, string? destinationLane)
     {
-        _currentNameIdx += 1;
         _customerCabRequestedHandler.Handle(new CustomerCabRequested(customerName, startLocation, destinationLane));
         return $"Received customer ride request from {customerName}";
     }

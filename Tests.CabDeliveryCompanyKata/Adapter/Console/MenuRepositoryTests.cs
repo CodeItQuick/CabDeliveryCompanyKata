@@ -1,11 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
-using Production.EmmaCabCompany;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Application.Menu;
 using Production.EmmaCabCompany.Domain;
-using Production.EmmaCabCompany.Domain.CustomerList;
 
 namespace Tests.CabDeliveryCompanyKata.Adapter.Console;
 
@@ -15,7 +11,6 @@ public class MenuCommandTests
     private CustomerListRepository _customerListRepository;
     private CustomerCabRequestedHandler _customerCabRequestedHandler;
     private readonly CustomerDeliveredHandler _customerDeliveredHandler;
-    private readonly CustomerEnroutedHandler _customerEnroutedHandler;
     private readonly CustomerPickedUpHandler _customerPickedUpHandler;
     private readonly CustomerRideRequestedHandler _customerRideRequestedHandler;
     private CustomerCancelledCabHandler _customerCancelledCabHandler;

@@ -26,7 +26,6 @@ public class MenuControllerTest
     [Fact]
     public void CanMutateDisplayMenu()
     {
-        var dispatcherCoordinator = new DispatcherCoordinator();
         var dbContextOptions = new DbContextOptionsBuilder<CabContext>()
             .UseInMemoryDatabase($"{Guid.NewGuid()}.db")
             .Options;

@@ -24,7 +24,7 @@ public class HomeController : Controller
     private readonly ICustomerCabRequestedHandler _customerCabRequestedHandler;
     private readonly ICustomerCancelledCabHandler _customerCancelledCabHandler;
     private readonly ICustomerDeliveredHandler _customerDeliveredHandler;
-    private readonly ICustomerEnroutedHandler _customerEnroutedHandler;
+    private readonly ICustomerPickedUpHandler _customerPickedUpHandler;
     private readonly ICustomerRideRequestedHandler _customerRideRequestedHandler;
     private readonly IMenuRequestedHandler _menuRequestedHandler;
 
@@ -36,7 +36,7 @@ public class HomeController : Controller
         ICustomerCabRequestedHandler customerCabRequestedHandler,
         ICustomerCancelledCabHandler customerCancelledCabHandler,
         ICustomerDeliveredHandler customerDeliveredHandler,
-        ICustomerEnroutedHandler customerEnroutedHandler,
+        ICustomerPickedUpHandler customerPickedUpHandler,
         ICustomerRideRequestedHandler customerRideRequestedHandler,
         IMenuRequestedHandler menuRequestedHandler)
     {
@@ -47,7 +47,7 @@ public class HomeController : Controller
         _customerCabRequestedHandler = customerCabRequestedHandler;
         _customerCancelledCabHandler = customerCancelledCabHandler;
         _customerDeliveredHandler = customerDeliveredHandler;
-        _customerEnroutedHandler = customerEnroutedHandler;
+        _customerPickedUpHandler = customerPickedUpHandler;
         _customerRideRequestedHandler = customerRideRequestedHandler;
         _menuRequestedHandler = menuRequestedHandler;
     }
@@ -90,7 +90,7 @@ public class HomeController : Controller
     }
     public IActionResult CabNotifiesPickedUp()
     {
-        _customerEnroutedHandler.Handle(new CustomerEnrouted());
+        _customerPickedUpHandler.Handle(new CustomerPickedUp());
         
         return RedirectToAction(nameof(Index));
     }

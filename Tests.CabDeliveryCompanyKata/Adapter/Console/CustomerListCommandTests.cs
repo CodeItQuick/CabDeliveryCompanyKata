@@ -12,7 +12,6 @@ public class CustomerListCommandsTests
     private CustomerListRepository _customerListRepository;
     private CustomerCabRequestedHandler _customerCabRequestedHandler;
     private readonly CustomerDeliveredHandler _customerDeliveredHandler;
-    private readonly CustomerEnroutedHandler _customerEnroutedHandler;
     private readonly CustomerPickedUpHandler _customerPickedUpHandler;
     private readonly CustomerRideRequestedHandler _customerRideRequestedHandler;
     private CustomerCancelledCabHandler _customerCancelledCabHandler;
@@ -27,7 +26,6 @@ public class CustomerListCommandsTests
         _customerListRepository = new CustomerListRepository(_cabContext);
         _customerCabRequestedHandler = new CustomerCabRequestedHandler(_customerListRepository);
         _customerDeliveredHandler = new CustomerDeliveredHandler(_customerListRepository);
-        _customerEnroutedHandler = new CustomerEnroutedHandler(_customerListRepository);
         _customerPickedUpHandler = new CustomerPickedUpHandler(_customerListRepository);
         _customerRideRequestedHandler = new CustomerRideRequestedHandler(_customerListRepository);
         _customerCancelledCabHandler = new CustomerCancelledCabHandler(_customerListRepository);
@@ -109,7 +107,6 @@ public class CustomerListCommandsTests
         _customerCabRequestedHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destionation Lane"));
         _customerRideRequestedHandler.Handle(new CustomerRideRequested() { CustomerListId = 1});
         _customerPickedUpHandler.Handle(new CustomerPickedUp());
-        _customerEnroutedHandler.Handle(new CustomerEnrouted());
         Assert.Equal(1, _cabContext.CustomerList
             .Include(customerList => customerList.Customers!)
             .FirstOrDefault()!.Customers!.Count);
@@ -130,7 +127,6 @@ public class CustomerListCommandsTests
         _customerCabRequestedHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destionation Lane"));
         _customerRideRequestedHandler.Handle(new CustomerRideRequested() { CustomerListId = 1});  
         _customerPickedUpHandler.Handle(new CustomerPickedUp());
-        _customerEnroutedHandler.Handle(new CustomerEnrouted());
         _customerDeliveredHandler.Handle(new CustomerDelivered());
         Assert.Equal(1, _cabContext.CustomerList
             .Include(customerList => customerList.Customers!)

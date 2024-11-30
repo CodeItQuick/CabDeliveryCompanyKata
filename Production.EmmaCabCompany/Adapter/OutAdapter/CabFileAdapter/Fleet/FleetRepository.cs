@@ -36,7 +36,7 @@ public class FleetRepository : IFleetRepository
         var updateFleet = _cabContext.Fleet.Include(x => x.FleetOfCabs)
             .FirstOrDefault(x => x.Id == 1)!;
         var cab = new Cab("Cab Driver Name", 0, 0, 0);
-        updateFleet.AddCab(cab);
+        updateFleet.FleetOfCabs.Add(cab);
         _cabContext.Fleet.Update(updateFleet);
         _cabContext.SaveChanges();
         var updateMenu = _cabContext.Menu
@@ -55,7 +55,7 @@ public class FleetRepository : IFleetRepository
         {
             var fleet = _cabContext.Fleet.Include(x => x.FleetOfCabs)
                 .FirstOrDefault(x => x.Id == fleetId);
-            _cabContext.Cabs.Remove(fleet!.SignedOutCab());
+            _cabContext.Cabs.Remove(fleet!.FleetOfCabs.FirstOrDefault()!);
             _cabContext.SaveChanges();
         }
         catch (ArgumentNullException)
