@@ -68,10 +68,6 @@ public class DispatcherCoordinator
         }
         var customer = _customerList.PickupCustomer();
         _fleet.PickupCustomer(customer);
-        if (_fleet.IsEnroute(customer))
-        {
-            _customerList.PutCustomerInRoute(customer);
-        }
     }
 
     public void DropOffCustomer()

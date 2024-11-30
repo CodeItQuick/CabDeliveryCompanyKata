@@ -121,8 +121,13 @@ public class Fleet
             throw new SystemException("Cannot drop off customers as there are no cabs in the fleet");
         }
 
-        var enrouteCab = FleetOfCabs?.FirstOrDefault(x => x.IsEnrouteFor(customer));
-        enrouteCab?.PickupAssignedCustomer(customer);
+        FleetOfCabs.ForEach(x =>
+        {
+            if (x.IsEnrouteFor(customer))
+            {
+                x.PickupAssignedCustomer(customer);
+            }
+        });
     }
 
     public void DropOffCustomer()

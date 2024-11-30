@@ -4,14 +4,12 @@ using Microsoft.EntityFrameworkCore;
 namespace Production.EmmaCabCompany.Domain.CustomerList;
 
 // Aggregate Root Id
-// TODO: This class has behaviour mixed in it, I think "CustomerList" should also be a domain object, that object contains the
-// TODO: behaviour, and this object should be constructing/mapping domain objects from database DTOs
 public class CustomerList
 {
     public int Id { get; set; } = 1;
     public virtual List<Customer> Customers { get; set; }
 
-    private Dictionary<Customer, CustomerStatus> _customerStatusMap = new();
+    // private Dictionary<Customer, CustomerStatus> _customerStatusMap = new();
 
     public CustomerList()
     {
@@ -25,95 +23,70 @@ public class CustomerList
 
     public void CustomerCabCall(Customer customer)
     {
-        _customerStatusMap.Add(customer, CustomerStatus.CustomerCallInProgress);
+        // _customerStatusMap.Add(customer, CustomerStatus.CustomerCallInProgress);
         customer.Status = CustomerStatus.CustomerCallInProgress;
         Customers.Add(customer);
     }
 
     public Customer? FindRideRequestedCustomer()
     {
-        if (_customerStatusMap.All(x => x.Value != CustomerStatus.CustomerCallInProgress))
+        if (Customers.All(x => x.Status != CustomerStatus.CustomerCallInProgress))
         {
             throw new SystemException("There are currently no customer's waiting for cabs.");
         }
-        return _customerStatusMap
-            .FirstOrDefault(x => x.Value == CustomerStatus.CustomerCallInProgress)
-            .Key;
+        return Customers
+            .FirstOrDefault(x => x.Status == CustomerStatus.CustomerCallInProgress);
     }
     // TODO: Write Aggregate Root Tests
-    public void CreateCustomerList(string[] customerList)
-    {
-        _customerStatusMap = new Dictionary<Customer, CustomerStatus>();
-        foreach (var customerStr in customerList)
-        {
-            string?[] customerAttributes = customerStr.Split(",");
-            if (customerAttributes.Length < 1 || string.IsNullOrWhiteSpace(customerAttributes[0]))
-            {
-            }
-            else
-            {
-                if (!string.IsNullOrWhiteSpace(customerAttributes[0]))
-                {
-                    var customer = new Customer(
-                        customerAttributes[0], 
-                        customerAttributes[1], 
-                        customerAttributes[2]);
-                    CustomerStatus.TryParse(customerAttributes[3], out CustomerStatus customerStatus);
-                    _customerStatusMap.Add(customer, customerStatus);
-                }
-            }
-        }
-    }
     public void RideRequest()
     {
         // TODO: get rid of second if condition
-        if (Customers.Any(x => x.Status == CustomerStatus.CustomerCallInProgress) && 
-            _customerStatusMap.All(x => x.Value != CustomerStatus.CustomerCallInProgress))
+        if (Customers.Any(x => x.Status == CustomerStatus.CustomerCallInProgress))
         {
             Customers.FirstOrDefault(x => x.Status == CustomerStatus.CustomerCallInProgress)!.Status = 
                 CustomerStatus.WaitingPickup;
             return;
         }
         // TODO: get rid of below
-        if (_customerStatusMap.All(x => x.Value != CustomerStatus.CustomerCallInProgress))
-        {
-            throw new SystemException("There are currently no customer's waiting for cabs.");
-        }
-        var customer = _customerStatusMap
-            .FirstOrDefault(x => x.Value == CustomerStatus.CustomerCallInProgress)
-            .Key;
-        _customerStatusMap[customer] = CustomerStatus.WaitingPickup;
+        // if (_customerStatusMap.All(x => x.Value != CustomerStatus.CustomerCallInProgress))
+        // {
+        //     throw new SystemException("There are currently no customer's waiting for cabs.");
+        // }
+        // var customer = _customerStatusMap
+        //     .FirstOrDefault(x => x.Value == CustomerStatus.CustomerCallInProgress)
+        //     .Key;
+        // _customerStatusMap[customer] = CustomerStatus.WaitingPickup;
     }
     public Customer? FindEnroutePassenger(CustomerStatus customerStatus)
     {
-        return _customerStatusMap
-            .LastOrDefault(x => x.Value == customerStatus)
-            .Key;
+        return Customers
+            .LastOrDefault(x => x.Status == customerStatus);
     }
     
     public Customer PickupCustomer()
     {
-        if (Customers.Any(x => x.Status == CustomerStatus.WaitingPickup) &&
-            _customerStatusMap.All(x => x.Value != CustomerStatus.WaitingPickup))
-        {
-            var customerToChange = Customers.FirstOrDefault(x => x.Status == CustomerStatus.WaitingPickup);
-            customerToChange!.Status = CustomerStatus.WaitingPickup;
-            return customerToChange;
-        }
-        if (_customerStatusMap.All(x => x.Value != CustomerStatus.WaitingPickup))
+        if (Customers.All(x => x.Status != CustomerStatus.WaitingPickup))
         {
             throw new SystemException("There are currently no customer's assigned to cabs.");
         }
-        var firstCustomer = _customerStatusMap
-            .FirstOrDefault(x => x.Value == CustomerStatus.WaitingPickup)
-            .Key;
-        return firstCustomer;
+
+        if (Customers.Any(x => x.Status == CustomerStatus.WaitingPickup))
+        {
+            var customerToChange = Customers.FirstOrDefault(x => x.Status == CustomerStatus.WaitingPickup);
+            customerToChange!.Status = CustomerStatus.Enroute;
+            return customerToChange;
+        }
+        return Customers.FirstOrDefault(x => x.Status == CustomerStatus.WaitingPickup)!;
     }
 
     public void PutCustomerInRoute(Customer firstCustomer)
     {
         // TODO: move throws to this method, not the query
-        _customerStatusMap[firstCustomer] = CustomerStatus.Enroute;
+        var customer = Customers.FirstOrDefault(x => x.Id == firstCustomer.Id);
+        if (customer != null)
+        {
+            customer.Status = CustomerStatus.Enroute;
+        }
     }
     public void PutCustomerEnroute()
     {
@@ -126,54 +99,61 @@ public class CustomerList
     
     public void ValidateCanDropOffCustomer()
     {
-        if (_customerStatusMap
-                .FirstOrDefault(x => x.Value == CustomerStatus.Enroute)
-                .Key == null)
+        if (Customers
+                .FirstOrDefault(x => x.Status == CustomerStatus.Enroute)
+                == null)
         {
             throw new SystemException("No customer to drop off.");
         }
     }
     public void MarkCustomerAsDelivered()
     {
-        var customer = _customerStatusMap
-            .FirstOrDefault(x => x.Value == CustomerStatus.Enroute)
-            .Key;
-        _customerStatusMap[customer] = CustomerStatus.Delivered;
+        var customer = Customers
+            .FirstOrDefault(x => x.Status == CustomerStatus.Enroute);
+        if (customer != null)
+        {
+            customer.Status = CustomerStatus.Delivered;
+        }
     }
     
     public void CancelPickup()
     {
-        if (Customers.Any(x => x.Status == CustomerStatus.CustomerCallInProgress) &&
-            _customerStatusMap.All(x => x.Value != CustomerStatus.CustomerCallInProgress))
+        if (Customers.All(x => 
+                x.Status != CustomerStatus.WaitingPickup && x.Status != CustomerStatus.CustomerCallInProgress))
+        {
+            throw new SystemException("No customers are waiting for pickup. Cannot cancel cab.");
+        }
+
+        if (Customers.Any(x => x.Status == CustomerStatus.CustomerCallInProgress))
         {
             var customerToChange = Customers.FirstOrDefault(x => x.Status == CustomerStatus.CustomerCallInProgress);
             customerToChange!.Status = CustomerStatus.CancelledCall;
             return;
         }
-        if (_customerStatusMap.All(x => 
-                x.Value != CustomerStatus.WaitingPickup && x.Value != CustomerStatus.CustomerCallInProgress))
-        {
-            throw new SystemException("No customers are waiting for pickup. Cannot cancel cab.");
-        }
-        var customer = _customerStatusMap.FirstOrDefault(x => 
-            x.Value is CustomerStatus.WaitingPickup or CustomerStatus.CustomerCallInProgress).Key;
-        _customerStatusMap[customer] = CustomerStatus.CancelledCall;
+        // var customer = _customerStatusMap.FirstOrDefault(x => 
+        //     x.Value is CustomerStatus.WaitingPickup or CustomerStatus.CustomerCallInProgress).Key;
+        // _customerStatusMap[customer] = CustomerStatus.CancelledCall;
     }
     
     public bool CustomerInState(CustomerStatus customerStatus)
     {
-        return _customerStatusMap
-            .Any(x => x.Value == customerStatus);
+        return Customers
+            .Any(x => x.Status == customerStatus);
     }
 
     public Dictionary<Customer, CustomerStatus> Export()
     {
-        return _customerStatusMap;
+        Dictionary<Customer, CustomerStatus> customerDictionary = new Dictionary<Customer, CustomerStatus>();
+        Customers.ForEach(x =>
+        {
+            customerDictionary.Add(x, x.Status);
+        });
+        return customerDictionary;
     }
 
     public void Rebuild(Dictionary<Customer, CustomerStatus> customerDictionary)
     {
-        _customerStatusMap = customerDictionary;
+        // _customerStatusMap = customerDictionary;
     }
 
     public static Dictionary<Customer, CustomerStatus> CreateCustomerState(string[] customerList)

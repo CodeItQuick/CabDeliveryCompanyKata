@@ -1,7 +1,6 @@
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Domain;
-using Production.EmmaCabCompany.Service;
 using Tests.CabDeliveryCompanyKata;
 
 namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
@@ -12,7 +11,6 @@ public class DispatchController
     private readonly CustomerListRepository _customerListRepository;
     private readonly FleetRepository _fleetRepository;
     private readonly MenuRepository _menuRepository;
-    private readonly CabServiceHandler _cabServiceHandler;
     private CustomerCabRequestedHandler _customerCabRequestedHandler;
     private CustomerRideRequestedHandler _customerRideRequestedHandler;
     private CustomerCancelledCabHandler _customerCancelledCabHandler;
@@ -22,13 +20,11 @@ public class DispatchController
     private AddCabCommandHandler _addCabCommandHandler;
     private RemoveCabCommandHandler _removeCabCommandHandler;
 
-    public DispatchController(CabServiceHandler cabServiceHandler,
-        CustomerListRepository customerListRepository, FleetRepository fleetRepository, MenuRepository menuRepository)
+    public DispatchController(CustomerListRepository customerListRepository, FleetRepository fleetRepository, MenuRepository menuRepository)
     {
         _customerListRepository = customerListRepository;
         _fleetRepository = fleetRepository;
         _menuRepository = menuRepository;
-        _cabServiceHandler = cabServiceHandler;
         _customerCabRequestedHandler = new CustomerCabRequestedHandler(_customerListRepository);
         _customerCancelledCabHandler = new CustomerCancelledCabHandler(_customerListRepository);
         _customerDeliveredHandler = new CustomerDeliveredHandler(_customerListRepository);

@@ -3,7 +3,6 @@ using Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 using Production.EmmaCabCompany.Adapter.@out;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Domain;
-using Production.EmmaCabCompany.Service;
 
 namespace Tests.CabDeliveryCompanyKata.Adapter.Console;
 
@@ -34,10 +33,7 @@ public class MenuControllerTest
         using var cabContext = new CabContext(dbContextOptions);
         var menuController = new MenuController(new MenuRepository(cabContext));
 
-        var dispatchController = new DispatchController(
-            new CabServiceHandler(dispatcherCoordinator, 
-                new CabFileRepository(new FakeFileReadWriter("customer", "cab"))), 
-            new CustomerListRepository(cabContext), new FleetRepository(cabContext), new MenuRepository(cabContext));
+        var dispatchController = new DispatchController(new CustomerListRepository(cabContext), new FleetRepository(cabContext), new MenuRepository(cabContext));
 
         dispatchController.AddCab();
         

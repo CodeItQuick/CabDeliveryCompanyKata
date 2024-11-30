@@ -8,7 +8,6 @@ using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Application.Menu;
 using Production.EmmaCabCompany.Domain;
-using Production.EmmaCabCompany.Service;
 using Production.WebCabCompany.Models;
 using Tests.CabDeliveryCompanyKata;
 using Tests.CabDeliveryCompanyKata.Adapter.Console;
@@ -28,7 +27,6 @@ public class HomeController : Controller
     private readonly ICustomerEnroutedHandler _customerEnroutedHandler;
     private readonly ICustomerRideRequestedHandler _customerRideRequestedHandler;
     private readonly IMenuRequestedHandler _menuRequestedHandler;
-    private readonly CabServiceHandler _cabService;
 
     public HomeController(ILogger<HomeController> logger, 
         IOptions<FileSettings> fileSettings, 
@@ -52,12 +50,6 @@ public class HomeController : Controller
         _customerEnroutedHandler = customerEnroutedHandler;
         _customerRideRequestedHandler = customerRideRequestedHandler;
         _menuRequestedHandler = menuRequestedHandler;
-        var fileHandler = new FileHandler(
-            fileSettings.Value.CustomerFileNameCsv, 
-            fileSettings.Value.CabFileNameCsv);
-        var dispatcherCoordinator = new DispatcherCoordinator();
-        var cabFileRepository = new CabFileRepository(fileHandler);
-        _cabService = new CabServiceHandler(dispatcherCoordinator, cabFileRepository);
     }
 
     // TODO: Not tested
