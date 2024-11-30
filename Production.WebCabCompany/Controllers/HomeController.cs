@@ -29,7 +29,6 @@ public class HomeController : Controller
     private readonly ICustomerRideRequestedHandler _customerRideRequestedHandler;
     private readonly IMenuRequestedHandler _menuRequestedHandler;
     private readonly CabServiceHandler _cabService;
-    private readonly MenuService _menuService;
 
     public HomeController(ILogger<HomeController> logger, 
         IOptions<FileSettings> fileSettings, 
@@ -59,7 +58,6 @@ public class HomeController : Controller
         var dispatcherCoordinator = new DispatcherCoordinator();
         var cabFileRepository = new CabFileRepository(fileHandler);
         _cabService = new CabServiceHandler(dispatcherCoordinator, cabFileRepository);
-        _menuService = new MenuService(dispatcherCoordinator, cabFileRepository);
     }
 
     // TODO: Not tested

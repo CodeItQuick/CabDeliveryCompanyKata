@@ -9,7 +9,6 @@ namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 public class DispatchController
 {
     private int _currentNameIdx = 0;
-    private MenuService _menuService;
     private readonly CustomerListRepository _customerListRepository;
     private readonly FleetRepository _fleetRepository;
     private readonly MenuRepository _menuRepository;
@@ -23,10 +22,9 @@ public class DispatchController
     private AddCabCommandHandler _addCabCommandHandler;
     private RemoveCabCommandHandler _removeCabCommandHandler;
 
-    public DispatchController(CabServiceHandler cabServiceHandler, MenuService menuService,
+    public DispatchController(CabServiceHandler cabServiceHandler,
         CustomerListRepository customerListRepository, FleetRepository fleetRepository, MenuRepository menuRepository)
     {
-        _menuService = menuService;
         _customerListRepository = customerListRepository;
         _fleetRepository = fleetRepository;
         _menuRepository = menuRepository;
@@ -45,7 +43,6 @@ public class DispatchController
     {
         var cabName = "Evan's Cab";
         _addCabCommandHandler.Handle(new AddCabCommand(cabName, 46.2382, 63.1311));
-        // _cabServiceHandler.AddCab(new Cab(cabName, 20, 46.2382, 63.1311));
 
         return "Added Evan's Cab to fleet";
     }
@@ -55,7 +52,6 @@ public class DispatchController
         try
         {
             _removeCabCommandHandler.Handle(new RemoveCabCommand(1));
-            // _cabServiceHandler.RemoveCab();
             return "Requested cab removed from fleet";
         }
         catch (Exception ex)
@@ -66,7 +62,6 @@ public class DispatchController
 
     public string CustomerCabCall(string? customerName, string? startLocation, string? destinationLane)
     {
-        // var customerCabCall = _cabServiceHandler.CustomerCabCall(customerName, startLocation, destinationLane);
         _currentNameIdx += 1;
         _customerCabRequestedHandler.Handle(new CustomerCabRequested(customerName, startLocation, destinationLane));
         return $"Received customer ride request from {customerName}";
@@ -134,7 +129,6 @@ public class DispatchController
                 throw new SystemException("This is not a valid option.");
             }
 
-            // _cabServiceHandler.PickupCustomer();
             _customerPickedUpHandler.Handle(new CustomerPickedUp());
             return "Notified dispatcher of pickup";
         }
@@ -155,7 +149,6 @@ public class DispatchController
                 throw new SystemException("This is not a valid option.");
             }
 
-            // var droppedOff = _cabServiceHandler.DropOffCustomer();
             _customerDeliveredHandler.Handle(new CustomerDelivered());
             var customerList = _customerListRepository.GetById(1);
             // TODO: fix this, should not be hardcodedZ

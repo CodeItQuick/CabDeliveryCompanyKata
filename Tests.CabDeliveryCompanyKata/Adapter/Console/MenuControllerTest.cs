@@ -1,28 +1,22 @@
 using Microsoft.EntityFrameworkCore;
-using Production.EmmaCabCompany;
 using Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 using Production.EmmaCabCompany.Adapter.@out;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Domain;
-using Production.EmmaCabCompany.Domain.CustomerList;
 using Production.EmmaCabCompany.Service;
 
-namespace Tests.CabDeliveryCompanyKata;
+namespace Tests.CabDeliveryCompanyKata.Adapter.Console;
 
 public class MenuControllerTest
 {
     [Fact]
     public void CanDisplayStartMenu()
     {
-        var dispatcherCoordinator = new DispatcherCoordinator();
-        var cabFileRepository = new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"));
-        var menuService = new MenuService(dispatcherCoordinator, cabFileRepository);
         var dbContextOptions = new DbContextOptionsBuilder<CabContext>()
             .UseInMemoryDatabase($"{Guid.NewGuid()}.db")
             .Options;
         using var cabContext = new CabContext(dbContextOptions);
-        var menuController = new MenuController(menuService, new MenuRepository(cabContext));
+        var menuController = new MenuController(new MenuRepository(cabContext));
 
         var displayMenu = menuController.DisplayMenu();
         
@@ -34,18 +28,15 @@ public class MenuControllerTest
     public void CanMutateDisplayMenu()
     {
         var dispatcherCoordinator = new DispatcherCoordinator();
-        var cabFileRepository = new CabFileRepository(new FakeFileReadWriter($"customer_list_{Guid.NewGuid()}.csv", $"cab_list_{Guid.NewGuid()}.csv"));
-        var menuService = new MenuService(dispatcherCoordinator, cabFileRepository);
         var dbContextOptions = new DbContextOptionsBuilder<CabContext>()
             .UseInMemoryDatabase($"{Guid.NewGuid()}.db")
             .Options;
         using var cabContext = new CabContext(dbContextOptions);
-        var menuController = new MenuController(menuService, new MenuRepository(cabContext));
+        var menuController = new MenuController(new MenuRepository(cabContext));
 
         var dispatchController = new DispatchController(
             new CabServiceHandler(dispatcherCoordinator, 
                 new CabFileRepository(new FakeFileReadWriter("customer", "cab"))), 
-            menuService, 
             new CustomerListRepository(cabContext), new FleetRepository(cabContext), new MenuRepository(cabContext));
 
         dispatchController.AddCab();

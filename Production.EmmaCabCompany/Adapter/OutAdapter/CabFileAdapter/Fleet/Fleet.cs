@@ -11,12 +11,12 @@ namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 public class Fleet
 {
     public int Id = 1;
-    [ForeignKey("Cab")] public virtual List<Cab> FleetOfCabs { get; set; }
+    [ForeignKey("Cab")] public virtual List<Cab> FleetOfCabs { get; set; } = new();
 
-    public Fleet()
-    {
-        FleetOfCabs = new();
-    }
+    // public Fleet()
+    // {
+    //     FleetOfCabs = new();
+    // }
 
 
     public void CreateFleet(string[] cabList, Dictionary<Customer, CustomerStatus> loadedCustomerDirectory)

@@ -1,5 +1,4 @@
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Application.Menu;
 using Tests.CabDeliveryCompanyKata;
 using Tests.CabDeliveryCompanyKata.Adapter.Console;
@@ -8,12 +7,10 @@ namespace Production.EmmaCabCompany.Adapter.@out;
 
 public class MenuController
 {
-    private readonly MenuService _menuService;
     private readonly MenuRequestedHandler _menuRequested;
 
-    public MenuController(MenuService menuService, MenuRepository menuRepository)
+    public MenuController(MenuRepository menuRepository)
     {
-        _menuService = menuService;
         _menuRequested = new MenuRequestedHandler(menuRepository);
     }
 

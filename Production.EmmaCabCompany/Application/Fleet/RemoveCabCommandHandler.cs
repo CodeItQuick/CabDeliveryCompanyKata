@@ -1,5 +1,3 @@
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-
 namespace Production.EmmaCabCompany.Application;
 
 public class RemoveCabCommandHandler : IRemoveCabCommandHandler

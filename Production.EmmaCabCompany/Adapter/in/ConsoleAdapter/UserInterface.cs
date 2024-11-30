@@ -18,7 +18,6 @@ public class UserInterface
     private CabFileRepository _cabFileRepository;
     private DispatcherCoordinator _dispatch;
     private CabServiceHandler _cabService;
-    private MenuService _menuService;
     private DispatchController _dispatchController;
 
     public UserInterface(
@@ -42,9 +41,8 @@ public class UserInterface
         _dispatch = new DispatcherCoordinator();
         _cabFileRepository = new CabFileRepository(writer);
         _cabService = new CabServiceHandler(_dispatch, _cabFileRepository);
-        _menuService = new MenuService(_dispatch, _cabFileRepository);
-        _menuController = new MenuController(_menuService, new MenuRepository(_cabContext));
-        _dispatchController = new DispatchController(_cabService, _menuService,
+        _menuController = new MenuController(new MenuRepository(_cabContext));
+        _dispatchController = new DispatchController(_cabService,
             new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
 
     }
@@ -105,7 +103,12 @@ public class UserInterface
 
         return param;
     }
-
+  // POST, PUT, DELETE, GET, PATCH
+  // 1. GET ALL ZIPCODES NEIGHBOROUGHING YOUR ZIPCODE
+  // 2. GET ALL CARS IN THOSE ZIP CODES
+  // RETRIEVE
+  // GET ALL CARS FROM USERS ZIPCODE
+  // RETRIEVE
     private void WriteMenu()
     {
         var menu = _menuController.DisplayMenu();
