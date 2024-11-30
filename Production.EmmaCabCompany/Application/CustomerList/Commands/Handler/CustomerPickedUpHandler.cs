@@ -16,7 +16,7 @@ public class CustomerPickedUpHandler : ICustomerPickedUpHandler
     public int Handle(CustomerPickedUp request)
     {
         var customerList = _customerListRepository.GetById(1);
-        customerList.PutCustomerEnroute();
+        customerList.PickupCustomer();
         _customerListRepository.Add(customerList);
 
         return customerList.Id;

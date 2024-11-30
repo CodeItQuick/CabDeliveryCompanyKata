@@ -16,7 +16,7 @@ public class CustomerDeliveredHandler : ICustomerDeliveredHandler
     public int Handle(CustomerDelivered request)
     {
         var customerList = _customerListRepository.GetById(1);
-        customerList.PutCustomerDelivered();
+        customerList.CustomerDelivered();
         _customerListRepository.Add(customerList);
 
         return customerList.Id;
