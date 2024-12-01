@@ -1,5 +1,5 @@
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-using Tests.CabDeliveryCompanyKata.Adapter.Console;
+using Production.EmmaCabCompany.Domain.Menu;
 
 namespace Production.EmmaCabCompany.Application.Menu;
 

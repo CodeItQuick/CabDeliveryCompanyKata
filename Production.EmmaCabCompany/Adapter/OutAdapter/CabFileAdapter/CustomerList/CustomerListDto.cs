@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 
 [PrimaryKey("Id")]
 [Table("CustomerList")]

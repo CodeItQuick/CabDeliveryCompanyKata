@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Production.EmmaCabCompany.Adapter.@out;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 
 namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 

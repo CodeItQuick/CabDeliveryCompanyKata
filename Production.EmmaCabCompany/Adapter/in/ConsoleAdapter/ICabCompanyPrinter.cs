@@ -1,4 +1,4 @@
-namespace Production.EmmaCabCompany.Adapter.@out;
+namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 
 public interface ICabCompanyPrinter
 {

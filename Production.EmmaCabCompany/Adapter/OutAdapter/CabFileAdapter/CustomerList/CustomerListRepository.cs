@@ -1,10 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Application.CustomerList;
-using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Domain.CustomerList;
 
-namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 
 public class CustomerListRepository : ICustomerListRepository
 {
@@ -35,19 +33,19 @@ public class CustomerListRepository : ICustomerListRepository
         _cabContext.ChangeTracker.Clear();
     }
 
-    public CustomerList GetById(int customerListId)
+    public Domain.CustomerList.CustomerList GetById(int customerListId)
     {
         var customerListDto = _cabContext.CustomerList
             .Include(x => x.Customers)
             .FirstOrDefault(x => x.Id == customerListId)!;
         var customers = customerListDto.Customers.Select(x =>
             new Customer(x.Name, x.StartLocation!, x.EndLocation) { Status = x.Status }).ToList();
-        var customerList = CustomerList.CreateCustomerList(customerListDto.Id,
+        var customerList = Domain.CustomerList.CustomerList.CreateCustomerList(customerListDto.Id,
             customers);
         return customerList;
     }
 
-    public void Add(CustomerList customerList)
+    public void Add(Domain.CustomerList.CustomerList customerList)
     {
         var customerListDto = _cabContext.CustomerList
             .Include(x => x.Customers)

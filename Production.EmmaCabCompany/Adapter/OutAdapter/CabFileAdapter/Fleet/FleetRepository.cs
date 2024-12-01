@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 using Production.EmmaCabCompany.Application.Fleet;
 
-namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 
 public class FleetRepository : IFleetRepository
 {
@@ -19,7 +18,7 @@ public class FleetRepository : IFleetRepository
     {
         var fleetExists = _cabContext.Fleet.Any(x => x.Id == 1);
         if (fleetExists) return;
-        _cabContext.Fleet.Add(new Fleet.Fleet() { Id = 1 });
+        _cabContext.Fleet.Add(new CabFileAdapter.Fleet.Fleet() { Id = 1 });
         _cabContext.SaveChanges();
     }
 

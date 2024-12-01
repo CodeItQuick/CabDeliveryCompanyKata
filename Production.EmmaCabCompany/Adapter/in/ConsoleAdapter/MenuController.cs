@@ -1,9 +1,8 @@
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 using Production.EmmaCabCompany.Application.Menu;
-using Tests.CabDeliveryCompanyKata;
-using Tests.CabDeliveryCompanyKata.Adapter.Console;
+using Production.EmmaCabCompany.Domain.Menu;
 
-namespace Production.EmmaCabCompany.Adapter.@out;
+namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 
 public class MenuController
 {

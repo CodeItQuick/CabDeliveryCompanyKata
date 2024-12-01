@@ -1,10 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Domain.CustomerList;
 
-namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 
 [PrimaryKey("Id")]
 [Table("Customers")]

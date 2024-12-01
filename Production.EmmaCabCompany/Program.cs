@@ -2,7 +2,6 @@
 
 using Production.EmmaCabCompany.Adapter.@in;
 using Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
-using Production.EmmaCabCompany.Adapter.@out;
 
 namespace Production.EmmaCabCompany;
 public class Program

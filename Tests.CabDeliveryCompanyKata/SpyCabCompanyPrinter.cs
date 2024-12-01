@@ -1,4 +1,4 @@
-using Production.EmmaCabCompany.Adapter.@out;
+using Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 
 namespace Tests.CabDeliveryCompanyKata;
 

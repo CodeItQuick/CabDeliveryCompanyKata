@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 using Production.EmmaCabCompany.Application.Menu;
-using Production.EmmaCabCompany.Domain.CustomerList;
 
-namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 
 public class MenuRepository : IMenuRepository
 {
@@ -19,7 +19,7 @@ public class MenuRepository : IMenuRepository
     {
         var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
         if (fleetExists) return;
-        _cabContext.Menu.Add(new Menu.Menu() { Id = 1, Customers = new List<CustomerDto>()});
+        _cabContext.Menu.Add(new CabFileAdapter.Menu.Menu() { Id = 1, Customers = new List<CustomerDto>()});
         _cabContext.SaveChanges();
     }
     private void EnsureCustomerListExistsForSingleUser()
@@ -30,7 +30,7 @@ public class MenuRepository : IMenuRepository
         _cabContext.SaveChanges();
     }
 
-    public Menu.Menu GetById(int customerListId)
+    public CabFileAdapter.Menu.Menu GetById(int customerListId)
     {
         var menu = _cabContext.Menu
             .Include(x => x.Customers)

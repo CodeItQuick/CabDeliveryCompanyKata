@@ -1,4 +1,4 @@
-namespace Tests.CabDeliveryCompanyKata.Adapter.Console;
+namespace Production.EmmaCabCompany.Domain.Menu;
 
 public class MenuConfigurationDto
 {
