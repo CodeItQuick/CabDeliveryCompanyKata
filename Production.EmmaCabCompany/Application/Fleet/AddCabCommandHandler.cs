@@ -1,6 +1,4 @@
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-
-namespace Production.EmmaCabCompany.Application;
+namespace Production.EmmaCabCompany.Application.Fleet;
 
 public class AddCabCommandHandler : IAddCabCommandHandler
 {

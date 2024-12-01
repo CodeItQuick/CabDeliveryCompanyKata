@@ -1,6 +1,6 @@
-namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+namespace Production.EmmaCabCompany.Application.Menu;
 
 public interface IMenuRepository
 {
-    public Menu.Menu GetById(int customerListId);
+    public Adapter.OutAdapter.CabFileAdapter.Menu.Menu GetById(int customerListId);
 }

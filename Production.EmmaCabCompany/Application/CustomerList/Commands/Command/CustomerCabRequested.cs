@@ -1,4 +1,4 @@
-namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+namespace Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
 
 public class CustomerCabRequested
 {

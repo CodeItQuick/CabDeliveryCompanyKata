@@ -1,10 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+﻿namespace Production.EmmaCabCompany.Domain.CustomerList;
 
-namespace Production.EmmaCabCompany.Domain.CustomerList;
-
-// TODO: there should be a DTO on the aggregate, that then creates a Customer domain object
 public class Customer
 {
     public int Id { get; init; }

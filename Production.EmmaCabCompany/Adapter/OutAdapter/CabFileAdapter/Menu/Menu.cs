@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using Production.EmmaCabCompany.Domain;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
+using Production.EmmaCabCompany.Domain.CustomerList;
 
 namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 
@@ -10,18 +11,18 @@ public class Menu
 {
     public int Id { get; set; }
     [ForeignKey("CustomerId")] public List<CustomerDto> Customers { get; set; }
-    [ForeignKey("CabId")] public List<Cab> Cabs { get; set; }
+    [ForeignKey("CabId")] public List<CabDto> Cabs { get; set; }
 
     public Menu()
     {
         Customers = new List<CustomerDto>();
-        Cabs = new List<Cab>();
+        Cabs = new List<CabDto>();
     }
 
     public List<int> MenuOptions()
     {
         List<int> options = [];
-        if (Cabs.Count(x => x.IsStatus(CabStatus.Available)) > Customers.Count(x => x.Status != CustomerStatus.Delivered))
+        if (Cabs.Count(x => x.IsStatus(Fleet.CabStatus.Available)) > Customers.Count(x => x.Status != CustomerStatus.Delivered))
         {
             options.AddRange([2, 7]);
         }

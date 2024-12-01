@@ -1,4 +1,4 @@
-namespace Production.EmmaCabCompany.Application;
+namespace Production.EmmaCabCompany.Application.Fleet;
 
 public class RemoveCabCommandHandler : IRemoveCabCommandHandler
 {

@@ -89,12 +89,6 @@ public class UserInterface
 
         return param;
     }
-  // POST, PUT, DELETE, GET, PATCH
-  // 1. GET ALL ZIPCODES NEIGHBOROUGHING YOUR ZIPCODE
-  // 2. GET ALL CARS IN THOSE ZIP CODES
-  // RETRIEVE
-  // GET ALL CARS FROM USERS ZIPCODE
-  // RETRIEVE
     private void WriteMenu()
     {
         var menu = _menuController.DisplayMenu();

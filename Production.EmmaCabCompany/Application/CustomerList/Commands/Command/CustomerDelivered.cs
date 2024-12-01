@@ -1,4 +1,4 @@
-namespace Production.EmmaCabCompany.Application;
+namespace Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
 
 public class CustomerDelivered
 {

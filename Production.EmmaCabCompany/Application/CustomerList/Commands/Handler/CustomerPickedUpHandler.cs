@@ -1,6 +1,6 @@
-using Production.EmmaCabCompany.Application;
+using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
 
-namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+namespace Production.EmmaCabCompany.Application.CustomerList.Commands.Handler;
 
 public class CustomerPickedUpHandler : ICustomerPickedUpHandler
 {

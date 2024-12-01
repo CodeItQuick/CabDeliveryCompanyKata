@@ -1,11 +1,7 @@
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-using Production.EmmaCabCompany.Domain;
-using Production.EmmaCabCompany.Domain.CustomerList;
-
-namespace Production.EmmaCabCompany.Application;
+namespace Production.EmmaCabCompany.Application.CustomerList;
 
 public interface ICustomerListRepository
 {
-    public CustomerList GetById(int customerListId);
-    public void Add(CustomerList customerList);
+    public Domain.CustomerList.CustomerList GetById(int customerListId);
+    public void Add(Domain.CustomerList.CustomerList customerList);
 }

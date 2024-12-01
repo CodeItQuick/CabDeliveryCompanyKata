@@ -1,7 +1,8 @@
-using Production.EmmaCabCompany.Application;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
 using Production.EmmaCabCompany.Domain.CustomerList;
 
-namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+namespace Production.EmmaCabCompany.Application.CustomerList.Commands.Handler;
 
 public class CustomerCabRequestedHandler : ICustomerCabRequestedHandler
 {

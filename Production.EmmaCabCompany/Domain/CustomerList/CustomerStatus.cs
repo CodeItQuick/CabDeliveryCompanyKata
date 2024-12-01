@@ -1,4 +1,4 @@
-namespace Production.EmmaCabCompany.Domain;
+namespace Production.EmmaCabCompany.Domain.CustomerList;
 
 public enum CustomerStatus
 {
