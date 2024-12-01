@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
-
 namespace Production.EmmaCabCompany.Domain.CustomerList;
 
 // Aggregate Root Id

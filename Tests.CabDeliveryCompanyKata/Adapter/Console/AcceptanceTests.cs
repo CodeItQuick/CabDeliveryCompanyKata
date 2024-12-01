@@ -1,7 +1,4 @@
-using Production.EmmaCabCompany.Adapter.@in;
 using Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
-using Production.EmmaCabCompany.Adapter.@out;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
 namespace Tests.CabDeliveryCompanyKata;
 
@@ -26,12 +23,9 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
-            cabCompanyReader, 
-            new FileHandler(customerListFilename, cabListFilename));
+            cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.List());
@@ -57,12 +51,9 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
-            cabCompanyReader, 
-            new FileHandler(customerListFilename, cabListFilename));
+            cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.List());
@@ -81,11 +72,9 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
-            cabCompanyReader, new FileHandler(customerListFilename, cabListFilename));
+            cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("This is not a valid option.", cabCompanyPrinter.List());
@@ -103,12 +92,9 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
-            cabCompanyReader, 
-            new FileHandler(customerListFilename, cabListFilename));
+            cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("This is not a valid option.", cabCompanyPrinter.List());
@@ -132,12 +118,9 @@ public class AcceptanceTests
                 "0"
             ]
         };
-        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
-            cabCompanyReader, 
-            new FileHandler(customerListFilename, cabListFilename));
+            cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("This is not a valid option.", cabCompanyPrinter.List());
@@ -154,11 +137,9 @@ public class AcceptanceTests
                 "0"
             ]
         };
-        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
-            cabCompanyReader, new FileHandler(customerListFilename, cabListFilename));
+            cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("This is not a valid option.", cabCompanyPrinter.List());
@@ -176,12 +157,9 @@ public class AcceptanceTests
                 "0"
             ]
         };
-        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
-            cabCompanyReader, 
-            new FileHandler(customerListFilename, cabListFilename));
+            cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("This is not a valid option.", cabCompanyPrinter.List());
@@ -199,12 +177,9 @@ public class AcceptanceTests
                 "0"
             ]
         };
-        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
-            cabCompanyReader, 
-            new FileHandler(customerListFilename, cabListFilename),
+            cabCompanyReader,
             $"{Guid.NewGuid()}-failure-case-test.db");
         userInterface.Run();
         
@@ -237,12 +212,9 @@ public class AcceptanceTests
                 "0"
             ]
         };
-        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
-            cabCompanyReader, 
-            new FileHandler(customerListFilename, cabListFilename));
+            cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.List());
@@ -273,11 +245,9 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
-            cabCompanyReader, new FileHandler(customerListFilename, cabListFilename));
+            cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("This is not a valid option.", 
@@ -310,11 +280,9 @@ public class AcceptanceTests
                 "0"
             }
         };
-        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
-            cabCompanyReader, new FileHandler(customerListFilename, cabListFilename));
+            cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("Evan's Cab picked up Lisa at Walmart.", 
@@ -338,11 +306,9 @@ public class AcceptanceTests
                 "0"
             ]
         };
-        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
-            cabCompanyReader, new FileHandler(customerListFilename, cabListFilename));
+            cabCompanyReader);
         userInterface.Run();
         
         Assert.Contains("This is not a valid option.", 
@@ -369,12 +335,10 @@ public class AcceptanceTests
         };
         var customerListFilename = $"customer_list_persisted_state.csv";
         var cabListFilename = $"cab_list_persisted_state.csv";
-        var fakeFileReadWriter = new FakeFileReadWriter(customerListFilename, cabListFilename);
         var dbName = $"{Guid.NewGuid()}-test.db";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
-            cabCompanyReader, 
-            fakeFileReadWriter,
+            cabCompanyReader,
             dbName);
         userInterface.Run();
         Assert.Contains("Evan's Cab picked up Emma at Bowling Alley.", cabCompanyPrinter.List());
@@ -387,8 +351,7 @@ public class AcceptanceTests
                     "5",
                     "0"
                 ]
-            }, 
-            fakeFileReadWriter,
+            },
             dbName);
         
         userInterfaceSecondRun.Run();

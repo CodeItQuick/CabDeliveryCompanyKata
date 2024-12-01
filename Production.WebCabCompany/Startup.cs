@@ -79,6 +79,7 @@ public class Startup
         services.AddScoped<ICustomerCancelledCabHandler, CustomerCancelledCabHandler>();
         services.AddScoped<ICustomerDeliveredHandler, CustomerDeliveredHandler>();
         services.AddScoped<ICustomerRideRequestedHandler, CustomerRideRequestedHandler>();
+        services.AddScoped<ICustomerPickedUpHandler, CustomerPickedUpHandler>();
         services.AddScoped<IMenuRequestedHandler, MenuRequestedHandler>();
 
         // Does not work on this dotnet?

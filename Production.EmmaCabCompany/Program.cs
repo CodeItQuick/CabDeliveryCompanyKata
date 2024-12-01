@@ -3,7 +3,6 @@
 using Production.EmmaCabCompany.Adapter.@in;
 using Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 using Production.EmmaCabCompany.Adapter.@out;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
 namespace Production.EmmaCabCompany;
 public class Program
@@ -13,11 +12,9 @@ public class Program
         var cabCompanyPrinter = new CabCompanyPrinter();
         var cabCompanyReader = new CabCompanyReader();
 
-        var customerListFilename = $"customer_list_default{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_default{Guid.NewGuid()}.csv";
         var dispatch = new UserInterface(
             cabCompanyPrinter, 
-            cabCompanyReader, new FileHandler(customerListFilename, cabListFilename));
+            cabCompanyReader);
         dispatch.Run();
     }
 }

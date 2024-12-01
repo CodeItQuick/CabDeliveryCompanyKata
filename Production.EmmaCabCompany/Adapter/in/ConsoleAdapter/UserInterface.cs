@@ -8,18 +8,15 @@ public class UserInterface
 {
     private readonly ICabCompanyPrinter cabCompanyPrinter;
     private readonly ICabCompanyReader cabCompanyReader;
-    private readonly IFileHandler writer;
     private MenuController _menuController;
     private CabContext _cabContext;
     private DispatchController _dispatchController;
 
     public UserInterface(
-        ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader,
-        IFileHandler writer, string? dbName = null)
+        ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader, string? dbName = null)
     {
         this.cabCompanyPrinter = cabCompanyPrinter;
         this.cabCompanyReader = cabCompanyReader;
-        this.writer = writer;
         var connectionFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             dbName ?? $"production_db-{Guid.NewGuid()}.db");
         if (!File.Exists(connectionFile))
