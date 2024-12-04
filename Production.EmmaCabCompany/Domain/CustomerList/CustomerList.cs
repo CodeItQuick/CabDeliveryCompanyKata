@@ -50,7 +50,6 @@ public class CustomerList
         {
             var customerToChange = Customers.FirstOrDefault(x => x.Status == CustomerStatus.CustomerCallInProgress);
             customerToChange!.Status = CustomerStatus.CancelledCall;
-            return;
         }
     }
 
