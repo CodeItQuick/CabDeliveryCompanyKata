@@ -13,7 +13,7 @@ public class CustomerDeliveredHandler : ICustomerDeliveredHandler
         _customerListRepository = customerListRepository;
     }
 
-    public int Handle(CustomerDelivered request)
+    public int Handle<TS>(TS @event) where TS : CustomerDelivered
     {
         var customerList = _customerListRepository.GetById(1);
         customerList.CustomerDelivered();
@@ -22,7 +22,4 @@ public class CustomerDeliveredHandler : ICustomerDeliveredHandler
         return customerList.Id;
     }
 }
-public interface ICustomerDeliveredHandler
-{
-    public int Handle(CustomerDelivered request);
-}
+public interface ICustomerDeliveredHandler : IHandler<CustomerDelivered>;

@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Production.EmmaCabCompany;
 using Production.EmmaCabCompany.Adapter.@in;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
@@ -20,35 +19,25 @@ namespace Production.WebCabCompany.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly IFleetRepository _fleetRepository;
     private readonly IAddCabCommandHandler _addCabCommandHandler;
     private readonly IRemoveCabCommandHandler _removeCabCommandHandler;
     private readonly IApplicationHandler _applicationHandler;
-    private readonly ICustomerCancelledCabHandler _customerCancelledCabHandler;
-    private readonly ICustomerDeliveredHandler _customerDeliveredHandler;
     private readonly ICustomerPickedUpHandler _customerPickedUpHandler;
     private readonly ICustomerRideRequestedHandler _customerRideRequestedHandler;
     private readonly IMenuRequestedHandler _menuRequestedHandler;
 
-    public HomeController(ILogger<HomeController> logger, 
-        IOptions<FileSettings> fileSettings, 
-        IFleetRepository fleetRepository,
+    public HomeController(ILogger<HomeController> logger,
         IAddCabCommandHandler addCabCommandHandler,
         IRemoveCabCommandHandler removeCabCommandHandler,
         IApplicationHandler applicationHandler,
-        ICustomerCancelledCabHandler customerCancelledCabHandler,
-        ICustomerDeliveredHandler customerDeliveredHandler,
         ICustomerPickedUpHandler customerPickedUpHandler,
         ICustomerRideRequestedHandler customerRideRequestedHandler,
         IMenuRequestedHandler menuRequestedHandler)
     {
         _logger = logger;
-        _fleetRepository = fleetRepository;
         _addCabCommandHandler = addCabCommandHandler;
         _removeCabCommandHandler = removeCabCommandHandler;
         _applicationHandler = applicationHandler;
-        _customerCancelledCabHandler = customerCancelledCabHandler;
-        _customerDeliveredHandler = customerDeliveredHandler;
         _customerPickedUpHandler = customerPickedUpHandler;
         _customerRideRequestedHandler = customerRideRequestedHandler;
         _menuRequestedHandler = menuRequestedHandler;
@@ -98,7 +87,7 @@ public class HomeController : Controller
     }
     public IActionResult CabNotifiesDroppedOff()
     {
-        _customerDeliveredHandler.Handle(new CustomerDelivered());
+        _applicationHandler.Handle(new CustomerDelivered());
         
         return RedirectToAction(nameof(Index));
     }

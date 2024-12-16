@@ -43,16 +43,12 @@ public class HomeControllerIntegrationTests
         };
         IOptions<FileSettings> options = Options.Create(fileSettings);
         var homeController = new HomeController(
-            new NullLogger<HomeController>(), 
-            options, 
-            _fleetRepository,
+            new NullLogger<HomeController>(),
             _addCabCommandHandler,
             new RemoveCabCommandHandler(new FleetRepository(_cabContext)),
             new ApplicationHandler(
                 new CustomerCabRequestedHandler(new CustomerListRepository(_cabContext)),
                 new CustomerCancelledCabHandler(new CustomerListRepository(_cabContext))),
-            new CustomerCancelledCabHandler(new CustomerListRepository(_cabContext)),
-            new CustomerDeliveredHandler(new CustomerListRepository(_cabContext)),
             new CustomerPickedUpHandler(new CustomerListRepository(_cabContext)),
             new CustomerRideRequestedHandler(new CustomerListRepository(_cabContext)),
             new MenuRequestedHandler(new MenuRepository(_cabContext)));
