@@ -24,18 +24,18 @@ public class ApplicationHandler : IApplicationHandler
     {
         handler.Add(@event =>
         {
-            if (@event.GetType() == typeof(CustomerCabRequested))
+            if (@event is CustomerCabRequested requested)
             {
-                return customerCabRequested.Handle<CustomerCabRequested>(@event as CustomerCabRequested);
+                return customerCabRequested.Handle(requested);
             }
 
             return 0;
         });
         handler.Add(@event =>
         {
-            if (@event.GetType() == typeof(CustomerCancelledCab))
+            if (@event is CustomerCancelledCab requested)
             {
-                return customerCancelledCabRequestedHandler.Handle<CustomerCancelledCab>(@event as CustomerCancelledCab);
+                return customerCancelledCabRequestedHandler.Handle(requested);
             }
 
             return 0;
