@@ -13,7 +13,7 @@ public class CustomerPickedUpHandler : ICustomerPickedUpHandler
         _customerListRepository = customerListRepository;
     }
 
-    public int Handle(CustomerPickedUp request)
+    public int Handle<TS>(TS request) where TS : CustomerPickedUp
     {
         var customerList = _customerListRepository.GetById(1);
         customerList.PickupCustomer();
@@ -22,7 +22,4 @@ public class CustomerPickedUpHandler : ICustomerPickedUpHandler
         return customerList.Id;
     }
 }
-public interface ICustomerPickedUpHandler
-{
-    public int Handle(CustomerPickedUp request);
-}
+public interface ICustomerPickedUpHandler : IHandler<CustomerPickedUp>;

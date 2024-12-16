@@ -20,7 +20,9 @@ public class ApplicationHandler : IApplicationHandler
 
     public ApplicationHandler(
         ICustomerCabRequestedHandler customerCabRequested, 
-        ICustomerCancelledCabHandler customerCancelledCabRequestedHandler)
+        ICustomerCancelledCabHandler customerCancelledCabRequestedHandler,
+        ICustomerPickedUpHandler customerPickedUpHandler,
+        ICustomerDeliveredHandler customerDeliveredHandler)
     {
         handler.Add(@event =>
         {
@@ -36,6 +38,24 @@ public class ApplicationHandler : IApplicationHandler
             if (@event is CustomerCancelledCab requested)
             {
                 return customerCancelledCabRequestedHandler.Handle(requested);
+            }
+
+            return 0;
+        });
+        handler.Add(@event =>
+        {
+            if (@event is CustomerDelivered requested)
+            {
+                return customerDeliveredHandler.Handle(requested);
+            }
+
+            return 0;
+        });
+        handler.Add(@event =>
+        {
+            if (@event is CustomerPickedUp requested)
+            {
+                return customerPickedUpHandler.Handle(requested);
             }
 
             return 0;
