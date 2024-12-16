@@ -1,6 +1,5 @@
 namespace Production.EmmaCabCompany.Domain.CustomerList;
 
-// Aggregate Root Id
 public class CustomerList
 {
     public int Id { get; private init; } = 1;
@@ -16,8 +15,6 @@ public class CustomerList
         customer.Status = CustomerStatus.CustomerCallInProgress;
         Customers.Add(customer);
     }
-
-    // TODO: Write Aggregate Root Tests
     public void RideRequest()
     {
         if (Customers.All(x => x.Status != CustomerStatus.CustomerCallInProgress))

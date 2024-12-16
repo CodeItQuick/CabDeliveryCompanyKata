@@ -23,7 +23,7 @@ public class HomeController : Controller
     private readonly IFleetRepository _fleetRepository;
     private readonly IAddCabCommandHandler _addCabCommandHandler;
     private readonly IRemoveCabCommandHandler _removeCabCommandHandler;
-    private readonly ICustomerCabRequestedHandler _customerCabRequestedHandler;
+    private readonly IApplicationHandler _applicationHandler;
     private readonly ICustomerCancelledCabHandler _customerCancelledCabHandler;
     private readonly ICustomerDeliveredHandler _customerDeliveredHandler;
     private readonly ICustomerPickedUpHandler _customerPickedUpHandler;
@@ -35,7 +35,7 @@ public class HomeController : Controller
         IFleetRepository fleetRepository,
         IAddCabCommandHandler addCabCommandHandler,
         IRemoveCabCommandHandler removeCabCommandHandler,
-        ICustomerCabRequestedHandler customerCabRequestedHandler,
+        IApplicationHandler applicationHandler,
         ICustomerCancelledCabHandler customerCancelledCabHandler,
         ICustomerDeliveredHandler customerDeliveredHandler,
         ICustomerPickedUpHandler customerPickedUpHandler,
@@ -46,7 +46,7 @@ public class HomeController : Controller
         _fleetRepository = fleetRepository;
         _addCabCommandHandler = addCabCommandHandler;
         _removeCabCommandHandler = removeCabCommandHandler;
-        _customerCabRequestedHandler = customerCabRequestedHandler;
+        _applicationHandler = applicationHandler;
         _customerCancelledCabHandler = customerCancelledCabHandler;
         _customerDeliveredHandler = customerDeliveredHandler;
         _customerPickedUpHandler = customerPickedUpHandler;
@@ -79,7 +79,7 @@ public class HomeController : Controller
     }
     public IActionResult CustomerCabCall()
     {
-        _customerCabRequestedHandler.Handle(
+        _applicationHandler.Handle(
             new CustomerCabRequested("default customer", "1 Fulton Drive", "2 Destination Lane"));
         
         return RedirectToAction(nameof(Index));
@@ -104,7 +104,7 @@ public class HomeController : Controller
     }
     public IActionResult CustomerCancelledCabRide()
     {
-        _customerCancelledCabHandler.Handle(new CustomerCancelledCab());
+        _applicationHandler.Handle(new CustomerCancelledCab());
         
         return RedirectToAction(nameof(Index));
     }

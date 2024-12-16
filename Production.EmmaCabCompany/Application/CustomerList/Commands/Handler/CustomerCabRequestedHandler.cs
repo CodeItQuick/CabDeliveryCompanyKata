@@ -14,8 +14,8 @@ public class CustomerCabRequestedHandler : ICustomerCabRequestedHandler
     {
         _customerListRepository = customerListRepository;
     }
-
-    public int Handle(CustomerCabRequested request)
+    
+    public int Handle<TS>(TS request) where TS : CustomerCabRequested
     {
         var customerList = _customerListRepository.GetById(1);
         customerList.CustomerCabCall(
@@ -25,7 +25,5 @@ public class CustomerCabRequestedHandler : ICustomerCabRequestedHandler
         return customerList.Id;
     }
 }
-public interface ICustomerCabRequestedHandler
-{
-    public int Handle(CustomerCabRequested addCabCommand);
-}
+
+public interface ICustomerCabRequestedHandler : IHandler<CustomerCabRequested>;

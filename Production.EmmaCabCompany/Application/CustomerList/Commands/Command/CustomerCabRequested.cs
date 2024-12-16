@@ -1,6 +1,6 @@
 namespace Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
 
-public class CustomerCabRequested
+public class CustomerCabRequested : IEvent
 {
     public CustomerCabRequested(string customerName, string startLocation, string endLocation)
     {

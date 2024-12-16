@@ -8,6 +8,7 @@ using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Application.CustomerList;
+using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Handler;
 using Production.EmmaCabCompany.Application.Fleet;
 using Production.EmmaCabCompany.Application.Menu;
@@ -81,6 +82,7 @@ public class Startup
         services.AddSingleton<IMenuRepository, MenuRepository>();
         services.AddScoped<IAddCabCommandHandler, AddCabCommandHandler>();
         services.AddScoped<IRemoveCabCommandHandler, RemoveCabCommandHandler>();
+        services.AddScoped<IApplicationHandler, ApplicationHandler>();
         services.AddScoped<ICustomerCabRequestedHandler, CustomerCabRequestedHandler>();
         services.AddScoped<ICustomerCancelledCabHandler, CustomerCancelledCabHandler>();
         services.AddScoped<ICustomerDeliveredHandler, CustomerDeliveredHandler>();

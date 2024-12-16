@@ -13,7 +13,7 @@ public class CustomerCancelledCabHandler : ICustomerCancelledCabHandler
         _customerListRepository = customerListRepository;
     }
 
-    public int Handle(CustomerCancelledCab request)
+    public int Handle<TS>(TS @event) where TS : CustomerCancelledCab
     {
         var customerList = _customerListRepository.GetById(1);
         customerList.CancelPickup();
@@ -22,7 +22,4 @@ public class CustomerCancelledCabHandler : ICustomerCancelledCabHandler
         return customerList.Id;
     }
 }
-public interface ICustomerCancelledCabHandler
-{
-    public int Handle(CustomerCancelledCab addCabCommand);
-}
+public interface ICustomerCancelledCabHandler : IHandler<CustomerCancelledCab>;
