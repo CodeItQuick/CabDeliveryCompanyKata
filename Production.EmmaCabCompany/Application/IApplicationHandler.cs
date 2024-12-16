@@ -16,7 +16,10 @@ public interface IHandler<in T> where T : IEvent
 
 public class ApplicationHandler : IApplicationHandler
 {
-    private readonly List<Func<IEvent, int>> handler = new();
+    private readonly ICustomerCabRequestedHandler _customerCabRequested;
+    private readonly ICustomerCancelledCabHandler _customerCancelledCabRequestedHandler;
+    private readonly ICustomerPickedUpHandler _customerPickedUpHandler;
+    private readonly ICustomerDeliveredHandler _customerDeliveredHandler;
 
     public ApplicationHandler(
         ICustomerCabRequestedHandler customerCabRequested, 
@@ -24,49 +27,23 @@ public class ApplicationHandler : IApplicationHandler
         ICustomerPickedUpHandler customerPickedUpHandler,
         ICustomerDeliveredHandler customerDeliveredHandler)
     {
-        handler.Add(@event =>
-        {
-            if (@event is CustomerCabRequested requested)
-            {
-                return customerCabRequested.Handle(requested);
-            }
-
-            return 0;
-        });
-        handler.Add(@event =>
-        {
-            if (@event is CustomerCancelledCab requested)
-            {
-                return customerCancelledCabRequestedHandler.Handle(requested);
-            }
-
-            return 0;
-        });
-        handler.Add(@event =>
-        {
-            if (@event is CustomerDelivered requested)
-            {
-                return customerDeliveredHandler.Handle(requested);
-            }
-
-            return 0;
-        });
-        handler.Add(@event =>
-        {
-            if (@event is CustomerPickedUp requested)
-            {
-                return customerPickedUpHandler.Handle(requested);
-            }
-
-            return 0;
-        });
-        
+        _customerCabRequested = customerCabRequested;
+        _customerCancelledCabRequestedHandler = customerCancelledCabRequestedHandler;
+        _customerPickedUpHandler = customerPickedUpHandler;
+        _customerDeliveredHandler = customerDeliveredHandler;
     }
 
     public int Handle<T>(T request) where T : IEvent
     {
-        handler.ForEach(x => x.Invoke(request));
-        return 1;
+        return request switch
+        {
+            CustomerCabRequested customerCabRequested => _customerCabRequested.Handle(customerCabRequested),
+            CustomerCancelledCab customerCancelledCab => _customerCancelledCabRequestedHandler.Handle(
+                customerCancelledCab),
+            CustomerPickedUp customerPickedUp => _customerPickedUpHandler.Handle(customerPickedUp),
+            CustomerDelivered customerDelivered => _customerDeliveredHandler.Handle(customerDelivered),
+            _ => throw new NotImplementedException("this handler isn't implemented")
+        };
     }
 }
 
