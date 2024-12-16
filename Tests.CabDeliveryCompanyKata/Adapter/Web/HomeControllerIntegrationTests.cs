@@ -51,12 +51,6 @@ public class HomeControllerIntegrationTests
             new CustomerPickedUpHandler(new CustomerListRepository(_cabContext)),
             new CustomerRideRequestedHandler(new CustomerListRepository(_cabContext)),
             new MenuRequestedHandler(new MenuRepository(_cabContext)));
-    }
-
-    [Fact]
-    public void CanAddCabDriverToFleet()
-    {
-        
         var claimsIdentity = new ClaimsIdentity(
             new List<Claim>()
             {
@@ -72,6 +66,12 @@ public class HomeControllerIntegrationTests
                 User = new ClaimsPrincipal(claimsIdentity)
             }
         };
+    }
+
+    [Fact]
+    public void CanAddCabDriverToFleet()
+    {
+        
         _homeController.AddCabDriver();
 
         var response = _homeController.Index() as ViewResult;
