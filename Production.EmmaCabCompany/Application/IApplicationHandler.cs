@@ -23,6 +23,7 @@ public class ApplicationHandler : IApplicationHandler
     private readonly ICustomerDeliveredHandler _customerDeliveredHandler;
     private readonly IAddCommandHandler _addCabCommandHandler;
     private readonly IRemoveCabCommandHandler _removeCabCommandHandler;
+    private readonly ICustomerRideRequestedHandler _customerRideRequestedHandler;
 
     public ApplicationHandler(
         ICustomerCabRequestedHandler customerCabRequested, 
@@ -30,7 +31,8 @@ public class ApplicationHandler : IApplicationHandler
         ICustomerPickedUpHandler customerPickedUpHandler,
         ICustomerDeliveredHandler customerDeliveredHandler, 
         IAddCommandHandler addCabCommandHandler,
-        IRemoveCabCommandHandler removeCabCommandHandler)
+        IRemoveCabCommandHandler removeCabCommandHandler,
+        ICustomerRideRequestedHandler customerRideRequestedHandler)
     {
         _customerCabRequested = customerCabRequested;
         _customerCancelledCabRequestedHandler = customerCancelledCabRequestedHandler;
@@ -38,6 +40,7 @@ public class ApplicationHandler : IApplicationHandler
         _customerDeliveredHandler = customerDeliveredHandler;
         _addCabCommandHandler = addCabCommandHandler;
         _removeCabCommandHandler = removeCabCommandHandler;
+        _customerRideRequestedHandler = customerRideRequestedHandler;
     }
 
     public int Handle<T>(T request) where T : IEvent
@@ -51,6 +54,7 @@ public class ApplicationHandler : IApplicationHandler
             CustomerDelivered customerDelivered => _customerDeliveredHandler.Handle(customerDelivered),
             AddCabCommand addCabCommand => _addCabCommandHandler.Handle(addCabCommand),
             RemoveCabCommand removeCabCommand => _removeCabCommandHandler.Handle(removeCabCommand),
+            CustomerRideRequested customerRideRequested => _customerRideRequestedHandler.Handle(customerRideRequested),
             _ => throw new NotImplementedException("this handler isn't implemented")
         };
     }

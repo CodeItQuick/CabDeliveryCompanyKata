@@ -19,21 +19,18 @@ namespace Production.WebCabCompany.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly IRemoveCabCommandHandler _removeCabCommandHandler;
     private readonly IApplicationHandler _applicationHandler;
     private readonly ICustomerPickedUpHandler _customerPickedUpHandler;
     private readonly ICustomerRideRequestedHandler _customerRideRequestedHandler;
     private readonly IMenuRequestedHandler _menuRequestedHandler;
 
     public HomeController(ILogger<HomeController> logger,
-        IRemoveCabCommandHandler removeCabCommandHandler,
         IApplicationHandler applicationHandler,
         ICustomerPickedUpHandler customerPickedUpHandler,
         ICustomerRideRequestedHandler customerRideRequestedHandler,
         IMenuRequestedHandler menuRequestedHandler)
     {
         _logger = logger;
-        _removeCabCommandHandler = removeCabCommandHandler;
         _applicationHandler = applicationHandler;
         _customerPickedUpHandler = customerPickedUpHandler;
         _customerRideRequestedHandler = customerRideRequestedHandler;
@@ -72,13 +69,13 @@ public class HomeController : Controller
     }
     public IActionResult SendCabRequest()
     {
-        _customerRideRequestedHandler.Handle(new CustomerRideRequested());
+        _applicationHandler.Handle(new CustomerRideRequested());
         
         return RedirectToAction(nameof(Index));
     }
     public IActionResult CabNotifiesPickedUp()
     {
-        _customerPickedUpHandler.Handle(new CustomerPickedUp());
+        _applicationHandler.Handle(new CustomerPickedUp());
         
         return RedirectToAction(nameof(Index));
     }

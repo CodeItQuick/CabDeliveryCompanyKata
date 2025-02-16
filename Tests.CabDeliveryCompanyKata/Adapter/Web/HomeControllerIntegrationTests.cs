@@ -40,14 +40,14 @@ public class HomeControllerIntegrationTests
         IOptions<FileSettings> options = Options.Create(fileSettings);
         _homeController = new HomeController(
             new NullLogger<HomeController>(),
-            new RemoveCabCommandHandler(new FleetRepository(_cabContext)),
             new ApplicationHandler(
                 new CustomerCabRequestedHandler(new CustomerListRepository(_cabContext)),
                 new CustomerCancelledCabHandler(new CustomerListRepository(_cabContext)),
                 new CustomerPickedUpHandler(new CustomerListRepository(_cabContext)),
                 new CustomerDeliveredHandler(new CustomerListRepository(_cabContext)),
                 new AddCabCommandHandler(new FleetRepository(_cabContext)),
-                new RemoveCabCommandHandler(new FleetRepository(_cabContext))
+                new RemoveCabCommandHandler(new FleetRepository(_cabContext)),
+                new CustomerRideRequestedHandler(new CustomerListRepository(_cabContext))
             ),
             new CustomerPickedUpHandler(new CustomerListRepository(_cabContext)),
             new CustomerRideRequestedHandler(new CustomerListRepository(_cabContext)),
