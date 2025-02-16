@@ -16,5 +16,4 @@ public class AddCabCommandHandler : IAddCommandHandler
     }
 }
 
-
 public interface IAddCommandHandler : IHandler<AddCabCommand>;

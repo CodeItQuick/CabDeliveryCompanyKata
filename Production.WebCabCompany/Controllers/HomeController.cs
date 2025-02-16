@@ -19,7 +19,6 @@ namespace Production.WebCabCompany.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly IAddCommandHandler _addCabCommandHandler;
     private readonly IRemoveCabCommandHandler _removeCabCommandHandler;
     private readonly IApplicationHandler _applicationHandler;
     private readonly ICustomerPickedUpHandler _customerPickedUpHandler;
@@ -27,7 +26,6 @@ public class HomeController : Controller
     private readonly IMenuRequestedHandler _menuRequestedHandler;
 
     public HomeController(ILogger<HomeController> logger,
-        IAddCommandHandler addCabCommandHandler,
         IRemoveCabCommandHandler removeCabCommandHandler,
         IApplicationHandler applicationHandler,
         ICustomerPickedUpHandler customerPickedUpHandler,
@@ -35,7 +33,6 @@ public class HomeController : Controller
         IMenuRequestedHandler menuRequestedHandler)
     {
         _logger = logger;
-        _addCabCommandHandler = addCabCommandHandler;
         _removeCabCommandHandler = removeCabCommandHandler;
         _applicationHandler = applicationHandler;
         _customerPickedUpHandler = customerPickedUpHandler;
@@ -58,12 +55,12 @@ public class HomeController : Controller
     }
     public IActionResult RemoveCabDriver()
     {
-        _removeCabCommandHandler.Handle(new RemoveCabCommand(1));
+        _applicationHandler.Handle(new RemoveCabCommand(1));
         return RedirectToAction(nameof(Index));
     }
     public IActionResult CustomerRequestRide()
     {
-        _customerRideRequestedHandler.Handle(new CustomerRideRequested());
+        _applicationHandler.Handle(new CustomerRideRequested());
         return RedirectToAction(nameof(Index));
     }
     public IActionResult CustomerCabCall()

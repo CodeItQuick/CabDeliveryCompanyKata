@@ -22,19 +22,22 @@ public class ApplicationHandler : IApplicationHandler
     private readonly ICustomerPickedUpHandler _customerPickedUpHandler;
     private readonly ICustomerDeliveredHandler _customerDeliveredHandler;
     private readonly IAddCommandHandler _addCabCommandHandler;
+    private readonly IRemoveCabCommandHandler _removeCabCommandHandler;
 
     public ApplicationHandler(
         ICustomerCabRequestedHandler customerCabRequested, 
         ICustomerCancelledCabHandler customerCancelledCabRequestedHandler,
         ICustomerPickedUpHandler customerPickedUpHandler,
         ICustomerDeliveredHandler customerDeliveredHandler, 
-        IAddCommandHandler addCabCommandHandler)
+        IAddCommandHandler addCabCommandHandler,
+        IRemoveCabCommandHandler removeCabCommandHandler)
     {
         _customerCabRequested = customerCabRequested;
         _customerCancelledCabRequestedHandler = customerCancelledCabRequestedHandler;
         _customerPickedUpHandler = customerPickedUpHandler;
         _customerDeliveredHandler = customerDeliveredHandler;
         _addCabCommandHandler = addCabCommandHandler;
+        _removeCabCommandHandler = removeCabCommandHandler;
     }
 
     public int Handle<T>(T request) where T : IEvent
@@ -47,6 +50,7 @@ public class ApplicationHandler : IApplicationHandler
             CustomerPickedUp customerPickedUp => _customerPickedUpHandler.Handle(customerPickedUp),
             CustomerDelivered customerDelivered => _customerDeliveredHandler.Handle(customerDelivered),
             AddCabCommand addCabCommand => _addCabCommandHandler.Handle(addCabCommand),
+            RemoveCabCommand removeCabCommand => _removeCabCommandHandler.Handle(removeCabCommand),
             _ => throw new NotImplementedException("this handler isn't implemented")
         };
     }

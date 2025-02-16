@@ -9,14 +9,16 @@ public class RemoveCabCommandHandler : IRemoveCabCommandHandler
         _fleetRepository = fleetRepository;
     }
 
-    // this should be "Handle"
     public void Handle(RemoveCabCommand addCabCommand)
     {
         _fleetRepository.RemoveCab(addCabCommand.FleetId);
     }
+
+    public int Handle<TS>(TS @event) where TS : RemoveCabCommand
+    {
+        _fleetRepository.RemoveCab(@event.FleetId);
+        return @event.FleetId;
+    }
 }
 
-public interface IRemoveCabCommandHandler
-{
-    public void Handle(RemoveCabCommand addCabCommand);
-}
+public interface IRemoveCabCommandHandler : IHandler<RemoveCabCommand>;
