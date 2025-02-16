@@ -18,7 +18,7 @@ public class FleetRepository : IFleetRepository
     {
         var fleetExists = _cabContext.Fleet.Any(x => x.Id == 1);
         if (fleetExists) return;
-        _cabContext.Fleet.Add(new CabFileAdapter.Fleet.Fleet() { Id = 1 });
+        _cabContext.Fleet.Add(new Fleet() { Id = 1 });
         _cabContext.SaveChanges();
     }
 

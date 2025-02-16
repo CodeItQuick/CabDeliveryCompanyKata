@@ -46,7 +46,8 @@ public class HomeControllerIntegrationTests
                 new CustomerCabRequestedHandler(new CustomerListRepository(_cabContext)),
                 new CustomerCancelledCabHandler(new CustomerListRepository(_cabContext)),
                 new CustomerPickedUpHandler(new CustomerListRepository(_cabContext)),
-                new CustomerDeliveredHandler(new CustomerListRepository(_cabContext))
+                new CustomerDeliveredHandler(new CustomerListRepository(_cabContext)),
+                new AddCabCommandHandler(new FleetRepository(_cabContext))
             ),
             new CustomerPickedUpHandler(new CustomerListRepository(_cabContext)),
             new CustomerRideRequestedHandler(new CustomerListRepository(_cabContext)),

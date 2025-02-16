@@ -17,10 +17,10 @@ public class CustomerCabRequestedHandler : ICustomerCabRequestedHandler
     
     public int Handle<TS>(TS request) where TS : CustomerCabRequested
     {
-        var customerList = _customerListRepository.GetById(1);
+        var customerList = _customerListRepository.GetById(1); // separately managed
         customerList.CustomerCabCall(
             new Customer(request.CustomerName, request.StartLocation, request.EndLocation));
-        _customerListRepository.Add(customerList);
+        _customerListRepository.Add(customerList); // write
 
         return customerList.Id;
     }

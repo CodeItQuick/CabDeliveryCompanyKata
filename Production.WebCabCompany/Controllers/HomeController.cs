@@ -19,7 +19,7 @@ namespace Production.WebCabCompany.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly IAddCabCommandHandler _addCabCommandHandler;
+    private readonly IAddCommandHandler _addCabCommandHandler;
     private readonly IRemoveCabCommandHandler _removeCabCommandHandler;
     private readonly IApplicationHandler _applicationHandler;
     private readonly ICustomerPickedUpHandler _customerPickedUpHandler;
@@ -27,7 +27,7 @@ public class HomeController : Controller
     private readonly IMenuRequestedHandler _menuRequestedHandler;
 
     public HomeController(ILogger<HomeController> logger,
-        IAddCabCommandHandler addCabCommandHandler,
+        IAddCommandHandler addCabCommandHandler,
         IRemoveCabCommandHandler removeCabCommandHandler,
         IApplicationHandler applicationHandler,
         ICustomerPickedUpHandler customerPickedUpHandler,
@@ -52,7 +52,7 @@ public class HomeController : Controller
 
     public IActionResult AddCabDriver()
     {
-        _addCabCommandHandler.Handle(new AddCabCommand("default", 23.23, 32.32));
+        _applicationHandler.Handle(new AddCabCommand("default", 23.23, 32.32));
         
         return RedirectToAction(nameof(Index));
     }

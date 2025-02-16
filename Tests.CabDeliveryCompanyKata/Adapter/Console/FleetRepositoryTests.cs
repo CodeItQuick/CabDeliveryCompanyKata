@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 
@@ -18,20 +17,22 @@ public class FleetRepositoryTests
         _cabContext.Database.Migrate();
         _fleetRepository = new FleetRepository(_cabContext);
     }
-
     [Fact]
     public void CanEmptyFleet()
     {
         _fleetRepository.EmptyFleet(1);
         Assert.Equal(1, _cabContext.Fleet.FirstOrDefault()!.Id);
-        Assert.Equal(0, _cabContext.Fleet.Include(x => x.FleetOfCabs).FirstOrDefault()!.FleetOfCabs.Count);
+        Assert.Empty(_cabContext.Fleet
+            .Include(x => x.FleetOfCabs)
+            .FirstOrDefault()!.FleetOfCabs);
     }
     [Fact]
     public void CanAddCab()
     {
         _fleetRepository.EmptyFleet(1);
         _fleetRepository.AddCab("evan", 1.00, 1.00);
-        Assert.Single(_cabContext.Fleet.Include(x => x.FleetOfCabs)
+        Assert.Single(_cabContext.Fleet
+            .Include(x => x.FleetOfCabs)
             .FirstOrDefault()!.FleetOfCabs);
     }
     [Fact]
@@ -41,7 +42,9 @@ public class FleetRepositoryTests
         _fleetRepository.AddCab("evan", 1.00, 1.00);
         _fleetRepository.AddCab("dan", 1.00, 1.00);
         Assert.Equal(1, _cabContext.Fleet.FirstOrDefault()!.Id);
-        Assert.Equal(2, _cabContext.Fleet.Include(x => x.FleetOfCabs).FirstOrDefault()!.FleetOfCabs.Count);
+        Assert.Equal(2, _cabContext.Fleet
+            .Include(x => x.FleetOfCabs)
+            .FirstOrDefault()!.FleetOfCabs.Count);
     }
     [Fact]
     public void CanRemoveCab()
@@ -50,7 +53,9 @@ public class FleetRepositoryTests
         _fleetRepository.AddCab("evan", 1.00, 1.00);
         _fleetRepository.RemoveCab(1);
         Assert.Equal(1, _cabContext.Fleet.FirstOrDefault()!.Id);
-        Assert.Equal(0, _cabContext.Fleet.Include(x => x.FleetOfCabs).FirstOrDefault()!.FleetOfCabs.Count);
+        Assert.Empty(_cabContext.Fleet
+            .Include(x => x.FleetOfCabs)
+            .FirstOrDefault()!.FleetOfCabs);
     }
     
 }

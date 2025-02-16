@@ -80,7 +80,7 @@ public class Startup
         services.AddSingleton<IFleetRepository, FleetRepository>();
         services.AddSingleton<ICustomerListRepository, CustomerListRepository>();
         services.AddSingleton<IMenuRepository, MenuRepository>();
-        services.AddScoped<IAddCabCommandHandler, AddCabCommandHandler>();
+        services.AddScoped<IAddCommandHandler, AddCabCommandHandler>();
         services.AddScoped<IRemoveCabCommandHandler, RemoveCabCommandHandler>();
         services.AddScoped<IApplicationHandler, ApplicationHandler>();
         services.AddScoped<ICustomerCabRequestedHandler, CustomerCabRequestedHandler>();
