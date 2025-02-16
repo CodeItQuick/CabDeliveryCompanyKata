@@ -6,7 +6,6 @@ using Production.EmmaCabCompany.Adapter.@in;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
-using Production.EmmaCabCompany.Application.CustomerList.Commands.Handler;
 using Production.EmmaCabCompany.Application.Fleet;
 using Production.EmmaCabCompany.Application.Menu;
 using Production.EmmaCabCompany.Domain;
@@ -20,20 +19,14 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IApplicationHandler _applicationHandler;
-    private readonly ICustomerPickedUpHandler _customerPickedUpHandler;
-    private readonly ICustomerRideRequestedHandler _customerRideRequestedHandler;
     private readonly IMenuRequestedHandler _menuRequestedHandler;
 
     public HomeController(ILogger<HomeController> logger,
         IApplicationHandler applicationHandler,
-        ICustomerPickedUpHandler customerPickedUpHandler,
-        ICustomerRideRequestedHandler customerRideRequestedHandler,
         IMenuRequestedHandler menuRequestedHandler)
     {
         _logger = logger;
         _applicationHandler = applicationHandler;
-        _customerPickedUpHandler = customerPickedUpHandler;
-        _customerRideRequestedHandler = customerRideRequestedHandler;
         _menuRequestedHandler = menuRequestedHandler;
     }
 

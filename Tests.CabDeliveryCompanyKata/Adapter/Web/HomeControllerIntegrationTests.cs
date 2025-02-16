@@ -49,8 +49,6 @@ public class HomeControllerIntegrationTests
                 new RemoveCabCommandHandler(new FleetRepository(_cabContext)),
                 new CustomerRideRequestedHandler(new CustomerListRepository(_cabContext))
             ),
-            new CustomerPickedUpHandler(new CustomerListRepository(_cabContext)),
-            new CustomerRideRequestedHandler(new CustomerListRepository(_cabContext)),
             new MenuRequestedHandler(new MenuRepository(_cabContext)));
         var claimsIdentity = new ClaimsIdentity(
             new List<Claim>()
