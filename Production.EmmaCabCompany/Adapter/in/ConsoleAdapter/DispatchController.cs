@@ -1,7 +1,7 @@
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
+using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Handler;
 using Production.EmmaCabCompany.Application.Fleet;
@@ -12,34 +12,27 @@ namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 public class DispatchController
 {
     private readonly CustomerListRepository _customerListRepository;
-    private readonly FleetRepository _fleetRepository;
     private readonly MenuRepository _menuRepository;
-    private CustomerCabRequestedHandler _customerCabRequestedHandler;
-    private CustomerRideRequestedHandler _customerRideRequestedHandler;
-    private CustomerCancelledCabHandler _customerCancelledCabHandler;
-    private CustomerDeliveredHandler _customerDeliveredHandler;
-    private CustomerPickedUpHandler _customerPickedUpHandler;
-    private AddCabCommandHandler _addCabCommandHandler;
-    private RemoveCabCommandHandler _removeCabCommandHandler;
+    private ApplicationHandler _applicationHandler;
 
     public DispatchController(CustomerListRepository customerListRepository, FleetRepository fleetRepository, MenuRepository menuRepository)
     {
         _customerListRepository = customerListRepository;
-        _fleetRepository = fleetRepository;
         _menuRepository = menuRepository;
-        _customerCabRequestedHandler = new CustomerCabRequestedHandler(_customerListRepository);
-        _customerCancelledCabHandler = new CustomerCancelledCabHandler(_customerListRepository);
-        _customerDeliveredHandler = new CustomerDeliveredHandler(_customerListRepository);
-        _customerPickedUpHandler = new CustomerPickedUpHandler(_customerListRepository);
-        _customerRideRequestedHandler = new CustomerRideRequestedHandler(_customerListRepository);
-        _addCabCommandHandler = new AddCabCommandHandler(_fleetRepository);
-        _removeCabCommandHandler = new RemoveCabCommandHandler(_fleetRepository);
+        _applicationHandler = new ApplicationHandler(
+            new CustomerCabRequestedHandler(customerListRepository),
+            new CustomerCancelledCabHandler(customerListRepository),
+            new CustomerPickedUpHandler(customerListRepository),
+            new CustomerDeliveredHandler(customerListRepository),
+            new AddCabCommandHandler(fleetRepository),
+            new RemoveCabCommandHandler(fleetRepository),
+            new CustomerRideRequestedHandler(customerListRepository));
     }
 
     public string AddCab()
     {
         var cabName = "Evan's Cab";
-        _addCabCommandHandler.Handle(new AddCabCommand(cabName, 46.2382, 63.1311));
+        _applicationHandler.Handle(new AddCabCommand(cabName, 46.2382, 63.1311));
 
         return "Added Evan's Cab to fleet";
     }
@@ -48,7 +41,7 @@ public class DispatchController
     {
         try
         {
-            _removeCabCommandHandler.Handle(new RemoveCabCommand(1));
+            _applicationHandler.Handle(new RemoveCabCommand(1));
             return "Requested cab removed from fleet";
         }
         catch (Exception ex)
@@ -59,7 +52,7 @@ public class DispatchController
 
     public string CustomerCabCall(string? customerName, string? startLocation, string? destinationLane)
     {
-        _customerCabRequestedHandler.Handle(new CustomerCabRequested(customerName, startLocation, destinationLane));
+        _applicationHandler.Handle(new CustomerCabRequested(customerName, startLocation, destinationLane));
         return $"Received customer ride request from {customerName}";
     }
 
@@ -75,7 +68,7 @@ public class DispatchController
             }
 
             // _cabServiceHandler.CancelPickup();
-            _customerCancelledCabHandler.Handle(new CustomerCancelledCab());
+            _applicationHandler.Handle(new CustomerCancelledCab());
             return ["Customer cancelled cab ride successfully."];
         }
         catch (Exception ex)
@@ -96,7 +89,7 @@ public class DispatchController
             }
 
             // var response = _cabServiceHandler.SendCabRequest();
-            _customerRideRequestedHandler.Handle(new CustomerRideRequested());
+            _applicationHandler.Handle(new CustomerRideRequested());
 
             // TODO: Fix this - it may have to do a read, which kinda sucks
             var customerList = _customerListRepository.GetById(1);
@@ -125,7 +118,7 @@ public class DispatchController
                 throw new SystemException("This is not a valid option.");
             }
 
-            _customerPickedUpHandler.Handle(new CustomerPickedUp());
+            _applicationHandler.Handle(new CustomerPickedUp());
             return "Notified dispatcher of pickup";
         }
         catch (Exception ex)
@@ -145,7 +138,7 @@ public class DispatchController
                 throw new SystemException("This is not a valid option.");
             }
 
-            _customerDeliveredHandler.Handle(new CustomerDelivered());
+            _applicationHandler.Handle(new CustomerDelivered());
             var customerList = _customerListRepository.GetById(1);
             // TODO: fix this, should not be hardcodedZ
             var customer = customerList.Customers.Last(x => x.Status == CustomerStatus.Delivered);
