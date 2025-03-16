@@ -80,14 +80,7 @@ public class Startup
         services.AddSingleton<IFleetRepository, FleetRepository>();
         services.AddSingleton<ICustomerListRepository, CustomerListRepository>();
         services.AddSingleton<IMenuRepository, MenuRepository>();
-        services.AddScoped<IAddCommandHandler, AddCabCommandHandler>();
-        services.AddScoped<IRemoveCabCommandHandler, RemoveCabCommandHandler>();
         services.AddScoped<IApplicationHandler, ApplicationHandler>();
-        services.AddScoped<ICustomerCabRequestedHandler, CustomerCabRequestedHandler>();
-        services.AddScoped<ICustomerCancelledCabHandler, CustomerCancelledCabHandler>();
-        services.AddScoped<ICustomerDeliveredHandler, CustomerDeliveredHandler>();
-        services.AddScoped<ICustomerRideRequestedHandler, CustomerRideRequestedHandler>();
-        services.AddScoped<ICustomerPickedUpHandler, CustomerPickedUpHandler>();
         services.AddScoped<IMenuRequestedHandler, MenuRequestedHandler>();
 
         // Does not work on this dotnet?

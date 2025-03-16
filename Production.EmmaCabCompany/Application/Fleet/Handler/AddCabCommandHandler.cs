@@ -1,19 +1,18 @@
 namespace Production.EmmaCabCompany.Application.Fleet;
 
-public class AddCabCommandHandler : IAddCommandHandler
+public class AddCabCabCommandHandler : IAddCabCommandHandler
 {
     private readonly IFleetRepository _fleetRepository;
 
-    public AddCabCommandHandler(IFleetRepository fleetRepository)
+    public AddCabCabCommandHandler(IFleetRepository fleetRepository)
     {
         _fleetRepository = fleetRepository;
     }
 
-    public int Handle<TS>(TS request) where TS : AddCabCommand
+    public void Handle(AddCabCommand request)
     {
         _fleetRepository.AddCab(request.CabName, request.Latitude, request.Longitude);
-        return 1;
     }
 }
 
-public interface IAddCommandHandler : IHandler<AddCabCommand>;
+public interface IAddCabCommandHandler : ICommandHandler<AddCabCommand>;

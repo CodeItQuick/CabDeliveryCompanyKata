@@ -20,7 +20,7 @@ public class HomeControllerIntegrationTests
 {
     private CabContext _cabContext;
     private FleetRepository _fleetRepository;
-    private AddCabCommandHandler _addCabCommandHandler;
+    private AddCabCabCommandHandler _addCabCabCommandHandler;
     private HomeController _homeController;
 
     public HomeControllerIntegrationTests()
@@ -31,7 +31,7 @@ public class HomeControllerIntegrationTests
         _cabContext = new CabContext(cabContextOptions.Options);
         _cabContext.Database.Migrate();
         _fleetRepository = new FleetRepository(_cabContext);
-        _addCabCommandHandler = new AddCabCommandHandler(_fleetRepository);
+        _addCabCabCommandHandler = new AddCabCabCommandHandler(_fleetRepository);
         var fileSettings = new FileSettings()
         {
             CabFileNameCsv = $"{Guid.NewGuid().ToString()}.csv",
@@ -40,15 +40,7 @@ public class HomeControllerIntegrationTests
         IOptions<FileSettings> options = Options.Create(fileSettings);
         _homeController = new HomeController(
             new NullLogger<HomeController>(),
-            new ApplicationHandler(
-                new CustomerCabRequestedHandler(new CustomerListRepository(_cabContext)),
-                new CustomerCancelledCabHandler(new CustomerListRepository(_cabContext)),
-                new CustomerPickedUpHandler(new CustomerListRepository(_cabContext)),
-                new CustomerDeliveredHandler(new CustomerListRepository(_cabContext)),
-                new AddCabCommandHandler(new FleetRepository(_cabContext)),
-                new RemoveCabCommandHandler(new FleetRepository(_cabContext)),
-                new CustomerRideRequestedHandler(new CustomerListRepository(_cabContext))
-            ),
+            new ApplicationHandler(new FleetRepository(_cabContext), new CustomerListRepository(_cabContext)),
             new MenuRequestedHandler(new MenuRepository(_cabContext)));
         var claimsIdentity = new ClaimsIdentity(
             new List<Claim>()

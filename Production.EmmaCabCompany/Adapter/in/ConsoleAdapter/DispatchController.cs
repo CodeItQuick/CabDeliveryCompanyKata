@@ -19,14 +19,7 @@ public class DispatchController
     {
         _customerListRepository = customerListRepository;
         _menuRepository = menuRepository;
-        _applicationHandler = new ApplicationHandler(
-            new CustomerCabRequestedHandler(customerListRepository),
-            new CustomerCancelledCabHandler(customerListRepository),
-            new CustomerPickedUpHandler(customerListRepository),
-            new CustomerDeliveredHandler(customerListRepository),
-            new AddCabCommandHandler(fleetRepository),
-            new RemoveCabCommandHandler(fleetRepository),
-            new CustomerRideRequestedHandler(customerListRepository));
+        _applicationHandler = new ApplicationHandler(fleetRepository, customerListRepository);
     }
 
     public string AddCab()

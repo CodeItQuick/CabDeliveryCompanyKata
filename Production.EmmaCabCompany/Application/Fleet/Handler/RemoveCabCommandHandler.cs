@@ -1,10 +1,10 @@
 namespace Production.EmmaCabCompany.Application.Fleet;
 
-public class RemoveCabCommandHandler : IRemoveCabCommandHandler
+public class RemoveCabCommandCommandHandler : IRemoveCabCommandCommandHandler
 {
     private readonly IFleetRepository _fleetRepository;
 
-    public RemoveCabCommandHandler(IFleetRepository fleetRepository)
+    public RemoveCabCommandCommandHandler(IFleetRepository fleetRepository)
     {
         _fleetRepository = fleetRepository;
     }
@@ -13,12 +13,6 @@ public class RemoveCabCommandHandler : IRemoveCabCommandHandler
     {
         _fleetRepository.RemoveCab(addCabCommand.FleetId);
     }
-
-    public int Handle<TS>(TS @event) where TS : RemoveCabCommand
-    {
-        _fleetRepository.RemoveCab(@event.FleetId);
-        return @event.FleetId;
-    }
 }
 
-public interface IRemoveCabCommandHandler : IHandler<RemoveCabCommand>;
+public interface IRemoveCabCommandCommandHandler : ICommandHandler<RemoveCabCommand>;

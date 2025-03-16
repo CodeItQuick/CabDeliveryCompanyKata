@@ -1,62 +1,82 @@
+using Microsoft.EntityFrameworkCore;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
+using Production.EmmaCabCompany.Application.CustomerList;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Handler;
 using Production.EmmaCabCompany.Application.Fleet;
+using Production.EmmaCabCompany.Domain.CustomerList;
 
 namespace Production.EmmaCabCompany.Application;
 
-public interface IApplicationHandler
+public interface IApplicationHandler :
+    ICustomerCabRequestedCommandHandler,
+    ICustomerCancelledCabCommandHandler,
+    ICustomerPickedUpCommandHandler,
+    ICustomerDeliveredCommandHandler,
+    IAddCabCommandHandler,
+    IRemoveCabCommandCommandHandler,
+    ICustomerRideRequestedCommandHandler;
+
+public interface ICommandHandler<in T> where T : IEvent
 {
-    int Handle<T>(T @event) where T : IEvent;
+    void Handle(T @event);
 }
 
-public interface IHandler<in T> where T : IEvent
+
+public class ApplicationHandler : IApplicationHandler 
 {
-    int Handle<TS>(TS @event) where TS : T;
-}
-
-
-public class ApplicationHandler : IApplicationHandler
-{
-    private readonly ICustomerCabRequestedHandler _customerCabRequested;
-    private readonly ICustomerCancelledCabHandler _customerCancelledCabRequestedHandler;
-    private readonly ICustomerPickedUpHandler _customerPickedUpHandler;
-    private readonly ICustomerDeliveredHandler _customerDeliveredHandler;
-    private readonly IAddCommandHandler _addCabCommandHandler;
-    private readonly IRemoveCabCommandHandler _removeCabCommandHandler;
-    private readonly ICustomerRideRequestedHandler _customerRideRequestedHandler;
-
+    private readonly IFleetRepository _fleetRepository;
+    private readonly ICustomerListRepository _customerListRepository;
+    
     public ApplicationHandler(
-        ICustomerCabRequestedHandler customerCabRequested, 
-        ICustomerCancelledCabHandler customerCancelledCabRequestedHandler,
-        ICustomerPickedUpHandler customerPickedUpHandler,
-        ICustomerDeliveredHandler customerDeliveredHandler, 
-        IAddCommandHandler addCabCommandHandler,
-        IRemoveCabCommandHandler removeCabCommandHandler,
-        ICustomerRideRequestedHandler customerRideRequestedHandler)
+        IFleetRepository fleetRepository,
+        ICustomerListRepository customerListRepository)
     {
-        _customerCabRequested = customerCabRequested;
-        _customerCancelledCabRequestedHandler = customerCancelledCabRequestedHandler;
-        _customerPickedUpHandler = customerPickedUpHandler;
-        _customerDeliveredHandler = customerDeliveredHandler;
-        _addCabCommandHandler = addCabCommandHandler;
-        _removeCabCommandHandler = removeCabCommandHandler;
-        _customerRideRequestedHandler = customerRideRequestedHandler;
+        _fleetRepository = fleetRepository;
+        _customerListRepository = customerListRepository;
     }
 
-    public int Handle<T>(T request) where T : IEvent
+    public void Handle(CustomerCabRequested request)
     {
-        return request switch
-        {
-            CustomerCabRequested customerCabRequested => _customerCabRequested.Handle(customerCabRequested),
-            CustomerCancelledCab customerCancelledCab => _customerCancelledCabRequestedHandler.Handle(
-                customerCancelledCab),
-            CustomerPickedUp customerPickedUp => _customerPickedUpHandler.Handle(customerPickedUp),
-            CustomerDelivered customerDelivered => _customerDeliveredHandler.Handle(customerDelivered),
-            AddCabCommand addCabCommand => _addCabCommandHandler.Handle(addCabCommand),
-            RemoveCabCommand removeCabCommand => _removeCabCommandHandler.Handle(removeCabCommand),
-            CustomerRideRequested customerRideRequested => _customerRideRequestedHandler.Handle(customerRideRequested),
-            _ => throw new NotImplementedException("this handler isn't implemented")
-        };
+        var customerList = _customerListRepository.GetById(1); // separately managed
+        customerList.CustomerCabCall(
+            new Customer(request.CustomerName, request.StartLocation, request.EndLocation));
+        _customerListRepository.Add(customerList); // write
+    }
+    public void Handle(CustomerCancelledCab @event)
+    {
+        var customerList = _customerListRepository.GetById(1);
+        customerList.CancelPickup();
+        _customerListRepository.Add(customerList);
+    }
+    public void Handle(CustomerDelivered @event)
+    {
+        var customerList = _customerListRepository.GetById(1);
+        customerList.CustomerDelivered();
+        _customerListRepository.Add(customerList);
+    }
+    public void Handle(CustomerPickedUp request)
+    {
+        var customerList = _customerListRepository.GetById(1);
+        customerList.PickupCustomer();
+        _customerListRepository.Add(customerList);
+    }
+    public void Handle(CustomerRideRequested @event)
+    {
+        var customerList = _customerListRepository.GetById(1);
+        customerList.RideRequest();
+        _customerListRepository.Add(customerList);
+    }
+    public void Handle(AddCabCommand request)
+    {
+        _fleetRepository.AddCab(request.CabName, request.Latitude, request.Longitude);
+    }
+    
+    public void Handle(RemoveCabCommand addCabCommand)
+    {
+        _fleetRepository.RemoveCab(addCabCommand.FleetId);
     }
 }
 

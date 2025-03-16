@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
+using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Handler;
 using Production.EmmaCabCompany.Application.Menu;
 using Production.EmmaCabCompany.Domain;
@@ -13,12 +15,6 @@ namespace Tests.CabDeliveryCompanyKata.Adapter.Console;
 public class MenuCommandTests
 {
     private readonly CabContext _cabContext;
-    private CustomerListRepository _customerListRepository;
-    private CustomerCabRequestedHandler _customerCabRequestedHandler;
-    private readonly CustomerDeliveredHandler _customerDeliveredHandler;
-    private readonly CustomerPickedUpHandler _customerPickedUpHandler;
-    private readonly CustomerRideRequestedHandler _customerRideRequestedHandler;
-    private CustomerCancelledCabHandler _customerCancelledCabHandler;
     private MenuRepository _menuRepository;
     private MenuRequestedHandler _menuRequestedHandler;
 
