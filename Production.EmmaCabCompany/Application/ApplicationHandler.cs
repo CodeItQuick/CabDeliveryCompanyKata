@@ -24,31 +24,31 @@ public class ApplicationHandler : IApplicationHandler
         var customerList = _customerListRepository.GetById(1); // separately managed
         customerList.CustomerCabCall(
             new Customer(request.CustomerName, request.StartLocation, request.EndLocation));
-        _customerListRepository.Add(customerList); // write
+        _customerListRepository.Save(customerList); // write
     }
     public void Handle(CustomerCancelledCab @event)
     {
         var customerList = _customerListRepository.GetById(1);
         customerList.CancelPickup();
-        _customerListRepository.Add(customerList);
+        _customerListRepository.Save(customerList);
     }
     public void Handle(CustomerDelivered @event)
     {
         var customerList = _customerListRepository.GetById(1);
         customerList.CustomerDelivered();
-        _customerListRepository.Add(customerList);
+        _customerListRepository.Save(customerList);
     }
     public void Handle(CustomerPickedUp request)
     {
         var customerList = _customerListRepository.GetById(1);
         customerList.PickupCustomer();
-        _customerListRepository.Add(customerList);
+        _customerListRepository.Save(customerList);
     }
     public void Handle(CustomerRideRequested @event)
     {
         var customerList = _customerListRepository.GetById(1);
         customerList.RideRequest();
-        _customerListRepository.Add(customerList);
+        _customerListRepository.Save(customerList);
     }
     public void Handle(AddCabCommand request)
     {

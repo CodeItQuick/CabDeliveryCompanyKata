@@ -10,7 +10,7 @@ public class FakeRepositoryTestNonGenericCustomerListRepository
     {
         var customerListRepository = new FakeCustomerListDatabaseRepository();
 
-        customerListRepository.Add(new CustomerList()
+        customerListRepository.Save(new CustomerList()
         {
             Customers = new List<Customer>()
         });

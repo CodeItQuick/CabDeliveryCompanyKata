@@ -12,7 +12,7 @@ public class FakeCustomerListDatabaseRepository : ICustomerListRepository
         throw new NotImplementedException();
     }
 
-    public void Add(CustomerList customerList)
+    public void Save(CustomerList customerList)
     {
         throw new NotImplementedException();
     }

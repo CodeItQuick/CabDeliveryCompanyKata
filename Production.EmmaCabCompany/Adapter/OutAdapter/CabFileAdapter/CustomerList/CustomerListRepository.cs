@@ -11,26 +11,6 @@ public class CustomerListRepository : ICustomerListRepository
     public CustomerListRepository(CabContext cabContext)
     {
         _cabContext = cabContext;
-        EnsureMenuExistsForSingleUser();
-        EnsureFleetExistsForSingleUser();
-    }
-
-    private void EnsureMenuExistsForSingleUser()
-    {
-        var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
-        if (fleetExists) return;
-        _cabContext.Menu.Add(new Menu.Menu() { Id = 1, Customers = new List<CustomerDto>()});
-        _cabContext.SaveChanges();
-        _cabContext.ChangeTracker.Clear();
-    }
-
-    private void EnsureFleetExistsForSingleUser()
-    {
-        var fleetExists = _cabContext.CustomerList.Any(x => x.Id == 1);
-        if (fleetExists) return;
-        _cabContext.CustomerList.Add(new CustomerListDto() { Id = 1, Customers = new List<CustomerDto>() });
-        _cabContext.SaveChanges();
-        _cabContext.ChangeTracker.Clear();
     }
 
     public Domain.CustomerList.CustomerList GetById(int customerListId)
@@ -45,7 +25,7 @@ public class CustomerListRepository : ICustomerListRepository
         return customerList;
     }
 
-    public void Add(Domain.CustomerList.CustomerList customerList)
+    public void Save(Domain.CustomerList.CustomerList customerList)
     {
         var customerListDto = _cabContext.CustomerList
             .Include(x => x.Customers)

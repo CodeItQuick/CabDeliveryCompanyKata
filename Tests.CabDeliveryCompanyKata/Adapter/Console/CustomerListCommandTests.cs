@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Handler;
@@ -25,9 +26,28 @@ public class CustomerListCommandsTests
         _cabContext = new CabContext(dbContextOptionsBuilder.Options);
         _cabContext.Database.Migrate();
         _cabContext.ChangeTracker.Clear();
+        EnsureFleetExistsForSingleUser();
+        EnsureMenuExistsForSingleUser();
         _customerListRepository = new CustomerListRepository(_cabContext);
         _fleetRepository = new FleetRepository(_cabContext);
         _applicationHandler = new ApplicationHandler(new FleetRepository(_cabContext), new CustomerListRepository(_cabContext));
+    }
+    private void EnsureMenuExistsForSingleUser()
+    {
+        var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
+        if (fleetExists) return;
+        _cabContext.Menu.Add(new Menu() { Id = 1, Customers = new List<CustomerDto>()});
+        _cabContext.SaveChanges();
+        _cabContext.ChangeTracker.Clear();
+    }
+
+    private void EnsureFleetExistsForSingleUser()
+    {
+        var fleetExists = _cabContext.CustomerList.Any(x => x.Id == 1);
+        if (fleetExists) return;
+        _cabContext.CustomerList.Add(new CustomerListDto() { Id = 1, Customers = new List<CustomerDto>() });
+        _cabContext.SaveChanges();
+        _cabContext.ChangeTracker.Clear();
     }
     [Fact]
     public void CustomerCanRequestCab()
