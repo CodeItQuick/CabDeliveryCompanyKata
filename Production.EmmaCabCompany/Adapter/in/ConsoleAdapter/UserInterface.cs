@@ -30,9 +30,27 @@ public class UserInterface
             .UseSqlite($"Data Source={connectionFile}");
         _cabContext = new CabContext(dbContextOptions.Options);
         _cabContext.Database.Migrate();
+        EnsureFleetExistsForSingleUser();
+        EnsureMenuExistsForSingleUser();
         _menuController = new MenuController(new MenuRepository(_cabContext));
         _dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
 
+    }
+    
+    private void EnsureFleetExistsForSingleUser()
+    {
+        var fleetExists = _cabContext.Fleet.Any(x => x.Id == 1);
+        if (fleetExists) return;
+        _cabContext.Fleet.Add(new Fleet() { Id = 1 });
+        _cabContext.SaveChanges();
+    }
+
+    private void EnsureMenuExistsForSingleUser()
+    {
+        var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
+        if (fleetExists) return;
+        _cabContext.Menu.Add(new Menu() { Id = 1 });
+        _cabContext.SaveChanges();
     }
 
     public void Run()

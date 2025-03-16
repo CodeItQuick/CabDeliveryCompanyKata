@@ -11,7 +11,7 @@ public class RemoveCabCommandCommandHandler : IRemoveCabCommandCommandHandler
 
     public void Handle(RemoveCabCommand addCabCommand)
     {
-        _fleetRepository.RemoveCab(addCabCommand.FleetId);
+        _fleetRepository.Remove(addCabCommand.FleetId);
     }
 }
 

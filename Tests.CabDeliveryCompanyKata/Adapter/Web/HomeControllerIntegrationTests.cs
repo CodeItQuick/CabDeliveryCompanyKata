@@ -19,8 +19,6 @@ namespace Tests.CabDeliveryCompanyKata.Adapter.Web;
 public class HomeControllerIntegrationTests
 {
     private CabContext _cabContext;
-    private FleetRepository _fleetRepository;
-    private AddCabCabCommandHandler _addCabCabCommandHandler;
     private HomeController _homeController;
 
     public HomeControllerIntegrationTests()
@@ -30,8 +28,8 @@ public class HomeControllerIntegrationTests
 
         _cabContext = new CabContext(cabContextOptions.Options);
         _cabContext.Database.Migrate();
-        _fleetRepository = new FleetRepository(_cabContext);
-        _addCabCabCommandHandler = new AddCabCabCommandHandler(_fleetRepository);
+        EnsureFleetExistsForSingleUser();
+        EnsureMenuExistsForSingleUser();
         var fileSettings = new FileSettings()
         {
             CabFileNameCsv = $"{Guid.NewGuid().ToString()}.csv",
@@ -71,5 +69,29 @@ public class HomeControllerIntegrationTests
         Assert.Equivalent(
             (response!.Model as CabDisplayModel)!.DisplayMenu.ToArray(), 
             (int[]) [0, 1, 2, 7]);
+    }
+    
+    private void EnsureFleetExistsForSingleUser()
+    {
+        var fleetExists = _cabContext.Fleet.Any(x => x.Id == 1);
+        if (fleetExists) return;
+        _cabContext.Fleet.Add(new Fleet() { Id = 1 });
+        _cabContext.SaveChanges();
+    }
+
+    private void EnsureMenuExistsForSingleUser()
+    {
+        var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
+        if (fleetExists) return;
+        _cabContext.Menu.Add(new Menu() { Id = 1 });
+        _cabContext.SaveChanges();
+    }
+
+    public void EmptyFleet(int fleetId)
+    {
+        var fleet = _cabContext.Fleet.Include(x => x.FleetOfCabs)
+            .FirstOrDefault(x => x.Id == fleetId);
+        _cabContext.Cabs.RemoveRange(fleet!.FleetOfCabs.ToList());
+        _cabContext.SaveChanges();
     }
 }

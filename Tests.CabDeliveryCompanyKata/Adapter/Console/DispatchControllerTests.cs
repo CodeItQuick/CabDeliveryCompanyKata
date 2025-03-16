@@ -18,8 +18,33 @@ public class DispatchControllerTests
             new DbContextOptionsBuilder<CabContext>()
                 .UseSqlite($"Data Source={Guid.NewGuid()}.db").Options);
         _cabContext.Database.Migrate();
+        EnsureFleetExistsForSingleUser();
+        EnsureMenuExistsForSingleUser();
     }
 
+    private void EnsureFleetExistsForSingleUser()
+    {
+        var fleetExists = _cabContext.Fleet.Any(x => x.Id == 1);
+        if (fleetExists) return;
+        _cabContext.Fleet.Add(new Fleet() { Id = 1 });
+        _cabContext.SaveChanges();
+    }
+
+    private void EnsureMenuExistsForSingleUser()
+    {
+        var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
+        if (fleetExists) return;
+        _cabContext.Menu.Add(new Menu() { Id = 1 });
+        _cabContext.SaveChanges();
+    }
+
+    public void EmptyFleet(int fleetId)
+    {
+        var fleet = _cabContext.Fleet.Include(x => x.FleetOfCabs)
+            .FirstOrDefault(x => x.Id == fleetId);
+        _cabContext.Cabs.RemoveRange(fleet!.FleetOfCabs.ToList());
+        _cabContext.SaveChanges();
+    }
     [Fact]
     public void CanAddCabsToTheFleet()
     {
@@ -56,8 +81,6 @@ public class DispatchControllerTests
     [Fact]
     public void CannotRemoveCabsWithPassengerInIt()
     {
-        var customerListFilename = $"customer_list_{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_{Guid.NewGuid()}.csv";
         var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -137,8 +160,6 @@ public class DispatchControllerTests
     [Fact]
     public void CanCancelPickup()
     {
-        var customerListFilename = $"customer_list_{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_{Guid.NewGuid()}.csv";
         var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -164,8 +185,6 @@ public class DispatchControllerTests
     [Fact]
     public void CabCanDriveToCustomerAfterCabRequest()
     {
-        var customerListFilename = $"customer_list_{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_{Guid.NewGuid()}.csv";
         var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -200,8 +219,6 @@ public class DispatchControllerTests
     [Fact]
     public void CabCanPickupCustomer()
     {
-        var customerListFilename = $"customer_list_{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_{Guid.NewGuid()}.csv";
         var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -237,8 +254,6 @@ public class DispatchControllerTests
     [Fact]
     public void CabCanDropOffCustomer()
     {
-        var customerListFilename = $"customer_list_{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_{Guid.NewGuid()}.csv";
         var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -253,8 +268,6 @@ public class DispatchControllerTests
     [Fact]
     public void CabCanDropOffOnlyOneCustomerAtATime()
     {
-        var customerListFilename = $"customer_list_{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_{Guid.NewGuid()}.csv";
         var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.AddCab();
@@ -273,8 +286,6 @@ public class DispatchControllerTests
     [Fact]
     public void CabCanDropOffTwoCustomers()
     {
-        var customerListFilename = $"customer_list_{Guid.NewGuid()}.csv";
-        var cabListFilename = $"cab_list_{Guid.NewGuid()}.csv";
         var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
         dispatchController.AddCab();
         dispatchController.AddCab();

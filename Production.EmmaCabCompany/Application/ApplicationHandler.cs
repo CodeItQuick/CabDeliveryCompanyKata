@@ -2,6 +2,7 @@ using Production.EmmaCabCompany.Application.CustomerList;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
 using Production.EmmaCabCompany.Application.Fleet;
 using Production.EmmaCabCompany.Domain.CustomerList;
+using Production.EmmaCabCompany.Domain.Fleet;
 
 namespace Production.EmmaCabCompany.Application;
 
@@ -51,11 +52,15 @@ public class ApplicationHandler : IApplicationHandler
     }
     public void Handle(AddCabCommand request)
     {
-        _fleetRepository.AddCab(request.CabName, request.Latitude, request.Longitude);
+        _fleetRepository.Save(new Cab(
+            request.CabName, 
+            0, 
+            request.Latitude, 
+            request.Longitude));
     }
     
     public void Handle(RemoveCabCommand addCabCommand)
     {
-        _fleetRepository.RemoveCab(addCabCommand.FleetId);
+        _fleetRepository.Remove(addCabCommand.FleetId);
     }
 }
