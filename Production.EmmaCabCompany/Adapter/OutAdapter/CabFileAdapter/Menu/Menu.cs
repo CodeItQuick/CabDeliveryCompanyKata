@@ -8,9 +8,9 @@ namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 
 [PrimaryKey("Id")]
 [Table("Menu")]
-public class Menu
+public class Menu : IdentityClass
 {
-    public int Id { get; set; }
+    public override int Id { get; set; }
     [ForeignKey("CustomerId")] public List<CustomerDto> Customers { get; set; }
     [ForeignKey("CabId")] public List<CabDto> Cabs { get; set; }
 

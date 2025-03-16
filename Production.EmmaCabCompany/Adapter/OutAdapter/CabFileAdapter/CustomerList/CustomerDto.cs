@@ -18,7 +18,7 @@ public class CustomerDto
     public string? StartLocation { get; init; }
     [Column("EndLocation")]
     public string? EndLocation { get; init; }
-    [NotMapped]
+    [NotMapped] // should this exist at this layer if its "not mapped"?
     public (double, double) PickupLocation { get; init; }
     [Column("Status")]
     public CustomerStatus Status { get; init; }

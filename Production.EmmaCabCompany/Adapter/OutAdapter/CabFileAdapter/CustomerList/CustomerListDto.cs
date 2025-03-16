@@ -5,9 +5,9 @@ namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerLi
 
 [PrimaryKey("Id")]
 [Table("CustomerList")]
-public class CustomerListDto
+public class CustomerListDto : IdentityClass
 {
-    public int Id { get; set; }
+    public override int Id { get; set; }
     [ForeignKey("CustomerId")]
     public List<CustomerDto> Customers { get; set; }
 }

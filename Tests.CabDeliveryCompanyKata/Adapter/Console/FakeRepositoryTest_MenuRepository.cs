@@ -4,7 +4,7 @@ using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 
 namespace Tests.CabDeliveryCompanyKata.Adapter.Console;
 
-public class FakeRepositoryTest
+public class FakeRepositoryTest_MenuRepository
 {
     [Fact]
     public void Repository_CanCreateAnItem()

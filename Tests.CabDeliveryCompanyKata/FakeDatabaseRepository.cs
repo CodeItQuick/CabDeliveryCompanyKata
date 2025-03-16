@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Globalization;
-using System.Linq.Expressions;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
-using Production.EmmaCabCompany.Application.Menu;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
 namespace Tests.CabDeliveryCompanyKata;
 
