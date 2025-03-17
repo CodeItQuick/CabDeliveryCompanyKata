@@ -17,7 +17,7 @@ public class FleetRepository : IFleetRepository
     {
         var updateFleet = _cabContext.Fleet.Include(x => x.FleetOfCabs)
             .FirstOrDefault(x => x.Id == 1)!;
-        var cab1 = new CabDto("Cab Driver Name", 0, 0, 0);
+        var cab1 = new CabDto(cab._cabName, cab._wallet, cab._latitude, cab._longitude);
         updateFleet.FleetOfCabs.Add(cab1);
         _cabContext.Fleet.Update(updateFleet);
         _cabContext.SaveChanges();
