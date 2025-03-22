@@ -7,7 +7,7 @@ namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerLi
 
 [PrimaryKey("Id")]
 [Table("Customers")]
-public class CustomerDto
+public class PatronDto
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

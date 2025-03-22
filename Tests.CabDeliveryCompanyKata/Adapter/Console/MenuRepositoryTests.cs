@@ -40,8 +40,8 @@ public class MenuCommandTests
     [Fact]
     public void MenuDisplaysOptionsThreeAndSixWhenCustomerCallInProgress()
     {
-        _cabContext.Customers.Add(
-            new CustomerDto()
+        _cabContext.Patron.Add(
+            new PatronDto()
             {
                 Name = "Dan", StartLocation = "1 Fulton Drive", EndLocation = "2 Destination Lane",
                 Status = CustomerStatus.CustomerCallInProgress, MenuId = 1, CustomerId = 1
@@ -60,8 +60,8 @@ public class MenuCommandTests
     [Fact]
     public void MenuDisplaysOptionsFourWhenCustomerWaitingPickup()
     {
-        _cabContext.Customers.Add(
-            new CustomerDto()
+        _cabContext.Patron.Add(
+            new PatronDto()
             {
                 Name = "Dan", StartLocation = "1 Fulton Drive", EndLocation = "2 Destination Lane",
                 Status = CustomerStatus.WaitingPickup, MenuId = 1, CustomerId = 1
@@ -79,8 +79,8 @@ public class MenuCommandTests
     [Fact]
     public void MenuDisplaysOptionsFiveWhenCustomerEnroute()
     {
-        _cabContext.Customers.Add(
-            new CustomerDto()
+        _cabContext.Patron.Add(
+            new PatronDto()
             {
                 Name = "Dan", StartLocation = "1 Fulton Drive", EndLocation = "2 Destination Lane",
                 Status = CustomerStatus.Enroute, MenuId = 1, CustomerId = 1

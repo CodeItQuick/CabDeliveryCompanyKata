@@ -80,12 +80,12 @@ public class FleetRepositoryTests
         _cabContext.Menu.Add(new Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu.Menu() { Id = 1 });
         _cabContext.SaveChanges();
     }
-    
-    public void EmptyFleet(int fleetId)
+
+    private void EmptyFleet(int fleetId)
     {
         var fleet = _cabContext.Fleet.Include(x => x.FleetOfCabs)
             .FirstOrDefault(x => x.Id == fleetId);
-        _cabContext.Cabs.RemoveRange(fleet!.FleetOfCabs.ToList());
+        _cabContext.CabDrivers.RemoveRange(fleet!.FleetOfCabs.ToList());
         _cabContext.SaveChanges();
     }
 }

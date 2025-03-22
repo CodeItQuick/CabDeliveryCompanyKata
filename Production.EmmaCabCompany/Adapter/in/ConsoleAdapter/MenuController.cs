@@ -1,3 +1,4 @@
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 using Production.EmmaCabCompany.Application.Menu;
 using Production.EmmaCabCompany.Domain.Menu;
@@ -7,10 +8,12 @@ namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 public class MenuController
 {
     private readonly MenuRequestedHandler _menuRequested;
+    private MenuRepository _menuRepository;
 
-    public MenuController(MenuRepository menuRepository)
+    public MenuController(CabContext cabContext)
     {
-        _menuRequested = new MenuRequestedHandler(menuRepository);
+        _menuRepository = new MenuRepository(cabContext);
+        _menuRequested = new MenuRequestedHandler(_menuRepository);
     }
 
     public List<string> DisplayMenu()

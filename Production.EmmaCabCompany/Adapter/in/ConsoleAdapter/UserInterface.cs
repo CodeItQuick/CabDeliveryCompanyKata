@@ -32,8 +32,8 @@ public class UserInterface
         _cabContext.Database.Migrate();
         EnsureFleetExistsForSingleUser();
         EnsureMenuExistsForSingleUser();
-        _menuController = new MenuController(new MenuRepository(_cabContext));
-        _dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        _menuController = new MenuController(_cabContext);
+        _dispatchController = new DispatchController(_cabContext);
 
     }
     

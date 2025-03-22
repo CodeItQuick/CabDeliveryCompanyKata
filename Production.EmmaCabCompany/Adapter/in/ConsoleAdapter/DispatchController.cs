@@ -1,3 +1,4 @@
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
@@ -15,11 +16,11 @@ public class DispatchController
     private readonly MenuRepository _menuRepository;
     private ApplicationHandler _applicationHandler;
 
-    public DispatchController(CustomerListRepository customerListRepository, FleetRepository fleetRepository, MenuRepository menuRepository)
+    public DispatchController(CabContext cabContext)
     {
-        _customerListRepository = customerListRepository;
-        _menuRepository = menuRepository;
-        _applicationHandler = new ApplicationHandler(fleetRepository, customerListRepository);
+        _customerListRepository = new CustomerListRepository(cabContext);
+        _menuRepository = new MenuRepository(cabContext);
+        _applicationHandler = new ApplicationHandler(cabContext);
     }
 
     public string AddCab()

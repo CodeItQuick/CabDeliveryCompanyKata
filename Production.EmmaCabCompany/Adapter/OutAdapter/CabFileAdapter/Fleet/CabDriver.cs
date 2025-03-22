@@ -7,7 +7,7 @@ namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 
 [Table("Cabs")]
 [PrimaryKey("Id")]
-public class CabDto
+public class CabDriver
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -27,7 +27,7 @@ public class CabDto
     // [ForeignKey(nameof(Fleet.Id))]
     // public virtual Fleet Fleet { get; set; }
 
-    public CabDto(string? cabName, int wallet, double latitude, double longitude)
+    public CabDriver(string? cabName, int wallet, double latitude, double longitude)
     {
         _cabName = cabName;
         _wallet = wallet;

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.WebCabCompany;
 using Production.WebCabCompany.Models;
 
@@ -63,6 +64,10 @@ public class TestingWebApiFactory: WebApplicationFactory<Program>
             // });
             //
             //
+            services.AddDbContext<CabContext>(options =>
+            {
+                options.UseInMemoryDatabase("testing_blog-application-2-cab-context.db");
+            });
             var sp = services.BuildServiceProvider();
             using (var scope = sp.CreateScope())
             using (var appContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())

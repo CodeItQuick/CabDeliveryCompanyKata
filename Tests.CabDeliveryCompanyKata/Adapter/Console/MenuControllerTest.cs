@@ -17,7 +17,7 @@ public class MenuControllerTest
             .UseInMemoryDatabase($"{Guid.NewGuid()}.db")
             .Options;
         using var cabContext = new CabContext(dbContextOptions);
-        var menuController = new MenuController(new MenuRepository(cabContext));
+        var menuController = new MenuController(cabContext);
 
         var displayMenu = menuController.DisplayMenu();
         
@@ -34,9 +34,9 @@ public class MenuControllerTest
         using var cabContext = new CabContext(dbContextOptions);
         cabContext.Fleet.Add(new Fleet() { Id = 1 });
         cabContext.SaveChanges();
-        var menuController = new MenuController(new MenuRepository(cabContext));
+        var menuController = new MenuController(cabContext);
 
-        var dispatchController = new DispatchController(new CustomerListRepository(cabContext), new FleetRepository(cabContext), new MenuRepository(cabContext));
+        var dispatchController = new DispatchController(cabContext);
 
         dispatchController.AddCab();
         

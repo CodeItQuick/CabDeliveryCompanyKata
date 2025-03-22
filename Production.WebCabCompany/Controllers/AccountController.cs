@@ -116,7 +116,7 @@ public class AccountController : Controller
     {
         await _signInManager.SignOutAsync();
         _logger.LogInformation(4, "User logged out.");
-        return RedirectToAction(nameof(HomeController.Index), "Home");
+        return RedirectToAction(nameof(MenuController.Index), "Menu");
     }
 
     #region Helpers
@@ -136,10 +136,8 @@ public class AccountController : Controller
         {
             return Redirect(returnUrl);
         }
-        else
-        {
-            return RedirectToAction(nameof(HomeController.Index), "Home");
-        }
+
+        return RedirectToAction(nameof(MenuController.Index), "Menu");
     }
 
     #endregion

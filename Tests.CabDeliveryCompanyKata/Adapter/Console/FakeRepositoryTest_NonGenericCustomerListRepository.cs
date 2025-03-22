@@ -24,8 +24,8 @@ public class FakeRepositoryTestNonGenericCustomerListRepository
     [Fact]
     public void Repository_CanCreateAnItemWithDetails()
     {
-        var customerListRepository = new FakeDatabaseRepository<CustomerListDto>();
-        var firstCustomer = new CustomerDto()
+        var customerListRepository = new FakeDatabaseRepository<FleetCoordinator>();
+        var firstCustomer = new PatronDto()
         {
             Id = 7,
             Name = "Hello World",
@@ -35,9 +35,9 @@ public class FakeRepositoryTestNonGenericCustomerListRepository
             MenuId = 1,
             StartLocation = "1 Starting Drive"
         };
-        customerListRepository.Create(new CustomerListDto()
+        customerListRepository.Create(new FleetCoordinator()
         {
-            Customers =
+            Patrons =
             [
                 firstCustomer
             ]
@@ -47,46 +47,46 @@ public class FakeRepositoryTestNonGenericCustomerListRepository
 
         Assert.Single(customerListDto);
         Assert.Equal(1, customerListDto.First().Id);
-        Assert.Equal(1, customerListDto.First().Customers.Count);
-        Assert.Equivalent(firstCustomer, customerListDto.First().Customers.First());
+        Assert.Equal(1, customerListDto.First().Patrons.Count);
+        Assert.Equivalent(firstCustomer, customerListDto.First().Patrons.First());
     }
 
     [Fact]
     public void Repository_CanAddTwoItems()
     {
-        var customerListRepository = new FakeDatabaseRepository<CustomerListDto>();
-        customerListRepository.Create(new CustomerListDto()
+        var customerListRepository = new FakeDatabaseRepository<FleetCoordinator>();
+        customerListRepository.Create(new FleetCoordinator()
         {
-            Customers = new List<CustomerDto>()
+            Patrons = new List<PatronDto>()
         });
-        customerListRepository.Create(new CustomerListDto()
+        customerListRepository.Create(new FleetCoordinator()
         {
-            Customers = new List<CustomerDto>()
+            Patrons = new List<PatronDto>()
         });
 
         var customerListDto = customerListRepository.Read();
 
         Assert.Equal(2, customerListDto.Count);
         Assert.Equal(1, customerListDto.First().Id);
-        Assert.Equal(0, customerListDto.First().Customers.Count);
+        Assert.Equal(0, customerListDto.First().Patrons.Count);
     }
 
     [Fact]
     public void Repository_CanUpdateAnItem()
     {
-        var customerListRepository = new FakeDatabaseRepository<CustomerListDto>();
-        customerListRepository.Create(new CustomerListDto()
+        var customerListRepository = new FakeDatabaseRepository<FleetCoordinator>();
+        customerListRepository.Create(new FleetCoordinator()
         {
-            Customers = new List<CustomerDto>()
+            Patrons = new List<PatronDto>()
         });
-        customerListRepository.Create(new CustomerListDto()
+        customerListRepository.Create(new FleetCoordinator()
         {
-            Customers = new List<CustomerDto>()
+            Patrons = new List<PatronDto>()
         });
 
-        customerListRepository.Update(2, new CustomerListDto()
+        customerListRepository.Update(2, new FleetCoordinator()
         {
-            Customers = new List<CustomerDto>()
+            Patrons = new List<PatronDto>()
             {
                 new() { Id = 1, Name = "hello world"}
             }
@@ -96,24 +96,24 @@ public class FakeRepositoryTestNonGenericCustomerListRepository
 
         Assert.Equal(2, customerListDto.Count);
         Assert.Equal(2, customerListDto.Find(x => x.Id == 2).Id);
-        Assert.Equal(1, customerListDto.Find(x => x.Id == 2).Customers.Count);
+        Assert.Equal(1, customerListDto.Find(x => x.Id == 2).Patrons.Count);
     }
 
     [Fact]
     public void Repository_CanDeleteAnItem()
     {
-        var customerListRepository = new FakeDatabaseRepository<CustomerListDto>();
-        customerListRepository.Create(new CustomerListDto()
+        var customerListRepository = new FakeDatabaseRepository<FleetCoordinator>();
+        customerListRepository.Create(new FleetCoordinator()
         {
-            Customers = new List<CustomerDto>()
+            Patrons = new List<PatronDto>()
         });
-        customerListRepository.Create(new CustomerListDto()
+        customerListRepository.Create(new FleetCoordinator()
         {
-            Customers = new List<CustomerDto>()
+            Patrons = new List<PatronDto>()
         });
-        customerListRepository.Create(new CustomerListDto()
+        customerListRepository.Create(new FleetCoordinator()
         {
-            Customers = new List<CustomerDto>()
+            Patrons = new List<PatronDto>()
         });
         customerListRepository.Delete(2);
 
@@ -121,25 +121,25 @@ public class FakeRepositoryTestNonGenericCustomerListRepository
 
         Assert.Equal(2, customerListDto.Count);
         Assert.Equal(1, customerListDto.First().Id);
-        Assert.Equal(0, customerListDto.First().Customers.Count);
+        Assert.Equal(0, customerListDto.First().Patrons.Count);
         Assert.Equal(3, customerListDto.Skip(1).First().Id);
-        Assert.Equal(0, customerListDto.Skip(1).First().Customers.Count);
+        Assert.Equal(0, customerListDto.Skip(1).First().Patrons.Count);
     }
     [Fact]
     public void Repository_CanSearchUsingFilters()
     {
-        var customerListRepository = new FakeDatabaseRepository<CustomerListDto>();
-        customerListRepository.Create(new CustomerListDto()
+        var customerListRepository = new FakeDatabaseRepository<FleetCoordinator>();
+        customerListRepository.Create(new FleetCoordinator()
         {
-            Customers = new List<CustomerDto>()
+            Patrons = new List<PatronDto>()
         });
-        customerListRepository.Create(new CustomerListDto()
+        customerListRepository.Create(new FleetCoordinator()
         {
-            Customers = new List<CustomerDto>()
+            Patrons = new List<PatronDto>()
         });
-        customerListRepository.Create(new CustomerListDto()
+        customerListRepository.Create(new FleetCoordinator()
         {
-            Customers = new List<CustomerDto>()
+            Patrons = new List<PatronDto>()
         });
         customerListRepository.Delete(2);
 
@@ -148,6 +148,6 @@ public class FakeRepositoryTestNonGenericCustomerListRepository
 
         Assert.Equal(1, customerListDto.Count);
         Assert.Equal(3, customerListDto.First().Id);
-        Assert.Equal(0, customerListDto.First().Customers.Count);
+        Assert.Equal(0, customerListDto.First().Patrons.Count);
     }
 }

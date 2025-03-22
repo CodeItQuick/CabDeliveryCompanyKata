@@ -42,14 +42,13 @@ public class DispatchControllerTests
     {
         var fleet = _cabContext.Fleet.Include(x => x.FleetOfCabs)
             .FirstOrDefault(x => x.Id == fleetId);
-        _cabContext.Cabs.RemoveRange(fleet!.FleetOfCabs.ToList());
+        _cabContext.CabDrivers.RemoveRange(fleet!.FleetOfCabs.ToList());
         _cabContext.SaveChanges();
     }
     [Fact]
     public void CanAddCabsToTheFleet()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext),
-            new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
 
         var addCabMessage = dispatchController.AddCab();
 
@@ -59,8 +58,7 @@ public class DispatchControllerTests
     [Fact]
     public void CanRemoveCabsFromTheFleet()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext),
-            new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
         var removeCab = dispatchController.RemoveCab();
 
@@ -70,8 +68,7 @@ public class DispatchControllerTests
     [Fact]
     public void CannotRemoveCabsFromEmptyFleet()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext),
-            new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
 
         var result = dispatchController.RemoveCab();
 
@@ -81,7 +78,7 @@ public class DispatchControllerTests
     [Fact]
     public void CannotRemoveCabsWithPassengerInIt()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
@@ -95,8 +92,7 @@ public class DispatchControllerTests
     [Fact]
     public void CanRemoveCabsWithoutPassengerInside()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext),
-            new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -111,8 +107,7 @@ public class DispatchControllerTests
     [Fact]
     public void CustomerCanCallInCab()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext),
-            new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
 
         var customerCabCall = dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -123,8 +118,7 @@ public class DispatchControllerTests
     [Fact]
     public void TwoCustomersCanCallInCab()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext),
-            new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
@@ -136,8 +130,7 @@ public class DispatchControllerTests
     [Fact]
     public void FirstCustomerCallInCancelsSecondCustomerCanCallInCab()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext),
-            new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.CustomerCancelledCabRide();
@@ -150,7 +143,7 @@ public class DispatchControllerTests
     [Fact]
     public void CannotPickupUnlessCustomersWaiting()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
 
         var customerCabCall = dispatchController.CustomerCancelledCabRide();
 
@@ -160,7 +153,7 @@ public class DispatchControllerTests
     [Fact]
     public void CanCancelPickup()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
@@ -172,7 +165,7 @@ public class DispatchControllerTests
     [Fact]
     public void CanCancelPickupAtAnyTime()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
@@ -185,7 +178,7 @@ public class DispatchControllerTests
     [Fact]
     public void CabCanDriveToCustomerAfterCabRequest()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
@@ -198,7 +191,7 @@ public class DispatchControllerTests
     [Fact]
     public void CannotSendCabRequestUntilCustomerCallsIn()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
 
         var sendCabRequest = dispatchController.SendCabRequest();
@@ -209,7 +202,7 @@ public class DispatchControllerTests
     [Fact]
     public void CannotSendCabRequestUntilCabsAreInFleet()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
 
         var sendCabRequest = dispatchController.SendCabRequest();
 
@@ -219,7 +212,7 @@ public class DispatchControllerTests
     [Fact]
     public void CabCanPickupCustomer()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
@@ -232,7 +225,7 @@ public class DispatchControllerTests
     [Fact]
     public void CabCannotPickupCustomerIfNoCabsInFleet()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
 
         var sendCabRequest = dispatchController.CabNotifiesPickedUp();
 
@@ -242,7 +235,7 @@ public class DispatchControllerTests
     [Fact]
     public void CabCannotPickupCustomerIfCustomerNotWaitingPickup()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
@@ -254,7 +247,7 @@ public class DispatchControllerTests
     [Fact]
     public void CabCanDropOffCustomer()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
         dispatchController.SendCabRequest();
@@ -268,7 +261,7 @@ public class DispatchControllerTests
     [Fact]
     public void CabCanDropOffOnlyOneCustomerAtATime()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -286,7 +279,7 @@ public class DispatchControllerTests
     [Fact]
     public void CabCanDropOffTwoCustomers()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
@@ -305,7 +298,7 @@ public class DispatchControllerTests
     [Fact]
     public void CabCannotDropOffCustomerIfNotInTransport()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext), new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
         dispatchController.AddCab();
         dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
 
@@ -319,8 +312,7 @@ public class DispatchControllerTests
     [Fact]
     public void InvalidOptionSelectedReturnsError()
     {
-        var dispatchController = new DispatchController(new CustomerListRepository(_cabContext),
-            new FleetRepository(_cabContext), new MenuRepository(_cabContext));
+        var dispatchController = new DispatchController(_cabContext);
 
         var dispatch = dispatchController.CabNotifiesDroppedOff();
 

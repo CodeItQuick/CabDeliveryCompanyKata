@@ -1,3 +1,6 @@
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 using Production.EmmaCabCompany.Application.CustomerList;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
 using Production.EmmaCabCompany.Application.Fleet;
@@ -6,17 +9,16 @@ using Production.EmmaCabCompany.Domain.Fleet;
 
 namespace Production.EmmaCabCompany.Application;
 
-public class ApplicationHandler : IApplicationHandler 
+public class ApplicationHandler : IApplicationHandler, IDisposable
 {
     private readonly IFleetRepository _fleetRepository;
     private readonly ICustomerListRepository _customerListRepository;
     
-    public ApplicationHandler(
-        IFleetRepository fleetRepository,
-        ICustomerListRepository customerListRepository)
+    public ApplicationHandler(CabContext cabContext)
     {
-        _fleetRepository = fleetRepository;
-        _customerListRepository = customerListRepository;
+        _cabContext = cabContext;
+        _fleetRepository = new FleetRepository(_cabContext);
+        _customerListRepository = new CustomerListRepository(_cabContext);
     }
 
     public void Handle(CustomerCabRequested request)
@@ -62,5 +64,26 @@ public class ApplicationHandler : IApplicationHandler
     public void Handle(RemoveCabCommand addCabCommand)
     {
         _fleetRepository.Remove(addCabCommand.FleetId);
+    }
+
+    private bool disposed = false;
+    private CabContext _cabContext;
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!this.disposed)
+        {
+            if (disposing)
+            {
+                _cabContext.Dispose();
+            }
+        }
+        this.disposed = true;
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

@@ -30,22 +30,22 @@ public class CustomerListCommandsTests
         EnsureMenuExistsForSingleUser();
         _customerListRepository = new CustomerListRepository(_cabContext);
         _fleetRepository = new FleetRepository(_cabContext);
-        _applicationHandler = new ApplicationHandler(new FleetRepository(_cabContext), new CustomerListRepository(_cabContext));
+        _applicationHandler = new ApplicationHandler(_cabContext);
     }
     private void EnsureMenuExistsForSingleUser()
     {
         var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
         if (fleetExists) return;
-        _cabContext.Menu.Add(new Menu() { Id = 1, Customers = new List<CustomerDto>()});
+        _cabContext.Menu.Add(new Menu() { Id = 1, Customers = new List<PatronDto>()});
         _cabContext.SaveChanges();
         _cabContext.ChangeTracker.Clear();
     }
 
     private void EnsureFleetExistsForSingleUser()
     {
-        var fleetExists = _cabContext.CustomerList.Any(x => x.Id == 1);
+        var fleetExists = _cabContext.FleetCoordinator.Any(x => x.Id == 1);
         if (fleetExists) return;
-        _cabContext.CustomerList.Add(new CustomerListDto() { Id = 1, Customers = new List<CustomerDto>() });
+        _cabContext.FleetCoordinator.Add(new FleetCoordinator() { Id = 1, Patrons = new List<PatronDto>() });
         _cabContext.SaveChanges();
         _cabContext.ChangeTracker.Clear();
     }
@@ -53,14 +53,14 @@ public class CustomerListCommandsTests
     public void CustomerCanRequestCab()
     {
         _applicationHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destination Lane"));
-        Assert.Equal("Dan", _cabContext.CustomerList
-            .Include(x => x.Customers)
+        Assert.Equal("Dan", _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault()
-            !.Customers.FirstOrDefault()!.Name);
-        Assert.Equal(CustomerStatus.CustomerCallInProgress, _cabContext.CustomerList
-            .Include(x => x.Customers)
+            !.Patrons.FirstOrDefault()!.Name);
+        Assert.Equal(CustomerStatus.CustomerCallInProgress, _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault()
-            !.Customers.FirstOrDefault()!.Status);
+            !.Patrons.FirstOrDefault()!.Status);
         
     }
     [Fact]
@@ -68,33 +68,33 @@ public class CustomerListCommandsTests
     {
         _applicationHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destination Lane"));
         _applicationHandler.Handle(new CustomerCabRequested("Lisa", "1 Fulton Drive", "2 Destination Lane"));
-        Assert.Equal(1, _cabContext.CustomerList.Count());
-        Assert.Equal(2, _cabContext.CustomerList
-            .Include(customerList => customerList.Customers!)
-            .FirstOrDefault()!.Customers!.Count);
-        Assert.Equal("Dan", _cabContext.CustomerList
-            .Include(x => x.Customers)
+        Assert.Equal(1, _cabContext.FleetCoordinator.Count());
+        Assert.Equal(2, _cabContext.FleetCoordinator
+            .Include(customerList => customerList.Patrons!)
+            .FirstOrDefault()!.Patrons!.Count);
+        Assert.Equal("Dan", _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault()
-            !.Customers.FirstOrDefault()!.Name);
-        Assert.Equal("Lisa", _cabContext.CustomerList
-            .Include(x => x.Customers)
+            !.Patrons.FirstOrDefault()!.Name);
+        Assert.Equal("Lisa", _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault()
-            !.Customers.Skip(1).FirstOrDefault()!.Name);
+            !.Patrons.Skip(1).FirstOrDefault()!.Name);
     }
     [Fact]
     public void CustomerCanRequestCabAndBeSentCab()
     {
-        _applicationHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destination Lane"));      Assert.Equal(1, _cabContext.CustomerList.Count());
+        _applicationHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destination Lane"));      Assert.Equal(1, _cabContext.FleetCoordinator.Count());
         _applicationHandler.Handle(new CustomerRideRequested() { CustomerListId = 1});      
-        Assert.Equal(1, _cabContext.CustomerList.Count());
-        Assert.Equal("Dan", _cabContext.CustomerList
-            .Include(x => x.Customers)
+        Assert.Equal(1, _cabContext.FleetCoordinator.Count());
+        Assert.Equal("Dan", _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault()
-            !.Customers.FirstOrDefault()!.Name);
-        Assert.Equal(CustomerStatus.WaitingPickup, _cabContext.CustomerList
-            .Include(x => x.Customers)
+            !.Patrons.FirstOrDefault()!.Name);
+        Assert.Equal(CustomerStatus.WaitingPickup, _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault()
-            !.Customers.FirstOrDefault()!.Status);
+            !.Patrons.FirstOrDefault()!.Status);
     }
     [Fact]
     public void TwoCustomersCanRequestCabAndBeSentCab()
@@ -103,19 +103,19 @@ public class CustomerListCommandsTests
         _applicationHandler.Handle(new CustomerRideRequested() { CustomerListId = 1});      
         _applicationHandler.Handle(new CustomerCabRequested("Lisa", "1 Fulton Drive", "2 Destionation Lane"));
         _applicationHandler.Handle(new CustomerRideRequested() { CustomerListId = 1});      
-        Assert.Equal(2, _cabContext.CustomerList
-            .Include(customerList => customerList.Customers!)
-            .FirstOrDefault()!.Customers!.Count);
-        Assert.Equal("Lisa", _cabContext.CustomerList
-            .Include(x => x.Customers)
+        Assert.Equal(2, _cabContext.FleetCoordinator
+            .Include(customerList => customerList.Patrons!)
+            .FirstOrDefault()!.Patrons!.Count);
+        Assert.Equal("Lisa", _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault()
-            !.Customers
+            !.Patrons
             .Skip(1)
             .FirstOrDefault()!.Name);
-        Assert.Equal(CustomerStatus.WaitingPickup, _cabContext.CustomerList
-            .Include(x => x.Customers)
+        Assert.Equal(CustomerStatus.WaitingPickup, _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault()
-            !.Customers
+            !.Patrons
             .Skip(1)
             .FirstOrDefault()!.Status);
     }
@@ -125,18 +125,18 @@ public class CustomerListCommandsTests
         _applicationHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destionation Lane"));
         _applicationHandler.Handle(new CustomerRideRequested() { CustomerListId = 1});
         _applicationHandler.Handle(new CustomerPickedUp());
-        Assert.Equal(1, _cabContext.CustomerList
-            .Include(customerList => customerList.Customers!)
-            .FirstOrDefault()!.Customers!.Count);
-        Assert.Equal("Dan", _cabContext.CustomerList
-            .Include(x => x.Customers)
+        Assert.Equal(1, _cabContext.FleetCoordinator
+            .Include(customerList => customerList.Patrons!)
+            .FirstOrDefault()!.Patrons!.Count);
+        Assert.Equal("Dan", _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault()
-            !.Customers
+            !.Patrons
             .FirstOrDefault()!.Name);
-        Assert.Equal(CustomerStatus.Enroute, _cabContext.CustomerList
-            .Include(x => x.Customers)
+        Assert.Equal(CustomerStatus.Enroute, _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault()
-            !.Customers
+            !.Patrons
             .FirstOrDefault()!.Status);
     }
     [Fact]
@@ -146,18 +146,18 @@ public class CustomerListCommandsTests
         _applicationHandler.Handle(new CustomerRideRequested() { CustomerListId = 1});  
         _applicationHandler.Handle(new CustomerPickedUp());
         _applicationHandler.Handle(new CustomerDelivered());
-        Assert.Equal(1, _cabContext.CustomerList
-            .Include(customerList => customerList.Customers!)
-            .FirstOrDefault()!.Customers!.Count);
-        Assert.Equal("Dan", _cabContext.CustomerList
-            .Include(x => x.Customers)
+        Assert.Equal(1, _cabContext.FleetCoordinator
+            .Include(customerList => customerList.Patrons!)
+            .FirstOrDefault()!.Patrons!.Count);
+        Assert.Equal("Dan", _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault()
-            !.Customers
+            !.Patrons
             .FirstOrDefault()!.Name);
-        Assert.Equal(CustomerStatus.Delivered, _cabContext.CustomerList
-            .Include(x => x.Customers)
+        Assert.Equal(CustomerStatus.Delivered, _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault()
-            !.Customers
+            !.Patrons
             .FirstOrDefault()!.Status);
     }
     [Fact]
@@ -167,18 +167,18 @@ public class CustomerListCommandsTests
             new CustomerCabRequested(
                 "Dan", "1 Fulton Drive", "2 Destination Lane"));
         _applicationHandler.Handle(new CustomerCancelledCab());
-        Assert.Equal(1, _cabContext.CustomerList
-            .Include(customerList => customerList.Customers!)
-            .FirstOrDefault()!.Customers!.Count);
-        Assert.Equal("Dan", _cabContext.CustomerList
-            .Include(x => x.Customers)
+        Assert.Equal(1, _cabContext.FleetCoordinator
+            .Include(customerList => customerList.Patrons!)
+            .FirstOrDefault()!.Patrons!.Count);
+        Assert.Equal("Dan", _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault()
-            !.Customers
+            !.Patrons
             .FirstOrDefault()!.Name);
-        Assert.Equal(CustomerStatus.CancelledCall, _cabContext.CustomerList
-            .Include(x => x.Customers)
+        Assert.Equal(CustomerStatus.CancelledCall, _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault()
-            !.Customers
+            !.Patrons
             .FirstOrDefault()!.Status);
     }
 }

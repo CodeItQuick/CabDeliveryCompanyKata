@@ -4,7 +4,7 @@ using Production.EmmaCabCompany.Domain.CustomerList;
 
 namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 
-public class CustomerListRepository : ICustomerListRepository
+public class CustomerListRepository : ICustomerListRepository, IDisposable
 {
     private CabContext _cabContext;
 
@@ -15,10 +15,10 @@ public class CustomerListRepository : ICustomerListRepository
 
     public Domain.CustomerList.CustomerList GetById(int customerListId)
     {
-        var customerListDto = _cabContext.CustomerList
-            .Include(x => x.Customers)
+        var customerListDto = _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault(x => x.Id == customerListId)!;
-        var customers = customerListDto.Customers.Select(x =>
+        var customers = customerListDto.Patrons.Select(x =>
             new Customer(x.Name, x.StartLocation!, x.EndLocation) { Status = x.Status }).ToList();
         var customerList = Domain.CustomerList.CustomerList.CreateCustomerList(customerListDto.Id,
             customers);
@@ -27,18 +27,37 @@ public class CustomerListRepository : ICustomerListRepository
 
     public void Save(Domain.CustomerList.CustomerList customerList)
     {
-        var customerListDto = _cabContext.CustomerList
-            .Include(x => x.Customers)
+        var customerListDto = _cabContext.FleetCoordinator
+            .Include(x => x.Patrons)
             .FirstOrDefault(x => x.Id == customerList.Id)!;
         var customerDtos = customerList.Customers
-            .Select(x => new CustomerDto()
+            .Select(x => new PatronDto()
             {
                 CustomerId = customerList.Id, Id = x.Id, Name = x.Name, Status = x.Status, EndLocation = x.EndLocation,
                 StartLocation = x.StartLocation, MenuId = 1
             }).ToList();
-        customerListDto.Customers = customerDtos;
+        customerListDto.Patrons = customerDtos;
         _cabContext.Update(customerListDto); 
         _cabContext.SaveChanges();
         _cabContext.ChangeTracker.Clear();
+    }
+    private bool disposed = false;
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!this.disposed)
+        {
+            if (disposing)
+            {
+                _cabContext.Dispose();
+            }
+        }
+        this.disposed = true;
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

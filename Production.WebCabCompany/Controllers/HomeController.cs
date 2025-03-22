@@ -1,14 +1,10 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Production.EmmaCabCompany;
-using Production.EmmaCabCompany.Adapter.@in;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
 using Production.EmmaCabCompany.Application.Fleet;
-using Production.EmmaCabCompany.Application.Menu;
-using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Domain.Menu;
 using Production.WebCabCompany.Models;
 
@@ -19,87 +15,67 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IApplicationHandler _applicationHandler;
-    private readonly IMenuRequestedHandler _menuRequestedHandler;
 
     public HomeController(ILogger<HomeController> logger,
-        IApplicationHandler applicationHandler,
-        IMenuRequestedHandler menuRequestedHandler)
+        CabContext cabContext)
     {
         _logger = logger;
-        _applicationHandler = applicationHandler;
-        _menuRequestedHandler = menuRequestedHandler;
-    }
-
-    // TODO: Not tested
-    public IActionResult Index()
-    {
-        var displayMenu = _menuRequestedHandler.Handle(new MenuRequested(1));
-        return View(new CabDisplayModel() { DisplayMenu = displayMenu.MenuOptions });
+        _applicationHandler = new ApplicationHandler(cabContext);
     }
 
     public IActionResult AddCabDriver()
     {
-        _applicationHandler.Handle(new AddCabCommand("default", 23.23, 32.32));
+        var addCabCommand = new AddCabCommand("default", 23.23, 32.32);
+        _applicationHandler.Handle(addCabCommand);
         
-        return RedirectToAction(nameof(Index));
+        return Redirect($"/Menu/Index");
     }
     public IActionResult RemoveCabDriver()
     {
         _applicationHandler.Handle(new RemoveCabCommand(1));
-        return RedirectToAction(nameof(Index));
+        return Redirect($"/Menu/Index");
     }
     public IActionResult CustomerRequestRide()
     {
         _applicationHandler.Handle(new CustomerRideRequested());
-        return RedirectToAction(nameof(Index));
+        return Redirect($"/Menu/Index");
     }
     public IActionResult CustomerCabCall()
     {
         _applicationHandler.Handle(
             new CustomerCabRequested("default customer", "1 Fulton Drive", "2 Destination Lane"));
         
-        return RedirectToAction(nameof(Index));
+        return Redirect($"/Menu/Index");
     }
     public IActionResult SendCabRequest()
     {
         _applicationHandler.Handle(new CustomerRideRequested());
         
-        return RedirectToAction(nameof(Index));
+        return Redirect($"/Menu/Index");
     }
     public IActionResult CabNotifiesPickedUp()
     {
         _applicationHandler.Handle(new CustomerPickedUp());
         
-        return RedirectToAction(nameof(Index));
+        return Redirect($"/Menu/Index");
     }
     public IActionResult CabNotifiesDroppedOff()
     {
         _applicationHandler.Handle(new CustomerDelivered());
         
-        return RedirectToAction(nameof(Index));
+        return Redirect($"/Menu/Index");
     }
     public IActionResult CustomerCancelledCabRide()
     {
         _applicationHandler.Handle(new CustomerCancelledCab());
         
-        return RedirectToAction(nameof(Index));
+        return Redirect($"/Menu/Index");
     }
     
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    //
+    // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
-}
-
-public class FileSettings
-{
-    public string CustomerFileNameCsv { get; init; } = "customer-file-name.csv";
-    public string CabFileNameCsv { get; init; } = "cab-file-name.csv";
-}
-
-public class CabDisplayModel
-{
-    public List<int> DisplayMenu { get; set; }
 }

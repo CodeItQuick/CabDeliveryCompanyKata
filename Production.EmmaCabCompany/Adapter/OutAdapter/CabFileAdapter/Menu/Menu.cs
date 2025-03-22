@@ -11,19 +11,20 @@ namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 public class Menu : IdentityClass
 {
     public override int Id { get; set; }
-    [ForeignKey("CustomerId")] public List<CustomerDto> Customers { get; set; }
-    [ForeignKey("CabId")] public List<CabDto> Cabs { get; set; }
+    [ForeignKey("CustomerId")] public List<PatronDto> Customers { get; init; }
+    [ForeignKey("CabId")] public List<CabDriver> Cabs { get; init; }
 
     public Menu()
     {
-        Customers = new List<CustomerDto>();
-        Cabs = new List<CabDto>();
+        Customers = new List<PatronDto>();
+        Cabs = new List<CabDriver>();
     }
 
     public List<int> MenuOptions()
     {
         List<int> options = [];
-        if (Cabs.Count(x => x.IsStatus(Fleet.CabStatus.Available)) > Customers.Count(x => x.Status != CustomerStatus.Delivered))
+        if (Cabs.Count(x => x.IsStatus(CabStatus.Available)) > 
+            Customers.Count(x => x.Status != CustomerStatus.Delivered))
         {
             options.AddRange([2, 7]);
         }

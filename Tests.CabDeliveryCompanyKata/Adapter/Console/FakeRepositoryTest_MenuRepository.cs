@@ -13,7 +13,7 @@ public class FakeRepositoryTest_MenuRepository
 
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDto>(), Customers = new List<CustomerDto>()
+            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
         });
 
         var displayMenu = menuRepository.Read();
@@ -30,11 +30,11 @@ public class FakeRepositoryTest_MenuRepository
         var menuRepository = new FakeDatabaseRepository<Menu>();
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDto>(), Customers = new List<CustomerDto>()
+            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
         });
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDto>(), Customers = new List<CustomerDto>()
+            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
         });
 
         var displayMenu = menuRepository.Read();
@@ -51,20 +51,20 @@ public class FakeRepositoryTest_MenuRepository
         var menuRepository = new FakeDatabaseRepository<Menu>();
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDto>(), Customers = new List<CustomerDto>()
+            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
         });
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDto>(), Customers = new List<CustomerDto>()
+            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
         });
 
         menuRepository.Update(2, new Menu()
         {
-            Cabs = new List<CabDto>()
+            Cabs = new List<CabDriver>()
             {
                 new("", 0, 0.0, 0.0)
             },
-            Customers = new List<CustomerDto>()
+            Customers = new List<PatronDto>()
             {
                 new() { Id = 1, Name = "hello world"}
             }
@@ -84,15 +84,15 @@ public class FakeRepositoryTest_MenuRepository
         var menuRepository = new FakeDatabaseRepository<Menu>();
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDto>(), Customers = new List<CustomerDto>()
+            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
         });
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDto>(), Customers = new List<CustomerDto>()
+            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
         });
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDto>(), Customers = new List<CustomerDto>()
+            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
         });
         menuRepository.Delete(2);
 
@@ -112,15 +112,15 @@ public class FakeRepositoryTest_MenuRepository
         var menuRepository = new FakeDatabaseRepository<Menu>();
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDto>(), Customers = new List<CustomerDto>()
+            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
         });
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDto>(), Customers = new List<CustomerDto>()
+            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
         });
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDto>(), Customers = new List<CustomerDto>()
+            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
         });
         menuRepository.Delete(2);
 

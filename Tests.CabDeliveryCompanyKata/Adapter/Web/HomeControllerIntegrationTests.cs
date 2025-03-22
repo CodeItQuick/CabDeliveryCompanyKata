@@ -20,6 +20,7 @@ public class HomeControllerIntegrationTests
 {
     private CabContext _cabContext;
     private HomeController _homeController;
+    private MenuController _menuController;
 
     public HomeControllerIntegrationTests()
     {
@@ -30,16 +31,10 @@ public class HomeControllerIntegrationTests
         _cabContext.Database.Migrate();
         EnsureFleetExistsForSingleUser();
         EnsureMenuExistsForSingleUser();
-        var fileSettings = new FileSettings()
-        {
-            CabFileNameCsv = $"{Guid.NewGuid().ToString()}.csv",
-            CustomerFileNameCsv = $"{Guid.NewGuid().ToString()}.csv"
-        };
-        IOptions<FileSettings> options = Options.Create(fileSettings);
         _homeController = new HomeController(
             new NullLogger<HomeController>(),
-            new ApplicationHandler(new FleetRepository(_cabContext), new CustomerListRepository(_cabContext)),
-            new MenuRequestedHandler(new MenuRepository(_cabContext)));
+            _cabContext);
+        _menuController = new MenuController(new NullLogger<MenuController>(), _cabContext);
         var claimsIdentity = new ClaimsIdentity(
             new List<Claim>()
             {
@@ -63,7 +58,7 @@ public class HomeControllerIntegrationTests
         
         _homeController.AddCabDriver();
 
-        var response = _homeController.Index() as ViewResult;
+        var response = _menuController.Index() as ViewResult;
 
         Assert.Equal(4, (response!.Model as CabDisplayModel)!.DisplayMenu.Count);
         Assert.Equivalent(
@@ -91,7 +86,7 @@ public class HomeControllerIntegrationTests
     {
         var fleet = _cabContext.Fleet.Include(x => x.FleetOfCabs)
             .FirstOrDefault(x => x.Id == fleetId);
-        _cabContext.Cabs.RemoveRange(fleet!.FleetOfCabs.ToList());
+        _cabContext.CabDrivers.RemoveRange(fleet!.FleetOfCabs.ToList());
         _cabContext.SaveChanges();
     }
 }
