@@ -11,34 +11,34 @@ namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 public class Menu : IdentityClass
 {
     public override int Id { get; set; }
-    [ForeignKey("CustomerId")] public List<PatronDto> Customers { get; init; }
-    [ForeignKey("CabId")] public List<CabDriver> Cabs { get; init; }
-
+    [ForeignKey("CustomerId")] public List<PatronDto> Patrons { get; set; }
+    [ForeignKey("CabId")] public List<CabDriver> Cabs { get; set; }
+    
     public Menu()
     {
-        Customers = new List<PatronDto>();
+        Patrons = new List<PatronDto>();
         Cabs = new List<CabDriver>();
     }
 
-    public List<int> MenuOptions()
+    public List<string> MenuOptions()
     {
-        List<int> options = [];
+        List<string> options = [];
         if (Cabs.Count(x => x.IsStatus(CabStatus.Available)) > 
-            Customers.Count(x => x.Status != CustomerStatus.Delivered))
+            Patrons.Count(x => x.Status != CustomerStatus.Delivered))
         {
-            options.AddRange([2, 7]);
+            options.AddRange(["2", "7"]);
         }
-        if (Customers.Any(x => x.Status == CustomerStatus.CustomerCallInProgress))
+        if (Patrons.Any(x => x.Status == CustomerStatus.CustomerCallInProgress))
         {
-            options.AddRange([3, 6]);
+            options.AddRange(["3", "6"]);
         }
-        if (Customers.Any(x => x.Status == CustomerStatus.WaitingPickup))
+        if (Patrons.Any(x => x.Status == CustomerStatus.WaitingPickup))
         {
-            options.AddRange([4]);
+            options.AddRange(["4"]);
         }
-        if (Customers.Any(x => x.Status == CustomerStatus.Enroute))
+        if (Patrons.Any(x => x.Status == CustomerStatus.Enroute))
         {
-            options.AddRange([5]);
+            options.AddRange(["5"]);
         }
         return options;
     }

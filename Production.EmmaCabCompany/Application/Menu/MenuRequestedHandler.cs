@@ -16,6 +16,11 @@ public class MenuRequestedHandler : IMenuRequestedHandler
     {
         var menuConfigurationDto = new MenuConfigurationDto();
         var menu = _menuRepository.GetById(menuRequested._id);
+        if (menu == null)
+        {
+            return menuConfigurationDto;
+        }
+        // menuConfigurationDto.MenuOptions = ["0", "1"];
         menuConfigurationDto.MenuOptions.AddRange(menu.MenuOptions());
         return menuConfigurationDto;
     }

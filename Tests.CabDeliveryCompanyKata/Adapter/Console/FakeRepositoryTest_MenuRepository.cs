@@ -13,7 +13,7 @@ public class FakeRepositoryTest_MenuRepository
 
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
+            Cabs = [], Patrons = []
         });
 
         var displayMenu = menuRepository.Read();
@@ -21,7 +21,7 @@ public class FakeRepositoryTest_MenuRepository
         Assert.Single(displayMenu);
         Assert.Equal(1, displayMenu.First().Id);
         Assert.Equal(0, displayMenu.First().Cabs.Count);
-        Assert.Equal(0, displayMenu.First().Customers.Count);
+        Assert.Equal(0, displayMenu.First().Patrons.Count);
     }
 
     [Fact]
@@ -30,11 +30,11 @@ public class FakeRepositoryTest_MenuRepository
         var menuRepository = new FakeDatabaseRepository<Menu>();
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
+            Cabs = [], Patrons = []
         });
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
+            Cabs = [], Patrons = []
         });
 
         var displayMenu = menuRepository.Read();
@@ -42,7 +42,7 @@ public class FakeRepositoryTest_MenuRepository
         Assert.Equal(2, displayMenu.Count);
         Assert.Equal(1, displayMenu.First().Id);
         Assert.Equal(0, displayMenu.First().Cabs.Count);
-        Assert.Equal(0, displayMenu.First().Customers.Count);
+        Assert.Equal(0, displayMenu.First().Patrons.Count);
     }
 
     [Fact]
@@ -51,11 +51,11 @@ public class FakeRepositoryTest_MenuRepository
         var menuRepository = new FakeDatabaseRepository<Menu>();
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
+            Cabs = new List<CabDriver>(), Patrons = new List<PatronDto>()
         });
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
+            Cabs = new List<CabDriver>(), Patrons = new List<PatronDto>()
         });
 
         menuRepository.Update(2, new Menu()
@@ -64,7 +64,7 @@ public class FakeRepositoryTest_MenuRepository
             {
                 new("", 0, 0.0, 0.0)
             },
-            Customers = new List<PatronDto>()
+            Patrons = new List<PatronDto>()
             {
                 new() { Id = 1, Name = "hello world"}
             }
@@ -75,7 +75,7 @@ public class FakeRepositoryTest_MenuRepository
         Assert.Equal(2, displayMenu.Count);
         Assert.Equal(2, displayMenu.Find(x => x.Id == 2).Id);
         Assert.Equal(1, displayMenu.Find(x => x.Id == 2).Cabs.Count);
-        Assert.Equal(1, displayMenu.Find(x => x.Id == 2).Customers.Count);
+        Assert.Equal(1, displayMenu.Find(x => x.Id == 2).Patrons.Count);
     }
 
     [Fact]
@@ -84,15 +84,15 @@ public class FakeRepositoryTest_MenuRepository
         var menuRepository = new FakeDatabaseRepository<Menu>();
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
+            Cabs = new List<CabDriver>(), Patrons = new List<PatronDto>()
         });
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
+            Cabs = new List<CabDriver>(), Patrons = new List<PatronDto>()
         });
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
+            Cabs = new List<CabDriver>(), Patrons = new List<PatronDto>()
         });
         menuRepository.Delete(2);
 
@@ -101,10 +101,10 @@ public class FakeRepositoryTest_MenuRepository
         Assert.Equal(2, displayMenu.Count);
         Assert.Equal(1, displayMenu.First().Id);
         Assert.Equal(0, displayMenu.First().Cabs.Count);
-        Assert.Equal(0, displayMenu.First().Customers.Count);
+        Assert.Equal(0, displayMenu.First().Patrons.Count);
         Assert.Equal(3, displayMenu.Skip(1).First().Id);
         Assert.Equal(0, displayMenu.Skip(1).First().Cabs.Count);
-        Assert.Equal(0, displayMenu.Skip(1).First().Customers.Count);
+        Assert.Equal(0, displayMenu.Skip(1).First().Patrons.Count);
     }
     [Fact]
     public void Repository_CanSearchUsingFilters()
@@ -112,15 +112,15 @@ public class FakeRepositoryTest_MenuRepository
         var menuRepository = new FakeDatabaseRepository<Menu>();
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
+            Cabs = new List<CabDriver>(), Patrons = new List<PatronDto>()
         });
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
+            Cabs = new List<CabDriver>(), Patrons = new List<PatronDto>()
         });
         menuRepository.Create(new Menu()
         {
-            Cabs = new List<CabDriver>(), Customers = new List<PatronDto>()
+            Cabs = new List<CabDriver>(), Patrons = new List<PatronDto>()
         });
         menuRepository.Delete(2);
 
@@ -130,6 +130,6 @@ public class FakeRepositoryTest_MenuRepository
         Assert.Equal(1, displayMenu.Count);
         Assert.Equal(3, displayMenu.First().Id);
         Assert.Equal(0, displayMenu.First().Cabs.Count);
-        Assert.Equal(0, displayMenu.First().Customers.Count);
+        Assert.Equal(0, displayMenu.First().Patrons.Count);
     }
 }

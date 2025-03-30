@@ -18,7 +18,6 @@ public class MenuController
 
     public List<string> DisplayMenu()
     {
-        // var displayMenu = _menuService.DisplayMenu();
         var menuOptions = _menuRequested.Handle(new MenuRequested(1));
         var menu = new List<string>()
         {
@@ -33,15 +32,17 @@ public class MenuController
             "4. (Incoming Radio) Cab Notifies Passenger Picked Up",
             "5. (Incoming Radio) Cab Notifies Passenger Dropped Off",
             "6. (Incoming Call) Cancel Cab Driver Fare",
-            "7. (Incoming Call) Customer Request Ride"
+            "7. (Incoming Call) Customer Request Ride",
+            "8. Register New User",
+            "9. Login Existing User"
         };
         var selectAdditionalOptions = otherMenuOptions
-            .Where((_, idx) => menuOptions.MenuOptions.Contains(idx));
+            .Where((_, idx) => menuOptions.MenuOptions.Contains(idx.ToString()));
         menu.AddRange(selectAdditionalOptions);
         return menu;
     }
 
-    public bool ContainsOption(int selection)
+    public bool ContainsOption(string selection)
     {
         var menuConfiguration = _menuRequested.Handle(new MenuRequested(1));
         return menuConfiguration.MenuOptions.Contains(selection);

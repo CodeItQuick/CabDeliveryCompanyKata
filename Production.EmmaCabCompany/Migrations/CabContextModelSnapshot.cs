@@ -51,7 +51,7 @@ namespace Production.EmmaCabCompany.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerListDto", b =>
@@ -62,7 +62,7 @@ namespace Production.EmmaCabCompany.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CustomerList");
+                    b.ToTable("CustomerList", (string)null);
                 });
 
             modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet.Fleet", b =>
@@ -73,7 +73,7 @@ namespace Production.EmmaCabCompany.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Fleet");
+                    b.ToTable("Fleet", (string)null);
                 });
 
             modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu.Menu", b =>
@@ -84,7 +84,7 @@ namespace Production.EmmaCabCompany.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Menu");
+                    b.ToTable("Menu", (string)null);
                 });
 
             modelBuilder.Entity("Production.EmmaCabCompany.Cab", b =>
@@ -121,7 +121,7 @@ namespace Production.EmmaCabCompany.Migrations
 
                     b.HasIndex("CabId");
 
-                    b.ToTable("Cabs");
+                    b.ToTable("Cabs", (string)null);
                 });
 
             modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerDto", b =>

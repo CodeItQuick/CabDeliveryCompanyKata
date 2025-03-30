@@ -1,60 +1,39 @@
 using Microsoft.EntityFrameworkCore;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 using Production.EmmaCabCompany.Application.Menu;
 
 namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 
-public class MenuRepository : IMenuRepository, IDisposable
+public class MenuRepository : IMenuRepository
 {
     private readonly CabContext _cabContext;
 
     public MenuRepository(CabContext cabContext)
     {
         _cabContext = cabContext;
-        EnsureMenuExistsForSingleUser();
-        EnsureCustomerListExistsForSingleUser();
-    }
-
-    private void EnsureMenuExistsForSingleUser()
-    {
-        var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
-        if (fleetExists) return;
-        _cabContext.Menu.Add(new CabFileAdapter.Menu.Menu() { Id = 1, Customers = new List<PatronDto>()});
-        _cabContext.SaveChanges();
-    }
-    private void EnsureCustomerListExistsForSingleUser()
-    {
-        var fleetExists = _cabContext.FleetCoordinator.Any(x => x.Id == 1);
-        if (fleetExists) return;
-        _cabContext.FleetCoordinator.Add(new FleetCoordinator() { Id = 1 });
-        _cabContext.SaveChanges();
     }
 
     public Menu GetById(int customerListId)
     {
         var menu = _cabContext.Menu
-            .Include(x => x.Customers)
+            .Include(x => x.Patrons)
             .Include(x => x.Cabs)
-            .FirstOrDefault(x => x.Id == 1)!;
+            .FirstOrDefault(x => x.Id == customerListId);
         return menu;
     }
-    private bool disposed = false;
 
-    protected virtual void Dispose(bool disposing)
+    public void Save(Menu menu)
     {
-        if (!this.disposed)
+        var currentMenuExists = _cabContext.Menu.FirstOrDefault(x => x.Id == menu.Id);
+        if (currentMenuExists != null)
         {
-            if (disposing)
-            {
-                _cabContext.Dispose();
-            }
+            currentMenuExists.Cabs = menu.Cabs;
+            currentMenuExists.Patrons = menu.Patrons;
+            _cabContext.Menu.Update(currentMenuExists);
         }
-        this.disposed = true;
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+        else
+        {
+            _cabContext.Menu.Add(menu);
+        }
+        _cabContext.SaveChanges();
     }
 }

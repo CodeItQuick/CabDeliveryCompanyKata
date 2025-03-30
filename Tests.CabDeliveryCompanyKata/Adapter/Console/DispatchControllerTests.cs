@@ -45,12 +45,23 @@ public class DispatchControllerTests
         _cabContext.CabDrivers.RemoveRange(fleet!.FleetOfCabs.ToList());
         _cabContext.SaveChanges();
     }
+
+    [Fact]
+    public void CanRegisterAsNewUser()
+    {
+        EmptyFleet(1);
+        var dispatchController = new DispatchController(_cabContext);
+
+        var addCabMessage = dispatchController.RegisterNewUser();
+
+        Assert.Equal("A new user has been registered", addCabMessage);
+    }
     [Fact]
     public void CanAddCabsToTheFleet()
     {
         var dispatchController = new DispatchController(_cabContext);
 
-        var addCabMessage = dispatchController.AddCab();
+        var addCabMessage = dispatchController.AddCab(1);
 
         Assert.Equal("Added Evan's Cab to fleet", addCabMessage);
     }
@@ -59,8 +70,8 @@ public class DispatchControllerTests
     public void CanRemoveCabsFromTheFleet()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
-        var removeCab = dispatchController.RemoveCab();
+        dispatchController.AddCab(1);
+        var removeCab = dispatchController.RemoveCab(1);
 
         Assert.Equal("Requested cab removed from fleet", removeCab);
     }
@@ -70,7 +81,7 @@ public class DispatchControllerTests
     {
         var dispatchController = new DispatchController(_cabContext);
 
-        var result = dispatchController.RemoveCab();
+        var result = dispatchController.RemoveCab(1);
 
         Assert.Equal("Cab cannot be removed until passenger dropped off.", result);
     }
@@ -79,12 +90,14 @@ public class DispatchControllerTests
     public void CannotRemoveCabsWithPassengerInIt()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
-        dispatchController.SendCabRequest();
-        dispatchController.CabNotifiesPickedUp();
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane", 1);
+        dispatchController.SendCabRequest(1);
+        dispatchController.CabNotifiesPickedUp(1);
 
-        var result = dispatchController.RemoveCab();
+        var result = dispatchController.RemoveCab(1);
 
         Assert.Equal("Requested cab removed from fleet", result);
     }
@@ -93,13 +106,15 @@ public class DispatchControllerTests
     public void CanRemoveCabsWithoutPassengerInside()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
-        dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
-        dispatchController.SendCabRequest();
-        dispatchController.CabNotifiesPickedUp();
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
+        dispatchController.AddCab(1);
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane", 1);
+        dispatchController.SendCabRequest(1);
+        dispatchController.CabNotifiesPickedUp(1);
 
-        var result = dispatchController.RemoveCab();
+        var result = dispatchController.RemoveCab(1);
 
         Assert.Equal("Requested cab removed from fleet", result);
     }
@@ -108,9 +123,11 @@ public class DispatchControllerTests
     public void CustomerCanCallInCab()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
 
-        var customerCabCall = dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
+        var customerCabCall = dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane", 1);
 
         Assert.Equal("Received customer ride request from Emma", customerCabCall);
     }
@@ -119,10 +136,12 @@ public class DispatchControllerTests
     public void TwoCustomersCanCallInCab()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane", 1);
 
-        var customerCabCall = dispatchController.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane");
+        var customerCabCall = dispatchController.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane", 1);
 
         Assert.Equal("Received customer ride request from Lisa", customerCabCall);
     }
@@ -131,11 +150,13 @@ public class DispatchControllerTests
     public void FirstCustomerCallInCancelsSecondCustomerCanCallInCab()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
-        dispatchController.CustomerCancelledCabRide();
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane", 1);
+        dispatchController.CustomerCancelledCabRide(1);
 
-        var customerCabCall = dispatchController.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane");
+        var customerCabCall = dispatchController.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane", 1);
 
         Assert.Equal("Received customer ride request from Lisa", customerCabCall);
     }
@@ -144,8 +165,10 @@ public class DispatchControllerTests
     public void CannotPickupUnlessCustomersWaiting()
     {
         var dispatchController = new DispatchController(_cabContext);
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
 
-        var customerCabCall = dispatchController.CustomerCancelledCabRide();
+        var customerCabCall = dispatchController.CustomerCancelledCabRide(1);
 
         Assert.Equal("This is not a valid option.", customerCabCall.First());
     }
@@ -154,10 +177,12 @@ public class DispatchControllerTests
     public void CanCancelPickup()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane", 1);
 
-        var customerCabCall = dispatchController.CustomerCancelledCabRide();
+        var customerCabCall = dispatchController.CustomerCancelledCabRide(1);
 
         Assert.Equal("Customer cancelled cab ride successfully.", customerCabCall.First());
     }
@@ -166,11 +191,13 @@ public class DispatchControllerTests
     public void CanCancelPickupAtAnyTime()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
-        dispatchController.SendCabRequest();
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane", 1);
+        dispatchController.SendCabRequest(1);
 
-        var customerCabCall = dispatchController.CustomerCancelledCabRide();
+        var customerCabCall = dispatchController.CustomerCancelledCabRide(1);
 
         Assert.Equal("This is not a valid option.", customerCabCall.First());
     }
@@ -179,10 +206,12 @@ public class DispatchControllerTests
     public void CabCanDriveToCustomerAfterCabRequest()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane", 1);
 
-        var sendCabRequest = dispatchController.SendCabRequest();
+        var sendCabRequest = dispatchController.SendCabRequest(1);
 
         Assert.Equal("Evan's Cab picked up Emma at 1 Fulton Drive.", sendCabRequest.First());
         Assert.Equal("Cab assigned to customer.", sendCabRequest.Skip(1).First());
@@ -192,9 +221,11 @@ public class DispatchControllerTests
     public void CannotSendCabRequestUntilCustomerCallsIn()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
 
-        var sendCabRequest = dispatchController.SendCabRequest();
+        var sendCabRequest = dispatchController.SendCabRequest(1);
 
         Assert.Equal("This is not a valid option.", sendCabRequest.First());
     }
@@ -204,7 +235,7 @@ public class DispatchControllerTests
     {
         var dispatchController = new DispatchController(_cabContext);
 
-        var sendCabRequest = dispatchController.SendCabRequest();
+        var sendCabRequest = dispatchController.SendCabRequest(1);
 
         Assert.Equal("This is not a valid option.", sendCabRequest.First());
     }
@@ -213,11 +244,13 @@ public class DispatchControllerTests
     public void CabCanPickupCustomer()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
-        dispatchController.SendCabRequest();
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane", 1);
+        dispatchController.SendCabRequest(1);
 
-        var sendCabRequest = dispatchController.CabNotifiesPickedUp();
+        var sendCabRequest = dispatchController.CabNotifiesPickedUp(1);
 
         Assert.Equal("Notified dispatcher of pickup", sendCabRequest);
     }
@@ -226,8 +259,10 @@ public class DispatchControllerTests
     public void CabCannotPickupCustomerIfNoCabsInFleet()
     {
         var dispatchController = new DispatchController(_cabContext);
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
 
-        var sendCabRequest = dispatchController.CabNotifiesPickedUp();
+        var sendCabRequest = dispatchController.CabNotifiesPickedUp(1);
 
         Assert.Equal("This is not a valid option.", sendCabRequest);
     }
@@ -236,10 +271,12 @@ public class DispatchControllerTests
     public void CabCannotPickupCustomerIfCustomerNotWaitingPickup()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane", 1);
 
-        var sendCabRequest = dispatchController.CabNotifiesPickedUp();
+        var sendCabRequest = dispatchController.CabNotifiesPickedUp(1);
 
         Assert.Equal("This is not a valid option.", sendCabRequest);
     }
@@ -248,12 +285,14 @@ public class DispatchControllerTests
     public void CabCanDropOffCustomer()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
-        dispatchController.SendCabRequest();
-        dispatchController.CabNotifiesPickedUp();
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane", 1);
+        dispatchController.SendCabRequest(1);
+        dispatchController.CabNotifiesPickedUp(1);
 
-        var droppedOff = dispatchController.CabNotifiesDroppedOff();
+        var droppedOff = dispatchController.CabNotifiesDroppedOff(1);
 
         Assert.Equal("Evan's Cab dropped off Emma at 1 Destination Lane.", droppedOff.First());
     }
@@ -262,16 +301,18 @@ public class DispatchControllerTests
     public void CabCanDropOffOnlyOneCustomerAtATime()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
-        dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
-        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
-        dispatchController.SendCabRequest();
-        dispatchController.SendCabRequest();
-        dispatchController.CabNotifiesPickedUp();
-        dispatchController.CabNotifiesPickedUp();
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
+        dispatchController.AddCab(1);
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane", 1);
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane", 1);
+        dispatchController.SendCabRequest(1);
+        dispatchController.SendCabRequest(1);
+        dispatchController.CabNotifiesPickedUp(1);
+        dispatchController.CabNotifiesPickedUp(1);
 
-        var droppedOff = dispatchController.CabNotifiesDroppedOff();
+        var droppedOff = dispatchController.CabNotifiesDroppedOff(1);
 
         Assert.Equal("Evan's Cab dropped off Emma at 1 Destination Lane.", droppedOff.Single());
     }
@@ -280,17 +321,19 @@ public class DispatchControllerTests
     public void CabCanDropOffTwoCustomers()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
-        dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
-        dispatchController.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane");
-        dispatchController.SendCabRequest();
-        dispatchController.SendCabRequest();
-        dispatchController.CabNotifiesPickedUp();
-        dispatchController.CabNotifiesPickedUp();
-        dispatchController.CabNotifiesDroppedOff();
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
+        dispatchController.AddCab(1);
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane", 1);
+        dispatchController.CustomerCabCall("Lisa", "1 Fulton Drive", "1 Destination Lane", 1);
+        dispatchController.SendCabRequest(1);
+        dispatchController.SendCabRequest(1);
+        dispatchController.CabNotifiesPickedUp(1);
+        dispatchController.CabNotifiesPickedUp(1);
+        dispatchController.CabNotifiesDroppedOff(1);
 
-        var droppedOff = dispatchController.CabNotifiesDroppedOff();
+        var droppedOff = dispatchController.CabNotifiesDroppedOff(1);
 
         Assert.Equal("Evan's Cab dropped off Lisa at 1 Destination Lane.", droppedOff.Single());
     }
@@ -299,10 +342,12 @@ public class DispatchControllerTests
     public void CabCannotDropOffCustomerIfNotInTransport()
     {
         var dispatchController = new DispatchController(_cabContext);
-        dispatchController.AddCab();
-        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane");
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
+        dispatchController.CustomerCabCall("Emma", "1 Fulton Drive", "1 Destination Lane", 1);
 
-        var droppedOff = dispatchController.CabNotifiesDroppedOff();
+        var droppedOff = dispatchController.CabNotifiesDroppedOff(1);
 
         Assert.Equal(
             "This is not a valid option.",
@@ -313,8 +358,10 @@ public class DispatchControllerTests
     public void InvalidOptionSelectedReturnsError()
     {
         var dispatchController = new DispatchController(_cabContext);
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
 
-        var dispatch = dispatchController.CabNotifiesDroppedOff();
+        var dispatch = dispatchController.CabNotifiesDroppedOff(1);
 
         Assert.Equal("This is not a valid option.", dispatch.First());
     }

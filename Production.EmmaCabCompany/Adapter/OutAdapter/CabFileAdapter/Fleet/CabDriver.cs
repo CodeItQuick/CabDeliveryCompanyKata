@@ -26,6 +26,9 @@ public class CabDriver
     
     // [ForeignKey(nameof(Fleet.Id))]
     // public virtual Fleet Fleet { get; set; }
+    public CabDriver()
+    {
+    }
 
     public CabDriver(string? cabName, int wallet, double latitude, double longitude)
     {

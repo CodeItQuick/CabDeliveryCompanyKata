@@ -39,5 +39,5 @@ public class MenuController : Controller
 
 public class CabDisplayModel
 {
-    public List<int> DisplayMenu { get; set; }
+    public List<string> DisplayMenu { get; set; }
 }

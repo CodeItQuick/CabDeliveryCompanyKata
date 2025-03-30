@@ -3,15 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
-using Production.EmmaCabCompany.Application;
-using Production.EmmaCabCompany.Application.CustomerList.Commands.Handler;
-using Production.EmmaCabCompany.Application.Fleet;
-using Production.EmmaCabCompany.Application.Menu;
 using Production.WebCabCompany.Controllers;
 
 namespace Tests.CabDeliveryCompanyKata.Adapter.Web;
@@ -63,7 +57,7 @@ public class HomeControllerIntegrationTests
         Assert.Equal(4, (response!.Model as CabDisplayModel)!.DisplayMenu.Count);
         Assert.Equivalent(
             (response!.Model as CabDisplayModel)!.DisplayMenu.ToArray(), 
-            (int[]) [0, 1, 2, 7]);
+            (string[]) ["0", "1", "8", "9"]);
     }
     
     private void EnsureFleetExistsForSingleUser()

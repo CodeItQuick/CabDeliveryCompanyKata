@@ -25,7 +25,7 @@ public class HomeController : Controller
 
     public IActionResult AddCabDriver()
     {
-        var addCabCommand = new AddCabCommand("default", 23.23, 32.32);
+        var addCabCommand = new AddCabCommand("default", 23.23, 32.32, 1);
         _applicationHandler.Handle(addCabCommand);
         
         return Redirect($"/Menu/Index");
@@ -43,7 +43,7 @@ public class HomeController : Controller
     public IActionResult CustomerCabCall()
     {
         _applicationHandler.Handle(
-            new CustomerCabRequested("default customer", "1 Fulton Drive", "2 Destination Lane"));
+            new CustomerCabRequested("default customer", "1 Fulton Drive", "2 Destination Lane", 1));
         
         return Redirect($"/Menu/Index");
     }

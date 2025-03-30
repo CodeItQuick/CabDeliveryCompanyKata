@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 using Production.EmmaCabCompany.Domain.Fleet;
 
@@ -17,8 +18,7 @@ public class FleetRepositoryTests
         _cabContext = new CabContext(dbContextOptionsBuilder.Options);
         _cabContext.Database.Migrate();
         _fleetRepository = new FleetRepository(_cabContext);
-        EnsureFleetExistsForSingleUser();
-        EnsureMenuExistsForSingleUser();
+        RegisterAndLoginSingleUser();
     }
     [Fact]
     public void CanEmptyFleet()
@@ -33,7 +33,7 @@ public class FleetRepositoryTests
     public void CanAddCab()
     {
         EmptyFleet(1);
-        var cab = new Cab("evan", 1, 1.00, 1.00);
+        var cab = new Cab("evan", 1, 1.00, 1.00) { Fleet = new Fleet() { Id = 1 }};
         _fleetRepository.Save(cab);
         Assert.Single(_cabContext.Fleet
             .Include(x => x.FleetOfCabs)
@@ -43,8 +43,8 @@ public class FleetRepositoryTests
     public void CanAddTwoCabs()
     {
         EmptyFleet(1);
-        var cabOne = new Cab("evan", 1, 1.00, 1.00);
-        var cabTwo = new Cab("dan", 1, 1.00, 1.00);
+        var cabOne = new Cab("evan", 1, 1.00, 1.00){ Fleet = new Fleet() { Id = 1 }};
+        var cabTwo = new Cab("dan", 1, 1.00, 1.00){ Fleet = new Fleet() { Id = 1 }};
         _fleetRepository.Save(cabOne);
         _fleetRepository.Save(cabTwo);
         Assert.Equal(1, _cabContext.Fleet.FirstOrDefault()!.Id);
@@ -56,7 +56,7 @@ public class FleetRepositoryTests
     public void CanRemoveCab()
     {
         EmptyFleet(1);
-        var cabOne = new Cab("evan", 1, 1.00, 1.00);
+        var cabOne = new Cab("evan", 1, 1.00, 1.00){ Fleet = new Fleet() { Id = 1 }};
         _fleetRepository.Save(cabOne);
         _fleetRepository.Remove(1);
         Assert.Equal(1, _cabContext.Fleet.FirstOrDefault()!.Id);
@@ -65,12 +65,12 @@ public class FleetRepositoryTests
             .FirstOrDefault()!.FleetOfCabs);
     }
     
-    private void EnsureFleetExistsForSingleUser()
+    private void RegisterAndLoginSingleUser()
     {
-        var fleetExists = _cabContext.Fleet.Any(x => x.Id == 1);
-        if (fleetExists) return;
-        _cabContext.Fleet.Add(new Fleet() { Id = 1 });
-        _cabContext.SaveChanges();
+        var fleet = new Fleet() { Id = null };
+        _fleetRepository.Save(fleet);
+        var fleetCoordinator = new FleetCoordinator();
+        _fleetRepository.Save(fleetCoordinator);
     }
 
     private void EnsureMenuExistsForSingleUser()

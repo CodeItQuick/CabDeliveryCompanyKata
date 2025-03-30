@@ -1,8 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 
 namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 
@@ -13,6 +10,7 @@ public class UserInterface
     private MenuController _menuController;
     private CabContext _cabContext;
     private DispatchController _dispatchController;
+    private int userId { get; set; } = 1;
 
     public UserInterface(
         ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader, string? dbName = null)
@@ -30,40 +28,22 @@ public class UserInterface
             .UseSqlite($"Data Source={connectionFile}");
         _cabContext = new CabContext(dbContextOptions.Options);
         _cabContext.Database.Migrate();
-        EnsureFleetExistsForSingleUser();
-        EnsureMenuExistsForSingleUser();
         _menuController = new MenuController(_cabContext);
         _dispatchController = new DispatchController(_cabContext);
 
     }
     
-    private void EnsureFleetExistsForSingleUser()
-    {
-        var fleetExists = _cabContext.Fleet.Any(x => x.Id == 1);
-        if (fleetExists) return;
-        _cabContext.Fleet.Add(new Fleet() { Id = 1 });
-        _cabContext.SaveChanges();
-    }
-
-    private void EnsureMenuExistsForSingleUser()
-    {
-        var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
-        if (fleetExists) return;
-        _cabContext.Menu.Add(new Menu() { Id = 1 });
-        _cabContext.SaveChanges();
-    }
-
     public void Run()
     {
-        int selection;
+        string selection = string.Empty;
         do
         {
             WriteMenu();
             var lineEntered = cabCompanyReader.ReadLine();
 
             cabCompanyPrinter.WriteLine($"You selected: {lineEntered}");
-            var isChosen = Int32.TryParse(lineEntered, out selection);
-            if (!isChosen)
+            selection = lineEntered ?? string.Empty;
+            if (string.IsNullOrEmpty(selection))
             {
                 continue;
             }
@@ -72,23 +52,29 @@ public class UserInterface
 
             var output = ExecuteCommand(selection, _dispatchController, paramList.ToArray());
             output.ForEach(cabCompanyPrinter.WriteLine);
-        } while (selection != 0);
+        } while (selection != "0");
     }
 
-    private List<string?> RequestParamList(int selection)
+    private List<string?> RequestParamList(string selection)
     {
         List<string?> paramList = [];
-        if (selection == 7 && _menuController.ContainsOption(7))
+        switch (selection)
         {
-            paramList.Add(ExtractParam($"Enter customer name: "));
-            Console.WriteLine("Location List");
-            Console.WriteLine("1 Fulton Drive");
-            Console.WriteLine("2 Fulton Drive");
-            Console.WriteLine("Bowling Alley");
-            Console.WriteLine("Walmart");
-            Console.WriteLine("Summerside");
-            paramList.Add(ExtractParam($"Enter start location: "));
-            paramList.Add(ExtractParam($"Enter end location: "));
+            case "7" when _menuController.ContainsOption("7"):
+                paramList.Add(ExtractParam($"Enter customer name: "));
+                Console.WriteLine("Location List");
+                Console.WriteLine("1 Fulton Drive");
+                Console.WriteLine("2 Fulton Drive");
+                Console.WriteLine("Bowling Alley");
+                Console.WriteLine("Walmart");
+                Console.WriteLine("Summerside");
+                paramList.Add(ExtractParam($"Enter start location: "));
+                paramList.Add(ExtractParam($"Enter end location: "));
+                break;
+            case "9" when _menuController.ContainsOption("9"):
+                paramList.Add(ExtractParam($"Enter user id: "));
+                userId = Convert.ToInt32(paramList[0]);
+                break;
         }
 
         return paramList;
@@ -115,7 +101,7 @@ public class UserInterface
         menu.ForEach(Console.WriteLine);
     }
 
-    private List<string> ExecuteCommand(int selection, DispatchController dispatchController,
+    private List<string> ExecuteCommand(string selection, DispatchController dispatchController,
         params string?[] commandParams)
     {
         if (!_menuController.ContainsOption(selection))
@@ -124,13 +110,15 @@ public class UserInterface
         }
         return selection switch
         {
-            1 => [dispatchController.AddCab()],
-            2 => [dispatchController.RemoveCab()],
-            3 => dispatchController.SendCabRequest(),
-            4 => [dispatchController.CabNotifiesPickedUp()],
-            5 => dispatchController.CabNotifiesDroppedOff(),
-            6 => dispatchController.CustomerCancelledCabRide(),
-            7 => [dispatchController.CustomerCabCall(commandParams[0], commandParams[1], commandParams[2])],
+            "1" => [dispatchController.AddCab(userId)],
+            "2" => [dispatchController.RemoveCab(userId)],
+            "3" => dispatchController.SendCabRequest(userId),
+            "4" => [dispatchController.CabNotifiesPickedUp(userId)],
+            "5" => dispatchController.CabNotifiesDroppedOff(userId),
+            "6" => dispatchController.CustomerCancelledCabRide(userId),
+            "7" => [dispatchController.CustomerCabCall(commandParams[0], commandParams[1], commandParams[2], userId)],
+            "8" => [dispatchController.RegisterNewUser()],            
+            "9" => [dispatchController.LoginUser(userId)],            
             _ => []
         };
     }

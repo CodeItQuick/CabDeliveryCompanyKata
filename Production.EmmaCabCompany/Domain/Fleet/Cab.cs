@@ -11,7 +11,9 @@ public class Cab
     private Customer? _assignedPassenger;
     public double _latitude { get; set; }
     public double _longitude { get; set; }
-    
+
+    public Adapter.OutAdapter.CabFileAdapter.Fleet.Fleet Fleet { get; set; } = new();
+
     public Cab(string? cabName, int wallet, double latitude, double longitude)
     {
         _cabName = cabName;

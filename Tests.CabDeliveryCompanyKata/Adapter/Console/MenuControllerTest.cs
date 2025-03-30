@@ -1,17 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
-using Production.EmmaCabCompany.Domain;
 
 namespace Tests.CabDeliveryCompanyKata.Adapter.Console;
 
 public class MenuControllerTest
 {
     [Fact]
-    public void CanDisplayStartMenu()
+    public void CanDisplayLoginMenu()
     {
         var dbContextOptions = new DbContextOptionsBuilder<CabContext>()
             .UseInMemoryDatabase($"{Guid.NewGuid()}.db")
@@ -24,6 +22,8 @@ public class MenuControllerTest
         Assert.Equal("Please choose a selection from the list: ", displayMenu.First());
         Assert.Equal("0. Exit", displayMenu.Skip(1).First());
         Assert.Equal("1. (Incoming Radio) Add New Cab Driver", displayMenu.Skip(2).First());
+        Assert.Equal("8. Register New User", displayMenu.Skip(3).First());
+        Assert.Equal("9. Login Existing User", displayMenu.Skip(4).First());
     }
     [Fact]
     public void CanMutateDisplayMenu()
@@ -32,13 +32,14 @@ public class MenuControllerTest
             .UseInMemoryDatabase($"{Guid.NewGuid()}.db")
             .Options;
         using var cabContext = new CabContext(dbContextOptions);
-        cabContext.Fleet.Add(new Fleet() { Id = 1 });
-        cabContext.SaveChanges();
+        
         var menuController = new MenuController(cabContext);
 
         var dispatchController = new DispatchController(cabContext);
 
-        dispatchController.AddCab();
+        dispatchController.RegisterNewUser();
+        dispatchController.LoginUser(1);
+        dispatchController.AddCab(1);
         
         var displayMenu = menuController.DisplayMenu();
         Assert.Equal("Please choose a selection from the list: ", displayMenu.First());

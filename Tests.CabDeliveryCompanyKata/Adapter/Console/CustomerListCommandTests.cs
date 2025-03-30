@@ -7,6 +7,7 @@ using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Handler;
+using Production.EmmaCabCompany.Application.Fleet;
 using Production.EmmaCabCompany.Domain;
 using Production.EmmaCabCompany.Domain.CustomerList;
 
@@ -14,9 +15,7 @@ namespace Tests.CabDeliveryCompanyKata.Adapter.Console;
 
 public class CustomerListCommandsTests
 {
-    private readonly CabContext _cabContext;
-    private CustomerListRepository _customerListRepository;
-    private FleetRepository _fleetRepository;
+    private CabContext _cabContext;
     private ApplicationHandler _applicationHandler;
 
     public CustomerListCommandsTests()
@@ -26,17 +25,15 @@ public class CustomerListCommandsTests
         _cabContext = new CabContext(dbContextOptionsBuilder.Options);
         _cabContext.Database.Migrate();
         _cabContext.ChangeTracker.Clear();
-        EnsureFleetExistsForSingleUser();
-        EnsureMenuExistsForSingleUser();
-        _customerListRepository = new CustomerListRepository(_cabContext);
-        _fleetRepository = new FleetRepository(_cabContext);
+        // EnsureFleetExistsForSingleUser();
+        // EnsureMenuExistsForSingleUser();
         _applicationHandler = new ApplicationHandler(_cabContext);
     }
     private void EnsureMenuExistsForSingleUser()
     {
         var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
         if (fleetExists) return;
-        _cabContext.Menu.Add(new Menu() { Id = 1, Customers = new List<PatronDto>()});
+        _cabContext.Menu.Add(new Menu() { Id = 1, Patrons = new List<PatronDto>()});
         _cabContext.SaveChanges();
         _cabContext.ChangeTracker.Clear();
     }
@@ -52,7 +49,10 @@ public class CustomerListCommandsTests
     [Fact]
     public void CustomerCanRequestCab()
     {
-        _applicationHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destination Lane"));
+        _applicationHandler.Handle(new NewUserRegistered());
+        _applicationHandler.Handle(new UserLogin() { Id = 1 });
+        _applicationHandler.Handle(new CustomerCabRequested(
+            "Dan", "1 Fulton Drive", "2 Destination Lane", 1));
         Assert.Equal("Dan", _cabContext.FleetCoordinator
             .Include(x => x.Patrons)
             .FirstOrDefault()
@@ -66,8 +66,10 @@ public class CustomerListCommandsTests
     [Fact]
     public void TwoCustomersCanRequestCab()
     {
-        _applicationHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destination Lane"));
-        _applicationHandler.Handle(new CustomerCabRequested("Lisa", "1 Fulton Drive", "2 Destination Lane"));
+        _applicationHandler.Handle(new NewUserRegistered());
+        _applicationHandler.Handle(new UserLogin() { Id = 1 });
+        _applicationHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destination Lane", 1));
+        _applicationHandler.Handle(new CustomerCabRequested("Lisa", "1 Fulton Drive", "2 Destination Lane", 1));
         Assert.Equal(1, _cabContext.FleetCoordinator.Count());
         Assert.Equal(2, _cabContext.FleetCoordinator
             .Include(customerList => customerList.Patrons!)
@@ -84,7 +86,10 @@ public class CustomerListCommandsTests
     [Fact]
     public void CustomerCanRequestCabAndBeSentCab()
     {
-        _applicationHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destination Lane"));      Assert.Equal(1, _cabContext.FleetCoordinator.Count());
+        _applicationHandler.Handle(new NewUserRegistered());
+        _applicationHandler.Handle(new UserLogin() { Id = 1 });
+        _applicationHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destination Lane", 1));      
+        Assert.Equal(1, _cabContext.FleetCoordinator.Count());
         _applicationHandler.Handle(new CustomerRideRequested() { CustomerListId = 1});      
         Assert.Equal(1, _cabContext.FleetCoordinator.Count());
         Assert.Equal("Dan", _cabContext.FleetCoordinator
@@ -99,9 +104,13 @@ public class CustomerListCommandsTests
     [Fact]
     public void TwoCustomersCanRequestCabAndBeSentCab()
     {
-        _applicationHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destionation Lane"));
+        _applicationHandler.Handle(new NewUserRegistered());
+        _applicationHandler.Handle(new UserLogin() { Id = 1 });
+        _applicationHandler.Handle(new CustomerCabRequested(
+            "Dan", "1 Fulton Drive", "2 Destination Lane", 1));
         _applicationHandler.Handle(new CustomerRideRequested() { CustomerListId = 1});      
-        _applicationHandler.Handle(new CustomerCabRequested("Lisa", "1 Fulton Drive", "2 Destionation Lane"));
+        _applicationHandler.Handle(new CustomerCabRequested(
+            "Lisa", "1 Fulton Drive", "2 Destination Lane", 1));
         _applicationHandler.Handle(new CustomerRideRequested() { CustomerListId = 1});      
         Assert.Equal(2, _cabContext.FleetCoordinator
             .Include(customerList => customerList.Patrons!)
@@ -122,7 +131,9 @@ public class CustomerListCommandsTests
     [Fact]
     public void CustomerCanBePickedUp()
     {
-        _applicationHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destionation Lane"));
+        _applicationHandler.Handle(new NewUserRegistered());
+        _applicationHandler.Handle(new UserLogin() { Id = 1 });
+        _applicationHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destionation Lane", 1));
         _applicationHandler.Handle(new CustomerRideRequested() { CustomerListId = 1});
         _applicationHandler.Handle(new CustomerPickedUp());
         Assert.Equal(1, _cabContext.FleetCoordinator
@@ -142,7 +153,9 @@ public class CustomerListCommandsTests
     [Fact]
     public void CustomerHasBeenDelivered()
     {
-        _applicationHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destionation Lane"));
+        _applicationHandler.Handle(new NewUserRegistered());
+        _applicationHandler.Handle(new UserLogin() { Id = 1 });
+        _applicationHandler.Handle(new CustomerCabRequested("Dan", "1 Fulton Drive", "2 Destionation Lane", 1));
         _applicationHandler.Handle(new CustomerRideRequested() { CustomerListId = 1});  
         _applicationHandler.Handle(new CustomerPickedUp());
         _applicationHandler.Handle(new CustomerDelivered());
@@ -163,9 +176,11 @@ public class CustomerListCommandsTests
     [Fact]
     public void CustomerHasCancelled()
     {
+        _applicationHandler.Handle(new NewUserRegistered());
+        _applicationHandler.Handle(new UserLogin() { Id = 1 });
         _applicationHandler.Handle(
             new CustomerCabRequested(
-                "Dan", "1 Fulton Drive", "2 Destination Lane"));
+                "Dan", "1 Fulton Drive", "2 Destination Lane", 1));
         _applicationHandler.Handle(new CustomerCancelledCab());
         Assert.Equal(1, _cabContext.FleetCoordinator
             .Include(customerList => customerList.Patrons!)
@@ -180,5 +195,75 @@ public class CustomerListCommandsTests
             .FirstOrDefault()
             !.Patrons
             .FirstOrDefault()!.Status);
+    }
+    [Fact]
+    public void NewUserHasRegistered()
+    {
+        _applicationHandler.Handle(new NewUserRegistered());
+        
+        Assert.Single(_cabContext.Fleet.ToList());
+        Assert.Equal(1, _cabContext.Fleet.FirstOrDefault()!.Id);
+    }
+    [Fact]
+    public void TwoNewUserHaveRegistered()
+    {
+        _applicationHandler.Handle(new NewUserRegistered());
+        _applicationHandler.Handle(new NewUserRegistered());
+        
+        Assert.Equal(2, _cabContext.Fleet.ToList().Count);
+        Assert.Equal(1, _cabContext.Fleet.FirstOrDefault()!.Id);
+        Assert.Equal(2, _cabContext.Fleet.ToList().Skip(1).FirstOrDefault()!.Id);
+    }
+    [Fact]
+    public void NewUserCanRegisterAndLoginAndAddCab()
+    {
+        _applicationHandler.Handle(new NewUserRegistered());
+        _applicationHandler.Handle(new UserLogin() { Id = 1 });
+        _applicationHandler.Handle(new AddCabCommand("Evan", 1.00, 2.00, 1));
+        
+        Assert.Single(_cabContext.Fleet.ToList());
+        Assert.Equal(1, _cabContext.Fleet.FirstOrDefault()!.Id);
+        Assert.Single(_cabContext.Fleet.FirstOrDefault()!.FleetOfCabs!);
+    }
+    [Fact]
+    public void SecondUserCanRegisterAndLoginAndAddCab()
+    {
+        _applicationHandler.Handle(new NewUserRegistered());
+        _applicationHandler.Handle(new NewUserRegistered());
+        _applicationHandler.Handle(new UserLogin() { Id = 2 });
+        _applicationHandler.Handle(new AddCabCommand("Evan", 1.00, 2.00, 2));
+        
+        Assert.Equal(2, _cabContext.Fleet.ToList().Count);
+        Assert.Equal(1, _cabContext.Fleet.Skip(1).FirstOrDefault()!.FleetOfCabs.Count);
+        Assert.Equal(2, _cabContext.Fleet.Skip(1).FirstOrDefault()!.Id);
+    }
+    [Fact]
+    public void SecondUserCanRegisterAndLoginAndRemoveCab()
+    {
+        _applicationHandler.Handle(new NewUserRegistered());
+        _applicationHandler.Handle(new NewUserRegistered());
+        _applicationHandler.Handle(new UserLogin() { Id = 2 });
+        _applicationHandler.Handle(new AddCabCommand("Evan", 1.00, 2.00, 2));
+        
+        _applicationHandler.Handle(new RemoveCabCommand(2));
+        
+        Assert.Equal(2, _cabContext.Fleet.ToList().Count);
+        Assert.Equal(0, _cabContext.Fleet.Skip(1).FirstOrDefault()!.FleetOfCabs.Count);
+        Assert.Equal(2, _cabContext.Fleet.Skip(1).FirstOrDefault()!.Id);
+    }
+    [Fact]
+    public void SecondUserCanRegisterAndLoginAndHandleRequestedCab()
+    {
+        _applicationHandler.Handle(new NewUserRegistered());
+        _applicationHandler.Handle(new NewUserRegistered());
+        _applicationHandler.Handle(new UserLogin() { Id = 2 });
+        _applicationHandler.Handle(new AddCabCommand("Evan", 1.00, 2.00, 2));
+        
+        _applicationHandler.Handle(new CustomerCabRequested(
+            "Evan", "1.00", "2.00", 1));
+        
+        Assert.Equal(2, _cabContext.Fleet.ToList().Count);
+        Assert.Single(_cabContext.Fleet.ToList().Skip(1).FirstOrDefault()!.FleetOfCabs);
+        Assert.Equal(2, _cabContext.Fleet.ToList().Skip(1).FirstOrDefault()!.Id);
     }
 }

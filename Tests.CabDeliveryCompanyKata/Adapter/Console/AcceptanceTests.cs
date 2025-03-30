@@ -12,6 +12,8 @@ public class AcceptanceTests
         {
             CommandList = new List<string>()
             {
+                "8",
+                "9",
                 "1",
                 "7",
                 "Emma",
@@ -39,6 +41,8 @@ public class AcceptanceTests
         {
             CommandList = new List<string>()
             {
+                "8",
+                "9",
                 "1",
                 "7",
                 "",
@@ -193,6 +197,8 @@ public class AcceptanceTests
         {
             CommandList =
             [
+                "8",
+                "9",
                 "1",
                 "1",
                 "7",
@@ -261,6 +267,8 @@ public class AcceptanceTests
         {
             CommandList = new List<string>()
             {
+                "8",
+                "9",
                 "1",
                 "1",
                 "7",
@@ -320,6 +328,8 @@ public class AcceptanceTests
         SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
         var commandList = new List<string>()
         {
+            "8",
+            "9",
             "1",
             "7",
             "Emma",
@@ -333,8 +343,6 @@ public class AcceptanceTests
         {
             CommandList = commandList
         };
-        var customerListFilename = $"customer_list_persisted_state.csv";
-        var cabListFilename = $"cab_list_persisted_state.csv";
         var dbName = $"{Guid.NewGuid()}-test.db";
         var userInterface = new UserInterface(
             cabCompanyPrinter, 
@@ -348,6 +356,7 @@ public class AcceptanceTests
             {
                 CommandList =
                 [
+                    "9",
                     "5",
                     "0"
                 ]

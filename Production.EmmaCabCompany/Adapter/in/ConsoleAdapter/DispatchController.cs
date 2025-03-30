@@ -1,10 +1,8 @@
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
-using Production.EmmaCabCompany.Application.CustomerList.Commands.Handler;
 using Production.EmmaCabCompany.Application.Fleet;
 using Production.EmmaCabCompany.Domain.CustomerList;
 
@@ -23,19 +21,19 @@ public class DispatchController
         _applicationHandler = new ApplicationHandler(cabContext);
     }
 
-    public string AddCab()
+    public string AddCab(int userId)
     {
         var cabName = "Evan's Cab";
-        _applicationHandler.Handle(new AddCabCommand(cabName, 46.2382, 63.1311));
+        _applicationHandler.Handle(new AddCabCommand(cabName, 46.2382, 63.1311, userId));
 
         return "Added Evan's Cab to fleet";
     }
 
-    public string RemoveCab()
+    public string RemoveCab(int userId)
     {
         try
         {
-            _applicationHandler.Handle(new RemoveCabCommand(1));
+            _applicationHandler.Handle(new RemoveCabCommand(userId));
             return "Requested cab removed from fleet";
         }
         catch (Exception ex)
@@ -44,18 +42,18 @@ public class DispatchController
         }
     }
 
-    public string CustomerCabCall(string? customerName, string? startLocation, string? destinationLane)
+    public string CustomerCabCall(string? customerName, string? startLocation, string? destinationLane, int userId)
     {
-        _applicationHandler.Handle(new CustomerCabRequested(customerName, startLocation, destinationLane));
+        _applicationHandler.Handle(new CustomerCabRequested(customerName, startLocation, destinationLane, userId));
         return $"Received customer ride request from {customerName}";
     }
 
-    public List<string> CustomerCancelledCabRide()
+    public List<string> CustomerCancelledCabRide(int userId)
     {
         try
         {
-            var menuObj = _menuRepository.GetById(1);
-            var hasOption = menuObj.MenuOptions().Contains(6);
+            var menuObj = _menuRepository.GetById(userId);
+            var hasOption = menuObj.MenuOptions().Contains("6");
             if (!hasOption)
             {
                 throw new SystemException("This is not a valid option.");
@@ -71,12 +69,12 @@ public class DispatchController
         }
     }
 
-    public List<string> SendCabRequest()
+    public List<string> SendCabRequest(int userId)
     {
         try
         {
-            var menuObj = _menuRepository.GetById(1);
-            var hasOption = menuObj.MenuOptions().Contains(3);
+            var menuObj = _menuRepository.GetById(userId);
+            var hasOption = menuObj.MenuOptions().Contains("3");
             if (!hasOption)
             {
                 throw new SystemException("This is not a valid option.");
@@ -86,7 +84,7 @@ public class DispatchController
             _applicationHandler.Handle(new CustomerRideRequested());
 
             // TODO: Fix this - it may have to do a read, which kinda sucks
-            var customerList = _customerListRepository.GetById(1);
+            var customerList = _customerListRepository.GetById(userId);
             // TODO: fix this, should not be hardcodedZ
             var customer = customerList.Customers.Last(x => x.Status == CustomerStatus.WaitingPickup);
             return 
@@ -101,12 +99,12 @@ public class DispatchController
         }
     }
 
-    public string CabNotifiesPickedUp()
+    public string CabNotifiesPickedUp(int userId)
     {
         try
         {
-            var menuObj = _menuRepository.GetById(1);
-            var hasOption = menuObj.MenuOptions().Contains(4);
+            var menuObj = _menuRepository.GetById(userId);
+            var hasOption = menuObj.MenuOptions().Contains("4");
             if (!hasOption)
             {
                 throw new SystemException("This is not a valid option.");
@@ -121,19 +119,19 @@ public class DispatchController
         }
     }
 
-    public List<string> CabNotifiesDroppedOff()
+    public List<string> CabNotifiesDroppedOff(int userId)
     {
         try
         {
-            var menuObj = _menuRepository.GetById(1);
-            var hasOption = menuObj.MenuOptions().Contains(5);
+            var menuObj = _menuRepository.GetById(userId);
+            var hasOption = menuObj.MenuOptions().Contains("5");
             if (!hasOption)
             {
                 throw new SystemException("This is not a valid option.");
             }
 
             _applicationHandler.Handle(new CustomerDelivered());
-            var customerList = _customerListRepository.GetById(1);
+            var customerList = _customerListRepository.GetById(userId);
             // TODO: fix this, should not be hardcodedZ
             var customer = customerList.Customers.Last(x => x.Status == CustomerStatus.Delivered);
             return
@@ -145,5 +143,17 @@ public class DispatchController
         {
             return [ex.Message];
         }
+    }
+
+    public string RegisterNewUser()
+    {
+        _applicationHandler.Handle(new NewUserRegistered());
+        return "A new user has been registered";
+    }
+
+    public string LoginUser(int userId)
+    {
+        _applicationHandler.Handle(new UserLogin() { Id = userId });
+        return "An existing user has logged in successfully";
     }
 }

@@ -8,6 +8,6 @@ namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 [Table("Fleet")]
 public class Fleet
 {
-    public int Id = 1;
-    [ForeignKey("Cab")] public virtual List<CabDriver> FleetOfCabs { get; set; } = new();
+    public int? Id { get; set; }
+    [ForeignKey("Cab")] public List<CabDriver> FleetOfCabs { get; set; } = new();
 }

@@ -1,6 +1,6 @@
 namespace Production.EmmaCabCompany.Application.Fleet;
 
-public class RemoveCabCommand(int fleetId) : IEvent
+public class RemoveCabCommand(int userId) : IEvent
 {
-    public int FleetId { get; init; } = fleetId;
+    public int UserId { get; } = userId;
 }

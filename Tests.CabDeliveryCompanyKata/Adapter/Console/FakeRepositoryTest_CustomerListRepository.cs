@@ -32,7 +32,6 @@ public class FakeRepositoryTestCustomerListRepository
             Id = 7,
             Name = "Hello World",
             Status = CustomerStatus.Delivered,
-            CustomerId = 7,
             EndLocation = "2 Destination Lane",
             MenuId = 1,
             StartLocation = "1 Starting Drive"

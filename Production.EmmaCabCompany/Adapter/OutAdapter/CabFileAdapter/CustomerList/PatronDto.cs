@@ -23,6 +23,5 @@ public class PatronDto
     [Column("Status")]
     public CustomerStatus Status { get; init; }
 
-    [Column("MenuId")] public int? MenuId { get; init; } = 1;
-    [Column("CustomerId")] public int? CustomerId { get; init; } = 1;
+    [Column("MenuId")] public int? MenuId { get; init; }
 }
