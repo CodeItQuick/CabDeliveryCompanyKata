@@ -14,56 +14,49 @@ public class FleetRepository : IFleetRepository
         _cabContext = cabContext;
     }
 
-    public void Save(Cab cab)
+    public void Save(Fleet entity)
     {
-        var updateFleet = _cabContext.Fleet.Include(x => x.FleetOfCabs)
-            .FirstOrDefault(x => x.Id == cab.Fleet.Id);
-        var cab1 = new CabDriver(cab._cabName, cab._wallet, cab._latitude, cab._longitude);
-        if (updateFleet == null)
+        if (entity.Id == null)
         {
-            updateFleet = new Fleet() { Id = cab.Fleet.Id ?? 1 };
-            _cabContext.Fleet.Add(updateFleet);
-            _cabContext.SaveChanges();
+            _cabContext.Fleet.Add(entity);
         }
-
-        var savedCab = _cabContext.CabDrivers.Add(cab1);
-        _cabContext.SaveChanges();
-        updateFleet.FleetOfCabs.Add(savedCab.Entity);
-        _cabContext.Fleet.Update(updateFleet);
-        _cabContext.SaveChanges();
-    }
-
-    public void Save(Fleet fleet)
-    {
-        _cabContext.Fleet.Add(fleet);
+        else if (entity.FleetOfCabs.Count != 0)
+        {
+            _cabContext.CabDrivers.AttachRange(entity.FleetOfCabs);
+            var find = _cabContext.Fleet.Find(entity.Id);
+            if (find != null)
+            {
+                _cabContext.Fleet.Update(find);
+            };
+        }
         _cabContext.SaveChanges();
     }
 
-    public void Save(FleetCoordinator fleetCoordinator)
-    {
-        _cabContext.FleetCoordinator.Add(fleetCoordinator);
-        _cabContext.SaveChanges();
-    }
-
-    public void Remove(int fleetId)
+    public void Remove(int entityId)
     {
         try
         {
             var fleet = _cabContext.Fleet.Include(x => x.FleetOfCabs)
-                .FirstOrDefault(x => x.Id == fleetId);
-            _cabContext.CabDrivers.Remove(fleet!.FleetOfCabs.FirstOrDefault()!);
+                .FirstOrDefault(x => x.Id == entityId);
+            if (fleet!.FleetOfCabs.FirstOrDefault()!.IsStatus(CabStatus.Available))
+            {
+                _cabContext.CabDrivers.Remove(fleet!.FleetOfCabs.FirstOrDefault(x => x.IsStatus(CabStatus.Available))!);
+            }
+            else
+            {
+                throw new ArgumentNullException();
+            }
             _cabContext.SaveChanges();
-            _cabContext.ChangeTracker.Clear();
         }
-        catch (ArgumentNullException)
+        catch (Exception)
         {
             throw new Exception("Cab cannot be removed until passenger dropped off.");
         }
     }
 
-    public Fleet GetFleetById(Fleet fleet)
+    public Fleet GetById(Fleet entity)
     {
-        var fleetDto = _cabContext.Fleet.FirstOrDefault(x => x.Id == fleet.Id);
-        return new Fleet() { Id = fleetDto.Id, FleetOfCabs = fleetDto?.FleetOfCabs ?? new List<CabDriver>()};
+        var fleetDto = _cabContext.Fleet.Include(fleet => fleet.FleetOfCabs).FirstOrDefault(x => x.Id == entity.Id);
+        return new Fleet() { Id = fleetDto.Id, FleetOfCabs = fleetDto?.FleetOfCabs ?? new List<CabDriver>() };
     }
 }

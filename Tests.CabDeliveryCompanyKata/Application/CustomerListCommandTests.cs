@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Handler;
@@ -25,27 +23,9 @@ public class CustomerListCommandsTests
         _cabContext = new CabContext(dbContextOptionsBuilder.Options);
         _cabContext.Database.Migrate();
         _cabContext.ChangeTracker.Clear();
-        // EnsureFleetExistsForSingleUser();
-        // EnsureMenuExistsForSingleUser();
         _applicationHandler = new ApplicationHandler(_cabContext);
     }
-    private void EnsureMenuExistsForSingleUser()
-    {
-        var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
-        if (fleetExists) return;
-        _cabContext.Menu.Add(new Menu() { Id = 1, Patrons = new List<PatronDto>()});
-        _cabContext.SaveChanges();
-        _cabContext.ChangeTracker.Clear();
-    }
 
-    private void EnsureFleetExistsForSingleUser()
-    {
-        var fleetExists = _cabContext.FleetCoordinator.Any(x => x.Id == 1);
-        if (fleetExists) return;
-        _cabContext.FleetCoordinator.Add(new FleetCoordinator() { Id = 1, Patrons = new List<PatronDto>() });
-        _cabContext.SaveChanges();
-        _cabContext.ChangeTracker.Clear();
-    }
     [Fact]
     public void CustomerCanRequestCab()
     {
@@ -223,7 +203,7 @@ public class CustomerListCommandsTests
         
         Assert.Single(_cabContext.Fleet.ToList());
         Assert.Equal(1, _cabContext.Fleet.FirstOrDefault()!.Id);
-        Assert.Single(_cabContext.Fleet.FirstOrDefault()!.FleetOfCabs!);
+        Assert.Single(_cabContext.Fleet.Include(x => x.FleetOfCabs).FirstOrDefault()!.FleetOfCabs!);
     }
     [Fact]
     public void SecondUserCanRegisterAndLoginAndAddCab()

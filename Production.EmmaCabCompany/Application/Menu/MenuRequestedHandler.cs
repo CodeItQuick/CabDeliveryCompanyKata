@@ -15,7 +15,7 @@ public class MenuRequestedHandler : IMenuRequestedHandler
     public MenuConfigurationDto Handle(MenuRequested menuRequested)
     {
         var menuConfigurationDto = new MenuConfigurationDto();
-        var menu = _menuRepository.GetById(menuRequested._id);
+        var menu = _menuRepository.GetById(new Adapter.OutAdapter.CabFileAdapter.Menu.Menu() { Id = menuRequested._id});
         if (menu == null)
         {
             return menuConfigurationDto;

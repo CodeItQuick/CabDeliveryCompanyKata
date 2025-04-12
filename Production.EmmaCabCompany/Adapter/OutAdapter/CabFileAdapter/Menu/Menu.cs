@@ -23,8 +23,9 @@ public class Menu : IdentityClass
     public List<string> MenuOptions()
     {
         List<string> options = [];
-        if (Cabs.Count(x => x.IsStatus(CabStatus.Available)) > 
-            Patrons.Count(x => x.Status != CustomerStatus.Delivered))
+        var isCabAvailable = Cabs.Count(x => x.IsStatus(CabStatus.Available)) > 
+                Patrons.Count(x => x.Status != CustomerStatus.Delivered);
+        if (isCabAvailable)
         {
             options.AddRange(["2", "7"]);
         }

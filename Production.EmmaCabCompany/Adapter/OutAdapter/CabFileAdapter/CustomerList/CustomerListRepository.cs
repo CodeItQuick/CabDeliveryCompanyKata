@@ -13,11 +13,11 @@ public class CustomerListRepository : ICustomerListRepository
         _cabContext = cabContext;
     }
 
-    public Domain.CustomerList.CustomerList GetById(int customerListId)
+    public Domain.CustomerList.CustomerList GetById(Domain.CustomerList.CustomerList entity)
     {
         var customerListDto = _cabContext.FleetCoordinator
             .Include(x => x.Patrons)
-            .FirstOrDefault(x => x.Id == customerListId)!;
+            .FirstOrDefault(x => x.Id == entity.Id)!;
         var customers = customerListDto.Patrons.Select(x =>
             new Customer(x.Name, x.StartLocation!, x.EndLocation) { Status = x.Status }).ToList();
         var customerList = Domain.CustomerList.CustomerList.CreateCustomerList(customerListDto.Id,
@@ -25,21 +25,34 @@ public class CustomerListRepository : ICustomerListRepository
         return customerList;
     }
 
-    public void Save(Domain.CustomerList.CustomerList customerList)
+    public void Save(Domain.CustomerList.CustomerList entity)
     {
         var fleetCoordinator = _cabContext.FleetCoordinator
             .Include(x => x.Patrons)
-            .FirstOrDefault(x => x.Id == customerList.Id)!;
-        var patrons = customerList.Customers
+            .FirstOrDefault(x => x.Id == entity.Id);
+        var patrons = entity.Customers
             .Select(x => new PatronDto()
             {
                 Id = x.Id, Name = x.Name, Status = x.Status, EndLocation = x.EndLocation,
                 StartLocation = x.StartLocation, MenuId = 1
             }).ToList();
-        fleetCoordinator.Patrons = patrons;
-        _cabContext.Patron.AddRange(patrons);
-        _cabContext.SaveChanges();
-        _cabContext.Update(fleetCoordinator); 
+        if (fleetCoordinator == null)
+        {
+            _cabContext.FleetCoordinator.Add(new FleetCoordinator());
+        }
+        else
+        {
+            fleetCoordinator.Patrons = patrons;
+            _cabContext.Patron.AddRange(patrons);
+            _cabContext.SaveChanges();
+            _cabContext.Update(fleetCoordinator); 
+        }
         _cabContext.SaveChanges();
     }
+
+    public void Remove(int entityId)
+    {
+        throw new NotImplementedException();
+    }
+
 }

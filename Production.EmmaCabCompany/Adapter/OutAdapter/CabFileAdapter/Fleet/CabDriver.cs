@@ -17,7 +17,7 @@ public class CabDriver
     [Column("Wallet")]
     public  int _wallet { get; set; }
     [Column("Status")]
-    private CabStatus _status;
+    private CabStatus _status = CabStatus.Available;
     private Customer? _assignedPassenger;
     [Column("Latitude")]
     public double _latitude { get; set; }

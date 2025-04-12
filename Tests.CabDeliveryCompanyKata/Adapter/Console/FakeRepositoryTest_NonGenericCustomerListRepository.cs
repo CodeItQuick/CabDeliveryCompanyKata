@@ -5,22 +5,6 @@ namespace Tests.CabDeliveryCompanyKata.Adapter.Console;
 
 public class FakeRepositoryTestNonGenericCustomerListRepository
 {
-    [Fact(Skip = "Not sure what I was up to with this one")]
-    public void Repository_CanCreateAnItem()
-    {
-        var customerListRepository = new FakeCustomerListDatabaseRepository();
-
-        customerListRepository.Save(new CustomerList()
-        {
-            Customers = new List<Customer>()
-        });
-
-        var customerListDto = customerListRepository.Read();
-
-        Assert.NotNull(customerListDto);
-        Assert.Equal(1, customerListDto.Id);
-        Assert.Equal(0, customerListDto.Customers.Count);
-    }
     [Fact]
     public void Repository_CanCreateAnItemWithDetails()
     {

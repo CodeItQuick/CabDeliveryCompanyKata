@@ -2,7 +2,7 @@ namespace Production.EmmaCabCompany.Domain.CustomerList;
 
 public class CustomerList
 {
-    public int Id { get; private init; } = 1;
+    public int Id { get; set; } = 1;
     public List<Customer> Customers { get; init; } = new();
 
     public static CustomerList CreateCustomerList(int id, List<Customer> customers)

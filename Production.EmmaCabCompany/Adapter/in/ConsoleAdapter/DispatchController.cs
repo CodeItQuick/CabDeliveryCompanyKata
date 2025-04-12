@@ -52,7 +52,7 @@ public class DispatchController
     {
         try
         {
-            var menuObj = _menuRepository.GetById(userId);
+            var menuObj = _menuRepository.GetById(new Menu() { Id = userId });
             var hasOption = menuObj.MenuOptions().Contains("6");
             if (!hasOption)
             {
@@ -73,7 +73,7 @@ public class DispatchController
     {
         try
         {
-            var menuObj = _menuRepository.GetById(userId);
+            var menuObj = _menuRepository.GetById(new Adapter.OutAdapter.CabFileAdapter.Menu.Menu() { Id = userId});
             var hasOption = menuObj.MenuOptions().Contains("3");
             if (!hasOption)
             {
@@ -84,7 +84,7 @@ public class DispatchController
             _applicationHandler.Handle(new CustomerRideRequested());
 
             // TODO: Fix this - it may have to do a read, which kinda sucks
-            var customerList = _customerListRepository.GetById(userId);
+            var customerList = _customerListRepository.GetById(new Domain.CustomerList.CustomerList() { Id = userId });
             // TODO: fix this, should not be hardcodedZ
             var customer = customerList.Customers.Last(x => x.Status == CustomerStatus.WaitingPickup);
             return 
@@ -103,7 +103,7 @@ public class DispatchController
     {
         try
         {
-            var menuObj = _menuRepository.GetById(userId);
+            var menuObj = _menuRepository.GetById(new Adapter.OutAdapter.CabFileAdapter.Menu.Menu() { Id = userId});
             var hasOption = menuObj.MenuOptions().Contains("4");
             if (!hasOption)
             {
@@ -123,7 +123,7 @@ public class DispatchController
     {
         try
         {
-            var menuObj = _menuRepository.GetById(userId);
+            var menuObj = _menuRepository.GetById(new Adapter.OutAdapter.CabFileAdapter.Menu.Menu() { Id = userId });
             var hasOption = menuObj.MenuOptions().Contains("5");
             if (!hasOption)
             {
@@ -131,7 +131,7 @@ public class DispatchController
             }
 
             _applicationHandler.Handle(new CustomerDelivered());
-            var customerList = _customerListRepository.GetById(userId);
+            var customerList = _customerListRepository.GetById(new Domain.CustomerList.CustomerList() { Id = userId });
             // TODO: fix this, should not be hardcodedZ
             var customer = customerList.Customers.Last(x => x.Status == CustomerStatus.Delivered);
             return

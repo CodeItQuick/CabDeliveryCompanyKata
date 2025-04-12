@@ -15,6 +15,7 @@ public class AcceptanceTests
                 "8",
                 "9",
                 "1",
+                "1",
                 "7",
                 "Emma",
                 "1 Fulton Drive",
@@ -44,6 +45,7 @@ public class AcceptanceTests
                 "8",
                 "9",
                 "1",
+                "1",
                 "7",
                 "",
                 "Emma",
@@ -71,6 +73,9 @@ public class AcceptanceTests
         {
             CommandList = new List<string>()
             {
+                "8",
+                "9",
+                "1",
                 "1",
                 "3",
                 "0"
@@ -91,6 +96,9 @@ public class AcceptanceTests
         {
             CommandList = new List<string>()
             {
+                "8",
+                "9",
+                "1",
                 "1",
                 "4",
                 "0"
@@ -111,6 +119,9 @@ public class AcceptanceTests
         {
             CommandList =
             [
+                "8",
+                "9",
+                "1",
                 "1",
                 "7",
                 "Emma",
@@ -137,6 +148,9 @@ public class AcceptanceTests
         {
             CommandList =
             [
+                "8",
+                "9",
+                "1",
                 "3",
                 "0"
             ]
@@ -156,6 +170,9 @@ public class AcceptanceTests
         {
             CommandList =
             [
+                "8",
+                "9",
+                "1",
                 "1",
                 "4",
                 "0"
@@ -176,6 +193,9 @@ public class AcceptanceTests
         {
             CommandList =
             [
+                "8",
+                "9",
+                "1",
                 "7",
                 "3",
                 "0"
@@ -199,6 +219,7 @@ public class AcceptanceTests
             [
                 "8",
                 "9",
+                "1",
                 "1",
                 "1",
                 "7",
@@ -237,6 +258,9 @@ public class AcceptanceTests
         {
             CommandList = new List<string>()
             {
+                "8",
+                "9",
+                "1",
                 "1",
                 "7",
                 "Emma",
@@ -269,6 +293,7 @@ public class AcceptanceTests
             {
                 "8",
                 "9",
+                "1",
                 "1",
                 "1",
                 "7",
@@ -310,6 +335,9 @@ public class AcceptanceTests
         {
             CommandList =
             [
+                "8",
+                "9",
+                "1",
                 "6",
                 "0"
             ]
@@ -330,6 +358,7 @@ public class AcceptanceTests
         {
             "8",
             "9",
+            "1",
             "1",
             "7",
             "Emma",
@@ -357,6 +386,7 @@ public class AcceptanceTests
                 CommandList =
                 [
                     "9",
+                    "1",
                     "5",
                     "0"
                 ]

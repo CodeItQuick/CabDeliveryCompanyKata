@@ -16,6 +16,14 @@ public interface IApplicationHandler :
     IRemoveCabCommandCommandHandler,
     ICustomerRideRequestedCommandHandler;
 
+public class AddCabCommandHandler : ICommandHandler<AddCabCommand>
+{
+    public void Handle(AddCabCommand @event)
+    {
+        throw new NotImplementedException();
+    }
+}
+
 public interface ICommandHandler<in T> where T : IEvent
 {
     void Handle(T @event);

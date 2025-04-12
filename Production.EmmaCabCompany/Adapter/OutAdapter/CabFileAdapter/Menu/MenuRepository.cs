@@ -12,12 +12,12 @@ public class MenuRepository : IMenuRepository
         _cabContext = cabContext;
     }
 
-    public Menu GetById(int customerListId)
+    public Menu GetById(Menu entity)
     {
         var menu = _cabContext.Menu
             .Include(x => x.Patrons)
             .Include(x => x.Cabs)
-            .FirstOrDefault(x => x.Id == customerListId);
+            .FirstOrDefault(x => x.Id == entity.Id);
         return menu;
     }
 
@@ -35,5 +35,10 @@ public class MenuRepository : IMenuRepository
             _cabContext.Menu.Add(menu);
         }
         _cabContext.SaveChanges();
+    }
+
+    public void Remove(int entityId)
+    {
+        throw new NotImplementedException();
     }
 }
