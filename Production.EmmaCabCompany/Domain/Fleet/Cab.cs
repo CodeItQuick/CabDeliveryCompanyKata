@@ -4,15 +4,14 @@ namespace Production.EmmaCabCompany.Domain.Fleet;
 
 public class Cab
 {
-    public int Id { get; init; }
+    public int? Id { get; init; }
     public string? _cabName { get; set; }
     public  int _wallet { get; set; }
     private CabStatus _status = CabStatus.Available;
-    private Customer? _assignedPassenger;
+    private Patron? _assignedPassenger;
     public double _latitude { get; set; }
     public double _longitude { get; set; }
-
-    public Adapter.OutAdapter.CabFileAdapter.Fleet.Fleet Fleet { get; set; } = new();
+    public int CustomerId { get; set; } = 1;
 
     public Cab(string? cabName, int wallet, double latitude, double longitude)
     {
@@ -22,7 +21,7 @@ public class Cab
         _longitude = longitude;
     }
 
-    public bool RequestRideFor(Customer? customer)
+    public bool RequestRideFor(Patron? customer)
     {
         if (_status != CabStatus.Available || _assignedPassenger != null)
         {
@@ -33,17 +32,17 @@ public class Cab
         return true;
     }
 
-    public bool PickupAssignedCustomer(Customer customer)
+    public bool PickupAssignedCustomer(Patron patron)
     {
-        if (!IsEnrouteFor(customer)) return false;
+        if (!IsEnrouteFor(patron)) return false;
         _status = CabStatus.TransportingCustomer;
         return true;
     }
 
-    public bool IsEnrouteFor(Customer customer)
+    public bool IsEnrouteFor(Patron patron)
     {
         return _status == CabStatus.CustomerRideRequested && 
-               customer.Name == _assignedPassenger?.Name;
+               patron.Name == _assignedPassenger?.Name;
     }
 
     public bool IsStatus(CabStatus requestedStatus)
@@ -66,11 +65,4 @@ public class Cab
     {
         return (_latitude, _longitude);
     }
-}
-
-public enum CabStatus
-{
-    Available,
-    TransportingCustomer,
-    CustomerRideRequested
 }

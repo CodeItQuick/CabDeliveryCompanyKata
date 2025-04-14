@@ -6,12 +6,12 @@ namespace Tests.CabDeliveryCompanyKata;
 
 public static class ObjectMother
 {
-    public static Customer CreateDefaultCustomer(
+    public static Patron CreateDefaultCustomer(
         string customerName = "Lisa", 
         string startLocation = "1 Fulton Drive", 
         string endLocation = "1 Destination Avenue")
     {
-        return new Customer(
+        return new Patron(
             customerName,
             startLocation, 
             endLocation);

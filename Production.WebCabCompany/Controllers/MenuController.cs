@@ -2,7 +2,9 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Customers;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Patrons;
 using Production.EmmaCabCompany.Application.Menu;
 using Production.EmmaCabCompany.Domain.Menu;
 using Production.WebCabCompany.Models;
@@ -19,7 +21,10 @@ public class MenuController : Controller
         CabContext cabContext)
     {
         _logger = logger;
-        _menuRequestedHandler = new MenuRequestedHandler(new MenuRepository(cabContext));
+        _menuRequestedHandler = new MenuRequestedHandler(
+            new PatronsRepository(cabContext),
+            new CustomerRepository(cabContext),
+            new CabDriversRepository(cabContext));
     }
 
     // TODO: Not tested

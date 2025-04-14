@@ -2,10 +2,10 @@ namespace Production.EmmaCabCompany.Domain.Menu;
 
 public class MenuRequested
 {
-    public int _id { get; set; } = 1;
+    public int Id { get; set; } = 1;
 
     public MenuRequested(int id)
     {
-        _id = id;
+        Id = id;
     }
 }

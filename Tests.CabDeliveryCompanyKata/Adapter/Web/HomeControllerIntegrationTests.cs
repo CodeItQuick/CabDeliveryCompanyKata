@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 using Production.WebCabCompany.Controllers;
 
 namespace Tests.CabDeliveryCompanyKata.Adapter.Web;
@@ -23,8 +21,8 @@ public class HomeControllerIntegrationTests
 
         _cabContext = new CabContext(cabContextOptions.Options);
         _cabContext.Database.Migrate();
-        EnsureFleetExistsForSingleUser();
-        EnsureMenuExistsForSingleUser();
+        // EnsureFleetExistsForSingleUser();
+        // EnsureMenuExistsForSingleUser();
         _homeController = new HomeController(
             new NullLogger<HomeController>(),
             _cabContext);
@@ -60,27 +58,27 @@ public class HomeControllerIntegrationTests
             (string[]) ["0", "1", "8", "9"]);
     }
     
-    private void EnsureFleetExistsForSingleUser()
-    {
-        var fleetExists = _cabContext.Fleet.Any(x => x.Id == 1);
-        if (fleetExists) return;
-        _cabContext.Fleet.Add(new Fleet() { Id = 1 });
-        _cabContext.SaveChanges();
-    }
-
-    private void EnsureMenuExistsForSingleUser()
-    {
-        var fleetExists = _cabContext.Menu.Any(x => x.Id == 1);
-        if (fleetExists) return;
-        _cabContext.Menu.Add(new Menu() { Id = 1 });
-        _cabContext.SaveChanges();
-    }
-
-    public void EmptyFleet(int fleetId)
-    {
-        var fleet = _cabContext.Fleet.Include(x => x.FleetOfCabs)
-            .FirstOrDefault(x => x.Id == fleetId);
-        _cabContext.CabDrivers.RemoveRange(fleet!.FleetOfCabs.ToList());
-        _cabContext.SaveChanges();
-    }
+    // private void EnsureFleetExistsForSingleUser()
+    // {
+    //     var fleetExists = _cabContext.Fleet.Any(x => x.Id == 1);
+    //     if (fleetExists) return;
+    //     _cabContext.Fleet.Add(new Fleet() { Id = 1 });
+    //     _cabContext.SaveChanges();
+    // }
+    //
+    // private void EnsureMenuExistsForSingleUser()
+    // {
+    //     var fleetExists = _cabContext.Menues.Any(x => x.Id == 1);
+    //     if (fleetExists) return;
+    //     _cabContext.Menues.Add(new Menu() { Id = 1 });
+    //     _cabContext.SaveChanges();
+    // }
+    //
+    // public void EmptyFleet(int fleetId)
+    // {
+    //     var fleet = _cabContext.Fleet.Include(x => x.Cabs)
+    //         .FirstOrDefault(x => x.Id == fleetId);
+    //     _cabContext.CabDrivers.RemoveRange(fleet!.Cabs.ToList());
+    //     _cabContext.SaveChanges();
+    // }
 }

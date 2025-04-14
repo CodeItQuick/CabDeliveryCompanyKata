@@ -6,11 +6,9 @@ namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
 public class CabContext : DbContext
 {
-    public DbSet<Fleet.Fleet> Fleet { get; set; }
     public DbSet<CabDriver> CabDrivers { get; set; }
-    public DbSet<PatronDto> Patron { get; set; }
-    public DbSet<FleetCoordinator> FleetCoordinator { get; set; }
-    public DbSet<Menu.Menu> Menu { get; set; }
+    public DbSet<PatronDto> Patrons { get; set; }
+    public DbSet<Customer> Customers { get; set; }
 
     public CabContext(DbContextOptions<CabContext> options) : base(options) { }
 }

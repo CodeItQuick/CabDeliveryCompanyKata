@@ -1,28 +1,40 @@
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+using Production.EmmaCabCompany.Application.CustomerList;
+using Production.EmmaCabCompany.Application.Fleet;
 using Production.EmmaCabCompany.Domain.Menu;
 
 namespace Production.EmmaCabCompany.Application.Menu;
 
 public class MenuRequestedHandler : IMenuRequestedHandler
 {
-    private readonly IMenuRepository _menuRepository;
+    private readonly IPatronsRepository _patronsRepository;
+    private readonly ICustomerRepository _customerRepository;
+    private readonly ICabDriversRepository _cabDriversRepository;
 
-    public MenuRequestedHandler(IMenuRepository menuRepository)
+    public MenuRequestedHandler(
+        IPatronsRepository patronsRepository,
+        ICustomerRepository customerRepository,
+        ICabDriversRepository cabDriversRepository)
     {
-        _menuRepository = menuRepository;
+        _patronsRepository = patronsRepository;
+        _customerRepository = customerRepository;
+        _cabDriversRepository = cabDriversRepository;
     }
 
     public MenuConfigurationDto Handle(MenuRequested menuRequested)
     {
-        var menuConfigurationDto = new MenuConfigurationDto();
-        var menu = _menuRepository.GetById(new Adapter.OutAdapter.CabFileAdapter.Menu.Menu() { Id = menuRequested._id});
-        if (menu == null)
+        var customer = _customerRepository.GetById(menuRequested.Id);
+        var cabDrivers = _cabDriversRepository.GetById(menuRequested.Id);
+        var patrons = _patronsRepository.GetById(menuRequested.Id);
+        
+        var menu = new Domain.Menu.Menu
         {
-            return menuConfigurationDto;
-        }
-        // menuConfigurationDto.MenuOptions = ["0", "1"];
-        menuConfigurationDto.MenuOptions.AddRange(menu.MenuOptions());
-        return menuConfigurationDto;
+            Cabs = cabDrivers.Cabs,
+            Patrons = patrons.Patrons,
+            Customer = customer
+        };
+        
+        return new MenuConfigurationDto() { MenuOptions = menu.MenuOptions()};
     }
 }
 

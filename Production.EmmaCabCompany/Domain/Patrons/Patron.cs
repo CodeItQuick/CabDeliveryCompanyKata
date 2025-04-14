@@ -1,21 +1,22 @@
 ﻿namespace Production.EmmaCabCompany.Domain.CustomerList;
 
-public class Customer
+public class Patron
 {
     public int Id { get; init; }
     public string? Name { get; init; }
     public string? StartLocation { get; init; }
     public string? EndLocation { get; init; }
     public (double, double) PickupLocation { get; init; }
-    public CustomerStatus Status { get; set; }
-    public int? MenuId { get; set; } = 1;
-    public int? CustomerId { get; set; } = 1;
+    public PatronStatus Status { get; set; }
+    public int? MenuId { get; set; }
+    public int? CustomerId { get; set; }
+    public PatronList PatronList { get; set; }
 
-    public Customer()
+    public Patron()
     {
     }
 
-    public Customer(string? customerName, string startLocation, string? endLocation)
+    public Patron(string? customerName, string startLocation, string? endLocation)
     {
         Name = customerName;
         StartLocation = startLocation;

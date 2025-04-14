@@ -6,7 +6,7 @@ using Production.EmmaCabCompany.Domain.CustomerList;
 namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 
 [PrimaryKey("Id")]
-[Table("Customers")]
+[Table("Patrons")]
 public class PatronDto
 {
     [Key]
@@ -21,7 +21,7 @@ public class PatronDto
     [NotMapped] // should this exist at this layer if its "not mapped"?
     public (double, double) PickupLocation { get; init; }
     [Column("Status")]
-    public CustomerStatus Status { get; init; }
-
-    [Column("MenuId")] public int? MenuId { get; init; }
+    public PatronStatus Status { get; init; }
+    [ForeignKey("Id")]
+    public Customer Customer { get; set; }
 }

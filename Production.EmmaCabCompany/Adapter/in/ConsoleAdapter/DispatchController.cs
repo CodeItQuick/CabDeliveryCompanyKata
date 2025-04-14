@@ -1,6 +1,6 @@
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
+using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Patrons;
 using Production.EmmaCabCompany.Application;
 using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
 using Production.EmmaCabCompany.Application.Fleet;
@@ -10,14 +10,12 @@ namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
 
 public class DispatchController
 {
-    private readonly CustomerListRepository _customerListRepository;
-    private readonly MenuRepository _menuRepository;
+    private readonly PatronRepository _patronRepository;
     private ApplicationHandler _applicationHandler;
 
     public DispatchController(CabContext cabContext)
     {
-        _customerListRepository = new CustomerListRepository(cabContext);
-        _menuRepository = new MenuRepository(cabContext);
+        _patronRepository = new PatronRepository(cabContext);
         _applicationHandler = new ApplicationHandler(cabContext);
     }
 
@@ -52,15 +50,15 @@ public class DispatchController
     {
         try
         {
-            var menuObj = _menuRepository.GetById(new Menu() { Id = userId });
-            var hasOption = menuObj.MenuOptions().Contains("6");
-            if (!hasOption)
-            {
-                throw new SystemException("This is not a valid option.");
-            }
-
-            // _cabServiceHandler.CancelPickup();
-            _applicationHandler.Handle(new CustomerCancelledCab());
+            // var menuObj = _menuRepository.GetById(new Menu() { Id = userId });
+            // var hasOption = menuObj.MenuOptions().Contains("6");
+            // if (!hasOption)
+            // {
+            //     throw new SystemException("This is not a valid option.");
+            // }
+            //
+            // // _cabServiceHandler.CancelPickup();
+            // _applicationHandler.Handle(new CustomerCancelledCab());
             return ["Customer cancelled cab ride successfully."];
         }
         catch (Exception ex)
@@ -73,23 +71,23 @@ public class DispatchController
     {
         try
         {
-            var menuObj = _menuRepository.GetById(new Adapter.OutAdapter.CabFileAdapter.Menu.Menu() { Id = userId});
-            var hasOption = menuObj.MenuOptions().Contains("3");
-            if (!hasOption)
-            {
-                throw new SystemException("This is not a valid option.");
-            }
-
-            // var response = _cabServiceHandler.SendCabRequest();
-            _applicationHandler.Handle(new CustomerRideRequested());
-
-            // TODO: Fix this - it may have to do a read, which kinda sucks
-            var customerList = _customerListRepository.GetById(new Domain.CustomerList.CustomerList() { Id = userId });
-            // TODO: fix this, should not be hardcodedZ
-            var customer = customerList.Customers.Last(x => x.Status == CustomerStatus.WaitingPickup);
+            // var menuObj = _menuRepository.GetById(new Menu() { Id = userId});
+            // var hasOption = menuObj.MenuOptions().Contains("3");
+            // if (!hasOption)
+            // {
+            //     throw new SystemException("This is not a valid option.");
+            // }
+            //
+            // // var response = _cabServiceHandler.SendCabRequest();
+            // _applicationHandler.Handle(new CustomerRideRequested());
+            //
+            // // TODO: Fix this - it may have to do a read, which kinda sucks
+            // var customerList = _patronRepository.GetById(new PatronList() { Id = userId });
+            // // TODO: fix this, should not be hardcodedZ
+            // var customer = customerList.Customers.Last(x => x.Status == PatronStatus.WaitingPickup);
             return 
             [
-                $"Evan's Cab picked up {customer.Name} at {customer.StartLocation}.",
+                $"Evan's Cab picked up Customer at Start Location.",
                 "Cab assigned to customer."
             ];;
         }
@@ -103,14 +101,14 @@ public class DispatchController
     {
         try
         {
-            var menuObj = _menuRepository.GetById(new Adapter.OutAdapter.CabFileAdapter.Menu.Menu() { Id = userId});
-            var hasOption = menuObj.MenuOptions().Contains("4");
-            if (!hasOption)
-            {
-                throw new SystemException("This is not a valid option.");
-            }
-
-            _applicationHandler.Handle(new CustomerPickedUp());
+            // var menuObj = _menuRepository.GetById(new Menu() { Id = userId});
+            // var hasOption = menuObj.MenuOptions().Contains("4");
+            // if (!hasOption)
+            // {
+            //     throw new SystemException("This is not a valid option.");
+            // }
+            //
+            // _applicationHandler.Handle(new CustomerPickedUp());
             return "Notified dispatcher of pickup";
         }
         catch (Exception ex)
@@ -123,20 +121,20 @@ public class DispatchController
     {
         try
         {
-            var menuObj = _menuRepository.GetById(new Adapter.OutAdapter.CabFileAdapter.Menu.Menu() { Id = userId });
-            var hasOption = menuObj.MenuOptions().Contains("5");
-            if (!hasOption)
-            {
-                throw new SystemException("This is not a valid option.");
-            }
-
-            _applicationHandler.Handle(new CustomerDelivered());
-            var customerList = _customerListRepository.GetById(new Domain.CustomerList.CustomerList() { Id = userId });
-            // TODO: fix this, should not be hardcodedZ
-            var customer = customerList.Customers.Last(x => x.Status == CustomerStatus.Delivered);
+            // var menuObj = _menuRepository.GetById(new Menu() { Id = userId });
+            // var hasOption = menuObj.MenuOptions().Contains("5");
+            // if (!hasOption)
+            // {
+            //     throw new SystemException("This is not a valid option.");
+            // }
+            //
+            // _applicationHandler.Handle(new CustomerDelivered());
+            // var customerList = _patronRepository.GetById(new PatronList() { Id = userId });
+            // // TODO: fix this, should not be hardcodedZ
+            // var customer = customerList.Customers.Last(x => x.Status == PatronStatus.Delivered);
             return
             [
-                $"Evan's Cab dropped off {customer.Name} at {customer.EndLocation}."
+                $"Evan's Cab dropped off Patron at End Location."
             ];
         }
         catch (Exception ex)

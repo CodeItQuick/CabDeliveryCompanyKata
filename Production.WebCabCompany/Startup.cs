@@ -3,18 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Menu;
 using Production.EmmaCabCompany.Application;
-using Production.EmmaCabCompany.Application.CustomerList;
-using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
-using Production.EmmaCabCompany.Application.CustomerList.Commands.Handler;
-using Production.EmmaCabCompany.Application.Fleet;
-using Production.EmmaCabCompany.Application.Menu;
-using Production.WebCabCompany.Controllers;
 using Production.WebCabCompany.Models;
-using Production.WebCabCompany.Services;
 
 namespace Production.WebCabCompany;
 

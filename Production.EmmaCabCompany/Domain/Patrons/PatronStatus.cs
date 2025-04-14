@@ -1,6 +1,6 @@
 namespace Production.EmmaCabCompany.Domain.CustomerList;
 
-public enum CustomerStatus
+public enum PatronStatus
 {
     WaitingPickup,
     Enroute,
