@@ -19,7 +19,7 @@ public class DispatchController
         _applicationHandler = new ApplicationHandler(cabContext);
     }
 
-    public string AddCab(int userId)
+    public string AddCab(int? userId)
     {
         var cabName = "Evan's Cab";
         _applicationHandler.Handle(new AddCabCommand(cabName, 46.2382, 63.1311, userId));
@@ -27,7 +27,7 @@ public class DispatchController
         return "Added Evan's Cab to fleet";
     }
 
-    public string RemoveCab(int userId)
+    public string RemoveCab(int? userId)
     {
         try
         {
@@ -40,13 +40,13 @@ public class DispatchController
         }
     }
 
-    public string CustomerCabCall(string? customerName, string? startLocation, string? destinationLane, int userId)
+    public string CustomerCabCall(string? customerName, string? startLocation, string? destinationLane, int? userId)
     {
-        _applicationHandler.Handle(new CustomerCabRequested(customerName, startLocation, destinationLane, userId));
+        _applicationHandler.Handle(new CustomerCabRequested(customerName, startLocation, destinationLane, userId ?? 0));
         return $"Received customer ride request from {customerName}";
     }
 
-    public List<string> CustomerCancelledCabRide(int userId)
+    public List<string> CustomerCancelledCabRide(int? userId)
     {
         try
         {
@@ -67,7 +67,7 @@ public class DispatchController
         }
     }
 
-    public List<string> SendCabRequest(int userId)
+    public List<string> SendCabRequest(int? userId)
     {
         try
         {
@@ -97,7 +97,7 @@ public class DispatchController
         }
     }
 
-    public string CabNotifiesPickedUp(int userId)
+    public string CabNotifiesPickedUp(int? userId)
     {
         try
         {
@@ -117,7 +117,7 @@ public class DispatchController
         }
     }
 
-    public List<string> CabNotifiesDroppedOff(int userId)
+    public List<string> CabNotifiesDroppedOff(int? userId)
     {
         try
         {
@@ -149,7 +149,7 @@ public class DispatchController
         return "A new user has been registered";
     }
 
-    public string LoginUser(int userId)
+    public string LoginUser(int? userId)
     {
         _applicationHandler.Handle(new UserLogin() { Id = userId });
         return "An existing user has logged in successfully";

@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Production.EmmaCabCompany.Application.Fleet;
 using Production.EmmaCabCompany.Domain.Fleet;
@@ -15,34 +16,21 @@ public class CabDriverRepository : ICabDriverRepository, IDisposable
 
     public void Save(Cab entity)
     {
-        var customer = new Customer() { Id = entity.CustomerId };
+        if (entity.Id is not (null or 0))
+        {
+            return;
+        }
         var cabDriver = new CabDriver()
         {
             Id = entity.Id,
-            Customer = customer,
+            CustomerId = entity.CustomerId,
             _cabName = entity._cabName,
             _latitude = entity._latitude,
             _longitude = entity._longitude,
             _status = CabStatus.Available
         };
-        if (cabDriver.Id is null or 0)
-        {
-            _cabContext.Customers.Attach(customer);
-            _cabContext.Add(cabDriver);
-            _cabContext.Entry(cabDriver).State = EntityState.Unchanged;
-            _cabContext.SaveChanges();
-            _cabContext.ChangeTracker.Clear();
-        }
-        else if (entity.Id != 0)
-        {
-            _cabContext.CabDrivers.Attach(cabDriver);
-            var find = _cabContext.CabDrivers.Find(entity.Id);
-            if (find != null)
-            {
-                _cabContext.CabDrivers.Update(cabDriver);
-            };
-            _cabContext.SaveChanges();
-        }
+        _cabContext.CabDrivers.Add(cabDriver);
+        _cabContext.SaveChanges();
     }
 
     public void Remove(int entityId)
@@ -50,9 +38,10 @@ public class CabDriverRepository : ICabDriverRepository, IDisposable
         try
         {
             var cab = _cabContext.CabDrivers
-                .FirstOrDefault(x => x.Id == entityId);
+                .FirstOrDefault(x => x.CustomerId == entityId);
             if (cab!.IsStatus(CabStatus.Available))
             {
+                cab.CustomerId = null;
                 _cabContext.CabDrivers.Remove(cab);
             }
             else
@@ -67,7 +56,7 @@ public class CabDriverRepository : ICabDriverRepository, IDisposable
         }
     }
 
-    public Cab GetById(int customerId)
+    public Cab GetById(int? customerId)
     {
         var cabDriver = _cabContext.CabDrivers
             .Include(fleet => fleet.Customer)
@@ -78,5 +67,26 @@ public class CabDriverRepository : ICabDriverRepository, IDisposable
     public void Dispose()
     {
         _cabContext.Dispose();
+    }
+
+    public async Task StreamToFile(string filename, int customerId)
+    {
+        await using var fileStream = File.Create(filename);
+        IQueryable<CabDriver> query = _cabContext.CabDrivers.Where(x => x.CustomerId == customerId);
+        await query.ForEachAsync(x =>
+        {
+            var unicodeEncoding = new UTF8Encoding();
+            byte[] result = unicodeEncoding.GetBytes($"{x.Id}, {x._cabName}, {x._latitude}, {x._longitude}\n");
+            if (fileStream.CanSeek)
+            {
+                fileStream.Seek(0, SeekOrigin.End);
+            }
+
+            if (fileStream.CanWrite)
+            {
+                fileStream.WriteAsync(result, 0, result.Length);
+            }
+        });
+        fileStream.Flush();
     }
 }

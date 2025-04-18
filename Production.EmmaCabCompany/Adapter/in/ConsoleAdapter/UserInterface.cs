@@ -10,7 +10,7 @@ public class UserInterface
     private MenuController _menuController;
     private CabContext _cabContext;
     private DispatchController _dispatchController;
-    private int userId { get; set; } = 1;
+    private int? CustomerId { get; set; }
 
     public UserInterface(
         ICabCompanyPrinter cabCompanyPrinter, ICabCompanyReader cabCompanyReader, string? dbName = null)
@@ -60,7 +60,7 @@ public class UserInterface
         List<string?> paramList = [];
         switch (selection)
         {
-            case "7" when _menuController.ContainsOption("7"):
+            case "7" when _menuController.ContainsOption("7", CustomerId):
                 paramList.Add(ExtractParam($"Enter customer name: "));
                 Console.WriteLine("Location List");
                 Console.WriteLine("1 Fulton Drive");
@@ -71,9 +71,9 @@ public class UserInterface
                 paramList.Add(ExtractParam($"Enter start location: "));
                 paramList.Add(ExtractParam($"Enter end location: "));
                 break;
-            case "9" when _menuController.ContainsOption("9"):
+            case "9" when _menuController.ContainsOption("9", CustomerId):
                 paramList.Add(ExtractParam($"Enter user id: "));
-                userId = Convert.ToInt32(paramList[0]);
+                CustomerId = Convert.ToInt32(paramList[0]);
                 break;
         }
 
@@ -97,28 +97,28 @@ public class UserInterface
     }
     private void WriteMenu()
     {
-        var menu = _menuController.DisplayMenu();
+        var menu = _menuController.DisplayMenu(CustomerId);
         menu.ForEach(Console.WriteLine);
     }
 
     private List<string> ExecuteCommand(string selection, DispatchController dispatchController,
         params string?[] commandParams)
     {
-        if (!_menuController.ContainsOption(selection))
+        if (!_menuController.ContainsOption(selection, CustomerId))
         {
             return ["This is not a valid option."];
         }
         return selection switch
         {
-            "1" => [dispatchController.AddCab(userId)],
-            "2" => [dispatchController.RemoveCab(userId)],
-            "3" => dispatchController.SendCabRequest(userId),
-            "4" => [dispatchController.CabNotifiesPickedUp(userId)],
-            "5" => dispatchController.CabNotifiesDroppedOff(userId),
-            "6" => dispatchController.CustomerCancelledCabRide(userId),
-            "7" => [dispatchController.CustomerCabCall(commandParams[0], commandParams[1], commandParams[2], userId)],
+            "1" => [dispatchController.AddCab(CustomerId)],
+            "2" => [dispatchController.RemoveCab(CustomerId)],
+            "3" => dispatchController.SendCabRequest(CustomerId),
+            "4" => [dispatchController.CabNotifiesPickedUp(CustomerId)],
+            "5" => dispatchController.CabNotifiesDroppedOff(CustomerId),
+            "6" => dispatchController.CustomerCancelledCabRide(CustomerId),
+            "7" => [dispatchController.CustomerCabCall(commandParams[0], commandParams[1], commandParams[2], CustomerId)],
             "8" => [dispatchController.RegisterNewUser()],            
-            "9" => [dispatchController.LoginUser(userId)],            
+            "9" => [dispatchController.LoginUser(CustomerId)],            
             _ => []
         };
     }

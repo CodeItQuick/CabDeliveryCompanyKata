@@ -19,9 +19,9 @@ public class MenuController
             new CabDriversRepository(cabContext));
     }
 
-    public List<string> DisplayMenu()
+    public List<string> DisplayMenu(int? customerId)
     {
-        var menuOptions = _menuRequested.Handle(new MenuRequested(1));
+        var menuOptions = _menuRequested.Handle(new MenuRequested(customerId));
         var menu = new List<string>()
         {
             "Please choose a selection from the list: ",
@@ -45,9 +45,9 @@ public class MenuController
         return menu;
     }
 
-    public bool ContainsOption(string selection)
+    public bool ContainsOption(string selection, int? customerId)
     {
-        var menuConfiguration = _menuRequested.Handle(new MenuRequested(1));
+        var menuConfiguration = _menuRequested.Handle(new MenuRequested(customerId));
         return menuConfiguration.MenuOptions.Contains(selection);
     }
 }

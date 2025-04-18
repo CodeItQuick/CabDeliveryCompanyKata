@@ -61,6 +61,9 @@ namespace Production.EmmaCabCompany.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("_cabName")
                         .HasColumnType("TEXT")
                         .HasColumnName("CabName");

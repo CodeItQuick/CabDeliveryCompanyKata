@@ -13,7 +13,7 @@ public class PatronRepository : IPatronRepository
         _cabContext = cabContext;
     }
 
-    public Patron GetById(int customerId)
+    public Patron GetById(int? customerId)
     {
         var patron = _cabContext.Patrons
             .FirstOrDefault(x => x.Id == customerId)!;

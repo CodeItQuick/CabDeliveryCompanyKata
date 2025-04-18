@@ -11,8 +11,8 @@ using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 namespace Production.EmmaCabCompany.Migrations
 {
     [DbContext(typeof(CabContext))]
-    [Migration("20250413150713_AddForeignKeyCustomerIdToCab")]
-    partial class AddForeignKeyCustomerIdToCab
+    [Migration("20250418160313_UpdateToCurrent")]
+    partial class UpdateToCurrent
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,6 +62,9 @@ namespace Production.EmmaCabCompany.Migrations
                 {
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("_cabName")

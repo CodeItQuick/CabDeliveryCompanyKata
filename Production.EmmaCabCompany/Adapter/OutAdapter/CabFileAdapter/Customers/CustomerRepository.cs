@@ -12,11 +12,11 @@ public class CustomerRepository : ICustomerRepository, IDisposable, IAsyncDispos
         _cabContext = cabContext;
     }
 
-    public Domain.Customers.Customer GetById(int customerId)
+    public Domain.Customers.Customer GetById(int? customerId)
     {
         var customer = _cabContext.Customers
             .FirstOrDefault(x => x.Id == customerId)!;
-        return new Domain.Customers.Customer() { Id = customer.Id };
+        return new Domain.Customers.Customer() { Id = customer?.Id };
     }
 
     public void Save(Domain.Customers.Customer entity)

@@ -49,7 +49,7 @@ public class CabDriversRepository : ICabDriversRepository
         }
     }
 
-    public Domain.Fleet.Fleet GetById(int customerId)
+    public Domain.Fleet.Fleet GetById(int? customerId)
     {
         var fleetDto = _cabContext.CabDrivers
             .Include(fleet => fleet.Customer)

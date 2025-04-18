@@ -13,7 +13,7 @@ public class PatronsRepository : IPatronsRepository
         _cabContext = cabContext;
     }
 
-    public PatronList GetById(int customerId)
+    public PatronList GetById(int? customerId)
     {
         var patrons = _cabContext.Patrons
             .Where(x => x.Customer.Id == customerId)

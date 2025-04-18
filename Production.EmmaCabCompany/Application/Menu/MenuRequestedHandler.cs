@@ -34,7 +34,7 @@ public class MenuRequestedHandler : IMenuRequestedHandler
             Customer = customer
         };
         
-        return new MenuConfigurationDto() { MenuOptions = menu.MenuOptions()};
+        return new MenuConfigurationDto() { MenuOptions = menu.MenuOptions(menuRequested.Id)};
     }
 }
 

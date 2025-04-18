@@ -5,7 +5,7 @@
 namespace Production.EmmaCabCompany.Migrations
 {
     /// <inheritdoc />
-    public partial class AddForeignKeyCustomerIdToCab : Migration
+    public partial class UpdateToCurrent : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -68,7 +68,8 @@ namespace Production.EmmaCabCompany.Migrations
                     Wallet = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     Latitude = table.Column<double>(type: "REAL", nullable: false),
-                    Longitude = table.Column<double>(type: "REAL", nullable: false)
+                    Longitude = table.Column<double>(type: "REAL", nullable: false),
+                    CustomerId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {

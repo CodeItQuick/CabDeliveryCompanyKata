@@ -24,7 +24,8 @@ public class CabDriver
     [Column("Longitude")]
     public double _longitude { get; set; }
     [ForeignKey("Id")]
-    public Customer Customer { get; set; }
+    public Customer? Customer { get; set; }
+    public int? CustomerId { get; set; }
     
     public bool IsStatus(CabStatus requestedStatus)
     {
