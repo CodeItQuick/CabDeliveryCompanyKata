@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
@@ -10,9 +11,11 @@ using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 namespace Production.EmmaCabCompany.Migrations
 {
     [DbContext(typeof(CabContext))]
-    partial class CabContextModelSnapshot : ModelSnapshot
+    [Migration("20250427110645_CorrectKeysOnCabDrivers")]
+    partial class CorrectKeysOnCabDrivers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -58,7 +61,6 @@ namespace Production.EmmaCabCompany.Migrations
             modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet.CabDriver", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("_cabName")

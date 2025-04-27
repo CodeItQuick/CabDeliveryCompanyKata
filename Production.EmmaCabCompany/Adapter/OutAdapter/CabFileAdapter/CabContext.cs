@@ -11,4 +11,11 @@ public class CabContext : DbContext
     public DbSet<Customer> Customers { get; set; }
 
     public CabContext(DbContextOptions<CabContext> options) : base(options) { }
+    public CabContext CreateDbContext(string[] args)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<CabContext>();
+        optionsBuilder.UseSqlite("Data Source=cab_database.db");
+
+        return new CabContext(optionsBuilder.Options);
+    }
 }

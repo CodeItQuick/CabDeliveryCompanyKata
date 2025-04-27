@@ -4,11 +4,11 @@ namespace Production.EmmaCabCompany.Domain.Fleet;
 
 public class Cab
 {
-    public int? Id { get; init; }
+    public int? Id { get; set; }
     public string? _cabName { get; set; }
     public  int _wallet { get; set; }
-    private CabStatus _status = CabStatus.Available;
-    private Patron? _assignedPassenger;
+    public CabStatus _status { get; set; } = CabStatus.Available;
+    public Patron? _assignedPassenger { get; set; }
     public double _latitude { get; set; }
     public double _longitude { get; set; }
     public int CustomerId { get; set; } = 1;
@@ -34,15 +34,9 @@ public class Cab
 
     public bool PickupAssignedCustomer(Patron patron)
     {
-        if (!IsEnrouteFor(patron)) return false;
+        if (_status != CabStatus.CustomerRideRequested) return false;
         _status = CabStatus.TransportingCustomer;
         return true;
-    }
-
-    public bool IsEnrouteFor(Patron patron)
-    {
-        return _status == CabStatus.CustomerRideRequested && 
-               patron.Name == _assignedPassenger?.Name;
     }
 
     public bool IsStatus(CabStatus requestedStatus)

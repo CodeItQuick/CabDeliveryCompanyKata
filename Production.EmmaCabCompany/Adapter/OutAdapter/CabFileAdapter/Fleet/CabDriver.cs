@@ -1,15 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using Production.EmmaCabCompany.Domain.CustomerList;
 
 namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 
 [Table("CabDrivers")]
-[PrimaryKey("Id")]
+// [PrimaryKey("Id")]
 public class CabDriver
 {
-    [Key]
+    // [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int? Id { get; set; }
     [Column("CabName")]
@@ -18,14 +17,12 @@ public class CabDriver
     public  int _wallet { get; set; }
     [Column("Status")]
     public CabStatus _status { get; set; } = CabStatus.Available;
-    private Customer? _assignedPassenger;
     [Column("Latitude")]
     public double _latitude { get; set; }
     [Column("Longitude")]
     public double _longitude { get; set; }
     [ForeignKey("Id")]
     public Customer? Customer { get; set; }
-    public int? CustomerId { get; set; }
     
     public bool IsStatus(CabStatus requestedStatus)
     {

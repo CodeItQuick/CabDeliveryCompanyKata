@@ -8,7 +8,7 @@ namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 [Table("Customers")]
 public class Customer
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    // [Key]
+    // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; init; }
 }

@@ -1,8 +1,10 @@
-﻿namespace Production.EmmaCabCompany.Domain.CustomerList;
+﻿using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
-public class Patron
+namespace Production.EmmaCabCompany.Domain.CustomerList;
+
+public class Patron : IdentityClass
 {
-    public int Id { get; init; }
+    public override int Id { get; set; }
     public string? Name { get; init; }
     public string? StartLocation { get; init; }
     public string? EndLocation { get; init; }

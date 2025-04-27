@@ -51,6 +51,10 @@ public class UserInterface
             var paramList = RequestParamList(selection);
 
             var output = ExecuteCommand(selection, _dispatchController, paramList.ToArray());
+            if (output.Count == 1 && Int32.TryParse(output.First(), out var loginId))
+            {
+                CustomerId = loginId;
+            }
             output.ForEach(cabCompanyPrinter.WriteLine);
         } while (selection != "0");
     }
@@ -104,7 +108,7 @@ public class UserInterface
     private List<string> ExecuteCommand(string selection, DispatchController dispatchController,
         params string?[] commandParams)
     {
-        if (!_menuController.ContainsOption(selection, CustomerId))
+        if (!_menuController.ContainsOption(selection, CustomerId) && !(CustomerId != null && selection == "9"))
         {
             return ["This is not a valid option."];
         }

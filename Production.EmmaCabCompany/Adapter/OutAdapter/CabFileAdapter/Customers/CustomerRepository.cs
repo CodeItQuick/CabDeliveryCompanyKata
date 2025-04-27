@@ -23,6 +23,7 @@ public class CustomerRepository : ICustomerRepository, IDisposable, IAsyncDispos
     {
         _cabContext.Customers.Add(new Customer());
         _cabContext.SaveChanges();
+        _cabContext.ChangeTracker.Clear();
     }
 
     public void Remove(int entityId)

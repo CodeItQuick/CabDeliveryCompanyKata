@@ -67,7 +67,7 @@ public class DispatchController
         }
     }
 
-    public List<string> SendCabRequest(int? userId)
+    public List<string> SendCabRequest(int? customerId)
     {
         try
         {
@@ -77,14 +77,9 @@ public class DispatchController
             // {
             //     throw new SystemException("This is not a valid option.");
             // }
-            //
-            // // var response = _cabServiceHandler.SendCabRequest();
-            // _applicationHandler.Handle(new CustomerRideRequested());
-            //
-            // // TODO: Fix this - it may have to do a read, which kinda sucks
-            // var customerList = _patronRepository.GetById(new PatronList() { Id = userId });
-            // // TODO: fix this, should not be hardcodedZ
-            // var customer = customerList.Customers.Last(x => x.Status == PatronStatus.WaitingPickup);
+            
+            _applicationHandler.Handle(new CustomerRideRequested() { CustomerListId = customerId ?? 0});
+            
             return 
             [
                 $"Evan's Cab picked up Customer at Start Location.",
@@ -108,7 +103,7 @@ public class DispatchController
             //     throw new SystemException("This is not a valid option.");
             // }
             //
-            // _applicationHandler.Handle(new CustomerPickedUp());
+            _applicationHandler.Handle(new CustomerPickedUp() { CustomerListId = userId ?? 0});
             return "Notified dispatcher of pickup";
         }
         catch (Exception ex)
@@ -151,7 +146,7 @@ public class DispatchController
 
     public string LoginUser(int? userId)
     {
-        _applicationHandler.Handle(new UserLogin() { Id = userId });
-        return "An existing user has logged in successfully";
+        var customer = _applicationHandler.Handle(new UserLogin() { Id = userId });
+        return customer.Id?.ToString() ?? "";
     }
 }

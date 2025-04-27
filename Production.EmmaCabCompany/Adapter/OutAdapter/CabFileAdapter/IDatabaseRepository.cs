@@ -3,7 +3,7 @@ namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 public interface IDatabaseRepository<T> where T : IdentityClass
 {
     public T GetById(int recordId);
-    public void Create(T entity);
+    public void Save(T entity);
     public void Delete(int recordId);
     // Bad idea below?
     // public void Update(int recordId, T updatedRecord);

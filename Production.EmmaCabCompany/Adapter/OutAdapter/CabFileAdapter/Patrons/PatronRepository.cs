@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 using Production.EmmaCabCompany.Application.CustomerList;
 using Production.EmmaCabCompany.Domain.CustomerList;
@@ -16,8 +17,12 @@ public class PatronRepository : IPatronRepository
     public Patron GetById(int? customerId)
     {
         var patron = _cabContext.Patrons
+            .Include(x => x.Customer)
             .FirstOrDefault(x => x.Id == customerId)!;
-        return new Patron(patron.Name, patron.StartLocation, patron.EndLocation);
+        return new Patron(patron.Name, patron.StartLocation, patron.EndLocation)
+        {
+            Id = patron.Id, CustomerId = patron.Customer.Id
+        };
     }
 
     public void Save(Patron entity)
@@ -26,11 +31,20 @@ public class PatronRepository : IPatronRepository
             .FirstOrDefault(x => x.Id == entity.CustomerId);
         var patronDto = new PatronDto()
         {
-            Id = entity.Id, Name = entity.Name, Status = entity.Status, EndLocation = entity.EndLocation,
-            StartLocation = entity.StartLocation, Customer = fleetCoordinator
+            Id = entity.Id, Name = entity.Name, Status = entity.Status, 
+            EndLocation = entity.EndLocation, StartLocation = entity.StartLocation,
+            Customer = fleetCoordinator
         };
-        _cabContext.Patrons.Add(patronDto);
+        if (patronDto.Id != null)
+        {
+            _cabContext.Patrons.Update(patronDto);
+        }
+        else
+        {
+            _cabContext.Patrons.Add(patronDto);
+        }
         _cabContext.SaveChanges();
+        _cabContext.ChangeTracker.Clear();
     }
 
     public void Remove(int entityId)

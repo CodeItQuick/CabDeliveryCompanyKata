@@ -21,8 +21,6 @@ public class AcceptanceTests
                 "1 Fulton Drive",
                 "1 Destination Lane",
                 "3",
-                "4",
-                "5",
                 "0"
             }
         };
@@ -31,8 +29,35 @@ public class AcceptanceTests
             cabCompanyReader);
         userInterface.Run();
         
-        Assert.Contains("Evan's Cab picked up Emma at 1 Fulton Drive.", cabCompanyPrinter.List());
-        Assert.Contains("Evan's Cab dropped off Emma at 1 Destination Lane.", cabCompanyPrinter.List());
+        Assert.Contains("Evan's Cab picked up Customer at Start Location.", cabCompanyPrinter.List());
+    }
+    [Fact]
+    public void TheCabCompanyCanDropOffACustomerAtAnAddress()
+    {
+        SpyCabCompanyPrinter cabCompanyPrinter = new SpyCabCompanyPrinter();
+        FakeCabCompanyReader cabCompanyReader = new FakeCabCompanyReader()
+        {
+            CommandList = new List<string>()
+            {
+                "8",
+                "9",
+                "1",
+                "1",
+                "7",
+                "Emma",
+                "1 Fulton Drive",
+                "1 Destination Lane",
+                "3",
+                "4",
+                "0"
+            }
+        };
+        var userInterface = new UserInterface(
+            cabCompanyPrinter, 
+            cabCompanyReader);
+        userInterface.Run();
+        
+        Assert.Contains("Notified dispatcher of pickup.", cabCompanyPrinter.List());
     }
     [Fact]
     public void TheCabCompanyCanRePromptOnBadCustomerName()

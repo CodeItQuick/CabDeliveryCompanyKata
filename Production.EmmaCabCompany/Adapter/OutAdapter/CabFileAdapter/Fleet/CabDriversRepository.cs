@@ -52,11 +52,20 @@ public class CabDriversRepository : ICabDriversRepository
     public Domain.Fleet.Fleet GetById(int? customerId)
     {
         var fleetDto = _cabContext.CabDrivers
-            .Include(fleet => fleet.Customer)
             .Where(x => x.Customer.Id == customerId)
             .ToList()
-            .Select(x => new Cab(x._cabName, x._wallet, x._latitude, x._longitude))
+            .Select(x => new Cab(x._cabName, x._wallet, x._latitude, x._longitude)
+            {
+                Id = x.Id, CustomerId = x.Customer?.Id ?? 0,
+                _status = CabStatus.TryParse(x._status.ToString(), out Domain.Fleet.CabStatus cabStatus)
+                    ? cabStatus
+                    : Domain.Fleet.CabStatus.Available,
+                _cabName = x._cabName,
+                _latitude = x._latitude,
+                _longitude = x._longitude,
+            })
             .ToList();
-        return new Domain.Fleet.Fleet() { Cabs = fleetDto};
+        _cabContext.ChangeTracker.Clear();
+        return new Domain.Fleet.Fleet() { Cabs = fleetDto };
     }
 }

@@ -1,9 +1,10 @@
+using System.Data.Common;
 using Microsoft.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
 using Production.EmmaCabCompany.Domain.Fleet;
-using Xunit.Sdk;
 
 
 namespace Tests.CabDeliveryCompanyKata.Adapter.Console;
@@ -24,15 +25,28 @@ public class CabDriverRepositoryTests : IClassFixture<TestDatabaseFixture>, IDis
 {
     private readonly TestDatabaseFixture _fixture;
     private CabContext _cabContext;
+    private DbContextOptions<CabContext> _dbContextOptions;
+    private DbConnectionStringBuilder _dbConnection;
+    private SqliteConnection _sqliteConnection;
 
     public CabDriverRepositoryTests(TestDatabaseFixture fixture)
     {
         _fixture = fixture;
-        var dbContextOptions = new DbContextOptionsBuilder<CabContext>()
-            .UseInMemoryDatabase(_fixture.sqlConnection.ToString())
+        _dbConnection = new DbConnectionStringBuilder
+        {
+            ConnectionString = "DataSource=sqlite_db.db"
+        };
+        _sqliteConnection = new SqliteConnection(_dbConnection.ConnectionString);
+        _sqliteConnection.Open();
+        _dbContextOptions = new DbContextOptionsBuilder<CabContext>()
+            .UseSqlite(_sqliteConnection)
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors()
             .Options;
-        _cabContext = new CabContext(dbContextOptions);
-        _cabContext.Customers.RemoveRange(_cabContext.Customers.ToList());
+        _cabContext = new CabContext(_dbContextOptions);
+        _cabContext.Database.Migrate();
+        var customerList = _cabContext.Customers.ToList();
+        _cabContext.Customers.RemoveRange(customerList);
         _cabContext.CabDrivers.RemoveRange(_cabContext.CabDrivers.ToList());
         _cabContext.SaveChanges();
         _cabContext.ChangeTracker.Clear();
@@ -41,13 +55,12 @@ public class CabDriverRepositoryTests : IClassFixture<TestDatabaseFixture>, IDis
     [Fact]
     public void CanAddCab()
     {
-        var customer = new Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter
-            .Customer();
+        var customer = new Customer();
         _cabContext.Customers.Add(customer);
         _cabContext.SaveChanges();
         var cab = new Cab("evan", 1, 1.00, 1.00)
         {
-            CustomerId = customer.Id
+            CustomerId = customer.Id, Id = null
         };
 
         var cabDriverRepository = new CabDriverRepository(_cabContext);
@@ -55,25 +68,28 @@ public class CabDriverRepositoryTests : IClassFixture<TestDatabaseFixture>, IDis
 
         Assert.Single(_cabContext.Customers.ToList());
         Assert.Single(_cabContext.CabDrivers.ToList());
-        Assert.Equal(customer.Id, _cabContext.CabDrivers.ToList().FirstOrDefault()?.CustomerId);
+        Assert.Equal(customer.Id, _cabContext.CabDrivers.ToList().FirstOrDefault()?.Customer.Id);
     }
 
     [Fact]
     public void CanAddTwoCabs()
     {
-        var customer = new Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Customer();
+        var customer = new Customer();
         _cabContext.Customers.Add(customer);
         _cabContext.SaveChanges();
-        var cab = new Cab("evan", 1, 1.00, 1.00) { CustomerId = customer.Id };
+        
+        var cab = new Cab("evan", 1, 1.00, 1.00) { Id = null, CustomerId = customer.Id };
         var cabTwo = new Cab("dan", 1, 1.00, 1.00) { CustomerId = customer.Id };
         var cabDriverRepository = new CabDriverRepository(_cabContext);
         cabDriverRepository.Save(cab);
-        _cabContext.ChangeTracker.Clear();
+        cabDriverRepository.Dispose();
 
-        cabDriverRepository.Save(cabTwo);
-
-        Assert.Single(_cabContext.Customers.ToList());
-        Assert.Equal(2, _cabContext.CabDrivers.Count());
+        var cabContextTwo = new CabContext(_dbContextOptions);
+        var cabDriverRepositoryTwo = new CabDriverRepository(cabContextTwo);
+        cabDriverRepositoryTwo.Save(cabTwo);
+        
+        Assert.Single(cabContextTwo.Customers.ToList());
+        Assert.Equal(2, cabContextTwo.CabDrivers.Count());
     }
 
     // Experimenting with streaming
@@ -98,7 +114,7 @@ public class CabDriverRepositoryTests : IClassFixture<TestDatabaseFixture>, IDis
         var file = File.ReadAllText("test.csv");
 
         var cabDrivers = _cabContext.CabDrivers
-            .Where(x => x.CustomerId == customer.Id)
+            .Where(x => x.Customer.Id == customer.Id)
             .ToList();
         
         Assert.Equal($"{cabDrivers.First().Id}, {cabDrivers.First()._cabName}, 1, 1\n" +

@@ -19,12 +19,16 @@ public class Menu
 
     public List<string> MenuOptions(int? customerId)
     {
-        List<string> options = [];
+        List<string> options = ["0"];
         var isCabAvailable = Customer != null && Cabs?.Count(x => x.IsStatus(CabStatus.Available)) > 
             Patrons?.Count(x => x.Status != PatronStatus.Delivered);
         if (customerId == null)
         {
             options.AddRange(["8", "9"]);
+        }
+        if (customerId != null)
+        {
+            options.AddRange(["1"]);
         }
         if (isCabAvailable)
         {

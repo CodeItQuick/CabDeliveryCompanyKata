@@ -6,7 +6,7 @@ public class FakeDatabaseRepository<T> : IDatabaseRepository<T> where T : Identi
 {
     private readonly Dictionary<int, T> _records = new();
 
-    public void Create(T entity)
+    public void Save(T entity)
     {
         entity.Id = _records.Count + 1;
         _records.Add(entity.Id, entity);

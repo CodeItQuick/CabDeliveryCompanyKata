@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
 using Production.EmmaCabCompany.Application.CustomerList;
 using Production.EmmaCabCompany.Domain.CustomerList;
@@ -16,9 +17,14 @@ public class PatronsRepository : IPatronsRepository
     public PatronList GetById(int? customerId)
     {
         var patrons = _cabContext.Patrons
+            .Include(x => x.Customer)
             .Where(x => x.Customer.Id == customerId)
-            .Select(x => new Patron(x.Name, x.StartLocation, x.EndLocation))
+            .Select(x => new Patron(x.Name, x.StartLocation, x.EndLocation)
+            {
+                Id = x.Id, CustomerId = x.Customer.Id, Status = x.Status
+            })
             .ToList();
+        _cabContext.ChangeTracker.Clear();
         return new PatronList() { Patrons = patrons };
     }
 
