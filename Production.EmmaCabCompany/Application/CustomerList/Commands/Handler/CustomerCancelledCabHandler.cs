@@ -1,5 +1,24 @@
-using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
+using Production.EmmaCabCompany.Application;
 
-namespace Production.EmmaCabCompany.Application.CustomerList.Commands.Handler;
+namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
-public interface ICustomerCancelledCabCommandHandler : ICommandHandler<CustomerCancelledCab>;
+public class CustomerCancelledCabHandler
+{
+    private readonly ICustomerListRepository _customerListRepository;
+
+    // TODO: should be internal, but then how to test?
+    public CustomerCancelledCabHandler(
+        ICustomerListRepository customerListRepository)
+    {
+        _customerListRepository = customerListRepository;
+    }
+
+    public int Handle(CustomerEnrouted request)
+    {
+        var customerList = _customerListRepository.GetById(1);
+        customerList.CancelPickup();
+        _customerListRepository.Add(customerList);
+
+        return customerList.Id;
+    }
+}

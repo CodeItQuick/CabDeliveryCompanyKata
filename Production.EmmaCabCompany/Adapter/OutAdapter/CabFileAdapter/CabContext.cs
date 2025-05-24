@@ -1,21 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
+using Production.EmmaCabCompany.Domain;
 
 namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
 public class CabContext : DbContext
 {
-    public DbSet<CabDriver> CabDrivers { get; set; }
-    public DbSet<PatronDto> Patrons { get; set; }
-    public DbSet<Customer> Customers { get; set; }
+    public DbSet<Fleet> Fleet { get; set; }
+    public DbSet<Cab> Cabs { get; set; }
+    public DbSet<CustomerList> CustomerList { get; set; }
 
     public CabContext(DbContextOptions<CabContext> options) : base(options) { }
-    public CabContext CreateDbContext(string[] args)
-    {
-        var optionsBuilder = new DbContextOptionsBuilder<CabContext>();
-        optionsBuilder.UseSqlite("Data Source=cab_database.db");
-
-        return new CabContext(optionsBuilder.Options);
-    }
 }

@@ -1,17 +1,15 @@
 using Production.EmmaCabCompany;
-using Production.EmmaCabCompany.Domain.CustomerList;
-using Production.EmmaCabCompany.Domain.Fleet;
 
 namespace Tests.CabDeliveryCompanyKata;
 
 public static class ObjectMother
 {
-    public static Patron CreateDefaultCustomer(
+    public static Customer CreateDefaultCustomer(
         string customerName = "Lisa", 
         string startLocation = "1 Fulton Drive", 
         string endLocation = "1 Destination Avenue")
     {
-        return new Patron(
+        return new Customer(
             customerName,
             startLocation, 
             endLocation);

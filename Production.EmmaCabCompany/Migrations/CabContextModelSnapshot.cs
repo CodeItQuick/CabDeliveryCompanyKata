@@ -17,21 +17,45 @@ namespace Production.EmmaCabCompany.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Customer", b =>
+            modelBuilder.Entity("Production.EmmaCabCompany.Cab", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("Cab")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("_cabName")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("CabName");
+
+                    b.Property<double>("_latitude")
+                        .HasColumnType("REAL")
+                        .HasColumnName("Latitude");
+
+                    b.Property<double>("_longitude")
+                        .HasColumnType("REAL")
+                        .HasColumnName("Longitude");
+
+                    b.Property<int>("_wallet")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("Wallet");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.HasIndex("Cab");
+
+                    b.ToTable("Cabs");
                 });
 
-            modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList.PatronDto", b =>
+            modelBuilder.Entity("Production.EmmaCabCompany.Customer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("Customer")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("EndLocation")
@@ -52,60 +76,55 @@ namespace Production.EmmaCabCompany.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Patrons");
+                    b.HasIndex("Customer");
+
+                    b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet.CabDriver", b =>
+            modelBuilder.Entity("Production.EmmaCabCompany.Domain.CustomerList", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("_cabName")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("CabName");
+                    b.HasKey("Id");
 
-                    b.Property<double>("_latitude")
-                        .HasColumnType("REAL")
-                        .HasColumnName("Latitude");
+                    b.ToTable("CustomerList");
+                });
 
-                    b.Property<double>("_longitude")
-                        .HasColumnType("REAL")
-                        .HasColumnName("Longitude");
-
-                    b.Property<int>("_status")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("Status");
-
-                    b.Property<int>("_wallet")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("Wallet");
+            modelBuilder.Entity("Production.EmmaCabCompany.Domain.Fleet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.ToTable("CabDrivers");
+                    b.ToTable("Fleet");
                 });
 
-            modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList.PatronDto", b =>
+            modelBuilder.Entity("Production.EmmaCabCompany.Cab", b =>
                 {
-                    b.HasOne("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
+                    b.HasOne("Production.EmmaCabCompany.Domain.Fleet", null)
+                        .WithMany("FleetOfCabs")
+                        .HasForeignKey("Cab");
                 });
 
-            modelBuilder.Entity("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet.CabDriver", b =>
+            modelBuilder.Entity("Production.EmmaCabCompany.Customer", b =>
                 {
-                    b.HasOne("Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Production.EmmaCabCompany.Domain.CustomerList", null)
+                        .WithMany("Customers")
+                        .HasForeignKey("Customer");
+                });
 
-                    b.Navigation("Customer");
+            modelBuilder.Entity("Production.EmmaCabCompany.Domain.CustomerList", b =>
+                {
+                    b.Navigation("Customers");
+                });
+
+            modelBuilder.Entity("Production.EmmaCabCompany.Domain.Fleet", b =>
+                {
+                    b.Navigation("FleetOfCabs");
                 });
 #pragma warning restore 612, 618
         }

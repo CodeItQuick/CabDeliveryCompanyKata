@@ -31,7 +31,7 @@ public class HomeControllerTests : IClassFixture<TestingWebApiFactory>
         var applicationToken = DefaultRegister(antiForgeryToken, loginUsername);
         var loginToken = NavigateToPage("Account/Login", applicationToken);
         DefaultLogin(loginToken, loginUsername);
-        NavigateSecurelyTo($"Menu/Index", applicationToken);
+        NavigateSecurelyTo($"Manage/Index", applicationToken);
         
         var response = NavigateSecurelyTo($"Home/AddCabDriver", applicationToken);
         
@@ -45,7 +45,7 @@ public class HomeControllerTests : IClassFixture<TestingWebApiFactory>
         var applicationToken = DefaultRegister(antiForgeryToken, loginUsername);
         var loginToken = NavigateToPage("Account/Login", applicationToken);
         DefaultLogin(loginToken, loginUsername);
-        NavigateSecurelyTo($"Menu/Index", applicationToken);
+        NavigateSecurelyTo($"Manage/Index", applicationToken);
         NavigateSecurelyTo($"Home/AddCabDriver", applicationToken);
         NavigateSecurelyTo($"Home/CustomerCabCall", applicationToken);
         var response = NavigateSecurelyTo($"Home/SendCabRequest", applicationToken);

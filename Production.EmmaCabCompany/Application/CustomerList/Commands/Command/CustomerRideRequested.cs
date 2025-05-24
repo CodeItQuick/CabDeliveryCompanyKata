@@ -1,6 +1,6 @@
-namespace Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
+namespace Production.EmmaCabCompany.Application;
 
-public class CustomerRideRequested : IEvent
+public class CustomerRideRequested
 {
     public int CustomerListId { get; set; }
 }

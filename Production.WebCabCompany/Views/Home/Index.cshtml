@@ -1,0 +1,51 @@
+﻿@using Production.WebCabCompany.Controllers
+@model CabDisplayModel
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Home Page";
+}
+<div>
+    @if (Model.DisplayMenu.Contains(1))
+    {
+        <div>
+            <a asp-controller="Home" asp-action="AddCabDriver">Add New Cab Driver</a>
+        </div>
+    }
+    @if (Model.DisplayMenu.Contains(2))
+    {
+        <div>
+            <a asp-controller="Home" asp-action="RemoveCabDriver">Remove Cab Driver</a>
+        </div>
+    }
+    @if (Model.DisplayMenu.Contains(3))
+    {
+        <div>
+            <a asp-controller="Home" asp-action="SendCabRequest">Send Cab Request</a>
+        </div>
+    }
+    @if (Model.DisplayMenu.Contains(4))
+    {
+        <div>
+            <a asp-controller="Home" asp-action="CabNotifiesPickedUp">Cab Notifies Picked Up</a>
+        </div>
+    }
+    @if (Model.DisplayMenu.Contains(5))
+    {
+        <div>
+            <a asp-controller="Home" asp-action="CabNotifiesDroppedOff">Cab Notifies Dropped Off</a>
+        </div>
+    }
+    @if (Model.DisplayMenu.Contains(6))
+    {
+        <div>
+            <a asp-controller="Home" asp-action="CustomerCancelledCabRide">Customer Cancelled Cab Ride</a>
+        </div>
+    }
+    @if (Model.DisplayMenu.Contains(7))
+    {
+        <div>
+            <a asp-controller="Home" asp-action="CustomerCabCall">Customer Request Ride</a>
+        </div>
+    }
+</div>
+

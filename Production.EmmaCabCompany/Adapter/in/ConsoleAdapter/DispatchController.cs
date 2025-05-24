@@ -1,64 +1,55 @@
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.CustomerList;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Patrons;
-using Production.EmmaCabCompany.Application;
-using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
-using Production.EmmaCabCompany.Application.Fleet;
-using Production.EmmaCabCompany.Domain.CustomerList;
+using Production.EmmaCabCompany.Service;
+using Tests.CabDeliveryCompanyKata;
 
-namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
+namespace Production.EmmaCabCompany.Adapter.@out;
 
 public class DispatchController
 {
-    private readonly PatronRepository _patronRepository;
-    private ApplicationHandler _applicationHandler;
-
-    public DispatchController(CabContext cabContext)
+    private int _currentNameIdx = 0;
+    private MenuService _menuService;
+    private readonly CabServiceHandler _cabServiceHandler;
+    public DispatchController(CabServiceHandler cabServiceHandler, MenuService menuService)
     {
-        _patronRepository = new PatronRepository(cabContext);
-        _applicationHandler = new ApplicationHandler(cabContext);
+        _menuService = menuService;
+        this._cabServiceHandler = cabServiceHandler;
     }
 
-    public string AddCab(int? userId)
+
+    public string AddCab()
     {
         var cabName = "Evan's Cab";
-        _applicationHandler.Handle(new AddCabCommand(cabName, 46.2382, 63.1311, userId));
-
+        _cabServiceHandler.AddCab(new Cab(cabName, 20, 46.2382, 63.1311));
+        
         return "Added Evan's Cab to fleet";
     }
-
-    public string RemoveCab(int? userId)
+    public string RemoveCab()
     {
         try
         {
-            _applicationHandler.Handle(new RemoveCabCommand(userId));
-            return "Requested cab removed from fleet";
+            _cabServiceHandler.RemoveCab();
+            return "Cab removed from fleet";
         }
         catch (Exception ex)
         {
             return ex.Message;
         }
     }
-
-    public string CustomerCabCall(string? customerName, string? startLocation, string? destinationLane, int? userId)
+    public string CustomerCabCall(string? customerName, string? startLocation, string? destinationLane)
     {
-        _applicationHandler.Handle(new CustomerCabRequested(customerName, startLocation, destinationLane, userId ?? 0));
-        return $"Received customer ride request from {customerName}";
+        var customerCabCall = _cabServiceHandler.CustomerCabCall(customerName, startLocation, destinationLane);
+        var resultText = $"Received customer ride request from {customerCabCall}";
+        _currentNameIdx += 1;
+        return resultText;
     }
-
-    public List<string> CustomerCancelledCabRide(int? userId)
+    public List<string> CustomerCancelledCabRide()
     {
         try
         {
-            // var menuObj = _menuRepository.GetById(new Menu() { Id = userId });
-            // var hasOption = menuObj.MenuOptions().Contains("6");
-            // if (!hasOption)
-            // {
-            //     throw new SystemException("This is not a valid option.");
-            // }
-            //
-            // // _cabServiceHandler.CancelPickup();
-            // _applicationHandler.Handle(new CustomerCancelledCab());
+            if (!_menuService.IsValidMenuOption(6))
+            {
+                throw new SystemException("This is not a valid option.");
+            }
+            _cabServiceHandler.CancelPickup();
             return ["Customer cancelled cab ride successfully."];
         }
         catch (Exception ex)
@@ -66,44 +57,31 @@ public class DispatchController
             return [ex.Message];
         }
     }
-
-    public List<string> SendCabRequest(int? customerId)
+    public List<string> SendCabRequest()
     {
         try
         {
-            // var menuObj = _menuRepository.GetById(new Menu() { Id = userId});
-            // var hasOption = menuObj.MenuOptions().Contains("3");
-            // if (!hasOption)
-            // {
-            //     throw new SystemException("This is not a valid option.");
-            // }
-            
-            _applicationHandler.Handle(new CustomerRideRequested() { CustomerListId = customerId ?? 0});
-            
-            return 
-            [
-                $"Evan's Cab picked up Customer at Start Location.",
-                "Cab assigned to customer."
-            ];;
+            if (!_menuService.IsValidMenuOption(3))
+            {
+                throw new SystemException("This is not a valid option.");
+            }
+            var response = _cabServiceHandler.SendCabRequest();
+            return response.ToList();
         }
         catch (Exception ex)
         {
             return [ex.Message];
         }
     }
-
-    public string CabNotifiesPickedUp(int? userId)
+    public string CabNotifiesPickedUp()
     {
         try
         {
-            // var menuObj = _menuRepository.GetById(new Menu() { Id = userId});
-            // var hasOption = menuObj.MenuOptions().Contains("4");
-            // if (!hasOption)
-            // {
-            //     throw new SystemException("This is not a valid option.");
-            // }
-            //
-            _applicationHandler.Handle(new CustomerPickedUp() { CustomerListId = userId ?? 0});
+            if (!_menuService.IsValidMenuOption(4))
+            {
+                throw new SystemException("This is not a valid option.");
+            }
+            _cabServiceHandler.PickupCustomer();
             return "Notified dispatcher of pickup";
         }
         catch (Exception ex)
@@ -111,42 +89,20 @@ public class DispatchController
             return ex.Message;
         }
     }
-
-    public List<string> CabNotifiesDroppedOff(int? userId)
+    public List<string> CabNotifiesDroppedOff()
     {
         try
         {
-            // var menuObj = _menuRepository.GetById(new Menu() { Id = userId });
-            // var hasOption = menuObj.MenuOptions().Contains("5");
-            // if (!hasOption)
-            // {
-            //     throw new SystemException("This is not a valid option.");
-            // }
-            //
-            // _applicationHandler.Handle(new CustomerDelivered());
-            // var customerList = _patronRepository.GetById(new PatronList() { Id = userId });
-            // // TODO: fix this, should not be hardcodedZ
-            // var customer = customerList.Customers.Last(x => x.Status == PatronStatus.Delivered);
-            return
-            [
-                $"Evan's Cab dropped off Patron at End Location."
-            ];
+            if (!_menuService.IsValidMenuOption(5))
+            {
+                throw new SystemException("This is not a valid option.");
+            }
+            var droppedOff = _cabServiceHandler.DropOffCustomer();
+            return [$"{droppedOff[0]?.CabName} dropped off {droppedOff[0]?.PassengerName} at {droppedOff[0]?.Destination}."];
         }
         catch (Exception ex)
         {
             return [ex.Message];
         }
-    }
-
-    public string RegisterNewUser()
-    {
-        _applicationHandler.Handle(new NewUserRegistered());
-        return "A new user has been registered";
-    }
-
-    public string LoginUser(int? userId)
-    {
-        var customer = _applicationHandler.Handle(new UserLogin() { Id = userId });
-        return customer.Id?.ToString() ?? "";
     }
 }

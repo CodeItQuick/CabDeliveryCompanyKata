@@ -1,16 +1,13 @@
-namespace Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
+namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
-public class CustomerCabRequested : IEvent
+public class CustomerCabRequested
 {
-    public CustomerCabRequested(string customerName, string startLocation, string endLocation, int customerId)
+    public CustomerCabRequested(string customerName, string startLocation, string endLocation)
     {
-        CustomerId = customerId;
         CustomerName = customerName;
         StartLocation = startLocation;
         EndLocation = endLocation;
     }
-
-    public int CustomerId { get;  }
 
     public string CustomerName { get; init; }
     public string StartLocation { get; init; }

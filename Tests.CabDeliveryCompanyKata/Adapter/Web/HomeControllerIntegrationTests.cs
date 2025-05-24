@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
+using Production.EmmaCabCompany.Application;
 using Production.WebCabCompany.Controllers;
 
 namespace Tests.CabDeliveryCompanyKata.Adapter.Web;
@@ -11,8 +13,8 @@ namespace Tests.CabDeliveryCompanyKata.Adapter.Web;
 public class HomeControllerIntegrationTests
 {
     private CabContext _cabContext;
-    private HomeController _homeController;
-    private MenuController _menuController;
+    private FleetRepository _fleetRepository;
+    private AddCabCommandHandler _addCabCommandHandler;
 
     public HomeControllerIntegrationTests()
     {
@@ -21,12 +23,25 @@ public class HomeControllerIntegrationTests
 
         _cabContext = new CabContext(cabContextOptions.Options);
         _cabContext.Database.Migrate();
-        // EnsureFleetExistsForSingleUser();
-        // EnsureMenuExistsForSingleUser();
-        _homeController = new HomeController(
-            new NullLogger<HomeController>(),
-            _cabContext);
-        _menuController = new MenuController(new NullLogger<MenuController>(), _cabContext);
+        _fleetRepository = new FleetRepository(_cabContext);
+        _addCabCommandHandler = new AddCabCommandHandler(_fleetRepository);
+    }
+
+    [Fact]
+    public void CanAddCabDriverToFleet()
+    {
+        var fileSettings = new FileSettings()
+        {
+            CabFileNameCsv = $"{Guid.NewGuid().ToString()}.csv",
+            CustomerFileNameCsv = $"{Guid.NewGuid().ToString()}.csv"
+        };
+        IOptions<FileSettings> options = Options.Create(fileSettings);
+        var homeController = new HomeController(
+            new NullLogger<HomeController>(), 
+            options, 
+            _fleetRepository,
+            _addCabCommandHandler);
+        
         var claimsIdentity = new ClaimsIdentity(
             new List<Claim>()
             {
@@ -35,50 +50,20 @@ public class HomeControllerIntegrationTests
                 new(ClaimTypes.Role, "Admin"),
             },
             "TestAuthType");
-        _homeController.ControllerContext = new ControllerContext()
+        homeController.ControllerContext = new ControllerContext()
         {
             HttpContext = new DefaultHttpContext()
             {
                 User = new ClaimsPrincipal(claimsIdentity)
             }
         };
-    }
+        homeController.AddCabDriver();
 
-    [Fact]
-    public void CanAddCabDriverToFleet()
-    {
-        
-        _homeController.AddCabDriver();
-
-        var response = _menuController.Index() as ViewResult;
+        var response = homeController.Index() as ViewResult;
 
         Assert.Equal(4, (response!.Model as CabDisplayModel)!.DisplayMenu.Count);
         Assert.Equivalent(
             (response!.Model as CabDisplayModel)!.DisplayMenu.ToArray(), 
-            (string[]) ["0", "1", "8", "9"]);
+            (int[]) [0, 1, 2, 7]);
     }
-    
-    // private void EnsureFleetExistsForSingleUser()
-    // {
-    //     var fleetExists = _cabContext.Fleet.Any(x => x.Id == 1);
-    //     if (fleetExists) return;
-    //     _cabContext.Fleet.Add(new Fleet() { Id = 1 });
-    //     _cabContext.SaveChanges();
-    // }
-    //
-    // private void EnsureMenuExistsForSingleUser()
-    // {
-    //     var fleetExists = _cabContext.Menues.Any(x => x.Id == 1);
-    //     if (fleetExists) return;
-    //     _cabContext.Menues.Add(new Menu() { Id = 1 });
-    //     _cabContext.SaveChanges();
-    // }
-    //
-    // public void EmptyFleet(int fleetId)
-    // {
-    //     var fleet = _cabContext.Fleet.Include(x => x.Cabs)
-    //         .FirstOrDefault(x => x.Id == fleetId);
-    //     _cabContext.CabDrivers.RemoveRange(fleet!.Cabs.ToList());
-    //     _cabContext.SaveChanges();
-    // }
 }

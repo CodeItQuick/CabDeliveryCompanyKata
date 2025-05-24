@@ -1,10 +1,13 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 using Production.EmmaCabCompany.Application;
+using Production.WebCabCompany.Controllers;
 using Production.WebCabCompany.Models;
+using Production.WebCabCompany.Services;
 
 namespace Production.WebCabCompany;
 
@@ -44,12 +47,10 @@ public class Startup
                 File.Create(connectionFile);
             }
             options.UseSqlite($"Data Source={connectionFile}");
-        }, ServiceLifetime.Singleton);
-        
-        // // Does not work on this dotnet?
-        // services.AddDatabaseDeveloperPageExceptionFilter();
+        });
 
 
+        services.Configure<FileSettings>(Configuration);
         services.AddMvc();
 
         services.AddIdentityCore<ApplicationUser>()
@@ -67,14 +68,13 @@ public class Startup
         .AddIdentityCookies(o => { });
 
         // Add application services.
-        // services.AddTransient<IEmailSender, AuthMessageSender>();
-        // services.AddTransient<ISmsSender, AuthMessageSender>();
-        // services.AddScoped<IFleetRepository, FleetRepository>();
-        // services.AddScoped<ICustomerListRepository, CustomerListRepository>();
-        // services.AddScoped<IMenuRepository, MenuRepository>();
-        services.AddScoped<IApplicationHandler, ApplicationHandler>();
-        // services.AddScoped<IMenuRequestedHandler, MenuRequestedHandler>();
+        services.AddTransient<IEmailSender, AuthMessageSender>();
+        services.AddTransient<ISmsSender, AuthMessageSender>();
+        services.AddSingleton<IFleetRepository, FleetRepository>();
+        services.AddSingleton<IAddCabCommandHandler, AddCabCommandHandler>();
 
+        // Does not work on this dotnet?
+        // services.AddDatabaseDeveloperPageExceptionFilter();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

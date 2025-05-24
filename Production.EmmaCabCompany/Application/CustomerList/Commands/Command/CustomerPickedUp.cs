@@ -1,6 +1,6 @@
-namespace Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
+namespace Production.EmmaCabCompany.Application;
 
-public class CustomerPickedUp : IEvent
+public class CustomerPickedUp
 {
     public int CustomerListId { get; set; }
 }

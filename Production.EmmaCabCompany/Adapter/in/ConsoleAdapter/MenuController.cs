@@ -1,27 +1,19 @@
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Customers;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Fleet;
-using Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter.Patrons;
-using Production.EmmaCabCompany.Application.Menu;
-using Production.EmmaCabCompany.Domain.Menu;
+using Tests.CabDeliveryCompanyKata;
 
-namespace Production.EmmaCabCompany.Adapter.@in.ConsoleAdapter;
+namespace Production.EmmaCabCompany.Adapter.@out;
 
 public class MenuController
 {
-    private readonly MenuRequestedHandler _menuRequested;
+    private readonly MenuService _menuService;
 
-    public MenuController(CabContext cabContext)
+    public MenuController(MenuService menuService)
     {
-        _menuRequested = new MenuRequestedHandler(
-            new PatronsRepository(cabContext),
-            new CustomerRepository(cabContext),
-            new CabDriversRepository(cabContext));
+        _menuService = menuService;
     }
 
-    public List<string> DisplayMenu(int? customerId)
+    public List<string> DisplayMenu()
     {
-        var menuOptions = _menuRequested.Handle(new MenuRequested(customerId));
+        var displayMenu = _menuService.DisplayMenu();
         var menu = new List<string>()
         {
             "Please choose a selection from the list: ",
@@ -35,19 +27,11 @@ public class MenuController
             "4. (Incoming Radio) Cab Notifies Passenger Picked Up",
             "5. (Incoming Radio) Cab Notifies Passenger Dropped Off",
             "6. (Incoming Call) Cancel Cab Driver Fare",
-            "7. (Incoming Call) Customer Request Ride",
-            "8. Register New User",
-            "9. Login Existing User"
+            "7. (Incoming Call) Customer Request Ride"
         };
         var selectAdditionalOptions = otherMenuOptions
-            .Where((_, idx) => menuOptions.MenuOptions.Contains(idx.ToString()));
+            .Where((_, idx) => displayMenu.Contains(idx));
         menu.AddRange(selectAdditionalOptions);
         return menu;
-    }
-
-    public bool ContainsOption(string selection, int? customerId)
-    {
-        var menuConfiguration = _menuRequested.Handle(new MenuRequested(customerId));
-        return menuConfiguration.MenuOptions.Contains(selection);
     }
 }

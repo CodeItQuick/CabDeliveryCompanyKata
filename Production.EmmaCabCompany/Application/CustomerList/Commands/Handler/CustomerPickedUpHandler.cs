@@ -1,5 +1,24 @@
-using Production.EmmaCabCompany.Application.CustomerList.Commands.Command;
+using Production.EmmaCabCompany.Application;
 
-namespace Production.EmmaCabCompany.Application.CustomerList.Commands.Handler;
+namespace Production.EmmaCabCompany.Adapter.OutAdapter.CabFileAdapter;
 
-public interface ICustomerPickedUpCommandHandler : ICommandHandler<CustomerPickedUp>;
+public class CustomerPickedUpHandler
+{
+    private readonly ICustomerListRepository _customerListRepository;
+
+    // TODO: should be internal, but then how to test?
+    public CustomerPickedUpHandler(
+        ICustomerListRepository customerListRepository)
+    {
+        _customerListRepository = customerListRepository;
+    }
+
+    public int Handle(CustomerPickedUp request)
+    {
+        var customerList = _customerListRepository.GetById(1);
+        customerList.PickupCustomer();
+        _customerListRepository.Add(customerList);
+
+        return customerList.Id;
+    }
+}
